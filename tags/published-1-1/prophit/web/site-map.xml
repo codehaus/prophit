@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE site SYSTEM "site.dtd">
+
+<site>
+  <page templated="false" file="index.html">
+    <name>prophIt Home</name>
+    <page file="doc.html">
+      <name>prophIt Documentation</name>
+      <page file="cookbook.html">
+        <name>Cookbook</name>
+      </page>
+      <page file="samples.html">
+        <name>Samples</name>
+        <page file="hello-list-prof-sample.html">
+           <name><![CDATA[Hello List <code>java -prof</code> Profile]]></name>
+        </page>
+        <page file="hello-list-hprof-sample.html">
+           <name><![CDATA[Hello List <code>hprof</code> Profile]]></name>
+        </page>
+        <page file="hsqldb-hprof-sample.html">
+           <name><![CDATA[HSQLDB <code>hprof</code> Profile]]></name>
+        </page>
+      </page>
+      <page file="profiler-types.html">
+        <name>Profilers</name>
+        <page file="dash-prof.html">
+           <name><![CDATA[Java <code>-prof</code>]]></name>
+        </page>
+        <page file="hprof.html">
+           <name><![CDATA[<code>hprof</code>]]></name>
+        </page>
+      </page>
+    </page>
+  </page>
+</site>
