@@ -25,17 +25,18 @@ MM_reloadPage(true);
 	A:active {color: red! important}
 	#topMenuLayer A {text-decoration: none}
 	#leftcol A {text-decoration: none}
-	DIV.header {background-color: #ff9933; font-family: Georgia, "Times New Roman", Times, serif; font-size: medium; color: #333333; font-variant: small-caps; font-weight: bold }
+	DIV.header {background-color: #EBDEA9; font-family: Georgia, "Times New Roman", Times, serif; font-size: small; color: #333333; font-variant: small-caps; font-weight: bold }
+	.news {font-size: 2; font-family: "Courier New" }
 </STYLE>
 </head>
 
 <body bgcolor="#FFFFFF" text="#333333">
-<div id="HeadingLayer"> 
-  <table id="HeaderTable" width="100%" border="0" cellpadding="8" cellspacing="0">
+<div id="HeadingLayer"> <font face="   "></font>
+<table id="HeaderTable" width="100%" border="0" cellpadding="8" cellspacing="0">
     <tr>
-  	  <td bgcolor="#FF9933" width="100%" > 
-        <p><font size="6" face="Georgia, Times New Roman, Times, serif" color="#000000"><b>proph<font face="Courier New, Courier, mono">It</font></b></font> 
-    <br>
+  	  <td bgcolor="#EBDEA9" width="100%" > 
+        <p><font size="6" face="Georgia, Times New Roman, Times, serif" color="#000000"><b><a href="index.html" style="text-decoration: none"><font color="222222">proph<font face="Courier New, Courier, mono">It</font></font></a></b></font> 
+          <br>
           <a href="http://prophit.westslopesoftware.com"><font color="#333333"> 
           prophIt.westslopesoftware.com<br>
     </font></a> </p>
@@ -85,9 +86,10 @@ MM_reloadPage(true);
 					<tr>
 						<td><div id="mainContentLayer">
 						<!-- #BeginEditable "Main%20Content%20Region" --> 
-                  <h1>Running prophIt</h1>
-                  <p> 
-                  <h4>Runtime Environment</h4>
+                  <div class="header">Running prophIt</div>
+                  <blockquote>In this section we will help you download everything you need to run prophIt to visualize <b>your</b> Java programs' profiling data. 
+				  We also want to explain our licensing policy before you download the product.</blockquote>
+                  <div class="header">Runtime Environment</div>
                   <blockquote>prophIt is implemented using the Java <a href="http://java.sun.com/products/jfc/" target=_blank>Swing</a> 
                     GUI library, using the <a href="http://www.jausoft.com/gl4java/" target=_blank>GL4Java</a> 
                     Java binding to <a href="http://www.opengl.org" target=_blank>OpenGL</a> 
@@ -96,8 +98,8 @@ MM_reloadPage(true);
                     for other platforms as well. We expect to offer supported 
                     versions of prophIt will be supported on these platforms also. 
                   </blockquote>
-                  <h4>Pre-Requisites:</h4>
-                  <blockquote><b>Java Webstart</b><br>
+                  <div class="header">Pre-Requisites</div>
+                  <blockquote><h4>Java Webstart</h4><p>
                     prophIt uses <a href="http://java.sun.com/products/javawebstart/" target=_blank>JavaWebStart</a> 
                       (version 1.0.1_02 or later) for installation and automatic 
                       upgrades. To run prophIt, first you need to obtain JavaWebStart: 
@@ -110,17 +112,32 @@ MM_reloadPage(true);
                         </li>
                       </ul>
                     
-                    <p><b>Java Version</b><br>
-                      prophIt requires JDK 1.3 or higher. It will run and look 
-                      better with JDK 1.4.0 or higher.<br>
+                    <h4> Java Development Kit</h4>
+                    <p> prophIt requires JDK 1.3 or higher. It will run and look 
+                      better with JDK 1.4.0 or higher. You can download the JDK 
+                      from <a href="java.sun.com/j2se">Sun</a>.<br>
                     </p>
                     <p> 
                   </blockquote>
-                  <h4>Get prophIt</h4><p>
-                  If you have the pre-requisites installed, you can install prophIt by clicking below.  <br>
+				  <div class="header">Licensing prophIt</div>
+					  
+                  <blockquote> Westslope Software, LLC is pleased to offer you 
+                    the opportunity to utilize an evaluation license to evaluate 
+                    prophIt. The product is currently in a Beta release. For the 
+                    duration of the Beta period, you can expect to find that prophIt 
+                    will be available for evaluation purposes free of charge. 
+                    We plan to offer prophIt free of charge for individual, non-commercial 
+                    use, for the forseeable future. However, when the Beta period 
+                    is over, we will have a commercial-use licensing fee that 
+                    reflects the value of prophIt as a development tool. If you 
+                    have comments or questions about our licensing or pricing 
+                    policies, please <a href="mailto:info@prophit.westslopesoftware.com">contact us</a>. 
+                  </blockquote>
+                  <div class="header">Download prophIt</div>
+                  <blockquote>If you have the pre-requisites installed, you can install prophIt by clicking below.  <br>
 					Clicking on the link below will take you to the license agreement page.  Accepting the agreement will cause Java Webstart to initiate a download of the prophIt application to your system.  <br>
-					This download is digitally signed and verified by Verisign.</p> <a href="license.html"><b>Run prophIt Now!</b></a>
-                  
+					This download is digitally signed and verified by Verisign. <a href="license.html"><b>Run prophIt Now!</b></a>
+                  </blockquote>
                   <!-- #EndEditable -->
 						</div></td>
 					</tr>
