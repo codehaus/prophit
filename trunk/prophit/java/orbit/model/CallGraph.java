@@ -112,7 +112,7 @@ public class CallGraph
 	{
 		return rootCall;
 	}
-	
+
 	public void setMaxDepth(int maxDepth)
 	{
 		if ( this.maxDepth != -1 &&

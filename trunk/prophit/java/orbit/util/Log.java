@@ -103,6 +103,12 @@ public class Log
 			log.debug("" + msg1 + msg2 + msg3 + msg4 + msg5);
 	}
 
+	public static void debug(Category log, Object msg1, Object msg2, Object msg3, Object msg4, Object msg5, double msg6)
+	{
+		if ( log.isDebugEnabled() )
+			log.debug("" + msg1 + msg2 + msg3 + msg4 + msg5 + msg6);
+	}
+
 	public static void debug(Category log, Object msg1, double msg2, Object msg3, double msg4, Object msg5,
 							 double msg6, Object msg7, double msg8, Object msg9, double msg10)
 	{

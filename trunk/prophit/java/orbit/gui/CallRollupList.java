@@ -32,7 +32,7 @@ class CallRollupList
 	 */
 	public void addCaller(Call caller, Call call)
 	{
-		addCall(caller, call.getTime());
+		addCall("Caller", caller, call.getTime());
 	}
 
 	/**
@@ -41,7 +41,7 @@ class CallRollupList
 	 */
 	public void addCallee(Call call)
 	{
-		addCall(call, call.getTime());
+		addCall("Callee", call, call.getTime());
 	}
 	
 	/**
@@ -97,12 +97,19 @@ class CallRollupList
 		return callNames.size();
 	}
 
+	public String toString()
+	{
+		return "totalTime : " + getTotalTime() + ", timeByCallName : " + timeByCallName;
+	}
+
 	/**
 	 * Add a new call. The time spent in the call will be aggregated with the time
 	 * spent in other calls whose {@link Call#getName name} is the same.
 	 */
-	private void addCall(Call call, double t)
+	private void addCall(String type, Call call, double t)
 	{
+		Log.debug(LOG, "Adding ", type, " ", call, ", t = ", t);
+
 		Double time = (Double)timeByCallName.get(call.getName());
 		if ( time == null )
 		{
