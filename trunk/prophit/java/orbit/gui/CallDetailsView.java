@@ -178,7 +178,7 @@ abstract class CallDetailsView
 				case 1:
 					return UIUtil.formatTime(details.getInclusiveTime()) +
 						" (" + UIUtil.formatPercent(details.getInclusiveTime() / details.getRootTime()) +
-						" " + Strings.getUILabel(CallDetailsView.class, "ofProgram") + ")";;
+						" " + Strings.getUILabel(CallDetailsView.class, "ofProgram") + ")";
 				}
 			case 2:
 				switch ( column )
@@ -188,7 +188,7 @@ abstract class CallDetailsView
 				case 1:
 					return UIUtil.formatTime(details.getExclusiveTime()) +
 						" (" + UIUtil.formatPercent(details.getExclusiveTime() / details.getRootTime()) +
-						" " + Strings.getUILabel(CallDetailsView.class, "ofProgram") + ")";;
+						" " + Strings.getUILabel(CallDetailsView.class, "ofProgram") + ")";
 				}
 			case 3:
 				switch ( column )
