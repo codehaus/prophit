@@ -102,11 +102,13 @@ MM_reloadPage(true);
                     <li><a href="#intelligent_labeling">Intelligent labeling</a></li>
                     <li><a href="#wire_frame">Wire-frame mode</a></li>
                     <li><a href="#selection_feedback">Enhanced selection feedback</a></li>
-                    <li><a href="#new_coloring">New Coloring options</a></li>
+                    <li><a href="#new_coloring">New coloring options</a></li>
                     <li><a href="#enhanced_searching">Enhanced searching</a></li>
                   	<li><a href="#compact_data_format">Compact call graph data format</a></li>
                   	<li><a href="#recursion_collapse">Collapse recursive functions</a></li>
                   	<li><a href="#profile_comparison">Profile Comparison</a></li>
+                  	<li><a href="#python_loader">Python profile loader</a></li>
+                  	<li><a href="#haskell_loader">Haskell profile loader</a></li>
                   </ul>
                   <a name="intelligent_labeling"><div class="header">Intelligent labeling of the 
                     tower diagram</div>
@@ -211,7 +213,7 @@ MM_reloadPage(true);
                       around the block's edges.</li>
                   </ol>
                   <a name="new_coloring"> 
-                  <div class="header">New Coloring options</div>
+                  <div class="header">New coloring options</div>
                   </a> 
                   <p>The coloring on the call graph currently shows the exclusive 
                     time of each block. New coloring algorithms could be used 
@@ -280,7 +282,34 @@ MM_reloadPage(true);
                   substantially speed up or slowed down can be quickly identified. 
                   Functions which are added to or dropped from the old profile 
                   can also be highlighted using distinctive colors. 
-                  <p>&nbsp;</p>
+				  
+				  <p>
+ 				  <a name="python_loader"><div class="header">Python profile loader</div></a>
+				  
+				  Python has a built-in <a href="http://www.python.org/doc/current/lib/profile.html">profiler</a>
+				  which capture statistics as a Python program runs and saves them to an in-memory data structure.
+				  This profile data can be dumped to a file using <code>profile.Profile.dump_stats()</code> and re-loaded using
+				  <code>pstats.Stats.load_stats()</code>
+				  <p> A profile loader could be implemented for prophIt to display 
+                    the Python profile data. This loader could use the <code>Stats</code> 
+                    Python class to load the data, then pull it into the prophIt 
+                    data model. The full stack information is not preserved by 
+                    the Python profiler; in essence the profile would look like 
+                    a <code>-prof</code> profile, or an <code>hprof</code> profile 
+                    with <i>depth=2</i>. Full stack information could potentially 
+                    be obtained by writing a <code>Profiler</code> subclass. This 
+                    is theoretically possible but the procedure is not well documented.
+
+				  <p>
+ 				  <a name="haskell_loader"><div class="header">Haskell profile loader</div></a>
+                  <p><a name="haskell_loader"> </a> The functional language Haskell 
+                    also has a <a href="http://www.haskell.org/ghc/docs/latest/html/users_guide/profiling.html">built-in 
+                    profiler</a> for which a prophIt profile loader could potentially 
+                    be implemented.</p>
+                  <p>The file format looks quite simple, rather similar to the 
+                    <code>java -prof</code> output. While the execption model 
+                    of Haskell is very different than any imperitive language, 
+                    the profile data still breaks down to the form of a call stack.</p>
                   <!-- #EndEditable --> </div>
               </td>
 					</tr>
