@@ -4,9 +4,9 @@ package orbit.model;
 public class RCC
 {
 	private final StackTrace st;
-	private final int    nCalls;
 	private final int    key;
 
+	private int    nCalls;
 	private long   time;
 
 	public RCC(StackTrace st, int nCalls, long time, int key)
@@ -27,6 +27,7 @@ public class RCC
 	public int    getKey() { return key; }
 
 	public void adjustTime(long delta) { time += delta; }
+	public void adjustCalls(int delta) { nCalls += delta; }
 	
 	public String toString()
 	{

@@ -4,18 +4,16 @@ if not "%OS%"=="Windows_NT" goto win9xStart
 :winNTStart
 @setlocal
 
-set SCRIPT_HOME=%~dp0
-
 rem Need to check if we are using the 4NT shell...
-echo "%FOURNT_SHELL"
 if not "%FOURNT_SHELL%" == "" goto setup4NT
+
+set SCRIPT_HOME=%~dp0
 
 rem On NT/2K grab all arguments at once
 set CMD_LINE_ARGS=%*
 goto doneStart
 
 :setup4NT
-echo 4nt
 set CMD_LINE_ARGS=%$
 goto doneStart
 
@@ -34,6 +32,15 @@ goto setupArgs
 :doneStart
 rem This label provides a place for the argument list loop to break out 
 rem and for NT handling to skip to.
+
+if exist "%SCRIPT_HOME%\lib" goto setupClasspath
+
+SET SCRIPT_HOME=.
+if exist "%SCRIPT_HOME%\lib" goto setupClasspath
+
+:setupClasspath
+
+echo %SCRIPT_HOME%
 
 set LOCALCLASSPATH=
 for %%i in ("%SCRIPT_HOME%\lib\*.jar") do set LOCALCLASSPATH=%%i;%LOCALCLASSPATH%

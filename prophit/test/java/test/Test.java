@@ -339,13 +339,15 @@ public class Test
 		CallAdapter dbClose = new CallAdapter(dbCloseCall);
 		CallAdapter dbInit = new CallAdapter(dbInitCall);
 
+		assertion(main.getExclusiveTime(TimeMeasure.TotalTime) == 20, "main.timeInSelf should be 20, is " + main.getExclusiveTime(TimeMeasure.TotalTime));
+
 		assertion(dbOpen.getDepth() == 2, "dbOpen.depth should be 2");
-		assertion(dbOpen.getTimeInSelf(TimeMeasure.TotalTime) == 40, "dbOpen.timeInSelf should be 40");
-		assertion(main.getTimeInSelf(TimeMeasure.TotalTime) == 20, "main.timeInSelf should be 20");
+		assertion(dbOpen.getExclusiveTime(TimeMeasure.TotalTime) == 40, "dbOpen.timeInSelf should be 40");
+		assertion(main.getExclusiveTime(TimeMeasure.TotalTime) == 20, "main.timeInSelf should be 20");
 		assertion(main.getTimeInChildren(TimeMeasure.TotalTime) == 50, "main.timeInChildren should be 50");
-		assertion(main.getFractionOfParentTime(TimeMeasure.TotalTime) == 0.7, "main.fractionOfParentTime should be 0.7");
-		assertion(dbOpen.getFractionOfParentChildTimes(TimeMeasure.TotalTime) == 0.8, "dbOpen.fractionOfChildTimes should be 0.8");
-		assertion(dbOpen.getFractionOfParentTime(TimeMeasure.TotalTime) == 4 / 7.0, "dbOpen.fractionOfChildTimes should be " + ( 4 / 7.0 ));
+		assertion(main.getInclusiveTimeFractionOfParentInclusiveTime(TimeMeasure.TotalTime) == 0.7, "main.fractionOfParentTime should be 0.7");
+		assertion(dbOpen.getInclusiveFractionOfParentChildTimes(TimeMeasure.TotalTime) == 0.8, "dbOpen.fractionOfChildTimes should be 0.8");
+		assertion(dbOpen.getInclusiveTimeFractionOfParentInclusiveTime(TimeMeasure.TotalTime) == 4 / 7.0, "dbOpen.fractionOfChildTimes should be " + ( 4 / 7.0 ));
 
 		Rectangle2D.Double fullExtent = new Rectangle2D.Double(0, 0, 1.0, 1.0);
 		Rectangle2D.Double leftHalf = new Rectangle2D.Double(0, 0, 0.5, 1.0);

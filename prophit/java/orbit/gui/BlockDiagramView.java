@@ -379,7 +379,7 @@ class BlockDiagramView
 		gl.glColor3d(1.0, 1.0, 1.0);
 		gl.glRasterPos2i(6, 2);
 		CallAdapter call = new CallAdapter(model.getRenderCall());
-		printString(GLUTEnum.GLUT_BITMAP_HELVETICA_12, "Root = " + call.getName() + ", time = " + call.getTime(measure) + ", " + ( call.getTime(measure) / model.getCallGraph().getTime() * 100.0 ) + "% of total");
+		printString(GLUTEnum.GLUT_BITMAP_HELVETICA_12, "Root = " + call.getName() + ", time = " + call.getInclusiveTime(measure) + ", " + ( call.getInclusiveTime(measure) / model.getCallGraph().getTime() * 100.0 ) + "% of total");
 		gl.glEnable(GL_LIGHTING);
 		gl.glEnable(GL_DEPTH_TEST); 
 		textEnd();

@@ -67,7 +67,6 @@ public class MapFrame
 
 	private final Controller controller = new Controller();
 	
-	// private MapCanvas cvsMap = null;
 	private BlockDiagramView blockView = null;
 	private BlockDiagramModel blockModel = null;
 	private JSlider depthSlider;
@@ -145,8 +144,7 @@ public class MapFrame
 
 	private JSlider createDepthSlider()
 	{
-		// Create a new JSlider with min = 1, max = 15, value = MapCanvas.DEFAULT_LEVELS
-		depthSlider = new JSlider(1, 15, MapCanvas.DEFAULT_LEVELS);
+		depthSlider = new JSlider(1, 15, BlockDiagramModel.DEFAULT_LEVELS);
 		depthSlider.setMajorTickSpacing(2);
 		depthSlider.setMinorTickSpacing(1);
 		depthSlider.setPaintTicks(true);
