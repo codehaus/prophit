@@ -8,9 +8,9 @@
   
   <information>
     <title>Orbit</title>
-    <vendor>ironworks.cc</vendor>
-    <homepage href="http://www.ironworks.cc/orbit" />
-    <description>Interactive profile viewer for Java programs. Reads files output by the 'hprof' and '-prof' Java profile utilities.</description>
+    <vendor>Westslope Software, LLC</vendor>
+    <homepage href="http://orbit.westslopesoftware.com" />
+    <description>Interactive profile data viewer for Java programs. Reads files output by the 'hprof' and '-prof' Java profile utilities.</description>
     <offline-allowed/>
   </information>
   
