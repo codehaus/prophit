@@ -18,76 +18,74 @@ import java.io.*;
 public class TestProphitParser
 	extends TestCase
 {
-    public TestProphitParser(String name)
-    {
-	super(name);
-    }
-
-    public void testXMLSampleParser() throws Exception
-    {
-	try {
-	    //System.out.println("HEY");
-
-	    Parser parser = new ProphitParserLoader(new FileReader(System.getProperty("basedir") + "/test/data/simple-profile-std.xml")); 
-
-	    assertTrue("File Format is recognized.", parser.isFileFormatRecognized());
-	    ModelBuilder builder = ModelBuilderFactory.newModelBuilder();
-	    parser.execute(builder);
+	public TestProphitParser(String name)
+	{
+		super(name);
 	}
-	catch (Exception x)
-	    {
-		System.out.println(x.getMessage());
-		throw new Exception(x.getMessage());
-	    }
 
-    }
+	public void testXMLSampleParser() throws Exception
+	{
+		try {
+			//System.out.println("HEY");
 
-    public void testParserFactory() throws Exception
-    {
-	try {
-	    File file = new File(System.getProperty("basedir") + "/test/data/simple-profile-std.xml");
-	    Parser parser = ParserFactory.instance().createParser(file);
-	    //System.out.println(parser);
-	    assertTrue("class is a ProphitParserLoader.", parser.getClass() == ProphitParserLoader.class);
-	    ModelBuilder builder = ModelBuilderFactory.newModelBuilder();
-	    parser.execute(builder);
+			Parser parser = new ProphitParserLoader(new FileReader(System.getProperty("basedir") + "/test/data/simple-profile-std.xml")); 
+
+			assertTrue("File Format is recognized.", parser.isFileFormatRecognized());
+			ModelBuilder builder = ModelBuilderFactory.newModelBuilder();
+			parser.execute(builder);
+		}
+		catch (Exception x)
+		{
+			System.out.println(x.getMessage());
+			throw new Exception(x.getMessage());
+		}
+
 	}
-	catch (Exception x) {
-	    System.out.println(x.getMessage());
-	    throw new Exception(x.getMessage());
-	}
+
+	public void testParserFactory() throws Exception
+	{
+		try {
+			File file = new File(System.getProperty("basedir") + "/test/data/simple-profile-std.xml");
+			Parser parser = ParserFactory.instance().createParser(file);
+			//System.out.println(parser);
+			assertTrue("class is a ProphitParserLoader.", parser.getClass() == ProphitParserLoader.class);
+			ModelBuilder builder = ModelBuilderFactory.newModelBuilder();
+			parser.execute(builder);
+		}
+		catch (Exception x) {
+			System.out.println(x.getMessage());
+			throw new Exception(x.getMessage());
+		}
 	    
-    }
-
-    public void testLoaderFactory() throws Exception
-    {
-	try {
-	    File file = new File(System.getProperty("basedir") + "/test/data/simple-profile-std.xml");
-	    Loader loader = LoaderFactory.instance().createLoader(file);
-
-	    assertTrue("loader is a ProphitParserLoader", loader.getClass() == ProphitParserLoader.class);
-	} catch (Exception x) {
-	    System.out.println(x.getMessage());
-	    throw new Exception(x.getMessage());
 	}
-    }
 
-    public void testLoadingWithFactory() throws Exception
-    {
-	try {
-	    File file = new File(System.getProperty("basedir") + "/test/data/simple-profile-std.xml");
-	    Loader loader = LoaderFactory.instance().createLoader(file);
+	public void testLoaderFactory() throws Exception
+	{
+		try {
+			File file = new File(System.getProperty("basedir") + "/test/data/simple-profile-std.xml");
+			Loader loader = LoaderFactory.instance().createLoader(file);
 
-	    assertTrue("loader is a ProphitParserLoader", loader.getClass() == ProphitParserLoader.class);
-	    loader.parse();
-
-	} catch (Exception x) {
-	    System.out.println(x.getMessage());
-	    throw new Exception(x.getMessage());
+			assertTrue("loader is a ProphitParserLoader", loader.getClass() == ProphitParserLoader.class);
+		} catch (Exception x) {
+			System.out.println(x.getMessage());
+			throw new Exception(x.getMessage());
+		}
 	}
-    }
-    
 
+	public void testLoadingWithFactory() throws Exception
+	{
+		try {
+			File file = new File(System.getProperty("basedir") + "/test/data/simple-profile-std.xml");
+			Loader loader = LoaderFactory.instance().createLoader(file);
+
+			assertTrue("loader is a ProphitParserLoader", loader.getClass() == ProphitParserLoader.class);
+			loader.parse();
+
+		} catch (Exception x) {
+			System.out.println(x.getMessage());
+			throw new Exception(x.getMessage());
+		}
+	}
 }
 
 

@@ -23,10 +23,13 @@ public class LoaderFactory
 		{
 			solver = new HProfSolver();
 		}
-		if ( parser instanceof Loader ) {
-		    return ( (Loader)parser );
-		} else {
-		    return (Loader)(new ParseAndSolveLoader(parser, solver, file));
+		if ( parser instanceof Loader ) 
+		{
+		    return (Loader)parser;
+		} 
+		else 
+		{
+		    return new ParseAndSolveLoader(parser, solver, file);
 		}	
 	}
 }
