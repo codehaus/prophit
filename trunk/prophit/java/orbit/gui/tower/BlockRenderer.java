@@ -7,6 +7,9 @@ import orbit.gui.Constants;
 import orbit.gui.GLUtils;
 import orbit.gui.TimeMeasure;
 import orbit.model.Call;
+import orbit.util.Log;
+
+import org.apache.log4j.Category;
 
 import gl4java.GLFunc;
 import gl4java.GLEnum;
@@ -28,6 +31,8 @@ import java.util.Map;
 class BlockRenderer
 	implements CallLayoutAlgorithm.Callback, GLEnum, Constants
 {
+	public static final Category LOG = Category.getInstance(BlockRenderer.class);
+
 	private final GLFunc                      gl;
 	private final int                         renderMode;
 	private final ColorModel                  colorModel;
@@ -71,26 +76,18 @@ class BlockRenderer
 	/**
 	 * Add a list of {@link Call}s which should always be rendered as solid.
 	 */
-	public void addSolidBlocks(List calls)
-	{
-		for ( Iterator i = calls.iterator(); i.hasNext(); )
-		{
-			Call call = (Call)i.next();
-			addSolidBlock(call);
-		}
-	}
-		
-	/**
-	 * Add a {@link Call} which should always be rendered as solid.
-	 */
-	public synchronized void addSolidBlock(Call call)
+	public synchronized void addSolidBlocks(List calls)
 	{
 		if ( solidCalls == null )
 		{
 			solidCalls = new HashSet();
 		}
-		solidCalls.add(call);
-	}	
+		for ( Iterator i = calls.iterator(); i.hasNext(); )
+		{
+			Call call = (Call)i.next();
+			solidCalls.add(call);
+		}
+	}
 	
 	/**
 	 * Renders a {@link CallAdapter} at the specified depth (relative to the root rendered block, not the root
@@ -101,12 +98,6 @@ class BlockRenderer
 	 */
 	public boolean beginCall(CallAdapter call, Rectangle2D.Double rectangle, int depth)
 	{
-		if ( rectangle.width * viewport[2] < MIN_BLOCK_SIZE_THRESHOLD ||
-			  rectangle.height * viewport[3] < MIN_BLOCK_SIZE_THRESHOLD )
-		{
-			return false;
-		}
-
 		// Used to shade the block according to whether it is a 'hotspot'. This shading can be made configurable
 		//   in the future
 		double expense = call.getExclusiveTime(measure) / call.getInclusiveTime(measure);
@@ -117,9 +108,10 @@ class BlockRenderer
 		if ( renderMode == RENDER_SOLID ||
 			 ( solidCalls != null && solidCalls.contains(call.getCall()) ) )
 		{
-			int name = nextName++;
-			glNameToCallMap.put(new Integer(name), call.getCall());
-			gl.glPushName(name);
+			Integer name = new Integer(nextName++);
+			glNameToCallMap.put(name, call.getCall());
+			Log.debug(LOG, "Assigned glName ", name, " to ", call.getCall());
+			gl.glPushName(name.intValue());
 
 			renderAsQuads(call, rectangle, depth, color);
 
@@ -140,6 +132,10 @@ class BlockRenderer
 	{
 		double bottomZ = depth * BLOCK_HEIGHT;
 		double topZ = ( depth + 1 ) * BLOCK_HEIGHT;
+
+		gl.glEnable(GL_DITHER);
+		gl.glEnable(GL_LIGHTING);
+		gl.glEnable(GL_CULL_FACE);
 
 		// Pushes the polygons back a little in the z-buffer so that the hi-lite lines
 		//   will stand out
@@ -205,6 +201,7 @@ class BlockRenderer
 		// Draw the hi-lite lines
 		gl.glDisable(GL_DITHER);
 		gl.glDisable(GL_LIGHTING);
+		gl.glDisable(GL_CULL_FACE);
 
 		gl.glBegin(GL_LINE_LOOP);
 			
@@ -226,15 +223,16 @@ class BlockRenderer
 		gl.glVertex3d(rectangle.x + rectangle.width, rectangle.y, topZ);
 		gl.glVertex3d(rectangle.x + rectangle.width, rectangle.y, bottomZ);
 		gl.glEnd();
-			
-		gl.glEnable(GL_LIGHTING);
-		gl.glEnable(GL_DITHER);
 	}
 
 	protected void renderAsLines(CallAdapter call, Rectangle2D.Double rectangle, int depth, Color color)
 	{
 		double bottomZ = depth * BLOCK_HEIGHT;
 		double topZ = ( depth + 1 ) * BLOCK_HEIGHT;
+
+		gl.glDisable(GL_DITHER);
+		gl.glDisable(GL_LIGHTING);
+		gl.glDisable(GL_CULL_FACE);
 
 		// Coordinate frame is OpenGL coordinates, with the X-axis heading East, the
 		//   Y-axis heading North, and the Z-axis heading towards the observer
