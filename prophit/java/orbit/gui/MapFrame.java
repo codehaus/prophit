@@ -95,15 +95,17 @@ public class MapFrame
 	private JCheckBox  chkWireframe;
 	
 	private String workingDirectory = null;
-	
+
 	private BlockDiagramModel blockModel = null;
 
 	private JToolBar         toolbar;
 	private BlockDiagramView blockView = null;
 	private JPanel           pnlContent;
 	private CallDetailsView  callDetails;
+	private DepthSliderModel depthModel;
 	private JSlider          depthSlider;
 	private JPanel           pnlStatus;
+	private JComboBox        cbLOD;
 	private JLabel           lblStatus;
 	
 	public MapFrame()
@@ -135,7 +137,7 @@ public class MapFrame
 								{
 									public void run()
 									{
-										lblStatus.setText(Strings.getUILabel(MapFrame.class, "status.reconstructingGraph"));
+										lblStatus.setText(Strings.getMessage(MapFrame.class, "status.reconstructingGraph", profileFile));
 									}
 								});
 						}
@@ -207,6 +209,9 @@ public class MapFrame
 				{
 					if ( BlockDiagramModel.RENDER_CALL_PROPERTY.equals(evt.getPropertyName()) )
 					{
+						// If the LevelOfDetail changes, the renderCall also changes
+						LevelOfDetail lod = blockModel.getLevelOfDetail();
+						cbLOD.setSelectedIndex(LevelOfDetail.getIndex(lod));
 						enableControls();
 					}
 					else if ( BlockDiagramModel.NUM_LEVELS_PROPERTY.equals(evt.getPropertyName()) )
@@ -216,9 +221,15 @@ public class MapFrame
 							depthSlider.setMaximum(depthSlider.getMaximum() + 5);
 						depthSlider.setValue(levels);
 					}
+					else if ( BlockDiagramModel.WIREFRAME_PROPERTY.equals(evt.getPropertyName()) )
+					{
+						Boolean wireframe = (Boolean)evt.getNewValue();
+						chkWireframe.setSelected(wireframe.booleanValue());
+					}
 				}
 			});
 		blockModel.setLevels(depthSlider.getValue());
+		blockModel.setLevelOfDetail(LevelOfDetail.ALL_LEVELS[cbLOD.getSelectedIndex()]);
 
 		if ( blockView == null )
 		{
@@ -261,6 +272,8 @@ public class MapFrame
 			callDetails.setModel(blockModel);
 		}
 
+		depthModel.setModel(blockModel);
+		
 		blockView.requestFocus();
 
 		enableControls();
@@ -294,7 +307,11 @@ public class MapFrame
 				addCaller(candidates, candidate);
 			}
 		}
-		selectCallByName(candidates, name);
+		Call candidate = selectCallByName(candidates, name);
+		if ( candidate != null )
+		{
+			blockModel.setWireframe(true);
+		}
 	}
 
 	/**
@@ -316,10 +333,16 @@ public class MapFrame
 			Call candidate = (Call)i.next();
 			addCallees(candidates, candidate);
 		}
-		selectCallByName(candidates, name);
+		Call candidate = selectCallByName(candidates, name);
+		if ( candidate != null )
+		{
+			int relativeDepth = candidate.getDepth() - blockModel.getRootRenderState().getRenderCall().getDepth();
+			if ( relativeDepth > depthSlider.getValue() )
+				depthSlider.setValue(relativeDepth);
+		}
 	}
 
-	private void selectCallByName(List candidates, String name)
+	private Call selectCallByName(List candidates, String name)
 	{
 		for ( Iterator i = candidates.iterator(); i.hasNext(); )
 		{
@@ -327,10 +350,11 @@ public class MapFrame
 			if ( name.equals(candidate.getName()) )
 			{
 				blockModel.setSelectedCall(candidate);
-				return;
+				return candidate;
 			}
 		}
 		LOG.info("Unable to find call '" + name + "' in diagram");
+		return null;
 	}
 
 	private void addCaller(List list, Call call)
@@ -376,7 +400,7 @@ public class MapFrame
 			{
 				public void actionPerformed(ActionEvent e)
 				{
-					blockModel.getRootRenderState().setRenderCall(blockModel.getCallGraph());
+					blockModel.getRootRenderState().setRenderCall(blockModel.getRootCall());
 				}
 			};
 	}
@@ -538,7 +562,6 @@ public class MapFrame
 					try
 					{
 						blockModel.setNameSearchString(searchText);
-						chkWireframe.setSelected(true);
 						blockModel.setWireframe(true);
 					}
 					finally
@@ -547,22 +570,33 @@ public class MapFrame
 					}
 				}
 			});
+
+		pnlSearch.add(new JLabel(Strings.getUILabel(MapFrame.class, "levelOfDetail.label")));
+		ArrayList lodStringsArray = new ArrayList();
+		for ( int i = 0; i < LevelOfDetail.ALL_LEVELS.length; ++i )
+		{
+			lodStringsArray.add(LevelOfDetail.ALL_LEVELS[i].getName());
+		}
+		String[] lodStrings = (String[])lodStringsArray.toArray(new String[0]);
+		cbLOD = (JComboBox)pnlSearch.add(new JComboBox(lodStrings));
+		cbLOD.setSelectedIndex(lodStrings.length / 2);
+		cbLOD.addActionListener(new ActionListener()
+			{
+				public void actionPerformed(ActionEvent evt)
+				{
+					int index = cbLOD.getSelectedIndex();
+					LevelOfDetail lod = LevelOfDetail.ALL_LEVELS[index];
+					Log.debug(LOG, "LevelOfDetail set to ", lod);
+					blockModel.setLevelOfDetail(lod);
+				}
+			});
 		
 		JPanel pnlTools = new JPanel();
 		pnlTools.setLayout(new BorderLayout());
 		pnlTools.add(toolbar, BorderLayout.NORTH);
 		pnlTools.add(pnlSearch, BorderLayout.SOUTH);
-
-		/*
-		SGLayout layout = new SGLayout(2, 1);
-		pnlTools.setLayout(layout);
-		pnlTools.add(toolbar);
-		pnlTools.add(pnlSearch);
-		*/
 		
 		getContentPane().add(pnlTools, BorderLayout.NORTH);
-		
-		// getContentPane().add(toolbar, BorderLayout.NORTH);
 	}
 
 	private void addComponents()
@@ -606,6 +640,20 @@ public class MapFrame
 					}
 				}
 			});
+
+		depthModel = new DepthSliderModel();
+		depthModel.addListener(new PropertyChangeListener()
+			{
+				public void propertyChange(PropertyChangeEvent evt)
+				{
+					if ( DepthSliderModel.MAX_DEPTH_PROPERTY.equals(evt.getPropertyName()) )
+					{
+						Integer value = (Integer)evt.getNewValue();
+						depthSlider.setMaximum(value.intValue());
+					}
+				}
+			});
+		
 		return depthSlider;
 	}
 
@@ -650,6 +698,7 @@ public class MapFrame
 			rootAction.setEnabled(false);
 			txtSearch.setEditable(false);
 			chkWireframe.setEnabled(false);
+			cbLOD.setEnabled(false);
 		}
 		else
 		{
@@ -659,6 +708,7 @@ public class MapFrame
 			rootAction.setEnabled(blockModel.getRootRenderState().getRenderCall().getParent() != null);
 			txtSearch.setEditable(true);
 			chkWireframe.setEnabled(true);
+			cbLOD.setEnabled(true);
 		}
 	}
 	
