@@ -29,7 +29,7 @@ Priorities range from 1 to 5, with 5 being the highest.
     <td width="7%">4</td>
     <td width="28%">Should hi-lite the diagram using a different selection mechanism 
       or color</td>
-    <td width="13%">&nbsp;</td>
+    <td width="13%"><a href="search-method-call.txt">search-method-call.txt</a></td>
   </tr>
   <tr bgcolor="ffeeff"> 
     <td width="52%">FAQ, common problems, for the web site</td>
@@ -58,10 +58,10 @@ Priorities range from 1 to 5, with 5 being the highest.
     <td width="52%" height="21">Implement a data loader for samples and times 
       in the binary hprof format</td>
     <td width="7%" height="21"> 
-      <div align="left">3</div>
+      <div align="left">2</div>
     </td>
     <td width="28%" height="21"> 
-      <p>Post Beta1</p>
+      <p>Post Beta1. Can't find any documentation on the hprof binary format.</p>
     </td>
     <td width="13%" height="21">&nbsp;</td>
   </tr>
@@ -93,14 +93,14 @@ Priorities range from 1 to 5, with 5 being the highest.
     <td width="35%">&nbsp;</td>
     <td width="16%">&nbsp;</td>
   </tr>
-  <tr bgcolor="eeeeee"> 
-    <td width="43%">Orbit should give a good warning when an unsupported profile 
-      is loaded (e.g. binary hprof)</td>
+  <tr bgcolor="ffeeff"> 
+    <td width="43%">Double-clicking on a 'callee' that is one level too deep in 
+      the call graph should add a level to the call graph</td>
     <td width="6%">4</td>
     <td width="35%">&nbsp;</td>
     <td width="16%">&nbsp;</td>
   </tr>
-  <tr bgcolor="ffeeff">
+  <tr bgcolor="ffeeff"> 
     <td width="43%">HelloList.java.txt shows up as HTML formatted in IE. It should 
       look like pre-formatted Java but instead there are no linebreaks.</td>
     <td width="6%">3</td>
@@ -115,14 +115,15 @@ Priorities range from 1 to 5, with 5 being the highest.
     <td width="35%">&nbsp;</td>
     <td width="16%">&nbsp;</td>
   </tr>
-  <tr bgcolor="eeeeee"> 
-    <td width="43%" bgcolor="ffeeff">If the window is maximized, the bottom part 
-      of the block diagram does not render properly</td>
-    <td width="6%" bgcolor="ffeeff"> 
-      <div align="left">3</div>
-    </td>
-    <td width="35%" bgcolor="ffeeff">&nbsp;</td>
-    <td width="16%" bgcolor="ffeeff">&nbsp;</td>
+  <tr bgcolor="ffeeff"> 
+    <td width="43%">The first time a diagram is opened, the Orbit frame changes 
+      size. This doesn't happen if JFrame.pack() is not called after the content 
+      panel is added to the frame. But if pack() is not called, the GL canvas 
+      for the block diagram renders to the top-left of where it should be, obscuring 
+      the toolbar, and the call details tables are not laid out properly.</td>
+    <td width="6%">3</td>
+    <td width="35%">&nbsp;</td>
+    <td width="16%">&nbsp;</td>
   </tr>
   <tr bgcolor="eeeeee"> 
     <td width="43%" bgcolor="ffeeff">Root block should always be 1 unit square 
@@ -143,25 +144,19 @@ Priorities range from 1 to 5, with 5 being the highest.
     <td width="43%">Memory usage appears to grow over time as more profiles are 
       opened and the previous ones (presumably) closed. </td>
     <td width="6%">2</td>
-    <td width="35%">This problem has been mitigated by making sure that the CallGraph 
-      data is cleaned up when the profile is closed. Though there may still be 
-      a moderate-sized leak resulting from the GL4Java JNI implementation holding 
-      a reference to the GLCanvas.</td>
+    <td width="35%">
+      <p>This problem has been mitigated by making sure that the CallGraph data 
+        is cleaned up when the profile is closed. Though there may still be a 
+        moderate-sized leak resulting from the GL4Java JNI implementation holding 
+        a reference to the GLCanvas.</p>
+      <p>Should fix this by only ever constructing one GL Canvas and just changing 
+        what it renders.</p>
+      </td>
     <td width="16%">&nbsp;</td>
   </tr>
   <tr bgcolor="ffeeff"> 
     <td width="43%">If the width of the frame is reduced to a very small amount, 
       the call details tables start to be clipped on the left hand side</td>
-    <td width="6%">2</td>
-    <td width="35%">&nbsp;</td>
-    <td width="16%">&nbsp;</td>
-  </tr>
-  <tr bgcolor="ffeeff"> 
-    <td width="43%">The first time a diagram is opened, the Orbit frame changes 
-      size. This doesn't happen if JFrame.pack() is not called after the content 
-      panel is added to the frame. But if pack() is not called, the GL canvas 
-      for the block diagram renders to the top-left of where it should be, obscuring 
-      the toolbar, and the call details tables are not laid out properly.</td>
     <td width="6%">2</td>
     <td width="35%">&nbsp;</td>
     <td width="16%">&nbsp;</td>
@@ -275,7 +270,7 @@ Priorities range from 1 to 5, with 5 being the highest.
     <td width="15%" height="2">&nbsp;</td>
   </tr>
 </table>
-<h2>Bugs Fixed</h2>
+<h2>Bugs Exterminated</h2>
 <table width="90%" border="0" cellspacing="1">
   <tr> 
     <th width="30%" bgcolor="ccccff" height="23">Description</th>
@@ -284,12 +279,23 @@ Priorities range from 1 to 5, with 5 being the highest.
     <th width="8%" bgcolor="ccccff" height="23">Date Closed</th>
     <th width="8%" bgcolor="ccccff" height="23">Task Doc</th>
   </tr>
+  <tr bgcolor="eeeeee">
+    <td width="43%">If the window is maximized, the bottom part of the block diagram 
+      does not render properly</td>
+    <td width="6%"> 
+      <div align="left">3</div>
+    </td>
+    <td width="35%">Seems to have been corrected. The problem was probably the 
+      'blank-out' rectangle which was drawn under the text</td>
+    <td width="16%">2002/10/06</td>
+    <td width="8%">&nbsp;</td>
+  </tr>
   <tr bgcolor="eeeeee"> 
-    <td width="30%">Link from the app to the doc page</td>
-    <td width="0%">5</td>
-    <td width="54%">Help/Documentation menu item added. URL is configured in the 
-      build file by the orbit.docpage property</td>
-    <td width="8%">2002/09/23</td>
+    <td width="43%">Orbit should give a good warning when an unsupported profile 
+      is loaded (e.g. binary hprof)</td>
+    <td width="6%">4</td>
+    <td width="35%">Dialog gives an error when the file fails to parse</td>
+    <td width="16%">2002/09/29</td>
     <td width="8%">&nbsp;</td>
   </tr>
   <tr bgcolor="eeeeee"> 
@@ -319,7 +325,7 @@ Priorities range from 1 to 5, with 5 being the highest.
     <td width="8%">2002/09/22</td>
     <td width="8%">&nbsp;</td>
   </tr>
-  <tr bgcolor="eeeeee">
+  <tr bgcolor="eeeeee"> 
     <td width="30%">New Orbit builds should not require the user to re-download 
       the supporting libraries (log4jme, gl4java). These JARs are regenerated 
       during the build and then re-signed</td>

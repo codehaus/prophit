@@ -5,6 +5,7 @@ import java.io.*;
 public class LogInputStream
 	extends InputStream
 {
+	private StringBuffer sb = new StringBuffer();
 	private final InputStream  input;
 	private final OutputStream log;
 
@@ -18,7 +19,21 @@ public class LogInputStream
 	{
 		int i = input.read();
 		if ( i != -1 )
+		{
+			/*
+			char c = new String(new byte[]{ (byte)i }).charAt(0);
+			if ( c == '\n')
+			{
+				System.out.println(sb.toString());
+				sb = new StringBuffer();
+			}
+			else
+			{
+				sb.append(c);
+			}
+			*/
 			log.write(i);
+		}
 		return i;
 	}
 	

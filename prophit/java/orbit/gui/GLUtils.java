@@ -8,7 +8,14 @@ public class GLUtils
 {
 	public static void glColor(GLFunc gl, Color color)
 	{
-		gl.glColor3b((byte)( color.getRed() - 128 ), (byte)( color.getGreen() - 128 ), (byte)( color.getBlue() - 128 ));
+		gl.glColor4f(( color.getRed() / 255.0f ), ( color.getGreen() / 255.0f ),
+					 ( color.getBlue() / 255.0f ), ( color.getAlpha() / 255.0f ));
+	}
+
+	public static void glClearColor(GLFunc gl, Color color)
+	{
+		gl.glClearColor(color.getRed() / 255.0f, color.getGreen() / 255.0f,
+						color.getBlue() / 255.0f, color.getAlpha() / 255.0f);
 	}
 
 	public static int clamp(int color)

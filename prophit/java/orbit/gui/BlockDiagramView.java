@@ -31,12 +31,26 @@ class BlockDiagramView
 	private static double MOVE_INCREMENT = 0.5;
 	private static double DRAG_ROTATE_FACTOR = 5.0;
 
+	private static int TEXT_OFFSET_FROM_LEFT = 4;
+	private static int FONT_HEIGHT = 14;
+	private static int TEXT_BORDER = 3;
+	private static int FONT_TOTAL_HEIGHT = FONT_HEIGHT + 2 * TEXT_BORDER;
+	private static int LEGEND_BLOCK_HEIGHT = FONT_TOTAL_HEIGHT;
+	private static int LEGEND_BLOCK_WIDTH = 20;
+	
 	private float Z_Off = -5.0f;
 
-	float[] Light_Ambient =  { 0.75f, 0.75f, 0.75f, 1.0f };
-	float[] Light_Diffuse =  { 1.2f, 1.2f, 1.2f, 1.0f }; 
-	float[] Light_Position = { 5.0f, 5.0f, 5.0f, 1.0f };
+	// float[] Light_Ambient =  { 0.75f, 0.75f, 0.75f, 1.0f };
+	// float[] Light_Diffuse =  { 1.2f, 1.2f, 1.2f, 1.0f }; 
+	// float[] Light_Ambient1 =  { 0.75f, 0.75f, 0.75f, 1.0f };
+	// float[] Light_Specular1 =  { 0.0f, 0.0f, 0.0f, 1.0f };
+	float[] Light_Diffuse1 =  { 1.0f, 1.0f, 1.0f, 1.0f };
+	float[] Light_Position1 = { 5.0f, 5.0f, 5.0f, 1.0f };
 
+	// float[] Light_Ambient2 =  { 0.35f, 0.35f, 0.35f, 1.0f };
+	float[] Light_Diffuse2 =  { 0.40f, 0.40f, 0.40f, 1.0f };
+	float[] Light_Position2 = { -5.0f, -5.0f, 5.0f, 1.0f };
+	
 	float bevel_mat_shininess[] = { 50.0f };
 	float bevel_mat_specular[] = { 1.0f, 1.0f, 1.0f, 1.0f };
 
@@ -57,9 +71,11 @@ class BlockDiagramView
 	private Point mouseClickPoint = null;
 	private EyeLocation mouseClickLocation = null;
 
-	private GLUTFunc glut = null;
+	private GLUTFunc glut       = null;
+	private int      renderMode = BlockRenderer.RENDER_SOLID;
 
-	private int   renderMode = BlockRenderer.RENDER_SOLID;
+	// private ColorModel colorModel = new BlackRedBlueColorModel();
+	private ColorModel colorModel = new BlendedColorModel();
 
 	private BlockDiagramModel model;
 
@@ -83,7 +99,8 @@ class BlockDiagramView
 						generateDiagramLists = true;
 						generateSelectedLists = true;
 					}
-					if ( BlockDiagramModel.SELECTED_CALL_PROPERTY.equals(evt.getPropertyName()) )
+					if ( BlockDiagramModel.SELECTED_CALL_PROPERTY.equals(evt.getPropertyName()) ||
+						 BlockDiagramModel.NAME_SEARCH_STRING_PROPERTY.equals(evt.getPropertyName()) )
 					{
 						generateSelectedLists = true;
 					}
@@ -222,6 +239,13 @@ class BlockDiagramView
 
 	}
 
+	public Dimension getPreferredSize()
+	{
+		Dimension d = super.getPreferredSize();
+		Log.debug(LOG, "preferredSize = ", d);
+		return d;
+	}
+	
 	public void removeNotify() 
 	{
 		super.removeNotify();
@@ -246,7 +270,7 @@ class BlockDiagramView
 		glut = new GLUTFuncLightImplWithFonts(gl, glu);
 
 		// Color to clear color buffer to.
-		gl.glClearColor(0.1f, 0.1f, 0.1f, 0.0f);
+		GLUtils.glClearColor(gl, colorModel.getBackgroundColor());
 		
 		// Depth to clear depth buffer to; type of test.
 		gl.glEnable(GL_CULL_FACE);
@@ -262,20 +286,24 @@ class BlockDiagramView
 		gl.glMaterialfv(GL_FRONT, GL_SHININESS, bevel_mat_shininess);
 		gl.glMaterialfv(GL_FRONT, GL_SPECULAR, bevel_mat_specular);
 
-		gl.glColorMaterial(GL_FRONT_AND_BACK, GL_DIFFUSE);
+		// gl.glColorMaterial(GL_FRONT_AND_BACK, GL_DIFFUSE);
+		gl.glColorMaterial(GL_FRONT, GL_DIFFUSE);
 		gl.glEnable(GL_COLOR_MATERIAL);
 		
-		// Set up a light, turn it on.
-		gl.glLightfv(GL_LIGHT0, GL_AMBIENT,  Light_Ambient);
-		gl.glLightfv(GL_LIGHT0, GL_DIFFUSE,  Light_Diffuse);
-		gl.glLightfv(GL_LIGHT0, GL_POSITION, Light_Position);
+		// Set up lights, turn them on.
+		// gl.glLightfv(GL_LIGHT0, GL_AMBIENT,  Light_Ambient1);
+		gl.glLightfv(GL_LIGHT0, GL_DIFFUSE,  Light_Diffuse1);
+		// gl.glLightfv(GL_LIGHT0, GL_SPECULAR,  Light_Specular1);
+		gl.glLightfv(GL_LIGHT0, GL_POSITION, Light_Position1);
+
+		// gl.glLightfv(GL_LIGHT1, GL_AMBIENT,  Light_Ambient2);
+		gl.glLightfv(GL_LIGHT1, GL_DIFFUSE,  Light_Diffuse2);
+		gl.glLightfv(GL_LIGHT1, GL_POSITION, Light_Position2);
+
 		gl.glEnable(GL_LIGHT0); 
+		gl.glEnable(GL_LIGHT1); 
 		gl.glEnable(GL_LIGHTING);
 		
-		// A handy trick -- have surface material mirror the color.
-		// gl.glColorMaterial(GL_FRONT, GL_AMBIENT_AND_DIFFUSE);
-		// gl.glEnable(GL_COLOR_MATERIAL);
-
 		reshape(getSize().width, getSize().height);
 	}
 
@@ -310,7 +338,9 @@ class BlockDiagramView
 		gl.glLoadIdentity();
 
 		// System.out.println(eyeLocation);
-		
+
+		double legendShift = 1 / 8.0;
+		gl.glTranslated(legendShift, legendShift, 0);
 		gl.glTranslated(model.getShiftHorizontal(), model.getShiftVertical(), 0);
 		glu.gluLookAt(model.getEye().getX(), model.getEye().getY(), model.getEye().getZ(), 
 						  0, 0, 0, 0, 0, 1);
@@ -335,8 +365,9 @@ class BlockDiagramView
 
 		gl.glCallList(selectedCallsList);
 
-		drawStats();
-		drawName();
+		drawDiagramRoot();
+		drawMouseOverCall();
+		drawLegend();
 		
 		// All done drawing.  Let's show it.
 		glj.gljSwap();
@@ -378,26 +409,100 @@ class BlockDiagramView
 		glj.gljCheckGL();
 	}
 
-	void drawSelected()
+	/*
+	 * Draw 4 color bands with the header label 'Exclusive Time'
+	 * At the bottom and top of the legend should be the inclusive time value
+	 *   which corresponsd to the color
+	 */
+	void drawLegend()
+	{
+		int width = getSize().width;
+		int height = getSize().height;
+
+		textBegin();
+
+		gl.glTranslatef(TEXT_OFFSET_FROM_LEFT, height - FONT_HEIGHT - TEXT_BORDER, 0);
+
+		gl.glDisable(GL_LIGHTING);
+		gl.glDisable(GL_DEPTH_TEST); 
+		
+		GLUtils.glColor(gl, colorModel.getTextColor());
+		gl.glRasterPos2i(0, 2);
+		printString(GLUTEnum.GLUT_BITMAP_HELVETICA_12, "Exclusive Time");
+		
+		gl.glTranslatef(0, -( FONT_HEIGHT + TEXT_BORDER), 0);
+		gl.glRasterPos2i(0, 2);
+		printString(GLUTEnum.GLUT_BITMAP_HELVETICA_12, "(% of Inclusive Time)");
+
+		gl.glTranslatef(0, -( TEXT_BORDER * 2 ), 0);
+
+		int numBlocks = 3;
+		for ( int i = numBlocks; i >= 0; --i )
+		{
+			gl.glTranslatef(0, -LEGEND_BLOCK_HEIGHT, 0);
+
+			// Scale value from FRACTION_THRESHOLD to 1
+			double value = BlockRenderer.FRACTION_THRESHOLD + ( i * ( ( 1 - BlockRenderer.FRACTION_THRESHOLD ) / (double)numBlocks ) );
+			GLUtils.glColor(gl, colorModel.getBlockColor(0, BlockRenderer.FRACTION_THRESHOLD, 1, value));
+														 
+			gl.glBegin(GL_QUADS);
+			gl.glVertex2i(LEGEND_BLOCK_WIDTH, 0);
+			gl.glVertex2i(LEGEND_BLOCK_WIDTH, LEGEND_BLOCK_HEIGHT);
+			gl.glVertex2i(0, LEGEND_BLOCK_HEIGHT);
+			gl.glVertex2i(0, 0);
+			gl.glEnd();
+			
+			GLUtils.glColor(gl, colorModel.getTextColor());
+			gl.glRasterPos2i(LEGEND_BLOCK_WIDTH + TEXT_BORDER, TEXT_BORDER * 2);
+			printString(GLUTEnum.GLUT_BITMAP_HELVETICA_12, UIUtil.formatPercent(value));
+		}
+		
+		gl.glEnable(GL_LIGHTING);
+		gl.glEnable(GL_DEPTH_TEST); 
+		
+		textEnd();
+	}
+
+	void drawSearchedForCalls()
+	{
+		java.util.List callNames = model.getNameSearchNames();
+		for ( Iterator i = callNames.iterator(); i.hasNext(); )
+		{
+			String name = (String)i.next();
+			for ( Iterator j = model.getCallsByName(name).iterator(); j.hasNext(); )
+			{
+				Call call = (Call)j.next();
+				drawSelected(call, colorModel.getSearchMatchColor());
+			}
+		}
+	}
+
+	void drawSelectedCalls()
 	{
 		Call selectedCall = model.getSelectedCall();
 		Log.debug(LOG, "selectedCall is ", selectedCall);
 		if ( selectedCall == null )
 			return;
 
-		if ( !drawSelected(selectedCall, Color.white) )
+		if ( !drawSelected(selectedCall, colorModel.getSelectedCallColor()) )
+		{
+			model.setSelectedCall(null);
 			return;
+		}
 
 		for ( Iterator i = model.getCallsByName(selectedCall.getName()).iterator(); i.hasNext(); )
 		{
 			Call call = (Call)i.next();
 			if ( !call.equals(selectedCall) )
 			{
-				drawSelected(call, Color.yellow);
+				drawSelected(call, colorModel.getMatchingSelectedCallColor());
 			}
 		}
 	}
-	
+
+	/**
+	 * @return true if the selectedCall has a rectangle on the screen.
+	 */
 	boolean drawSelected(Call selectedCall, Color color)
 	{
 		ComputeCallLocation computeLocation = new ComputeCallLocation(selectedCall, model.getRootRenderState().getRenderCall());
@@ -407,7 +512,6 @@ class BlockDiagramView
 
 		if ( rectangle == null )
 		{
-			model.setSelectedCall(null);
 			return false;
 		}
 		
@@ -449,71 +553,61 @@ class BlockDiagramView
 		return true;
 	}
 	
-	void drawName()
+	void drawMouseOverCall()
+	{
+		String text = "Mouse over  : ";
+		if ( model.getMouseOverCall() != null )
+		{
+			text = text + model.getMouseOverCall().getName();
+		}
+
+		drawText(FONT_TOTAL_HEIGHT - TEXT_BORDER, text);
+	}
+	
+	void drawDiagramRoot()
+	{
+		CallAdapter call = new CallAdapter(model.getRootRenderState().getRenderCall());
+		String text = "Diagram root : " + UIUtil.getShortName(call.getName()) + " [ time = " +
+			UIUtil.formatTime(call.getInclusiveTime(measure)) + ", " +
+			UIUtil.formatPercent( call.getInclusiveTime(measure) / model.getCallGraph().getTime() ) + " of total ]";
+		
+		drawText(0, text);
+	}
+
+	private void drawText(int y, String text)
 	{
 		int width = getSize().width;
 		int height = getSize().height;
 
 		textBegin();
 
-		gl.glTranslatef(0, height - 14, 0);
-
+		gl.glTranslatef(0, y, 0);
+		
 		// Make sure we can read the FPS section by first placing a 
 		// dark, opaque backdrop rectangle.
-		gl.glColor3d( 0, 0, 0);
+		GLUtils.glColor(gl, colorModel.getBackgroundColor() );
 
 		gl.glDisable(GL_LIGHTING);
 		gl.glDisable(GL_DEPTH_TEST); 
 		
 		gl.glBegin(GL_QUADS);
-		gl.glVertex2i(width, -2);
-		gl.glVertex2i(width, 14);
-		gl.glVertex2i(0, 14);
-		gl.glVertex2i(0, -2);
-		gl.glEnd();
-
-		if ( model.getMouseOverCall() != null )
-		{
-			gl.glColor3d(1.0, 1.0, 1.0);
-			gl.glRasterPos2i(6, 2);
-			printString(GLUTEnum.GLUT_BITMAP_HELVETICA_12, model.getMouseOverCall().getName());
-		}
-
-		gl.glEnable(GL_LIGHTING);
-		gl.glEnable(GL_DEPTH_TEST); 
-		
-		textEnd();
-	}
-	
-	void drawStats()
-	{
-		int width = getSize().width;
-		int height = getSize().height;
-
-		textBegin();
-
-		// Make sure we can read the FPS section by first placing a 
-		// dark, opaque backdrop rectangle.
-		gl.glColor3d( 0, 0, 0);
-			
-		gl.glBegin(GL_QUADS);
 		gl.glVertex2i(width, 0);
-		gl.glVertex2i(width, 16);
-		gl.glVertex2i(0, 16);
+		gl.glVertex2i(width, FONT_HEIGHT);
+		gl.glVertex2i(0, FONT_HEIGHT);
 		gl.glVertex2i(0, 0);
 		gl.glEnd();
 
-		gl.glDisable(GL_LIGHTING);
-		gl.glDisable(GL_DEPTH_TEST); 
-		gl.glColor3d(1.0, 1.0, 1.0);
-		gl.glRasterPos2i(6, 2);
-		CallAdapter call = new CallAdapter(model.getRootRenderState().getRenderCall());
-		printString(GLUTEnum.GLUT_BITMAP_HELVETICA_12, "Root = " + UIUtil.getShortName(call.getName()) + ", time = " + UIUtil.formatTime(call.getInclusiveTime(measure)) + ", " + UIUtil.formatPercent( call.getInclusiveTime(measure) / model.getCallGraph().getTime() ) + " of total");
+		GLUtils.glColor(gl, colorModel.getTextColor());
+		gl.glRasterPos2i(TEXT_OFFSET_FROM_LEFT, TEXT_BORDER);
+		
+		printString(GLUTEnum.GLUT_BITMAP_HELVETICA_12, text);
+
 		gl.glEnable(GL_LIGHTING);
-		gl.glEnable(GL_DEPTH_TEST); 
+		gl.glEnable(GL_DEPTH_TEST);
+		
 		textEnd();
 	}
-	
+
 	/*
 	 * Find the Call which is rendered <code>screenPoint</code> and set the mouseOverCall
 	 * variable to that Call (or to null).
@@ -617,7 +711,7 @@ class BlockDiagramView
 
 			// Render as wire frame
 			{
-				renderer = new BlockRenderer(gl, BlockRenderer.RENDER_WIREFRAME);
+				renderer = new BlockRenderer(gl, BlockRenderer.RENDER_WIREFRAME, colorModel);
 				layout.setCallback(renderer);
 				
 				gl.glNewList(linesList, GL_COMPILE);
@@ -629,7 +723,7 @@ class BlockDiagramView
 
 			// Render as solid
 			{
-				renderer = new BlockRenderer(gl, BlockRenderer.RENDER_SOLID);
+				renderer = new BlockRenderer(gl, BlockRenderer.RENDER_SOLID, colorModel);
 				layout.setCallback(renderer);
 				
 				gl.glNewList(quadsList, GL_COMPILE);
@@ -658,7 +752,8 @@ class BlockDiagramView
 
 			gl.glNewList(selectedCallsList, GL_COMPILE);
 			
-			drawSelected();
+			drawSelectedCalls();
+			drawSearchedForCalls();
 			
 			gl.glEndList();
 		}
@@ -694,5 +789,23 @@ class BlockDiagramView
 		//for ( int i = 0; i < str.length(); i++ )
 		//	glut.glutBitmapCharacter(font,str.charAt(i));
 		glut.glutBitmapString(font, str);
+	}
+
+	public interface ColorModel
+	{
+		public Color getBackgroundColor();
+
+		public Color getSearchMatchColor();
+
+		public Color getTextColor();
+
+		public Color getSelectedCallColor();
+
+		public Color getMatchingSelectedCallColor();
+
+		public Color getBlockColor(double minimumValue, double neutralValue, double maximumValue,
+								   double actualValue);
+		
+		public Color getBlockBorderColor();
 	}
 }
