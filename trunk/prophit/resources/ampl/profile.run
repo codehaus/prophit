@@ -1,0 +1,9 @@
+# Assign initial values for I
+for {i in I}
+{
+	let f[i] := nCalls[parent[i]] / sum {j in I: rccOf[j] == rccOf[i]} nCalls[parent[j]]
+}
+
+solve;
+display f;
+# display fError;

@@ -1,0 +1,201 @@
+
+Make sure files end with new-lines
+
+CallFractionSolver:
+  modelResourceName = '/ampl/profile.mod'
+  commandsResourceName = '/ampl/profile.run'
+  
+  CallFractionSolver():
+
+  double[] execute(userName, callIDs, proxyCallIDs):
+    Solver solver = Solver(SocketConnectionFactory())
+    String results = solver.execute(getUserName(), getModel(), getData(), getCommands())
+    return parse(results)
+
+  double[] parse(String results):
+    LineNumberReader reader = new LineNumberReader(new StringReader(results))
+    line
+    while ( ( line = reader.readLine() ) != 'f [*] :=' ):
+      pass
+    while ( ( line = reader.readLine() ) != ';' ):
+      # See algorithm in MapFrame
+
+  String getUserName():
+    userName = System.getProperty('solver.user.name')
+    if not userName:
+      userName = System.getProperty('user.name')
+    return userName
+
+  Datum getModel():
+    return StringDatum(readResource(modelResourceName))
+
+  Datum getCommands():
+    return StringDatum(readResource(commandsResourceName))
+
+  Datum getData():
+    # see algorithm in DashProfInvocationParser
+
+  String readResource(String resourceName):
+    InputStream is = getClass().getResourceAsStream(resourceName)
+    BufferedReader reader = new BufferedReader(new InputStreamReader(is))
+    StringBuffer sb = new StringBuffer()
+    String line;
+    while ( ( line = reader.readLine() ) != null ):
+      sb.append(line);
+      sb.append("\n")
+    sb.append("\n")
+    return sb.toString()
+                      
+  
+  
+		  
+
+
+commands: 
+  verify? 
+  begin job [total bytes]
+    TYPE NCO
+	 SOLVER DONLP2
+	 BEGIN.COM[<size>]
+	   command file
+	 BEGIN.MOD[<size>]
+	   model file
+	 BEGIN.DAT[<size>]
+	   data file
+  get results <job number>
+
+Solve:
+  double[] execute(List proxyCalls):
+    userName = getUserName()
+    String data = buildData(proxyCalls)
+    String model = readModel()
+    String commands = buildCommands()
+
+    verify = VerifyCommand(userName)
+    execute(verify)
+    serverID = verify.getServerID()
+    beginJob = BeginJobCommand(userName, modelDatum, dataDatum, commandsDatum)
+    execute(beginJob)
+    jobNumber = beginJob.getJobNumber()
+    getResults = GetResultsCommand(userName, jobNumber)
+    execute(getResults)
+    results = getResults.getResults()
+
+Command:
+  writeHeader(writer, command):
+    writer.writeln(userName)
+    writer.writeln(command)
+
+  String readSizedResult(reader):
+    size = Integer.parseInt(readLine(reader))
+    return read(reader, size)
+
+  String read(reader, size):
+    byte[] b = byte[size]
+    reader.read(b, size)
+    return String(b)
+
+  String readLine(reader):
+
+  String readFully(reader):
+
+VerifyCommand:
+  VerifyCommand(userName):
+
+  getServerID():
+  
+  void execute(writer, reader):
+    writeHeader(writer, "verify")
+    serverID = readSizedResult()
+
+GetResultsCommand:
+  GetResultsCommand(userName, jobNumber):
+
+  getResults():
+
+  execute(writer, reader):
+    writeHeader(writer, "get results " + jobNumber)
+    results = readFully(reader)
+
+BeginJobCommand:
+  BeginJobCommand(userName, modelDatum, dataDatum, commandsDatum):
+
+  getJobNumber():
+
+  # Begin the job and return the job number
+  execute(writer, reader):
+    MultiDatum md = new MultiDatum()
+    md.add(StringDatum("TYPE NCO\n"))
+    md.add(StringDatum("SOLVER DONLP2\n\n"))
+
+    if commandsDatum:
+      MultiDatum commands = MultiDatum()
+      commands.add(StringDatum("BEGIN.COM[" + commandsDatum.getSize() + "]"))
+      commands.add(commandsDatum)
+      md.add(commands)
+
+    MultiDatum model = MultiDatum()
+    model.add(StringDatum("BEGIN.MOD[" + modelDatum.getSize() + "]"))
+    model.add(modelDatum)
+    md.add(model)
+
+    MultiDatum data = MultiDatum()
+    data.add(StringDatum("BEGIN.DAT[" + dataDatum.getSize() + "]"))
+    data.add(dataDatum)
+    md.add(data)
+
+    writeHeader(writer, "begin job " + md.getSize())
+    writer.write(md.getText())
+
+    jobNumber = Integer.parseInt(reader.readLine())
+
+Output:
+  Output(name, datum, writeSize)
+
+  write(writer):
+    writer.write(name)
+    if writeSize:
+      formatter.format(writer, datum.getSize())
+    writer.writeln()
+    writer.write(datum.getText())
+
+InputAll:
+  read(reader):
+    while line = reader.read():
+      result.append(line)
+    return result
+
+InputDatum:
+  read(reader):
+    size = reader.readSize()
+    result = reader.read(size)
+    return result
+
+Datum:
+  getSize()
+  getText()
+
+StringDatum:
+  getSize(): return str.length()
+  getText(): return str
+
+FileDatum:
+  getSize(): return file.length()
+  getText(): return read(file)
+
+MultiDatum:
+  add(datum):
+    data.add(datum)
+  
+  getSize():
+    size = 0
+    for datum in data:
+      size += datum.getSize()
+    return size
+  
+  getText():
+    sb = StringBuffer()
+    for datum in data:
+      sb.append(datum.getText())
+    return sb
+

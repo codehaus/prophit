@@ -1,0 +1,25 @@
+# See dbCallTree.dat for call tree
+#
+# In this example, all the times are split evenly between the 2 call trees (init and test, insert and update)
+
+data;
+
+param time :=
+	DBExec1	50
+	DBExec2	50
+	insert	20
+	update	20
+	token1	15
+	token2	15
+	getChars	20
+	;
+param nCalls :=
+	DBExec1	1
+	DBExec2	1
+	insert	10
+	update	10
+	token1	15
+	token2	15
+	getChars	100
+	;
+

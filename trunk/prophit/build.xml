@@ -1,0 +1,106 @@
+<?xml version="1.0"?>
+
+<project name="orbit" default="jar">
+
+  <property name="build" value="build" />
+  <property name="dist" value="${build}/dist" />
+
+  <path id="run.class.path">
+	 <pathelement path="${build}/lib/orbit.jar" />
+  </path>
+
+  <path id="test.class.path">
+	 <path refid="run.class.path" />
+	 <fileset dir="${basedir}/lib" />
+	 <pathelement path="${build}/classes" />
+  </path>
+
+  <path id="compile.class.path">
+  </path>
+
+  <target name="init">
+	 <mkdir dir="${build}" />
+	 <mkdir dir="${build}/classes" />
+	 <mkdir dir="${build}/lib" />
+	 <mkdir dir="${dist}" />
+  </target>
+
+  <target name="compile" depends="init">
+    <javac classpathref="compile.class.path" srcdir="java" debug="yes" destdir="${build}/classes" />
+  </target>
+
+  <target name="jar" depends="compile">
+    <jar jarfile="${build}/lib/orbit.jar">
+	  <fileset dir="${build}/classes" />
+	  <fileset dir="resources" />
+    </jar>
+  </target>
+
+  <target name="compile-no-gui" depends="init">
+    <javac classpathref="compile.class.path" srcdir="java" debug="yes" destdir="${build}/classes"
+			excludes="orbit/gui/**,test/**," />
+  </target>
+
+  <target name="jar-no-gui" depends="compile-no-gui">
+    <jar jarfile="${build}/lib/orbit.jar">
+	  <fileset dir="${build}/classes" excludes="${build}/classes/orbit/gui/**" />
+	  <fileset dir="resources" />
+    </jar>
+  </target>
+
+  <target name="dist" depends="jar">
+    <copy todir="${dist}">
+	  <fileset dir="bin" />
+	</copy>
+    <copy todir="${dist}/data">
+	  <fileset dir="data" />
+	</copy>
+    <copy todir="${dist}/lib">
+	  <fileset dir="${build}/lib" />
+	</copy>
+
+	<zip zipfile="${build}/orbit.zip">
+	  <fileset dir="${dist}" />
+	</zip>
+  </target>
+
+  <target name="clean">
+		<delete dir="${build}" />
+  </target>
+
+  <target name="run" depends="jar">
+    <java classpathref="run.class.path" fork="true" maxmemory="256M" classname="orbit.gui.MapFrame">
+<!--	  <arg line="d:/java/hsqldb_v.1.61/demo/java.prof - -fractions fraw.txt" /> -->
+<!-- 	  <arg line="weblogic-system.prof - -fractions weblogic-system.prof.fractions" /> -->
+<!--  	  <arg line="data/hsqldb.prof" /> -->
+    </java>
+  </target>
+
+  <target name="parse" depends="jar">
+    <java classpathref="run.class.path" fork="true" maxmemory="256M" classname="orbit.parsers.DashProfInvocationParser">
+<!--      <jvmarg value="-Xrunhprof:cpu=samples"/>  
+	  <arg line="${basedir}/simple.prof" />
+	  <arg line="${basedir}/self.prof" />
+	  <arg line="d:/java/hsqldb_v.1.61/demo/java.prof" />
+      <jvmarg value="-Xrunhprof:cpu=samples"/>  
+      <jvmarg value="-prof"/>   
+	  <arg line="${basedir}/simple.prof -solve" />
+-->
+	  <arg line="weblogic-system.prof -solve" />
+	</java>
+  </target>
+
+  <target name="compile-tests" depends="init">
+    <javac classpathref="compile.class.path" srcdir="test/java" debug="yes" destdir="${build}/classes" />
+  </target>
+
+  <target name="test" depends="jar,compile-tests">
+    <java fork="true" classpathref="test.class.path" classname="test.Test">
+	</java>
+  </target>
+
+  <target name="hello" depends="jar,compile-tests">
+    <java classpathref="class.path" fork="true" classname="test.HelloList" />
+  </target>
+
+</project>
