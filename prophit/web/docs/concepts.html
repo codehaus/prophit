@@ -274,28 +274,28 @@ of your profile, then provides you with the data you need to improve your progra
                     </ul>
                   </ul>
                   <h2><a name="navigation">Navigation Buttons</a></h2>
-                  <p>The buttons at the top of the application are all used to 
-                    change the <a href="glossary.html#diagram_root">diagram root 
-                    </a>of the tower diagram. When a new profile is opened in 
-                    prophIt, the diagram root is always a function which has no 
-                    callers. The <code>main</code> function of the program is 
-                    always either the diagram root, or a callee of the diagram 
-                    root. Other callees of the diagram root represent other threads.</p>
-                  <dl> 
-                    <dt>Back</dt>
-                    <dd>Similar to a Back button in a web browser. Changes the 
-                      diagram root back to its previous value.</dd>
-                    <dt>Forward</dt>
-                    <dd>Similar to a Forward button in a web browser. Un-does 
-                      the effect of using the Back button. </dd>
-                    <dt>Parent</dt>
-                    <dd>Sets the diagram root to the <a href="glossary.html#caller">caller</a> 
-                      of the current diagram root.</dd>
-                    <dt>Root</dt>
-                    <dd>Sets the diagram root to the root of the entire profile. 
-                      This is the same view that appeared when the profile was 
-                      first opened in prophIt.</dd>
-                  </dl>
+                    <p>The buttons at the top of the application are all used 
+                      to change the <a href="glossary.html#diagram_root">diagram 
+                      root </a>of the tower diagram. The <a href="glossary.html#callee">callees</a> of the root of 
+                      the call graph may represent functions called by <code>main</code>, 
+                      or other threads.</p>
+                    <dl> 
+                      <dt>Back</dt>
+                      <dd>Similar to a Back button in a web browser. Returns the 
+                        diagram root back to its previous value.</dd>
+                      <dt>Forward</dt>
+                      <dd>Similar to a Forward button in a web browser. Un-does 
+                        the effect of using the Back button. Disabled if the Back 
+                        button has not been used.</dd>
+                      <dt>Parent</dt>
+                      <dd>Sets the diagram root to the <a href="glossary.html#caller">caller</a> 
+                        of the current diagram root. Repeatedly pushing the 'Parent' 
+                        button shows more and more of the program's call graph.</dd>
+                      <dt>Root</dt>
+                      <dd>Pushing this button shows the entire call graph. This 
+                        is the same view that appeared when the profile was first 
+                        opened in prophIt.</dd>
+                    </dl>
                   <h2><a name="search">Searching</a></h2>
                   <p>The Search bar, located above the tower diagram, provides 
                     a fast and flexible way to locate function calls.</p>
