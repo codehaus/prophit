@@ -2,6 +2,7 @@ package orbit.parsers;
 
 import orbit.model.*;
 import orbit.util.Log;
+import orbit.util.XMLConstants;
 
 import org.apache.log4j.Category;
 import net.n3.nanoxml.*;
@@ -101,7 +102,7 @@ public class ProphitParserLoader implements Parser, Loader
 		/* might call a DTD validator here, or just check for the 
 		 * existence of a few elements from the xml file that we are expecting. 
 		 */
-		String match = new String("<?xml");
+		String match = new String(XMLConstants.FILEMATCH);
 		String firstline = ((LineNumberReader)this.reader).readLine().trim();
 
 		if ( !(firstline.startsWith(match)))
@@ -154,7 +155,7 @@ public class ProphitParserLoader implements Parser, Loader
 			IXMLElement callgraph = (IXMLElement) xmlparser.parse();
 	    
 			Log.debug(LOG, "ELEMENT: ", callgraph.getFullName());
-			Log.debug(LOG, "User: ", callgraph.getFirstChildNamed("user").getContent());
+			Log.debug(LOG, "User: ", callgraph.getFirstChildNamed(XMLConstants.USER).getContent());
 
 			this.callgraph = makeNewCallGraph( callgraph );
 
@@ -201,7 +202,7 @@ public class ProphitParserLoader implements Parser, Loader
 	 */
 	private StackTrace makeNewStackTrace(IXMLElement st) throws XMLException
 	{
-		Vector vMethods = st.getChildrenNamed("method");
+		Vector vMethods = st.getChildrenNamed(XMLConstants.METHOD);
 		String[] methods = new String[vMethods.size()];
 
 		for (int i = 0; i < vMethods.size(); i++)
@@ -222,13 +223,13 @@ public class ProphitParserLoader implements Parser, Loader
 	 */
 	private RCC makeNewRCC(IXMLElement measurement) throws XMLException
 	{
-		StackTrace st = makeNewStackTrace(measurement.getFirstChildNamed("stacktrace"));
+		StackTrace st = makeNewStackTrace(measurement.getFirstChildNamed(XMLConstants.STACKTRACE));
 	
 		RCC rcc = new RCC(st, 
-								Integer.parseInt(measurement.getAttribute("numCalls")), 
-								Long.parseLong(measurement.getAttribute("time")), 
+								Integer.parseInt(measurement.getAttribute(XMLConstants.NUMCALLS)), 
+								Long.parseLong(measurement.getAttribute(XMLConstants.TIME)), 
 								-1, 
-								Integer.parseInt(measurement.getAttribute("id")));
+								Integer.parseInt(measurement.getAttribute(XMLConstants.ID)));
 	
 		return ( rcc );
 	}
@@ -251,8 +252,8 @@ public class ProphitParserLoader implements Parser, Loader
 		  }
 		*/
 	
-		int  rccID   = Integer.parseInt(invocation.getAttribute("measurementID"));
-		int parentID = Integer.parseInt(invocation.getAttribute("parentMeasurementID", "-1"));
+		int  rccID   = Integer.parseInt(invocation.getAttribute(XMLConstants.MYID));
+		int parentID = Integer.parseInt(invocation.getAttribute(XMLConstants.PARENTID, "-1"));
 		CallID cid = null;
 	
 		cid = new CallID( rccArray[rccID], ((parentID != -1) ?  rccArray[parentID] : null), key );
@@ -270,7 +271,7 @@ public class ProphitParserLoader implements Parser, Loader
 		// this should get the attribute callFraction, or -1 if there is no such attribute. 
 		// then turn it into a double and store on the local var "fraction"
 		//System.out.println("Fraction: " + invocation.getAttribute("callFraction", "-1"));
-		double fraction = Double.parseDouble(invocation.getAttribute("callFraction", "-1"));
+		double fraction = Double.parseDouble(invocation.getAttribute(XMLConstants.FRACTION, "-1"));
 		return ( fraction );
 	}
 
@@ -333,8 +334,8 @@ public class ProphitParserLoader implements Parser, Loader
 	 */
 	private CallGraph makeNewCallGraph(IXMLElement callgraph) throws XMLException
 	{
-		Vector vMeasurements = callgraph.getChildrenNamed("measurement");
-		Vector vInvocations = callgraph.getChildrenNamed("invocation");
+		Vector vMeasurements = callgraph.getChildrenNamed(XMLConstants.MEASUREMENT);
+		Vector vInvocations = callgraph.getChildrenNamed(XMLConstants.INVOCATION);
 
 		RCC[] rccArray = new RCC[vMeasurements.size()+1];	    
 		processMeasurements( vMeasurements, rccArray );

@@ -118,6 +118,11 @@ public class StackTrace
 			return null;
 	}
 
+	public String[] getMethods()
+	{
+		return stack;  // if we want to protect the array we could return a copy. 
+	}
+
 	public String toString()
 	{
 		StringBuffer sb = new StringBuffer();

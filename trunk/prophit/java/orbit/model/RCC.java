@@ -1,5 +1,7 @@
 package orbit.model;
 
+import java.util.*;
+
 /**
  * 'RCC' is a 'recorded caller/callee', read from the profile data file.
  * In general, each entry in the profile data file which records the number of calls and
@@ -11,6 +13,30 @@ package orbit.model;
  */
 public class RCC
 {
+
+	/** 
+	 * Get the RCC's associated with the CallIDs presented.
+	 * @param calls   The List of CallIDs for whom we want the rcc's.
+	 * @return        The List of RCC's.
+	 */
+	public static RCC[] getRCCs(CallID[] calls)
+	{
+		List rccList = new ArrayList();
+		Set rccSet = new HashSet();
+		for (int i = 0; i < calls.length; i++)
+		{
+			if ( calls[i] != null )
+			{
+				RCC r = calls[i].getRCC();
+				if (rccSet.add(r))
+				{
+					rccList.add(r);
+				}
+			}
+		}
+		return ( (RCC[])rccList.toArray(new RCC[0]) );
+	}
+		
 	private final StackTrace st;
 	private final int    key;
 
@@ -80,6 +106,7 @@ public class RCC
 		exclusiveTime += exclusiveTimeAdjust;
 		nCalls += nCallsAdjust;
 	}
+
 	
 	public String toString()
 	{

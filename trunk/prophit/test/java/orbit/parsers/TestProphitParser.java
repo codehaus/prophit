@@ -7,6 +7,7 @@ import util.*;
 //import orbit.gui.RectangleLayout;
 import orbit.model.*;
 import orbit.parsers.*;
+import orbit.writer.*;
 import orbit.util.*;
 
 import junit.framework.TestCase;
@@ -25,11 +26,12 @@ public class TestProphitParser
 
 	public void testXMLSampleParser() throws Exception
 	{
-		try {
+		try 
+		{
 			//System.out.println("HEY");
-
+			
 			Parser parser = new ProphitParserLoader(new FileReader(System.getProperty("basedir") + "/test/data/simple-profile-std.xml")); 
-
+			
 			assertTrue("File Format is recognized.", parser.isFileFormatRecognized());
 			ModelBuilder builder = ModelBuilderFactory.newModelBuilder();
 			parser.execute(builder);
@@ -44,7 +46,8 @@ public class TestProphitParser
 
 	public void testParserFactory() throws Exception
 	{
-		try {
+		try 
+		{
 			File file = new File(System.getProperty("basedir") + "/test/data/simple-profile-std.xml");
 			Parser parser = ParserFactory.instance().createParser(file);
 			//System.out.println(parser);
@@ -52,7 +55,8 @@ public class TestProphitParser
 			ModelBuilder builder = ModelBuilderFactory.newModelBuilder();
 			parser.execute(builder);
 		}
-		catch (Exception x) {
+		catch (Exception x) 
+		{
 			System.out.println(x.getMessage());
 			throw new Exception(x.getMessage());
 		}
@@ -61,12 +65,15 @@ public class TestProphitParser
 
 	public void testLoaderFactory() throws Exception
 	{
-		try {
+		try 
+		{
 			File file = new File(System.getProperty("basedir") + "/test/data/simple-profile-std.xml");
 			Loader loader = LoaderFactory.instance().createLoader(file);
 
 			assertTrue("loader is a ProphitParserLoader", loader.getClass() == ProphitParserLoader.class);
-		} catch (Exception x) {
+		} 
+		catch (Exception x) 
+		{
 			System.out.println(x.getMessage());
 			throw new Exception(x.getMessage());
 		}
@@ -74,14 +81,39 @@ public class TestProphitParser
 
 	public void testLoadingWithFactory() throws Exception
 	{
-		try {
+		try 
+		{
 			File file = new File(System.getProperty("basedir") + "/test/data/simple-profile-std.xml");
 			Loader loader = LoaderFactory.instance().createLoader(file);
-
+			
 			assertTrue("loader is a ProphitParserLoader", loader.getClass() == ProphitParserLoader.class);
 			loader.parse();
+			
+		} 
+		catch (Exception x) 
+		{
+			System.out.println(x.getMessage());
+			throw new Exception(x.getMessage());
+		}
+	}
 
-		} catch (Exception x) {
+	public void testWritingSimple() throws Exception
+	{
+		try
+		{
+			File file = new File(System.getProperty("basedir") + "/test/data/simple-profile-std.xml");
+			Loader loader = LoaderFactory.instance().createLoader(file);
+			
+			assertTrue("loader is a ProphitParserLoader", loader.getClass() == ProphitParserLoader.class);
+			loader.parse();
+			CallGraph cg = loader.solve();
+			assertTrue("CallGraph is not null.", cg != null);
+			File out = new File(System.getProperty("basedir") + "/test/data/blah-output.xml");
+			ProphitWriter writer = new ProphitWriter( cg, out );
+			writer.write();
+		}
+		catch (Exception x)
+		{
 			System.out.println(x.getMessage());
 			throw new Exception(x.getMessage());
 		}
