@@ -99,21 +99,26 @@ public class HProfSolver
 				
 				// Store the RCC of the callID
 				rccs[callID.getRCC().getKey()] = callID.getRCC();
-				
-				// Traverse through the parents of the current CallID
-				// For each parent, add the fraction-adjusted time of this CallID to
-				//   its inclusive time
-				traversalStack.clear();
-				traversalStack.addAll(callStack);
-				double fraction = fractions[callID.getKey()];
-				// Start with the parent of the current stack
-				traversalStack.pop();
-				while ( !traversalStack.isEmpty() )
+
+				// The RCCs which are generated from sub-stacks of the calls in the profile file
+				//   have time=0. There can be quite a few of these...
+				if ( callID.getRCC().getTime() > 0 )
 				{
-					int parentID = traversalStack.pop();
-					CallID parentCall = (CallID)callIDs.get(parentID);
-					inclusiveTimeAdjustments[parentCall.getRCC().getKey()] += callID.getRCC().getTime() * fraction;
-					fraction *= fractions[parentID];
+					// Traverse through the parents of the current CallID
+					// For each parent, add the fraction-adjusted time of this CallID to
+					//   its inclusive time
+					traversalStack.clear();
+					traversalStack.addAll(callStack);
+					double fraction = fractions[callID.getKey()];
+					// Start with the parent of the current stack
+					traversalStack.pop();
+					while ( !traversalStack.isEmpty() )
+					{
+						int parentID = traversalStack.pop();
+						CallID parentCall = (CallID)callIDs.get(parentID);
+						inclusiveTimeAdjustments[parentCall.getRCC().getKey()] += callID.getRCC().getTime() * fraction;
+						fraction *= fractions[parentID];
+					}
 				}
 				// return callStack.size() > STACK_THRESHOLD && fraction * callID.getRCC().getTime() > GRAPH_THRESHOLD;
 				return true;
