@@ -67,7 +67,19 @@ public class Log
 			log.debug("" + msg1 + msg2 + msg3);
 	}
 
+	public static void debug(Category log, Object msg1, Object msg2, int msg3)
+	{
+		if ( log.isDebugEnabled() )
+			log.debug("" + msg1 + msg2 + msg3);
+	}
+
 	public static void debug(Category log, Object msg1, Object msg2, Object msg3, Object msg4)
+	{
+		if ( log.isDebugEnabled() )
+			log.debug("" + msg1 + msg2 + msg3 + msg4);
+	}
+
+	public static void debug(Category log, Object msg1, int msg2, Object msg3, int msg4)
 	{
 		if ( log.isDebugEnabled() )
 			log.debug("" + msg1 + msg2 + msg3 + msg4);
