@@ -54,7 +54,7 @@ MM_reloadPage(true);
   <table cellspacing="0" cellpadding="4" width="100%">
     <tr>
 			
-      <td class="TopMenu"> Last Published: 10/28/2002 </td>
+      <td class="TopMenu"> Last Published: 02/14/2002 </td>
 			<td>
 				
         <div align="right"> <span class="TopMenu"><a href="../index.html">prophIt</a> 
@@ -133,6 +133,8 @@ of your profile, then provides you with the data you need to improve your progra
                     <li><a href="#navigation">Navigation Buttons</a></li>
                     <li><a href="#search">Searching</a></li>
                     <li><a href="#call_tables">Call Tables</a></li>
+                    <li><a href="#level_of_detail">Level of Detail</a></li>
+                    <li><a href="#wireframe">Wireframe</a></li>
                   </ul>
 				  
                   <div class="header">Call Graphs</div>
@@ -254,8 +256,8 @@ of your profile, then provides you with the data you need to improve your progra
                       call depth which is displayed in the diagram. In the example 
                       above, functions up to 14 calls deep are being displayed.</li>
                     <ul>
-                      <li>The call depth can be expanded beyond 15 by clicking 
-                        on the diagram and using the + and - keys</li>
+                      <li>As you navigate around the tower diagram, the depth slider adjusts automatically
+					  for the maximum call depth.</li>
                     </ul>
                     <li>The text at the bottom shows information about the function 
                       which is at the base of the diagram</li>
@@ -378,7 +380,28 @@ of your profile, then provides you with the data you need to improve your progra
                       inclusive time of all callees was spent in <code>init</code>. 
                       The remaining 40% was spent in <code>test</code>.</li>
                   </ul>
-				  </blockquote>
+				  <p/>
+                  <a name="level_of_detail"> 
+                  <h2>Level of Detail</h2>
+                    </a> You can control the amount of detail displayed in the tower 
+                    diagram using the Level of Detail control. If your program 
+                    is very large, or if you just want to get a rough idea of 
+                    the overall profile, lowering the Level of Detail will reduce 
+                    the amount of information shown on the screen, and improve 
+                    the performance of the display. For close examination of the 
+                    profile, increase the level of detail.
+
+					<p/>
+                  <a name="wireframe"> 
+                  <h2>Wireframe</h2>
+                  </a> 
+				  Normally, the blocks in the tower diagram are rendered as solid blocks. While the diagram is being
+				  rotated, the blocks are rendered in wireframe for better performance. Wireframe mode is also
+				  used after you use the Search bar so that you can easily see all the search results throughout the
+				  entire diagram. You can enable or disable Wireframe mode manually at any time using the Wireframe checkbox.
+				   
+					
+					</blockquote>
 				  <div class="header">So What's Next?</div>
 				  <blockquote>
 				  	Of course we're planning on new and better features to incorporate into prophIt.  

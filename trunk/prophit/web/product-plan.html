@@ -54,7 +54,7 @@ MM_reloadPage(true);
   <table cellspacing="0" cellpadding="4" width="100%">
     <tr>
 			
-      <td class="TopMenu"> Last Published: 10/28/2002 </td>
+      <td class="TopMenu"> Last Published: 02/14/2002 </td>
 			<td>
 				
         <div align="right"> <span class="TopMenu"><a href="index.html">prophIt</a> 
@@ -95,183 +95,60 @@ MM_reloadPage(true);
 			    <table name="MainTable" width="100%" bordercolor="#999999"  cellspacing="0" cellpadding="8" border="0">
 					<tr>
 						<td><div id="mainContentLayer">
-						<!-- #BeginEditable "Main%20Content%20Region" -->
+						<!-- #BeginEditable "Main%20Content%20Region" --> 
                   <div class="header"><font size="4">New Feature Proposals</font></div>
-				  <blockquote>
-				  	This is a summary of our thoughts on product plan and direction.  As with any aspect of our site, please  
-					<a href="mailto:info@prophit.westslopesoftware.com">send email</a> to us with your thoughts and opinions.
-				  </blockquote>
-				  <p>
+                  <blockquote> This is a summary of our thoughts on product plan 
+                    and direction. As with any aspect of our site, please <a href="mailto:info@prophit.westslopesoftware.com">send 
+                    email</a> to us with your thoughts and opinions. </blockquote>
+                  <p> 
                   <div class="header">Contents</div>
-                  <blockquote>
-				  <ul>
-                    <li><a href="#intelligent_labeling">Intelligent labeling</a></li>
-                    <li><a href="#wire_frame">Wire-frame mode</a></li>
-                    <li><a href="#improve_depth_slider">Improve depth slider</a></li>
-                    <li><a href="#time_threshold">Set time threshold</a></li>
-                    <li><a href="#selection_feedback">Enhanced selection feedback</a></li>
-                    <li><a href="#new_coloring">New coloring options</a></li>
-                    <li><a href="#enhanced_searching">Enhanced searching</a></li>
-                  	<li><a href="#compact_data_format">Compact call graph data format</a></li>
-                  	<li><a href="#recursion_collapse">Collapse recursive functions</a></li>
-                  	<li><a href="#profile_comparison">Profile comparison</a></li>
-                  	<li><a href="#python_loader">Python profile loader</a></li>
-                  	<li><a href="#perl_loader">Perl profile loader</a></li>
-                  	<li><a href="#haskell_loader">Haskell profile loader</a></li>
-                  </ul>
+                  <blockquote> 
+                    <ul>
+                      <li><a href="#intelligent_labeling">Intelligent labeling</a></li>
+					  <li><a href="#enhanced_searching">Enhanced searching</a></li>
+                      <li><a href="#new_coloring">New coloring options</a></li>
+                      <li><a href="#recursion_collapse">Collapse recursive functions</a></li>
+                      <li><a href="#profile_comparison">Profile comparison</a></li>
+                      <li><a href="#python_loader">Python profile loader</a></li>
+                      <li><a href="#perl_loader">Perl profile loader</a></li>
+                      <li><a href="#haskell_loader">Haskell profile loader</a></li>
+                    </ul>
                   </blockquote>
-				  <a name="intelligent_labeling"><div class="header">Intelligent labeling of the 
-                    tower diagram</div>
+                  <a name="intelligent_labeling"> 
+                  <div class="header">Intelligent labeling of the tower diagram</div>
                   </a> 
-				  <blockquote>
-				  The typical capacity of person's short-term memory is 7 
-                  items. Without labels, keeping track of which blocks in the 
-                  tower diagram correspond to which functions can become unmanagable. 
-                  The tower diagram UI can help solve this problem by intelligently 
-                  labeling certain blocks. Labels can be grouped into 3 categories: 
-                  <ol>
-                    <li>Prominent blocks : These are blocks which stand out in 
-                      the diagram. A block can be a prominent block if: 
-                      <ul>
-                        <li>It has unusually large inclusive time and its children 
-                          are not rendered in the diagram</li>
-                        <li>It has unusually large exclusive time</li>
-                      </ul>
-                    </li>
-                    <li>Recently selected blocks : Blocks which have recently 
-                      been selected with the mouse, or by navigating through the 
-                      caller/callee tables</li>
-                    <li>Hover-over blocks : When the user hovers over a block 
-                      for a short period of time (approximately half a second), 
-                      a label is added to the block </li>
-                  </ol>
-                  Within each category of block label, there can only be a fixed 
-                  number of labeled blocks. The number of labeled blocks depends 
-                  on the available real estate inside the tower diagram's canvas 
-                  that is not taken up by the diagram itself or by the legend. 
-                  Expanding the canvas by maximizing the ProphIt application creates 
-                  a large amount of label space. If the ProphIt application window 
-                  is small, very few labels will fit on the canvas. 
-                  <p>For large prominent blocks, the labels could be written into 
-                    the blocks themselves.</p>
-				  </blockquote>
-
-                  <a name="wire_frame"><div class="header">Wire-frame mode</div></a>
-				  <blockquote>
-                  When it is being rotated, the tower diagram currently renders 
-                  as a wire frame (with highlights for selected and search-result 
-                  blocks). This wire-frame mode is useful for being able to see 
-                  all the way through the tower diagram (and thus the call graph). 
-                  Wire-frame mode reveals information such as the complete set 
-                  of visible selected and search-result blocks, whereas in solid 
-                  mode one can only see the blocks which make up the outer perimiter 
-                  of the tower diagram. 
-                  <p> An option to manually switch to wire-frame mode when the 
-                    diagram is not being rotated would allow the user to see all 
-                    the way through it. Rendering the selected and search-result 
-                    blocks as solid blocks while the rest of the diagram is in 
-                    manual wire-frame mode would allow the user to examine and 
-                    select blocks which would not be easy to find if the entire 
-                    diagram was solid. Several designs are possible for implementing 
-                    manual wire-frame mode: 
-                  <ol>
-                    <li>Wire-frame mode could be automatically entered when the 
-                      user executes a search. Upon executing the search, all blocks 
-                      which are not selected or search-results are rendered in 
-                      wire-frame. Clicking on any of the remaining solid blocks 
-                      makes that block the new selected block, as normal. 
-                      <ul>
-                        <li>How should wire-frame mode be turned off in this scenario? 
-                          Automatically when the user selects one of the solid 
-                          blocks? Or manually by using a checkbox or similar control?</li>
-                        <li>Automatic enabling of wire-frame mode could use one 
-                          of the controls described in options (2) and (3). Which 
-                          one is more appropriate?</li>
-                      </ul>
-                    </li>
-                    <li>Wire-frame mode is entered manually using a checkbox. 
-                      The checkbox label is simply 'Wireframe'. If checked, all 
-                      blocks which are not selected or search-results render as 
-                      wireframe, and continue to do so until the checkbox is un-checked.</li>
-                    <li>Wire-frame mode is entered manually using a combo box 
-                      (dropdown list). The combo box options are: 
-                      <ul>
-                        <li>Off</li>
-                        <li>Partial (renders selected and search-result blocks 
-                          as solid)</li>
-                        <li>On (all blocks are rendered as wireframe)</li>
-                      </ul>
-                    </li>
-                  </ol>
-				  
-				  <p>If intelligent labeling is implemented, all of the blocks 
-                    which render as solid in wire-frame mode can be labeled. </p>
-					
+                  <blockquote> The typical capacity of person's short-term memory 
+                    is 7 items. Without labels, keeping track of which blocks 
+                    in the tower diagram correspond to which functions can become 
+                    unmanagable. The tower diagram UI can help solve this problem 
+                    by intelligently labeling certain blocks. Labels can be grouped 
+                    into 3 categories: 
+                    <ol>
+                      <li>Prominent blocks : These are blocks which stand out 
+                        in the diagram. A block can be a prominent block if: 
+                        <ul>
+                          <li>It has unusually large inclusive time and its children 
+                            are not rendered in the diagram</li>
+                          <li>It has unusually large exclusive time</li>
+                        </ul>
+                      </li>
+                      <li>Recently selected blocks : Blocks which have recently 
+                        been selected with the mouse, or by navigating through 
+                        the caller/callee tables</li>
+                      <li>Hover-over blocks : When the user hovers over a block 
+                        for a short period of time (approximately half a second), 
+                        a label is added to the block </li>
+                    </ol>
+                    Within each category of block label, there can only be a fixed 
+                    number of labeled blocks. The number of labeled blocks depends 
+                    on the available real estate inside the tower diagram's canvas 
+                    that is not taken up by the diagram itself or by the legend. 
+                    Expanding the canvas by maximizing the ProphIt application 
+                    creates a large amount of label space. If the ProphIt application 
+                    window is small, very few labels will fit on the canvas. 
+                    <p>For large prominent blocks, the labels could be written 
+                      into the blocks themselves.</p>
                   </blockquote>
-
-                  <a name="improve_depth_slider"><div class="header">Improve depth slider</div></a>
-				  <p>
-				  The maximum stack depth that the prophIt application will show by default is 15. This
-				  can be increased by pressing the '+' key with the focus on the tower diagram, but there
-				  are several problems with this feature:
-				  </p>
-				  <ol>
-                    <li>It is not very well-documented</li>
-                    <li>It is not intuitive</li>
-                    <li>The application does not provide any indication of what 
-                      the maximum depth of the call graph actually is</li>
-                    <li>If there are fewer than 15 calls in the call graph subset 
-                      displayed by the diagram, there is no indication that moving 
-                      the depth slider higher will not show any more information</li>
-                  </ol>
-                  <p>It is possible to determine from the call graph what the 
-                    maximum depth actually is. This maximum depth could be used 
-                    to set the max value on the depth slider, and this max value 
-                    could be adjusted as the user explores the tower diagram. 
-                    For instance, if the deepest function has 30 functions in 
-                    its call stack, the maximum depth is 30. </p>
-                  <a name="time_threshold"><div class="header">Set time threshold</div></a>
-				  <p> The tower diagram clips out any functions which take up 
-                    less than a predetermined amount of time as a percentage of 
-                    the diagram root call. This value is currently about 3 / W, 
-                    where <code>W</code> equals the width of the tower diagram 
-                    window. Allowing the user to set this threshold manually, 
-                    or adjusting automatically it in a more intelligent manner 
-                    would have some benefits:</p>
-                  <ol>
-                    <li>Functions which do not contribute significantly to the 
-                      program time (at least in the current diagram) would be 
-                      removed from the diagram. When the user first loads a profile, 
-                      the threshold could be set to a high value to show a rough 
-                      picture of the profile. At a later time, the threshold can 
-                      be lowered to show more detail</li>
-                    <li>If the threshold were raised as deeper stack depths are 
-                      shown, the performance impact of showing a deeper stack 
-                      could be mitigated</li>
-                  </ol>
-				  <a name="selection_feedback">
-                  <div class="header">Enhanced selection feedback</div>
-                  </a> 
-                  <blockquote>
-				  <p>When a block is selected by a mouse-click (a 'selected' block) 
-                    or identified by a search (a 'search-result' block), thin 
-                    lines similar to the ribbons on a present are drawn around 
-                    the block to hilight it. This hilighting is not particularly 
-                    prominent or visible. In order to enhance the visibility of 
-                    these hilights, one or more of the following may be implemented:</p>
-                  <ol>
-                    <li>Bolder lines. The hilight lines are currently one-pixel-wide 
-                      lines of a single color. The lines could be thickened, composed 
-                      of contrasting colors, or rendered as dashes rather than 
-                      solid lines.</li>
-                    <li>Animated selection. When the hilights are initially drawn, 
-                      some animation could be used to attract attention to them. 
-                      For instance the lines could start out thick and gradually 
-                      render as thinner and thiner. Or borders could be drawn 
-                      around the blocks with dotted lines that slowly progress 
-                      around the block's edges.</li>
-                  </ol>
-				  </blockquote>
                   <a name="new_coloring"> 
                   <div class="header">New coloring options</div>
                   </a> <blockquote>
