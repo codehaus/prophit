@@ -450,6 +450,13 @@ public class MapFrame
 			JMenu helpMenu = menuBar.add( new JMenu( Strings.getUILabel(MapFrame.class, "menu.help") ) );
 			helpMenu.setMnemonic( KeyEvent.VK_H );
 			
+			addMenuItem(helpMenu, Strings.getUILabel(MapFrame.class, "menu.help.doc"), KeyEvent.VK_D, -1, new ActionListener()
+				{
+					public void actionPerformed( ActionEvent e ) 
+					{ 
+						UIUtil.showDocument(Strings.getUILabel(MapFrame.class, "menu.help.docURL"));
+					}
+				});
 			addMenuItem(helpMenu, Strings.getUILabel(MapFrame.class, "menu.help.about"), KeyEvent.VK_A, -1, new ActionListener()
 				{
 					public void actionPerformed( ActionEvent e ) 
