@@ -130,12 +130,14 @@
 		<delete dir="${build}" />
   </target>
 
+  <property name="profile" value="java.prof" />
+
   <target name="run" depends="jar">
     <java classpathref="run.class.path" fork="true" maxmemory="256M" classname="orbit.gui.MapFrame">
 <!--	  <arg line="d:/java/hsqldb_v.1.61/demo/java.prof - -fractions fraw.txt" /> -->
 <!-- 	  <arg line="weblogic-system.prof - -fractions weblogic-system.prof.fractions" /> -->
 <!--  	  <arg line="data/hsqldb.prof" /> -->
-		  <arg line="data/hsqldb.hprof.txt" />
+		  <arg line="${profile}" />
 		<sysproperty key="solver.user.name" value="JAVA_USER" />
     </java>
   </target>
@@ -195,7 +197,10 @@
 
   <target name="hello" depends="jar,compile-tests">
     <java classpathref="test.class.path" fork="true" classname="util.HelloList">
-	  <jvmarg value="-Xrunhprof:cpu=samples,depth=6"/>   
+<!--	  <jvmarg value="-client"/> -->
+	  <jvmarg value="-classic"/>
+<!--	  <jvmarg value="-Xrunhprof:cpu=samples,depth=6"/> -->
+	  <jvmarg value="-prof"/>
 	</java>
   </target>
 
