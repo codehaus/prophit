@@ -59,7 +59,7 @@ public class HProfParser
 			seek("THREAD START (", true);
 			String line = seek("TRACE", true);
 			final HashMap stackTracesByID = new HashMap();
-			line = parseSamples(line, stackTracesByID);
+			line = parseTraces(line, stackTracesByID);
 
 			if ( line.startsWith("CPU SAMPLES BEGIN") )
 			{
@@ -237,9 +237,11 @@ public class HProfParser
 		return rccListByCallee;
 	}
 
-	private String parseSamples(String line, Map stackTracesByID) throws ParseException, IOException
+	private String parseTraces(String line, Map stackTracesByID) throws ParseException, IOException
 	{
 		HashMap map = new HashMap();
+		HashMap lineCache = new HashMap();
+		int lineCount = 0;
 		ArrayList stack = new ArrayList();
 		do
 		{
@@ -255,12 +257,22 @@ public class HProfParser
 				line = line.trim();
 				// Strip out line number, "Native method", "Unknown line"
 				int colon = line.lastIndexOf(':');
-				String lineNumber = "<Unknown line>";
+				// String lineNumber = "<Unknown line>";
 				if ( colon != -1 )
 				{
 					int paren = line.lastIndexOf(')');
-					lineNumber = line.substring(colon + 1, paren);
-					line = line.substring(0, colon) + line.substring(paren, line.length());
+					int size = colon + line.length() - paren;
+					// lineNumber = line.substring(colon + 1, paren);
+					StringBuffer sb = new StringBuffer(size);
+					sb.append(line.substring(0, colon));
+					sb.append(line.substring(paren, line.length()));
+					line = sb.toString();
+					String existing = (String)lineCache.get(line);
+					if ( existing != null )
+						line = existing;
+					else
+						lineCache.put(line, line);
+					++lineCount;
 				}
 				stack.add(line);
 			}
@@ -272,6 +284,9 @@ public class HProfParser
 				maxStackSize = stack.size();
 		}
 		while ( line != null && !line.startsWith("CPU SAMPLES BEGIN") );
+
+		// System.out.println("Found " + lineCache.size() + " unique lines among " + lineCount + " lines");
+
 		return line;
 	}
 
