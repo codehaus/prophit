@@ -108,6 +108,7 @@ MM_reloadPage(true);
                   	<li><a href="#recursion_collapse">Collapse recursive functions</a></li>
                   	<li><a href="#profile_comparison">Profile Comparison</a></li>
                   	<li><a href="#python_loader">Python profile loader</a></li>
+                  	<li><a href="#perl_loader">Perl profile loader</a></li>
                   	<li><a href="#haskell_loader">Haskell profile loader</a></li>
                   </ul>
                   <a name="intelligent_labeling"><div class="header">Intelligent labeling of the 
@@ -299,6 +300,11 @@ MM_reloadPage(true);
                     with <i>depth=2</i>. Full stack information could potentially 
                     be obtained by writing a <code>Profiler</code> subclass. This 
                     is theoretically possible but the procedure is not well documented.
+
+				  <p/>
+ 				  <a name="perl_loader"><div class="header">Perl profile loader</div></a>
+				  Perl has a built-in profiler called <a href="http://www.perldoc.com/perl5.6/lib/Devel/DProf.html">Devel::DProf</a>.
+				  This profiler dumps out profiling data to yet another text file format which prophIt could be adapted to read.
 
 				  <p>
  				  <a name="haskell_loader"><div class="header">Haskell profile loader</div></a>
