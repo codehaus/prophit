@@ -1,4 +1,4 @@
-package orbit.solver;
+package orbit.ampl;
 
 import java.util.ArrayList;
 import java.util.Iterator;

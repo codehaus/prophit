@@ -2,7 +2,6 @@ package orbit.parsers;
 
 import orbit.model.CallGraph;
 import orbit.model.CallID;
-import orbit.solver.SocketConnection;
 
 import java.io.*;
 import java.util.*;

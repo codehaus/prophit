@@ -1,7 +1,7 @@
 package util;
 
-import orbit.solver.Connection;
-import orbit.solver.ConnectionFactory;
+import orbit.ampl.Connection;
+import orbit.ampl.ConnectionFactory;
 
 import java.io.*;
 import java.util.ArrayList;

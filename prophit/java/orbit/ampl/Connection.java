@@ -1,4 +1,4 @@
-package orbit.solver;
+package orbit.ampl;
 
 import java.io.Writer;
 import java.io.BufferedReader;

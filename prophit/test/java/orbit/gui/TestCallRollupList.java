@@ -62,9 +62,9 @@ public class TestCallRollupList
 		assert(exception);
 
 		// Simulate adding some of the unique calls to the CallRollupList
-		rollup.addCall(simpleCG.main);
-		rollup.addCall(simpleCG.test);
-		rollup.addCall(simpleCG.init);
+		rollup.addCallee(simpleCG.main);
+		rollup.addCallee(simpleCG.test);
+		rollup.addCallee(simpleCG.init);
 
 		rollup.sort();
 
@@ -83,13 +83,13 @@ public class TestCallRollupList
 	{
 		CallRollupList rollup = new CallRollupList();
 
-		rollup.addCall(simpleCG.main);
-		rollup.addCall(simpleCG.test);
+		rollup.addCallee(simpleCG.main);
+		rollup.addCallee(simpleCG.test);
 
-		rollup.addCall(simpleCG.insert1);
-		rollup.addCall(simpleCG.insert2);
-		rollup.addCall(simpleCG.update1);
-		rollup.addCall(simpleCG.update2);
+		rollup.addCallee(simpleCG.insert1);
+		rollup.addCallee(simpleCG.insert2);
+		rollup.addCallee(simpleCG.update1);
+		rollup.addCallee(simpleCG.update2);
 
 		rollup.sort();
 
@@ -127,9 +127,9 @@ public class TestCallRollupList
 		details = new CallDetails(simpleCG.main, simpleCG.DBExec1);
 		assertEquals(2, details.getCallersModel().getRowCount());
 		assertEquals("test", details.getCallersModel().getValueAt(0, 0));
-		assertEquals("180 (60%)", details.getCallersModel().getValueAt(0, 1));
+		assertEquals("120 (57.14%)", details.getCallersModel().getValueAt(0, 1));
 		assertEquals("init", details.getCallersModel().getValueAt(1, 0));
-		assertEquals("120 (40%)", details.getCallersModel().getValueAt(1, 1));
+		assertEquals("90 (42.86%)", details.getCallersModel().getValueAt(1, 1));
 
 		// 'update' should come first because it takes more time
 		assertEquals(2, details.getCalleesModel().getRowCount());
@@ -150,7 +150,7 @@ public class TestCallRollupList
 		details = new CallDetails(simpleCG.init, simpleCG.DBExec1);
 		assertEquals(1, details.getCallersModel().getRowCount());
 		assertEquals("init", details.getCallersModel().getValueAt(0, 0));
-		assertEquals("120 (100%)", details.getCallersModel().getValueAt(0, 1));
+		assertEquals("90 (100%)", details.getCallersModel().getValueAt(0, 1));
 
 		// 'update' should come first because it takes more time
 		assertEquals(2, details.getCalleesModel().getRowCount());

@@ -1,4 +1,4 @@
-package orbit.solver;
+package orbit.ampl;
 
 public class Solver
 {

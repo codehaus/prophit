@@ -1,4 +1,4 @@
-package orbit.solver;
+package orbit.ampl;
 
 public abstract class Datum
 {

@@ -3,8 +3,7 @@ package orbit.parsers;
 import orbit.model.CallID;
 import orbit.model.CallGraph;
 import orbit.model.CallFractionSolverData;
-import orbit.solver.ConnectionFactory;
-import orbit.solver.SocketConnection;
+import orbit.ampl.SocketConnection;
 import orbit.util.Util;
 
 import java.io.*;
@@ -39,7 +38,7 @@ public class DashProfSolver
 	{
 		CallFractionSolverData data = new CallFractionSolverData(callIDs);
 																 
-		orbit.solver.Solver solver = new orbit.solver.Solver(factory);
+		orbit.ampl.Solver solver = new orbit.ampl.Solver(factory);
 		long solveStart = System.currentTimeMillis();
 		String results = solver.execute(data.getUserName(), data.getModel(), data.getData(), data.getCommands());
 		long solveEnd = System.currentTimeMillis();
@@ -103,7 +102,7 @@ public class DashProfSolver
 		
 		public ConnectionProperties()
 		{
-			InputStream is = getClass().getClassLoader().getResourceAsStream("solver/connection.properties");
+			InputStream is = getClass().getClassLoader().getResourceAsStream("ampl/connection.properties");
 			props = new Properties();
 			try
 			{
