@@ -60,7 +60,8 @@ class BlockDiagramView
 	private GLUTFunc glut = null;
 
 	private int   renderMode = BlockRenderer.RENDER_SOLID;
-	private final BlockDiagramModel model;
+
+	private BlockDiagramModel model;
 
 	public BlockDiagramView(int w, int h, BlockDiagramModel blockModel)
 	{
@@ -219,6 +220,19 @@ class BlockDiagramView
 				}
 			});
 
+	}
+
+	public void removeNotify() 
+	{
+		super.removeNotify();
+
+		/**
+		 * Strictly speaking, it shouldn't be necessary to release references explicitly.
+		 * However, there may be a problem with the native code retaining a reference to the BlockDiagramView.
+		 * If that is the case, we should try and ensure that as much cleanup happens as possible.
+		 */
+		model = null;
+		glut = null;
 	}
 
 	public void preInit() 

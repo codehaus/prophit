@@ -52,6 +52,9 @@ public class MapFrame
 							   gljLib + ", " + glLib + ", " + gluLib);
 		}
 
+		// GLContext debugging
+		// GLContext.gljClassDebug = true;
+
 		// Solves the lightweight/heavyweight mixing problem
 		JPopupMenu.setDefaultLightWeightPopupEnabled(false);
 		ToolTipManager.sharedInstance().setLightWeightPopupEnabled(false);
@@ -162,16 +165,20 @@ public class MapFrame
 	private void setCallGraph(CallGraph cg)
 	{
 		Dimension contentSize = pnlContent.getSize();
-			
-		getContentPane().remove(pnlContent);
-		
+
 		if ( blockView != null )
 		{
 			blockView.cvsDispose();
-			blockModel.dispose();
-			blockModel = null;
 			blockView = null;
 		}
+
+		if ( blockModel != null )
+		{
+			blockModel.dispose();
+			blockModel = null;
+		}
+			
+		getContentPane().remove(pnlContent);
 		
 		pnlContent = null;
 		System.gc();

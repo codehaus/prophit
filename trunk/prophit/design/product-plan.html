@@ -119,13 +119,6 @@ Priorities range from 1 to 5, with 5 being the highest.
     <td width="20%">&nbsp;</td>
     <td width="20%">&nbsp;</td>
   </tr>
-  <tr bgcolor="eeeeee">
-    <td width="70%">Memory usage appears to grow over time as more profiles are 
-      opened and the previous ones (presumably) closed</td>
-    <td width="10%">5</td>
-    <td width="20%">&nbsp;</td>
-    <td width="20%">&nbsp;</td>
-  </tr>
   <tr bgcolor="eeeeee"> 
     <td width="70%">New Orbit builds should not require the user to re-download 
       the supporting libraries (log4jme, gl4java). These JARs are regenerated during the build and then re-signed</td>
@@ -151,6 +144,12 @@ Priorities range from 1 to 5, with 5 being the highest.
   <tr bgcolor="eeeeee"> 
     <td width="70%">Root block should always be 1 unit square in size</td>
     <td width="10%">3</td>
+    <td width="20%">&nbsp;</td>
+    <td width="20%">&nbsp;</td>
+  </tr>
+  <tr bgcolor="eeeeee">
+    <td width="70%">Memory usage appears to grow over time as more profiles are opened and the previous ones (presumably) closed. This problem has been mitigated by making sure that the CallGraph data is cleaned up when the profile is closed. Though there may still be a moderate-sized leak resulting from the GL4Java JNI implementation holding a reference to the GLCanvas.</td>
+    <td width="10%">2</td>
     <td width="20%">&nbsp;</td>
     <td width="20%">&nbsp;</td>
   </tr>
