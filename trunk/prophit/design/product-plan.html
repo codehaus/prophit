@@ -1,0 +1,245 @@
+<html>
+<head>
+<title>Untitled Document</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link rel="stylesheet" href="default.css" type="text/css">
+</head>
+
+<body class="normal" bgcolor="#FFFFFF" text="#000000">
+
+<div align="center">
+  <h1>Orbit Development Plan</h1>
+  <br>
+  September 7, 2002<br>
+</div>
+
+
+<h2>Overview</h2>
+Priorities are ranked from 1 to 5, with 5 being the highest.
+<h2>Open Features</h2>
+<table width="90%" border="0" cellspacing="1">
+  <tr> 
+    <th width="70%" bgcolor="ccccff">Description</th>
+    <th width="10%" bgcolor="ccccff">Priority</th>
+    <th width="20%" bgcolor="ccccff">Details</th>
+    <th width="20%" bgcolor="ccccff">Task Doc</th>
+  </tr>
+  <tr bgcolor="eeeeee"> 
+    <td width="70%">Implement a data loader for for cpu=times</td>
+    <td width="10%"> 
+      <div align="left">5</div>
+    </td>
+    <td width="20%"><a href="parse-hprof-times.txt">parse-hprof-times.txt</a></td>
+    <td width="20%">&nbsp;</td>
+  </tr>
+  <tr bgcolor="eeeeee"> 
+    <td width="70%">Implement a data loader for samples and times in the binary 
+      hprof format</td>
+    <td width="10%"> 
+      <div align="left">3</div>
+    </td>
+    <td width="20%">&nbsp;</td>
+    <td width="20%">&nbsp;</td>
+  </tr>
+  <tr bgcolor="eeeeee"> 
+    <td width="70%">User documentation for the application</td>
+    <td width="10%">5</td>
+    <td width="20%">&nbsp;</td>
+    <td width="20%">&nbsp;</td>
+  </tr>
+  <tr bgcolor="eeeeee"> 
+    <td width="70%">'Getting Started' guide (cookbook), including how to use hprof 
+      and links to other sites with more info</td>
+    <td width="10%">5</td>
+    <td width="20%">&nbsp;</td>
+    <td width="20%">&nbsp;</td>
+  </tr>
+  <tr bgcolor="eeeeee"> 
+    <td width="70%">FAQ, common problems, for the web site</td>
+    <td width="10%">5</td>
+    <td width="20%">&nbsp;</td>
+    <td width="20%">&nbsp;</td>
+  </tr>
+  <tr bgcolor="eeeeee">
+    <td width="70%">&nbsp;</td>
+    <td width="10%">&nbsp;</td>
+    <td width="20%">&nbsp;</td>
+    <td width="20%">&nbsp;</td>
+  </tr>
+  <tr bgcolor="eeeeee"> 
+    <td width="70%">&nbsp;</td>
+    <td width="10%">&nbsp;</td>
+    <td width="20%">&nbsp;</td>
+    <td width="20%">&nbsp;</td>
+  </tr>
+  <tr bgcolor="eeeeee"> 
+    <td width="70%">&nbsp;</td>
+    <td width="10%">&nbsp;</td>
+    <td width="20%">&nbsp;</td>
+    <td width="20%">&nbsp;</td>
+  </tr>
+  <tr bgcolor="eeeeee"> 
+    <td width="70%">&nbsp;</td>
+    <td width="10%"> 
+      <div align="left"></div>
+    </td>
+    <td width="20%">&nbsp;</td>
+    <td width="20%">&nbsp;</td>
+  </tr>
+</table>
+<h2>Open Bugs</h2>
+<table width="90%" border="0" cellspacing="1">
+  <tr> 
+    <th width="70%" bgcolor="ccccff" height="10">Description</th>
+    <th width="10%" bgcolor="ccccff" height="10">Priority</th>
+    <th width="20%" bgcolor="ccccff" height="10">Details</th>
+    <th width="20%" bgcolor="ccccff" height="10">Task Doc</th>
+  </tr>
+  <tr bgcolor="eeeeee"> 
+    <td width="70%">In some cases, the children of a block with very little exclusive 
+      time do not take up most of the area of their parent.</td>
+    <td width="10%"> 
+      <div align="left">5</div>
+    </td>
+    <td width="20%">&nbsp;</td>
+    <td width="20%">&nbsp;</td>
+  </tr>
+  <tr bgcolor="eeeeee"> 
+    <td width="70%">If the window is maximized, the bottom part of the block diagram 
+      does not render properly</td>
+    <td width="10%"> 
+      <div align="left">4</div>
+    </td>
+    <td width="20%">&nbsp;</td>
+    <td width="20%">&nbsp;</td>
+  </tr>
+  <tr bgcolor="eeeeee"> 
+    <td width="70%">Block diagram and call details should be resizeable</td>
+    <td width="10%">4</td>
+    <td width="20%">&nbsp;</td>
+    <td width="20%">&nbsp;</td>
+  </tr>
+  <tr bgcolor="eeeeee">
+    <td width="70%">New Orbit builds should not require the user to re-download 
+      the supporting libraries (log4jme, gl4java)</td>
+    <td width="10%">4</td>
+    <td width="20%">&nbsp;</td>
+    <td width="20%">&nbsp;</td>
+  </tr>
+  <tr bgcolor="eeeeee"> 
+    <td width="70%">Change package names from 'orbit.xyz'? To what?</td>
+    <td width="10%">2</td>
+    <td width="20%">&nbsp;</td>
+    <td width="20%">&nbsp;</td>
+  </tr>
+  <tr bgcolor="eeeeee"> 
+    <td width="70%">&nbsp;</td>
+    <td width="10%">&nbsp;</td>
+    <td width="20%">&nbsp;</td>
+    <td width="20%">&nbsp;</td>
+  </tr>
+  <tr bgcolor="eeeeee"> 
+    <td width="70%">&nbsp;</td>
+    <td width="10%"> 
+      <div align="left"></div>
+    </td>
+    <td width="20%">&nbsp;</td>
+    <td width="20%">&nbsp;</td>
+  </tr>
+</table>
+<h2> Features Implemented</h2>
+<table width="90%" border="0" cellspacing="1">
+  <tr> 
+    <th width="70%" bgcolor="ccccff">Description</th>
+    <th width="10%" bgcolor="ccccff">Priority</th>
+    <th width="20%" bgcolor="ccccff">Details</th>
+    <th width="20%" bgcolor="ccccff">Date Closed</th>
+    <th width="20%" bgcolor="ccccff">Task Doc</th>
+  </tr>
+  <tr bgcolor="eeeeee"> 
+    <td width="70%">Double-clicking on a cell in the caller/callee table should 
+      focus<br>
+      the application on the method associated with that cell, and hi-lite<br>
+      the calls of that method</td>
+    <td width="10%">5</td>
+    <td width="20%"><a href="ui-enhancements.txt">ui-enhancements.txt</a></td>
+    <td width="20%">2002/08/12</td>
+    <td width="20%">&nbsp;</td>
+  </tr>
+  <tr bgcolor="eeeeee"> 
+    <td width="70%" height="2">Change the behavior of block selection so that 
+      the other blocks which have the same RCC as the selected block are also 
+      high-lighted, in a different color</td>
+    <td width="10%" height="2">5</td>
+    <td width="20%" height="2"><a href="ui-enhancements.txt">ui-enhancements.txt</a></td>
+    <td width="20%" height="2">2002/08/12</td>
+    <td width="20%" height="2">&nbsp;</td>
+  </tr>
+  <tr bgcolor="eeeeee"> 
+    <td width="70%" height="2">Want to be able to go back/forward/up/home using 
+      toolbar buttons</td>
+    <td width="10%" height="2">5</td>
+    <td width="20%" height="2"><a href="ui-enhancements.txt">ui-enhancements.txt</a></td>
+    <td width="20%" height="2">2002/08/12</td>
+    <td width="20%" height="2">&nbsp;</td>
+  </tr>
+  <tr bgcolor="eeeeee"> 
+    <td width="70%" height="2">Implement a JavaWebStart installer for Orbit</td>
+    <td width="10%" height="2">5</td>
+    <td width="20%" height="2">&nbsp;</td>
+    <td width="20%" height="2">2002/08/14</td>
+    <td width="20%" height="2">&nbsp;</td>
+  </tr>
+  <tr bgcolor="eeeeee"> 
+    <td width="70%" height="2">&nbsp;</td>
+    <td width="10%" height="2"> 
+      <div align="left"></div>
+    </td>
+    <td width="20%" height="2">&nbsp;</td>
+    <td width="20%" height="2">&nbsp;</td>
+    <td width="20%" height="2">&nbsp;</td>
+  </tr>
+</table>
+<h2>Bugs Fixed</h2>
+<table width="90%" border="0" cellspacing="1">
+  <tr> 
+    <th width="70%" bgcolor="ccccff">Description</th>
+    <th width="10%" bgcolor="ccccff">Priority</th>
+    <th width="20%" bgcolor="ccccff">Details</th>
+    <th width="20%" bgcolor="ccccff">Date Closed</th>
+    <th width="20%" bgcolor="ccccff">Task Doc</th>
+  </tr>
+  <tr bgcolor="eeeeee"> 
+    <td width="70%">&nbsp;</td>
+    <td width="10%"> 
+      <div align="left"></div>
+    </td>
+    <td width="20%">&nbsp;</td>
+    <td width="20%">&nbsp;</td>
+    <td width="20%">&nbsp;</td>
+  </tr>
+  <tr bgcolor="eeeeee"> 
+    <td width="70%">&nbsp;</td>
+    <td width="10%">&nbsp;</td>
+    <td width="20%">&nbsp;</td>
+    <td width="20%">&nbsp;</td>
+    <td width="20%">&nbsp;</td>
+  </tr>
+  <tr bgcolor="eeeeee"> 
+    <td width="70%">&nbsp;</td>
+    <td width="10%">&nbsp;</td>
+    <td width="20%">&nbsp;</td>
+    <td width="20%">&nbsp;</td>
+    <td width="20%">&nbsp;</td>
+  </tr>
+  <tr bgcolor="eeeeee"> 
+    <td width="70%">&nbsp;</td>
+    <td width="10%">&nbsp;</td>
+    <td width="20%">&nbsp;</td>
+    <td width="20%">&nbsp;</td>
+    <td width="20%">&nbsp;</td>
+  </tr>
+</table>
+<h2>&nbsp;</h2>
+</body>
+</html>
