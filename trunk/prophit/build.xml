@@ -184,7 +184,16 @@
 
   <target name="build" depends="compile,compile-tests" />
 
-  <target name="test" depends="jar,compile,compile-tests">
+  <target name="delete-cache">
+    <delete>
+      <fileset dir="${basedir}/data" includes="**/*.graph" />
+    </delete>
+    <delete>
+      <fileset dir="${basedir}/test/data" includes="**/*.graph" />
+    </delete>
+  </target>
+
+  <target name="test" depends="jar,compile,compile-tests,delete-cache">
     <delete dir="${build}/report" />
 	<mkdir dir="${build}/report" />
     <junit fork="true">
@@ -207,7 +216,7 @@
 	</java>
   </target>
 
-  <target name="run-test" depends="build,jar">
+  <target name="run-test" depends="build,jar,delete-cache">
     <junit fork="true">
 	  <sysproperty key="solver.user.name" value="JAVA_USER" />
 	  <sysproperty key="basedir" value="${basedir}" />
@@ -215,6 +224,13 @@
 	  <formatter type="brief" usefile="false" />
 	  <test name="${test.name}" />
     </junit>
+  </target>
+
+  <property name="depth" value="6" />
+  <target name="run-loader" depends="build,jar">
+    <java classpathref="run.class.path" fork="true" classname="orbit.parsers.Loader">
+      <arg line="${profile} ${depth}" />
+    </java>
   </target>
 
   <target name="hello" depends="jar,compile-tests">

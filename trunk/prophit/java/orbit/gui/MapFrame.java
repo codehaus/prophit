@@ -307,7 +307,7 @@ public class MapFrame
 				return;
 			}
 		}
-		LOG.info("Unable to find call " + name + " in diagram");
+		LOG.info("Unable to find call '" + name + "' in diagram");
 	}
 
 	private void addCaller(List list, Call call)

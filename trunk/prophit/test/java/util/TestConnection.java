@@ -10,13 +10,13 @@ public class TestConnection
 	implements Connection
 {
 	private final StringWriter writer = new StringWriter();
-	private final BufferedReader reader;
+	private final Reader reader;
 
 	public TestConnection(String response)
 	{
 		try
 		{
-			reader = new BufferedReader(new InputStreamReader(new ByteArrayInputStream(response.getBytes()), "US-ASCII"));
+			reader = new InputStreamReader(new ByteArrayInputStream(response.getBytes()), "US-ASCII");
 		}
 		catch (java.io.UnsupportedEncodingException x)
 		{
@@ -35,7 +35,7 @@ public class TestConnection
 		return writer;
 	}
 
-	public BufferedReader getReader()
+	public Reader getReader()
 	{
 		return reader;
 	}
