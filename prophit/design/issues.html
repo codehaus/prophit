@@ -22,27 +22,6 @@ Priorities range from 1 to 5, with 5 being the highest.
     <th width="47%" bgcolor="ccccff">Description</th>
     <th width="6%" bgcolor="ccccff">Priority</th>
     <th width="27%" bgcolor="ccccff">Details</th>
-    <th width="11%" bgcolor="ccccff">Beta 1</th>
-  </tr>
-  <tr bgcolor="eeeeee"> 
-    <td width="47%">Update ProphIt Website for Beta launch</td>
-    <td width="6%">4</td>
-    <td width="27%">Maybe this is only a 3, but i think its important our first 
-      impression be one of quality/professionalism, even if it is rough. Site 
-      is about 75% of the way there.</td>
-    <td width="11%">Y</td>
-  </tr>
-  <tr bgcolor="ffeeff">
-    <td width="47%">Visual feedback for selected blocks and blocks found by the 
-      Search bar should be more distinct</td>
-    <td width="6%">3</td>
-    <td width="27%">
-      <p>Suggestions include more prominent highlighting, and animating the selection 
-        graphics.</p>
-      <p>See <a href="../web/product-plan.html#selection_feedback">Enhanced selection 
-        feedback</a>.</p>
-    </td>
-    <td width="11%">N</td>
   </tr>
   <tr bgcolor="ffeeff"> 
     <td width="47%">As the mouse hovers over a diagram block, a label with an 
@@ -50,13 +29,12 @@ Priorities range from 1 to 5, with 5 being the highest.
       keep track of it as the diagram is manipulated. Also, the label should have 
       a little icon which the user can click to remove it.</td>
     <td width="6%">3</td>
-    <td width="27%">
+    <td width="27%"> 
       <p>Lots of improvements in the general design and labeling of the tower 
         diagram can be made. Will get Beta1 out first</p>
       <p>See <a href="../web/product-plan.html#intelligent_labeling">Intelligent 
         Labeling</a>.</p>
     </td>
-    <td width="11%">N</td>
   </tr>
   <tr bgcolor="ffeeff"> 
     <td width="47%">Parsed profile caching implementation should be made more 
@@ -64,7 +42,6 @@ Priorities range from 1 to 5, with 5 being the highest.
     <td width="6%">3</td>
     <td width="27%">See <a href="../web/product-plan.html#compact_data_format">Compact 
       call graph format</a></td>
-    <td width="11%">N</td>
   </tr>
   <tr bgcolor="ffeeff"> 
     <td width="47%" height="21">Implement a data loader for samples and times 
@@ -75,13 +52,11 @@ Priorities range from 1 to 5, with 5 being the highest.
     <td width="27%" height="21"> 
       <p>Post Beta1. Can't find any documentation on the hprof binary format.</p>
     </td>
-    <td width="11%">N</td>
   </tr>
   <tr bgcolor="ffeeff"> 
     <td width="47%">GUI should show a splash screen while it is initializing</td>
     <td width="6%">2</td>
     <td width="27%">&nbsp;</td>
-    <td width="11%">N</td>
   </tr>
 </table>
 <h2>Open Bugs</h2>
@@ -90,21 +65,19 @@ Priorities range from 1 to 5, with 5 being the highest.
     <th width="43%" bgcolor="ccccff" height="10">Description</th>
     <th width="6%" bgcolor="ccccff" height="10">Priority</th>
     <th width="35%" bgcolor="ccccff" height="10">Details</th>
-    <th width="10%" bgcolor="ccccff" height="10">Beta 1</th>
   </tr>
   <tr bgcolor="ffeeff"> 
-    <td width="52%">Text in docs\hsqldb-hprof-sample.html is too small</td>
+    <td width="52%">Text in <a href="../web/docs/hsqldb-hprof-sample.html">docs/hsqldb-hprof-sample.html</a> 
+      is too small</td>
     <td width="7%">3</td>
     <td width="28%">The font for the body text and bullet points is too small 
       to be readable</td>
-    <td width="10%">N</td>
   </tr>
   <tr bgcolor="ffeeff"> 
     <td width="52%">Re-name packages from 'orbit' to 'com.prophit'</td>
     <td width="7%">3</td>
     <td width="28%">Doesn't affect the operation of the app, I don't think this 
       is a Beta-level issue</td>
-    <td width="10%">N</td>
   </tr>
   <tr bgcolor="ffeeff"> 
     <td width="52%">-prof parser may not handle recursive functions properly</td>
@@ -113,37 +86,18 @@ Priorities range from 1 to 5, with 5 being the highest.
       3 levels of 'write' calls are showing up rather than the expected 2...[slf]I 
       see the bug... but i'm not sure what the impact is - is this a problem that 
       is likely to show up in lots of cases w/ prof? is it hard to fix?</td>
-    <td width="10%">N</td>
-  </tr>
-  <tr bgcolor="ffeeff"> 
-    <td width="43%">Double-clicking on a 'callee' that is one level too deep in 
-      the call graph should add a level to the call graph</td>
-    <td width="6%">3</td>
-    <td width="35%">&nbsp;</td>
-    <td width="10%">N</td>
-  </tr>
-  <tr bgcolor="ffeeff"> 
-    <td width="43%">Lighting model makes the cells change color as the diagram 
-      is rotated. </td>
-    <td width="6%">3</td>
-    <td width="35%">The cells don't match the legend properly as the diagram is 
-      rotated. And it some positions the left-hand side of the diagram is too 
-      dark </td>
-    <td width="10%">N</td>
   </tr>
   <tr bgcolor="ffeeff"> 
     <td width="43%">Label on the legend should be more clear</td>
     <td width="6%">3</td>
     <td width="35%">'Exclusive time (% of Inclusive Time)' does not have an obvious 
       meaning </td>
-    <td width="10%">N</td>
   </tr>
   <tr bgcolor="ffeeff"> 
     <td width="43%">HelloList.java.txt shows up as HTML formatted in IE. It should 
       look like pre-formatted Java but instead there are no linebreaks.</td>
     <td width="6%">3</td>
     <td width="35%">&nbsp;</td>
-    <td width="10%">N</td>
   </tr>
   <tr bgcolor="ffeeff"> 
     <td width="43%">Block diagram and call details should be resizeable. Currently, 
@@ -151,7 +105,6 @@ Priorities range from 1 to 5, with 5 being the highest.
       But the call details panel always stays at the same size</td>
     <td width="6%">3</td>
     <td width="35%">&nbsp;</td>
-    <td width="10%">N</td>
   </tr>
   <tr bgcolor="ffeeff"> 
     <td width="43%">The first time a diagram is opened, the Orbit frame changes 
@@ -161,37 +114,36 @@ Priorities range from 1 to 5, with 5 being the highest.
       the toolbar, and the call details tables are not laid out properly.</td>
     <td width="6%">3</td>
     <td width="35%">&nbsp;</td>
-    <td width="10%">N</td>
-  </tr>
-  <tr bgcolor="eeeeee"> 
-    <td width="43%" bgcolor="ffeeff">Root block should always be 1 unit square 
-      in size</td>
-    <td width="6%" bgcolor="ffeeff">3</td>
-    <td width="35%" bgcolor="ffeeff">&nbsp;</td>
-    <td width="10%" bgcolor="ffeeff">N</td>
   </tr>
   <tr bgcolor="ffeeff"> 
-    <td width="43%">Searching for the &lt;root&gt; block does not work</td>
+    <td width="47%">Visitor interface should not be part of the CallGraph package</td>
     <td width="6%">2</td>
-    <td width="35%">Typing &lt;root&gt; into the Search bar does not select the 
-      root block</td>
-    <td width="10%">N</td>
+    <td width="27%">Because it is used by the Call interface</td>
+  </tr>
+  <tr bgcolor="ffeeff"> 
+    <td width="43%">Lighting model makes the cells change color as the diagram 
+      is rotated. </td>
+    <td width="6%">2</td>
+    <td width="35%"> 
+      <p>The cells don't match the legend properly as the diagram is rotated. 
+        And it some positions the left-hand side of the diagram is too dark </p>
+      <p>This has been alleviated somewhat by making the color model have more 
+        contrast</p>
+    </td>
   </tr>
   <tr bgcolor="ffeeff"> 
     <td width="43%">Occassional error in checkGL while loading the first profile 
       into the UI</td>
-    <td width="6%">2</td>
+    <td width="6%">1</td>
     <td width="35%">De-prioritizing because I haven't seen this for a while, and 
       simply re-trying to load the profile seems to work. May have been caused 
       by not following the Swing threading rules</td>
-    <td width="10%">N</td>
   </tr>
   <tr bgcolor="ffeeff"> 
     <td width="43%">If the width of the frame is reduced to a very small amount, 
       the call details tables start to be clipped on the left hand side</td>
     <td width="6%">1</td>
     <td width="35%">&nbsp;</td>
-    <td width="10%">N</td>
   </tr>
 </table>
 <h2> Features Implemented</h2>
@@ -203,12 +155,20 @@ Priorities range from 1 to 5, with 5 being the highest.
     <th width="10%" bgcolor="ccccff">Date Closed</th>
   </tr>
   <tr bgcolor="eeeeee"> 
+    <td width="47%">Update ProphIt Website for Beta launch</td>
+    <td width="6%">4</td>
+    <td width="27%">Maybe this is only a 3, but i think its important our first 
+      impression be one of quality/professionalism, even if it is rough. Site 
+      is about 75% of the way there.</td>
+    <td width="11%">2002/10/18</td>
+  </tr>
+  <tr bgcolor="eeeeee"> 
     <td width="52%">FAQ, common problems, for the web site</td>
     <td width="7%">4</td>
     <td width="28%">We should start a FAQ page, we can introduce the content as 
       we go (ongoing maint issue)</td>
     <td width="13%">2002/10/15</td>
-    </tr>
+  </tr>
   <tr bgcolor="eeeeee"> 
     <td width="52%" height="66">Mechanism for searching for a method call</td>
     <td width="7%" height="66">4</td>
@@ -315,6 +275,36 @@ Priorities range from 1 to 5, with 5 being the highest.
     <th width="6%" bgcolor="ccccff" height="23">Priority</th>
     <th width="53%" bgcolor="ccccff" height="23">Details</th>
     <th width="12%" bgcolor="ccccff" height="23">Date Closed</th>
+  </tr>
+  <tr bgcolor="eeeeee">
+    <td width="52%" bgcolor="eeeeee" height="87">Navigating to a callee function 
+      should not render the wireframe for that block if the block is not visible 
+      in the diagram because of level of detail</td>
+    <td width="7%" bgcolor="eeeeee" height="87">3</td>
+    <td width="28%" bgcolor="eeeeee" height="87"> 
+      <p>Double-clicking on a callee may result in a new block 'appearing' where 
+        not had been rendered before, because the callee search algorithm does 
+        not consider the current level of detail</p>
+      <p>This is fixed by LevelOfDetail because the CallDetails and TowerDiagram 
+        are working off the same base data</p>
+      </td>
+    <td width="11%" height="87">2002/10/31</td>
+  </tr>
+  <tr bgcolor="eeeeee"> 
+    <td width="43%" bgcolor="eeeeee">Searching for the &lt;root&gt; block does 
+      not work</td>
+    <td width="6%" bgcolor="eeeeee">2</td>
+    <td width="35%" bgcolor="eeeeee">Typing &lt;root&gt; into the Search bar does 
+      not select the root block</td>
+    <td width="10%">2002/10/31</td>
+  </tr>
+  <tr bgcolor="eeeeee"> 
+    <td width="43%">Root block should always be 1 unit square in size</td>
+    <td width="6%">3</td>
+    <td width="35%">I have decided that this is not really a bug. Having the block 
+      have the same dimensions that it would have if it were not the root conveys 
+      information about it</td>
+    <td width="10%">2002/10/28</td>
   </tr>
   <tr bgcolor="eeeeee"> 
     <td width="43%">Rename everything from 'Orbit' to ProphIt.</td>
