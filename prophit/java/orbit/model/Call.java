@@ -2,6 +2,9 @@ package orbit.model;
 
 import java.util.List;
 
+/**
+ * Represents a particular method invocation in a {@link CallGraph}.
+ */
 public interface Call
 {
 	public int getKey();

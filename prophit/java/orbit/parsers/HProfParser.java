@@ -63,8 +63,11 @@ public class HProfParser
 			String line = seek("TRACE", true);
 			final HashMap stackTracesByID = new HashMap();
 			line = parseTraces(line, stackTracesByID);
-
-			if ( line.startsWith("CPU SAMPLES BEGIN") )
+			if ( line == null )
+			{
+				throw new ParseException("File does not contain any CPU profile data. Make sure you are using a 'cpu' option with hprof");
+			}
+			else if ( line.startsWith("CPU SAMPLES BEGIN") )
 			{
 				// eat the header line
 				seek("rank", true);

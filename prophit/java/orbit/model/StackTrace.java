@@ -3,13 +3,20 @@ package orbit.model;
 /**
  * A stack trace, represented by an array of strings. The 0th string should be the deepest (leaf) call,
  * the nth string should be the call closest to the root of the call stack.
+ * <p>
+ * The {@link #getParentStack} and {@link #getLeafStack} methods are efficient ways to navigate up and
+ * down the call stack, because they do not copy the underlying stack trace data.
  */
 public class StackTrace
 {
 	private final String[] stack;
 	private final int beginOffset;
 	private final int endOffset;
-	
+
+	/**
+	 * @param stack The entries in the stack trace. For purposes of memory optimization, it is a good idea to
+	 * re-use Strings in stack trace entries because there can be a lot of redundancy.
+	 */
 	public StackTrace(String[] stack)
 	{
 		this(stack, 0, 0);
@@ -41,7 +48,7 @@ public class StackTrace
 	}
 
 	/**
-	 * True if other has the same size stack, and all the entries are equal.
+	 * True if other has the same size stack, and all the stack entries are equal.
 	 */
 	public boolean equals(StackTrace other)
 	{
