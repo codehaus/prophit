@@ -2,21 +2,17 @@ package orbit.gui;
 
 import orbit.model.Call;
 
+import javax.swing.*;
+import javax.swing.table.AbstractTableModel;
+import javax.swing.table.DefaultTableModel;
+
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.beans.PropertyChangeSupport;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JSplitPane;
-import javax.swing.JTable;
-import javax.swing.ListSelectionModel;
-import javax.swing.table.AbstractTableModel;
-import javax.swing.table.DefaultTableModel;
+import java.beans.PropertyChangeSupport;
 
 /**
  * Contains the detailed information about the selected call. This includes the time and numCalls information for the
@@ -64,7 +60,7 @@ class CallDetailsView
 
 		setModel(blockModel);
 	}
-
+	
 	public void setModel(BlockDiagramModel blockModel)
 	{
 		this.blockModel = blockModel;

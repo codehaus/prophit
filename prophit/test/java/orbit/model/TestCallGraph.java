@@ -1,7 +1,6 @@
 package orbit.model;
 
-import util.*;
-
+import util.SimpleCallGraph;
 import junit.framework.TestCase;
 
 public class TestCallGraph

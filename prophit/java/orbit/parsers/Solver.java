@@ -1,6 +1,5 @@
 package orbit.parsers;
 
-import orbit.model.CallID;
 import orbit.model.CallGraph;
 
 import java.io.IOException;

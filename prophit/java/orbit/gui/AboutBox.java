@@ -1,13 +1,14 @@
 package orbit.gui;
 
-import java.awt.Frame;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyAdapter;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
+
+import java.awt.Frame;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 
 /**
  * Displays the Orbit logo, version, and copyright statement.

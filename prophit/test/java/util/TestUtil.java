@@ -1,10 +1,8 @@
 package util;
 
-import orbit.gui.RectangleLayout;
+import java.awt.geom.Rectangle2D;
 
 import junit.framework.AssertionFailedError;
-
-import java.awt.geom.Rectangle2D;
 
 public class TestUtil
 {

@@ -25,7 +25,7 @@
 
 	<path id="compile.class.path">
 		<fileset dir="${basedir}/lib" includes="jnlp.jar,log4jME.jar,gl4java.jar,gl4java-glutfonts.jar,junit.jar,nanoxml-2.2.2.jar"/>
-		<fileset dir="${ant.home}/lib" includes="ant.jar" />
+<!--		<fileset dir="${ant.home}/lib" includes="ant.jar" /> -->
 	</path>
 
 	<path id="prophit.path.path">
@@ -223,12 +223,6 @@
 		</java>
 	</target>
 
-	<target name="parse" depends="jar">
-		<java classpathref="run.class.path" fork="true" maxmemory="256M" classname="orbit.parsers.ParseAndSolveLoader">
-			<arg line="java.hprof.txt -1" />
-		</java>
-	</target>
-
 	<target name="compile-tests" depends="init">
 		<javac classpathref="compile.class.path" srcdir="test/java" debug="yes" destdir="${build}/classes" />
 	</target>
@@ -277,7 +271,7 @@
 
 	<property name="depth" value="6" />
 	<target name="run-loader" depends="build,jar">
-		<java classpathref="run.class.path" fork="true" classname="orbit.parsers.Loader">
+		<java classpathref="run.class.path" fork="true" classname="orbit.parsers.ParseAndSolveLoader">
 			<arg line="${profile} ${depth}" />
 		</java>
 	</target>

@@ -1,16 +1,15 @@
 package orbit.parsers;
 
+import net.n3.nanoxml.*;
 import orbit.model.*;
 import orbit.util.Log;
 import orbit.util.XMLConstants;
 
 import org.apache.log4j.Category;
-import net.n3.nanoxml.*;
 
 import java.io.*;
 import java.net.MalformedURLException;
-import java.util.*;
-import java.util.zip.*;
+import java.util.Vector;
 
 public class ProphitParserLoader implements Parser, Loader
 {

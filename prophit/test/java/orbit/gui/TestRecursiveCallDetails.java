@@ -1,12 +1,13 @@
 package orbit.gui;
 
-import orbit.model.*;
-import orbit.parsers.*;
-import orbit.gui.CallDetails;
-
-import junit.framework.TestCase;
+import orbit.model.Call;
+import orbit.model.CallGraph;
+import orbit.parsers.Loader;
+import orbit.parsers.LoaderFactory;
 
 import java.io.File;
+
+import junit.framework.TestCase;
 
 /*
  Uses the test data file:
@@ -61,7 +62,7 @@ public class TestRecursiveCallDetails
 	
 	public void setUp() throws Exception
 	{
-		Loader loader = LoaderFactory.instance().createLoader(new File("test/data/profiles/SelfCallerHierarchy.hprof.txt"));
+		Loader loader = LoaderFactory.instance().createLoader(new File(System.getProperty("basedir") + "/test/data/profiles/SelfCallerHierarchy.hprof.txt"));
 		loader.parse();
 		cg = loader.solve();
 	}
@@ -80,7 +81,18 @@ public class TestRecursiveCallDetails
 		assertEquals(202.0, cd.getInclusiveTime(), 0.001);
 		assertEquals(7.0, cd.getExclusiveTime(), 0.001);
 
-		assertEquals("totalTime : 336.0, timeByCallName : {bugs.SelfCallerHierarchy.secondLoop(SelfCallerHierarchy.java)=90.0, bugs.SumContainer.addChildren(SelfCallerHierarchy.java)=134.0, bugs.SelfCallerHierarchy.firstLoop(SelfCallerHierarchy.java)=112.0}", cd.getCallersRollupList().toString());
-		assertEquals("totalTime : 202.0, timeByCallName : {bugs.SumContainer.addChildren(SelfCallerHierarchy.java)=202.0}", cd.getCalleesRollupList().toString());
+		CallRollupList callers = cd.getCallersRollupList();
+		callers.sort();
+
+		assertEquals(callers.getTotalTime(), 336.0, 0);
+		assertEquals(callers.getTime(0), 134.0, 0);
+		assertEquals(callers.getTime(1), 112.0, 0);
+		assertEquals(callers.getTime(2), 90.0, 0);
+
+		CallRollupList callees = cd.getCalleesRollupList();
+		callees.sort();
+
+		assertEquals(callees.getTotalTime(), 202.0, 0);
+		assertEquals(callees.getTime(0), 202.0, 0);
 	}	
 }

@@ -14,9 +14,19 @@ public class GLUtils
 	 */
 	public static void drawText(GLFunc gl, GLUTFunc glut, int x, int y, String text, Color color)
 	{
+		drawText(gl, glut, x, y, text, color, false);
+	}
+
+	/** @param getWidth whether to compute and return the width of the bitmap string */
+	public static int drawText(GLFunc gl, GLUTFunc glut, int x, int y, String text, Color color, boolean getWidth)
+	{
 		GLUtils.glColor(gl, color);
 		gl.glRasterPos2i(x, y);
 		glut.glutBitmapString(GLUTEnum.GLUT_BITMAP_HELVETICA_12, text);
+		if ( getWidth )
+			return glut.glutBitmapLength(GLUTEnum.GLUT_BITMAP_HELVETICA_12, text);
+		else
+			return 0;
 	}
 
 	public static void glColor(GLFunc gl, Color color)

@@ -1,12 +1,12 @@
 package orbit.parsers;
 
 import orbit.model.*;
-import orbit.parsers.*;
+
+import java.io.File;
+import java.io.FileReader;
+import java.util.List;
 
 import junit.framework.TestCase;
-
-import java.util.*;
-import java.io.*;
 
 public class TestHProfParser
 	extends TestCase

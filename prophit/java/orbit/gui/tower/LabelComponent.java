@@ -1,15 +1,10 @@
 package orbit.gui.tower;
 
-import orbit.gui.BlockDiagramModel;
-import orbit.gui.Constants;
-import orbit.gui.CallAdapter;
-import orbit.gui.CallLayoutAlgorithm;
-import orbit.gui.Constants;
-import orbit.gui.GLUtils;
-import orbit.gui.TimeMeasure;
-import orbit.gui.UIUtil;
+import orbit.gui.*;
 import orbit.model.Call;
 import orbit.util.Log;
+
+import org.apache.log4j.Category;
 
 import gl4java.GLEnum;
 import gl4java.GLFunc;
@@ -18,19 +13,14 @@ import gl4java.utils.glut.GLUTEnum;
 import gl4java.utils.glut.GLUTFunc;
 import gl4java.utils.glut.fonts.GLUTFuncLightImplWithFonts;
 
-import org.apache.log4j.Category;
-
-import java.awt.*;
-import java.awt.geom.Rectangle2D;
+import java.awt.Component;
+import java.awt.Point;
+import java.awt.Rectangle;
 import java.awt.event.*;
+import java.awt.geom.Rectangle2D;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Iterator;
-import java.util.List;
-import java.util.LinkedList;
+import java.util.*;
 
 /**
  * Labels a set of blocks by drawing an arrow from the labeling text to the center of the block.

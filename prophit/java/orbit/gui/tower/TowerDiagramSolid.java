@@ -1,19 +1,11 @@
 package orbit.gui.tower;
 
-import orbit.gui.BlockDiagramModel;
-import orbit.gui.CallAdapter;
-import orbit.gui.CallLayoutAlgorithm;
-import orbit.gui.Constants;
-import orbit.gui.ColorModel;
-import orbit.gui.TimeMeasure;
+import orbit.gui.*;
 import orbit.util.Log;
 
 import org.apache.log4j.Category;
 
 import gl4java.GLEnum;
-import gl4java.GLFunc;
-import gl4java.GLUFunc;
-import gl4java.awt.GLCanvas;
 
 import java.awt.geom.Rectangle2D;
 import java.beans.PropertyChangeEvent;

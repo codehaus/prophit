@@ -9,7 +9,6 @@ import org.apache.log4j.Category;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.Iterator;
-import java.util.List;
 
 /**
  * Draws a highlight on each block which is a search result.

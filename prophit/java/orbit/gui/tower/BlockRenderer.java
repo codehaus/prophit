@@ -1,28 +1,17 @@
 package orbit.gui.tower;
 
-import orbit.gui.CallAdapter;
-import orbit.gui.CallLayoutAlgorithm;
-import orbit.gui.ColorModel;
-import orbit.gui.Constants;
-import orbit.gui.GLUtils;
-import orbit.gui.TimeMeasure;
+import orbit.gui.*;
 import orbit.model.Call;
 import orbit.util.Log;
 
 import org.apache.log4j.Category;
 
-import gl4java.GLFunc;
 import gl4java.GLEnum;
+import gl4java.GLFunc;
 
 import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.geom.Rectangle2D;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * The BlockRenderer uses the model to understand how the diagram should be drawn.

@@ -1,8 +1,7 @@
 package lp;
 
-import lp.solve.LP;
-
 import junit.framework.TestCase;
+import lp.solve.LP;
 
 public class TestLPSolve
 	extends TestCase

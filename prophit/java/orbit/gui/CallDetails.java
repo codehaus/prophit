@@ -6,11 +6,12 @@ import orbit.util.Pair;
 
 import org.apache.log4j.Category;
 
+import javax.swing.table.AbstractTableModel;
+import javax.swing.table.TableModel;
+
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
-import javax.swing.table.TableModel;
-import javax.swing.table.AbstractTableModel;
 
 /**
  * Data model for the display of detailed information on a particular method call. This information includes:

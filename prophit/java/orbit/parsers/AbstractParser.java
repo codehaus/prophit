@@ -1,11 +1,11 @@
 package orbit.parsers;
 
-import orbit.model.CallGraph;
-import orbit.model.CallID;
 import orbit.model.ModelBuilder;
 
-import java.io.*;
-import java.util.*;
+import java.io.IOException;
+import java.io.LineNumberReader;
+import java.util.List;
+import java.util.StringTokenizer;
 
 public abstract class AbstractParser
 	implements Parser

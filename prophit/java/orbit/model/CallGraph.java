@@ -1,13 +1,11 @@
 package orbit.model;
 
-import orbit.util.IntStack;
 import orbit.util.IntIterator;
+import orbit.util.IntStack;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Set;
-import java.util.HashSet;
 
 /**
  * The CallGraph implements the hierarchy of function calls in a profile. The CallGraph and all the calls

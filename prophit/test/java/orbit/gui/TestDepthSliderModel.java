@@ -2,11 +2,11 @@ package orbit.gui;
 
 import util.SimpleCallGraph;
 
-import junit.framework.TestCase;
-
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
+
+import junit.framework.TestCase;
 
 /**
  * Test the DepthSliderModel by constructing a BlockDiagramModel and DepthSliderModel and manually

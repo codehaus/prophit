@@ -2,7 +2,6 @@ package orbit.gui.tower;
 
 import orbit.gui.Constants;
 import orbit.gui.GLUtils;
-import orbit.gui.TimeMeasure;
 import orbit.model.Call;
 import orbit.util.Log;
 import orbit.util.Util;
@@ -14,7 +13,6 @@ import gl4java.GLUEnum;
 
 import java.awt.Color;
 import java.awt.geom.Rectangle2D;
-import java.util.Arrays;
 
 /**
  * Abstract class for drawing blocks which are highlighted. This behavior is used for selected and
