@@ -94,6 +94,10 @@
     <copy todir="${webdist}">
  	  <fileset dir="${basedir}/web" includes="**" excludes="**/CVS"/>
 	</copy>
+
+    <copy todir="${webdist}/lib">
+      <fileset dir="${basedir}/lib" includes="*.jar" excludes="**/CVS"/>
+    </copy>
   </target>
 
   <target name="signorbit" depends="jar">
