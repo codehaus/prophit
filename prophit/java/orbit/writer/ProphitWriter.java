@@ -50,7 +50,9 @@ public class ProphitWriter
 		RCC[] rccs = RCC.getRCCs(calls);
 
 		IXMLElement cg = new XMLElement(XMLConstants.CALLGRAPH);
-		cg.setAttribute(XMLConstants.DATE, (new Date().toString()) );
+		IXMLElement date = cg.createElement(XMLConstants.DATE);
+		date.setContent( new Date().toString() );
+		cg.addChild( date );
 		addMeasurements(cg, rccs);
 		addInvocations(cg, calls, callFractions);
 		return ( cg );
