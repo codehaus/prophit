@@ -70,18 +70,17 @@ public class MapFrame
 
 	private final Controller controller = new Controller();
 	
-	private BlockDiagramView blockView = null;
-	private BlockDiagramModel blockModel = null;
-
 	private Action backAction;
 	private Action forwardAction;
 	private Action parentAction;
 	private Action rootAction;
 
-	private JPanel          dummy;
-	private JSlider         depthSlider;
-	private CallDetailsView callDetails;
-	private JSplitPane      mainSplitter;
+	private BlockDiagramModel blockModel = null;
+
+	private BlockDiagramView blockView = null;
+	private JPanel           pnlContent;
+	private CallDetailsView  callDetails;
+	private JSlider          depthSlider;
 	
 	public MapFrame()
 	{
@@ -111,19 +110,15 @@ public class MapFrame
 		}
 		else
 		{
-			if ( dummy != null )
+			if ( pnlContent != null )
 			{
-				getContentPane().remove(dummy);
-				dummy = null;
-			}
-			if ( blockView != null )
-			{
-				getContentPane().remove(blockView);
+				getContentPane().remove(pnlContent);
 				
 				blockView.cvsDispose();
 				blockModel.dispose();
 				blockModel = null;
 				blockView = null;
+				pnlContent = null;
 				System.gc();
 			}
 			
@@ -151,13 +146,16 @@ public class MapFrame
 				});
 			blockModel.setLevels(depthSlider.getValue());
 
-			int width = getSize().width - callDetails.getSize().width;
-			int height = getSize().height - callDetails.getSize().height;
-			blockView = new BlockDiagramView(width, height, blockModel);
-			// mainSplitter.setTopComponent(blockView);
-			getContentPane().add(blockView, BorderLayout.CENTER);
-			blockView.requestFocus();
+			System.out.println("size = " + getSize());
+			blockView = new BlockDiagramView((int)( getSize().width * 2.0 / 3.0 ), getSize().height, blockModel);
+			callDetails = new CallDetailsView();
+
+			pnlContent = new ContentPanel(blockView, callDetails);
+			getContentPane().add(pnlContent, BorderLayout.CENTER);
+
 			pack();
+
+			blockView.requestFocus();
 
 			enableControls();
 			
@@ -165,7 +163,7 @@ public class MapFrame
 		}
 	}
 	
-    private void createActions()
+	private void createActions()
 	{
 		backAction = new AbstractAction("Back") // , new ImageIcon("images/rewind.gif"))
 			{
@@ -235,18 +233,7 @@ public class MapFrame
 
 	private void addComponents()
 	{
-		dummy = new JPanel();
-
-		JPanel bottomDummy = new JPanel()
-			{
-				public Dimension getMinimumSize() { return new Dimension(400, 300); }
-			};
-		callDetails = new CallDetailsView();
-		
-		getContentPane().add(dummy, BorderLayout.CENTER);
-		getContentPane().add(callDetails, BorderLayout.EAST);
 	}
-
 
 	private JSlider createDepthSlider()
 	{
@@ -358,6 +345,47 @@ public class MapFrame
 				dispose();
 				System.exit( 0 );
 			}
+		}
+	}
+
+	/*
+	 * ContentPanel is a container for the entire content of the application, which uses
+	 *   a GridBagLayout to assign horizontal space proportionally between the block diagram
+	 *   and the call details
+	 * pnlBlockDiagram is a panel which contains the current BlockDiagramView (blockView)
+	 * callDetails is the CallDetailsView
+	 * The blockDiagram is weighted 3:1 relative to the callDetails
+	 */
+	private static class ContentPanel
+		extends JPanel
+	{
+		public ContentPanel(BlockDiagramView blockDiagram, CallDetailsView callDetails)
+		{
+			/*
+			  This crap doesn't work
+			  The blockDiagram is not re-sized to fill the available space
+			  
+			GridBagLayout gbl = new GridBagLayout();
+			setLayout(gbl);
+
+			GridBagConstraints gbc = new GridBagConstraints();
+			
+			// Add pnlBlockDiagram
+			gbc.weightx = 1.0;
+			gbc.weighty = 1.0;
+			gbl.setConstraints(blockDiagram, gbc);
+			add(blockDiagram);
+			
+			// Add callDetails
+			gbc.weightx = 1.0;
+			gbc.gridwidth = GridBagConstraints.REMAINDER;
+			gbl.setConstraints(callDetails, gbc);
+			add(callDetails);
+			*/
+			setLayout(new BorderLayout());
+
+			add(blockDiagram, BorderLayout.CENTER);
+			add(callDetails, BorderLayout.EAST);
 		}
 	}
 }

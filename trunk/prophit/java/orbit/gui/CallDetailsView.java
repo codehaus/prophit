@@ -34,8 +34,12 @@ class CallDetailsView
 			CallDetails details = new CallDetails(rootCall, selectedCall);
 			
 			tblCallInfo.setModel(new CallInfoModel(details));
+			tblCallInfo.getColumnModel().getColumn(0).setPreferredWidth(40);
+
 			tblCallers.setModel(details.getCallersModel());
+			tblCallers.getColumnModel().getColumn(1).setPreferredWidth(40);
 			tblCallees.setModel(details.getCalleesModel());
+			tblCallees.getColumnModel().getColumn(1).setPreferredWidth(40);
 		}
 	}
 
@@ -73,6 +77,11 @@ class CallDetailsView
 		public CallInfoModel(CallDetails details)
 		{
 			this.details = details;
+		}
+		
+		public String getColumnName(int column) 
+		{
+			return "";
 		}
 
 		public int getRowCount()

@@ -62,7 +62,9 @@ class BlockDiagramView
 		super(w, h, null, null);
 		// super(true);
 
-		setSize(w, h);
+		System.out.println("Constructing with dimensions (" + w + ", " + h + ")");
+
+		// setSize(w, h);
 
 		this.model = blockModel;
 		this.model.addListener(new PropertyChangeListener()
@@ -113,7 +115,7 @@ class BlockDiagramView
 						}
 						switch ( e.getKeyCode() )
 						{
-						case KeyEvent.VK_UP:
+						case KeyEvent.VK_UP:	
 							model.shiftVertical(true);
 							break;
 						case KeyEvent.VK_DOWN:
@@ -277,7 +279,8 @@ class BlockDiagramView
 		// gl.glOrtho(-EXTENT * 0.1, EXTENT * 1.1, -EXTENT * 0.1, EXTENT * 1.1, -1.0, 100.0);
 		gl.glLoadIdentity();
 		double aspectRatio = width / (double)height;
-		System.out.println("Reshaping to aspect ratio " + aspectRatio);
+		System.out.println("Reshaping to ( " + width + ", " + height + " )");
+		System.out.println(" Aspect ratio = " + aspectRatio);
 		glu.gluPerspective(45, aspectRatio, 0.1, 100);
 		gl.glMatrixMode(GL_MODELVIEW);
 		glj.gljCheckGL();
