@@ -22,11 +22,14 @@ public class TestProphitParser
 
 	String profilesPath;  // for the profiles subdir
 	String dataPath;      // for the toplevel data dir
+	String outputPath;    // where all the data files written by the test itself go
+
 	public TestProphitParser(String name)
 	{
 		super(name);
 		this.profilesPath = System.getProperty("basedir") + "/test/data/profiles";
 		this.dataPath = System.getProperty("basedir") + "/data";
+		this.outputPath = System.getProperty("basedir") + "/build/output";
 	}
 	
 	/** 
@@ -36,22 +39,11 @@ public class TestProphitParser
 	 */
 	public void testXMLSampleParser() throws Exception
 	{
-		try 
-		{
-			//System.out.println("HEY");
-			
-			Parser parser = new ProphitParserLoader(new FileReader(this.profilesPath + "/simple-profile-std.xml")); 
-			
-			assertTrue("File Format is recognized.", parser.isFileFormatRecognized());
-			ModelBuilder builder = ModelBuilderFactory.newModelBuilder();
-			parser.execute(builder);
-		}
-		catch (Exception x)
-		{
-			System.out.println(x.getMessage());
-			throw new Exception(x.getMessage());
-		}
+		Parser parser = new ProphitParserLoader(new FileReader(this.profilesPath + "/simple-profile-std.xml")); 
 		
+		assertTrue("File Format is recognized.", parser.isFileFormatRecognized());
+		ModelBuilder builder = ModelBuilderFactory.newModelBuilder();
+		parser.execute(builder);
 	}
 	
 	/**
@@ -64,21 +56,11 @@ public class TestProphitParser
 	 */
 	public void testParserFactory() throws Exception
 	{
-		try 
-		{
-			File file = new File(this.profilesPath + "/simple-profile-std.xml");
-			Parser parser = ParserFactory.instance().createParser(file);
-			//System.out.println(parser);
-			assertTrue("class is a ProphitParserLoader.", parser.getClass() == ProphitParserLoader.class);
-			ModelBuilder builder = ModelBuilderFactory.newModelBuilder();
-			parser.execute(builder);
-		}
-		catch (Exception x) 
-		{
-			System.out.println(x.getMessage());
-			throw new Exception(x.getMessage());
-		}
-		
+		File file = new File(this.profilesPath + "/simple-profile-std.xml");
+		Parser parser = ParserFactory.instance().createParser(file);
+		assertTrue("class is a ProphitParserLoader.", parser.getClass() == ProphitParserLoader.class);
+		ModelBuilder builder = ModelBuilderFactory.newModelBuilder();
+		parser.execute(builder);
 	}
 	
 	/**
@@ -90,18 +72,10 @@ public class TestProphitParser
 	 */
 	public void testLoaderFactory() throws Exception
 	{
-		try 
-		{
-			File file = new File(this.profilesPath + "/simple-profile-std.xml");
-			Loader loader = LoaderFactory.instance().createLoader(file);
-			
-			assertTrue("loader is a ProphitParserLoader", loader.getClass() == ProphitParserLoader.class);
-		} 
-		catch (Exception x) 
-		{
-			System.out.println(x.getMessage());
-			throw new Exception(x.getMessage());
-		}
+		File file = new File(this.profilesPath + "/simple-profile-std.xml");
+		Loader loader = LoaderFactory.instance().createLoader(file);
+		
+		assertTrue("loader is a ProphitParserLoader", loader.getClass() == ProphitParserLoader.class);
 	}
 	
 	/** 
@@ -111,20 +85,11 @@ public class TestProphitParser
 	 */
 	public void testLoadingWithFactory() throws Exception
 	{
-		try 
-		{
-			File file = new File(this.profilesPath + "/simple-profile-std.xml");
-			Loader loader = LoaderFactory.instance().createLoader(file);
-			
-			assertTrue("loader is a ProphitParserLoader", loader.getClass() == ProphitParserLoader.class);
-			loader.parse();
-			
-		} 
-		catch (Exception x) 
-		{
-			System.out.println(x.getMessage());
-			throw new Exception(x.getMessage());
-		}
+		File file = new File(this.profilesPath + "/simple-profile-std.xml");
+		Loader loader = LoaderFactory.instance().createLoader(file);
+		
+		assertTrue("loader is a ProphitParserLoader", loader.getClass() == ProphitParserLoader.class);
+		loader.parse();
 	}
 	
 	/** 
@@ -135,124 +100,74 @@ public class TestProphitParser
 	 */
 	public void testWritingSimple() throws Exception
 	{
-		try
-		{
-			File file = new File(this.profilesPath + "/simple-profile-std.xml");
-			Loader loader = LoaderFactory.instance().createLoader(file);
-			
-			assertTrue("loader is a ProphitParserLoader", loader.getClass() == ProphitParserLoader.class);
-			loader.parse();
-			CallGraph cg = loader.solve();
-			assertTrue("CallGraph is not null.", cg != null);
-			File out = new File(this.profilesPath + "/out-simple-profile.xml");
-			ProphitWriter writer = new ProphitWriter( cg, out );
-			writer.write();
-		}
-		catch (Exception x)
-		{
-			System.out.println(x.getMessage());
-			throw new Exception(x.getMessage());
-		}
+		File file = new File(this.profilesPath + "/simple-profile-std.xml");
+		Loader loader = LoaderFactory.instance().createLoader(file);
+		
+		assertTrue("loader is a ProphitParserLoader", loader.getClass() == ProphitParserLoader.class);
+		loader.parse();
+		CallGraph cg = loader.solve();
+		assertTrue("CallGraph is not null.", cg != null);
+		File out = new File(this.outputPath + "/simple-profile-std.xml");
+		ProphitWriter writer = new ProphitWriter( cg, out );
+		writer.write();
 	}
 
 	public void testRoundTripSimpleProf() throws Exception
 	{
-		try 
+		Loader loader = LoaderFactory.instance().createLoader(new File(this.dataPath + "/simple.prof"));
+		loader.parse();
+		CallGraph simple = loader.solve();
+		CallID[] calls = simple.getCallIDs();
+		for (int i = 0; i < calls.length; i++)
 		{
-			
-			Loader loader = LoaderFactory.instance().createLoader(new File(this.dataPath + "/simple.prof"));
-			loader.parse();
-			CallGraph simple = loader.solve();
-			CallID[] calls = simple.getCallIDs();
-			for (int i = 0; i < calls.length; i++)
-			{
-				if (calls[i] != null) System.out.println(calls[i].toString());
-			}
-			System.out.println("finished loading simple");
-			
-			ProphitWriter writer = new ProphitWriter( simple, new File(this.dataPath + "/testoutput.xml"));
-			writer.write();
-
-			System.out.println("finished writing");
-
-			ProphitParserLoader p = new ProphitParserLoader( new FileReader(new File(this.dataPath + "/testoutput.xml")));
-			CallGraph newsimple = p.solve();
-
-			SimpleCallGraph scg = new SimpleCallGraph();
-			assertTrue("ROOT is the same", scg.main.equals(newsimple.getRoot()));
-			assertTrue("Children are the same", scg.test.equals(newsimple.getRoot().getChildren().get(0)));
-			assertTrue("Children are the same", scg.init.equals(newsimple.getRoot().getChildren().get(1)));
-			
-			System.out.println("FIRST: " + simple.toString(simple.getMaxDepth()));
-			System.out.println("");
-			System.out.println("SECOND: " + newsimple.toString(newsimple.getMaxDepth()));
-
+			if (calls[i] != null) System.out.println(calls[i].toString());
 		}
-		catch (Exception x)
-		{
-			//System.out.println(x.getMessage());
-			x.printStackTrace();
-			throw new RuntimeException("Unable to load simple.prof : " + x);
-		}
+			
+		ProphitWriter writer = new ProphitWriter( simple, new File(this.outputPath + "/simple.prof.xml"));
+		writer.write();
+
+		ProphitParserLoader p = new ProphitParserLoader( new FileReader(new File(this.outputPath + "/simple.prof.xml")));
+		CallGraph newsimple = p.solve();
+
+		SimpleCallGraph scg = new SimpleCallGraph();
+		assertTrue("ROOT is the same", scg.main.equals(newsimple.getRoot()));
+		assertTrue("Children are the same", scg.test.equals(newsimple.getRoot().getChildren().get(0)));
+		assertTrue("Children are the same", scg.init.equals(newsimple.getRoot().getChildren().get(1)));
+
+		assertEquals(simple.toString(simple.getMaxDepth()), newsimple.toString(newsimple.getMaxDepth()));
 	}
 
 	public void testRoundTripXML() throws Exception
 	{
-		try 
-		{
-			ProphitParserLoader p1 = new ProphitParserLoader( new FileReader(new File(this.dataPath + "/testoutput.xml")));
-			CallGraph c1 = p1.solve();
-			ProphitWriter writer = new ProphitWriter(c1, new File(this.dataPath + "/testoutput2.xml"));
-			writer.write();
-			ProphitParserLoader p2 = new ProphitParserLoader( new FileReader(new File(this.dataPath + "/testoutput2.xml")));
-			CallGraph c2 = p2.solve();
-			System.out.println("FIRST: " + c1.toString(c1.getMaxDepth()));
-			System.out.println(" ");
-			System.out.println("SECOND: " + c2.toString(c2.getMaxDepth()));
-		} catch (Exception x)
-		{
-			x.printStackTrace();
-			throw new RuntimeException("Unable to load.");
-		}
+		doTestRoundTrip(this.dataPath, "testoutput.xml");
 	}
 
 	public void testRoundTripSampleXML() throws Exception
 	{
-		try 
-		{
-			ProphitParserLoader p1 = new ProphitParserLoader(new FileReader(new File(this.profilesPath + "/simple-profile-std.xml")));
-			CallGraph cg = p1.solve();
-			ProphitWriter w = new ProphitWriter(cg, new File(this.profilesPath + "/simple-profile-std-copy.xml"));
-			w.write();
-		} catch (Exception x)
-		{
-			x.printStackTrace();
-			throw new RuntimeException("unable to load");
-		}
+		doTestRoundTrip(this.profilesPath, "simple-profile-std.xml");
 	}
 
 	public void testRoundTripHprofHello() throws Exception
 	{
-		try 
-		{
-			Loader hLoader = LoaderFactory.instance().createLoader(new File(this.dataPath + "/hello.hprof.txt"));
-			CallGraph cg = hLoader.solve();
-			//System.out.println(":::" + cg.toString(cg.getMaxDepth()));
-			ProphitWriter w = new ProphitWriter(cg, new File(this.profilesPath + "/out-hello.hprof.xml"));
-			System.out.println("----------------");
-			w.write();
-			System.out.println("----------------");
-			System.out.println(cg.toString(cg.getMaxDepth()));
+		doTestRoundTrip(this.dataPath, "hello.hprof.txt");
+	}
 
-			Loader pLoader = LoaderFactory.instance().createLoader(new File(this.profilesPath + "/out-hello.hprof.xml"));
-			CallGraph cgxml = pLoader.solve();
-			System.out.println(cgxml.toString(cgxml.getMaxDepth()));
+	private void doTestRoundTrip(String inputDir, String inputFileName) throws Exception
+	{
+		String inputFilePath = inputDir + "/" + inputFileName;
+		String outputFilePath = this.outputPath + "/" + inputFileName + ( inputFileName.endsWith(".xml") ? "" : ".xml" );
 
-		} catch (Exception x)
-		{
-			x.printStackTrace();
-			throw new RuntimeException("unable to load");
-		}
+		Loader loader = LoaderFactory.instance().createLoader(new File(inputFilePath));
+		loader.parse();
+		CallGraph c1 = loader.solve();
+		
+		ProphitWriter writer = new ProphitWriter(c1, new File(outputFilePath));
+		writer.write();
+
+		ProphitParserLoader p2 = new ProphitParserLoader( new FileReader(new File(outputFilePath)));
+		CallGraph c2 = p2.solve();
+		
+		assertEquals(c1.toString(c1.getMaxDepth()), c2.toString(c2.getMaxDepth()));
 	}
 }
 
