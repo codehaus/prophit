@@ -2,7 +2,7 @@
 
 <jnlp
       spec     = "1.0+"
-      version  = "@@prophIt.version@@"
+      version  = "@@prophit.version@@"
       codebase = "http://@@host@@:@@port@@"
       href     = "prophIt.jnlp">
   
