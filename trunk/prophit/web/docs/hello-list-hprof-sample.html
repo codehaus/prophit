@@ -114,128 +114,133 @@ MM_reloadPage(true);
                     Types</a> for more information on the difference between the 
                     two. This profile may be generated using the default settings
 					of the <a href="http://antprof.sf.net/hprof.html">hprof Ant task</a>.
-                  <ol>
-                    <li>Click on the <a href="glossary.html#diagram_root">diagram 
-                      root</a> (the bottom-most block in the tower diagram) to 
-                      select the <code>&lt;root&gt;</code> function. The base 
-                      of every diagram is the <code>&lt;root&gt;</code> function. 
-                      All the program's top-level threads are displayed as <a href="glossary.html#callee">callees</a> 
-                      of <code>&lt;root&gt;</code>. 
-                      <p> By selecting the <code>&lt;root&gt;</code> function, 
-                        and reading the Callee table, you can determine that the 
-                        program time consists primarily of the <code>HelloList.main</code> 
-                        function (over 99%), though it also spends a little time 
-                        running a few setup-related functions. 
-                    </li>
-                    <li>Adjust the <a href="glossary.html#depth_slider">depth 
-                      slider </a>down to '1', to show only 1 level of callees. 
-                      <p> If you look closely at the diagram, you can see that 
-                        the <code>&lt;root&gt;</code> function has only one callee 
-                        displayed. The block for the <code>HelloList.main</code> 
-                        function is the only one drawn<code></code>, because so 
-                        much more time is spent in <code>HelloList.main</code> 
-                        than in any other function. 
-                    </li>
-                    <li> 
-                      <p>Now move the slider to '2', to show another level of 
-                        function calls, and click on the <code>HelloList.main</code> 
-                        block in the diagram. If it helps you to get a better 
-                        view of the diagram, click and drag the diagram to change 
-                        its orientation. As you move your mouse over the diagram, 
-                        the name of the function under the mouse pointer is displayed 
-                        at the top of the diagram. 
-                    </li>
-                    <li> 
-                      <p> This view shows the relative amounts of time taken by 
-                        the <code>arrayAndString</code>, <code>linkedAndString</code>, 
-                        <code>arrayAndBuffer</code>, and <code>linkedAndBuffer</code> 
-                        functions. <code>arrayAndString</code> and <code>linkedAndString</code> 
-                        take about 40% of the time spent in <code>HelloList.main</code> 
-                        each, whereas <code>arrayAndBuffer</code> and <code>linkedAndBuffer</code> 
-                        only take about 10% of the time each. 
-                      <p> Already we can make 2 key observations: 
-                      <ol>
-                        <li>The functions which use <code>String</code> take much 
-                          more time than the ones that use <code>StringBuffer</code></li>
-                        <li>The functions which use <code>ArrayList</code> appear 
-                          to take about the same amount of time as the ones which 
-                          use <code>LinkedList</code>, but both <code>ArrayList</code> 
-                          functions are slightly faster than their <code>LinkedList</code> 
-                          counterparts. 
-                      </ol>
-                    </li>
-                    <li>Double-click the <code>linkedAndString</code> block. Double-clicking 
-                      makes the selected block into the <a href="glossary.html#diagram_root">diagram 
-                      root</a>, so <code>linkedAndString</code> is now the bottom 
-                      block in the diagram. You can use the 'Back' and 'Forward' 
-                      buttons to move back and forth between diagrams. 
-                      <p> As we could have guessed, the majority of the time (96%) 
-                        of the time spent in <code>linkedAndString</code> is spent 
-                        in <code>buildAsStrings</code>. The rest of the time is 
-                        split between adding items to the linked list, and cloning 
-                        the list at the end of the function. 
-                    </li>
-                    <li> This diagram also shows what happens inside <code>buildAsStrings</code>. 
-                      Move the slider up to '3' to show an additional level of 
-                      function calls. 
-                      <p> There are now several different colors of blocks in 
-                        the diagram. What do the colors represent? All the blocks 
-                        in the diagram are shaded from light to dark according 
-                        to how much of the time was spent in the function itself 
-                        ('<a href="glossary.html#exclusive">exclusive time</a>'). 
-                      <p> The diagram shows that there are 3 important hot spots 
-                        in the <code>buildAsStrings</code> function: 
-                      <ol>
-                        <li><code>StringBuffer.append</code></li>
-                        <li><code>StringBuffer.toString</code></li>
-                        <li><code>StringBuffer.&lt;init&gt;</code></li>
-                      </ol>
-                    </li>
-                    <li>Push the 'Root' button to set the root of the diagram 
-                      back to the <code>&lt;root&gt;</code> function. Move the 
-                      slider to '2', then double-click the <code>linkedAndBuffer</code> 
-                      function to focus on it and re-draw the diagram. 
-                      <p> In the <code>linkedAndString</code> function, building 
-                        the strings took 96% of the time. Here, the <code>buildAsBuffer</code> 
-                        function only takes about 87% of the time. 
-                    </li>
-                    <li>By moving the slider up to '4' or higher, you can see 
-                      the full picture for how time is spent in <code>linkedAndBuffer</code>. 
-                      Use the 'Back', 'Forward', 'Parent', and 'Root' buttons 
-                      to navigate between the views that you create. At all times, 
-                      the white highlight shows the function that you have currently 
-                      selected (by clicking or double-clicking on it). The yellow 
-                      highlights mark other places in the program where the selected 
-                      function was invoked.</li>
-					  <li>
-					  <p>One of the benefits of <code>hprof</code> is that it 
-                        can capture more stack levels (in this case, 6, as specified 
-                        by <code>depth=6</code>) than <code>-prof</code>. Use 
-                        the 'Root' button to show the entire program in the diagram, 
-                        then set the number of displayed levels in the call graph 
-                        to '4' using the slider. 
-                      <P>Double-click one of the <code>buildAsStrings</code> functions. 
-                        Make note of the times and percentages listed for its 
-                        callees (<code>StringBuffer.append</code>, <code>StringBuffer.toString</code>, 
-                        etc). Then go 'Back' and double-click on the other <code>buildAsStrings</code> 
-                        function (it will be highlighted in yellow). Note that 
-                        this invocation of <code>buildAsStrings</code> has the 
-                        same callees, but the times are slighly different. <code>-prof</code> 
-                        profiles do not show such distinctions, because it only 
-                        captures 2 levels of stack depth. <code>-prof</code> lumps 
-                        all the time spent in the callees of <code>buildAsStrings</code> 
-                        into one set of data. It does not differentiate based 
-                        on the caller of <code>buildAsStrings</code>. 
-                      <P> Therefore, the capability to show different data for 
-                        different invocations of the same function is not available 
-                        with <code>-prof</code>you have to use <code>hprof</code> 
-                        to get it. And you have to set the <code>depth</code> 
-                        option to a large enough number to ensure that the different 
-                        invocations will have different call stacks. In this case, 
-                        <code>depth=3</code> would have been sufficient. <code>depth=6</code> 
-                        seems to be enough for most cases, but you can experiment 
-                        with this parameter. </li>
-                  </ol>
+                    <ol>
+                      <li>The HelloList program is a simple comparison of the 
+                        performance of:
+						<ul>
+						<li>String and StringBuffer
+						<li>ArrayList and LinkedList
+						</ul>
+						Take a quick read through the code to familiarize yourself with what it is doing.
+						You may already know that StringBuffer is much faster than String. This simple example
+						is only meant to introduce the prophIt GUI; rest assured that the real value of prophIt lies
+						in finding much less common performance problems.
+					  </li>
+                      <li>Click on the <a href="glossary.html#diagram_root">diagram 
+                        root</a> (the bottom-most block in the tower diagram) 
+                        to select the <code>&lt;root&gt;</code> function. If it 
+                        helps you to get a better view of the diagram, click and 
+                        drag the diagram to change its orientation. The base of 
+                        every diagram is the <code>&lt;root&gt;</code> function. 
+                        All the program's top-level threads are displayed as <a href="glossary.html#callee">callees</a> 
+                        of <code>&lt;root&gt;</code>. 
+                        <p> By selecting the <code>&lt;root&gt;</code> function, 
+                          and reading the Callee table, you can determine that 
+                          the program time consists primarily the <code>arrayAndString</code>, 
+                          <code>linkedAndString</code>, <code>arrayAndBuffer</code>, 
+                          and <code>linkedAndBuffer</code> functions. 
+                      </li>
+                      <li>Adjust the <a href="glossary.html#depth_slider">depth 
+                        slider </a>down to '1', to show only 1 level of callees. 
+                        <p> This view shows the relative amounts of time taken 
+                          by the <code>arrayAndString</code>, <code>linkedAndString</code>, 
+                          <code>arrayAndBuffer</code>, and <code>linkedAndBuffer</code> 
+                          functions. <code>arrayAndString</code> and <code>linkedAndString</code> 
+                          take about 40% of the time spent in <code>HelloList.main</code> 
+                          each, whereas <code>arrayAndBuffer</code> and <code>linkedAndBuffer</code> 
+                          only take about 10% of the time each. 
+                      </li>
+                      <li> 
+                        <p> Already we can make 2 key observations: 
+                        <ol>
+                          <li>The functions which use <code>String</code> take 
+                            much more time than the ones that use <code>StringBuffer</code></li>
+                          <li>The functions which use <code>ArrayList</code> appear 
+                            to take about the same amount of time as the ones 
+                            which use <code>LinkedList</code>, but both <code>ArrayList</code> 
+                            functions are slightly faster than their <code>LinkedList</code> 
+                            counterparts. 
+                        </ol>
+                      </li>
+                      <li>Double-click the <code>linkedAndString</code> block. 
+                        Double-clicking makes the selected block into the <a href="glossary.html#diagram_root">diagram 
+                        root</a>, so <code>linkedAndString</code> is now the bottom 
+                        block in the diagram. You can use the 'Back' and 'Forward' 
+                        buttons to move back and forth between diagrams. 
+                        <p> As we could have guessed, the majority of the time 
+                          (96%) of the time spent in <code>linkedAndString</code> 
+                          is spent in <code>buildAsStrings</code>. The rest of 
+                          the time is split between adding items to the linked 
+                          list, and cloning the list at the end of the function. 
+                      </li>
+                      <li> This diagram also shows what happens inside <code>buildAsStrings</code>. 
+                        Move the depth slider up to '3' to show more of the call 
+                        graph. 
+                        <p> There are now several different colors of blocks in 
+                          the diagram. What do the colors represent? All the blocks 
+                          in the diagram are shaded from light to dark according 
+                          to how much of the time was spent in the function itself 
+                          ('<a href="glossary.html#exclusive">exclusive time</a>'). 
+                        <p> The diagram shows that there are 3 important hot spots 
+                          in the <code>buildAsStrings</code> function: 
+                        <ol>
+                          <li><code>StringBuffer.append</code></li>
+                          <li><code>StringBuffer.toString</code></li>
+                          <li><code>StringBuffer.&lt;init&gt;</code></li>
+                        </ol>
+                      </li>
+                      <li>Push the 'Root' button to set the root of the diagram 
+                        back to the <code>&lt;root&gt;</code> function. Move the 
+                        slider to '1', then double-click the <code>linkedAndBuffer</code> 
+                        function to focus on it and re-draw the diagram. 
+                        <p> In the <code>linkedAndString</code> function, building 
+                          the strings took 96% of the time. Here, the <code>buildAsBuffer</code> 
+                          function only takes about 87% of the time. 
+                      </li>
+                      <li>By moving the slider up its maximum value, you can see 
+                        the full picture for how time is spent in <code>linkedAndBuffer</code>. 
+                        Use the 'Back', 'Forward', 'Parent', and 'Root' buttons 
+                        to <a href="concepts.html#navigation">navigate</a> between 
+                        the views that you create. 
+                        <p> At all times, the function that you have currently 
+                          selected (by clicking or double-clicking on it) is highlighted. 
+                          Other places in the program where the selected function 
+                          was invoked are highlighted in a similar but different 
+                          color. 
+                      </li>
+                      <li> 
+                        <p>One of the benefits of <code>hprof</code> is that it 
+                          can capture more stack levels (in this case, 6, as specified 
+                          by <code>depth=6</code>) than <code>-prof</code>. Use 
+                          the 'Root' button to show the entire program in the 
+                          diagram, then set the number of displayed levels in 
+                          the call graph to '2' using the slider. 
+                        <P>Double-click one of the <code>buildAsStrings</code> 
+                          functions. Make note of the times and percentages listed 
+                          for its callees (<code>StringBuffer.append</code>, <code>StringBuffer.toString</code>, 
+                          etc). Then go 'Back' and double-click on the other <code>buildAsStrings</code> 
+                          function (it will be highlighted). Note that this invocation 
+                          of <code>buildAsStrings</code> has the same callees, 
+                          but the times are slighly different. <code>-prof</code> 
+                          profiles do not show such distinctions, because it only 
+                          captures 2 levels of stack depth. <code>-prof</code> 
+                          lumps all the time spent in the callees of <code>buildAsStrings</code> 
+                          into one set of data. It does not differentiate based 
+                          on the caller of <code>buildAsStrings</code>. 
+                        <P> Therefore, the capability to show different data for 
+                          different invocations of the same function is not available 
+                          with <code>-prof</code>; you have to use <code>hprof</code> 
+                          to get it. And you have to set the <code>depth</code> 
+                          option to a large enough number to ensure that the different 
+                          invocations will have different call stacks. In this 
+                          case, <code>depth=3</code> would have been sufficient. 
+                          <code>depth=6</code> seems to be enough for most cases, 
+                          but you can experiment with this parameter. The larger 
+                          value you used for the <code>depth</code> option, the 
+                          longer it will take to load the profile data file and 
+                          the larger it will be (both on disk and in memory). 
+                      </li>
+                    </ol>
 				  </blockquote>
 		  <div class="docnav" align="center"> Previous : <a href="samples.html">Samples</a>
 	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Up : <a href="samples.html">Samples</a> 
