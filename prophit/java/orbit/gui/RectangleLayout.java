@@ -10,6 +10,7 @@ public class RectangleLayout
 {
 	private final TimeMeasure        measure;
 	
+	private CallAdapter        parent;
 	private CallAdapter        call;
 	private Rectangle2D.Double parentExtent;
 	private Rectangle2D.Double remainderExtent;
@@ -19,8 +20,9 @@ public class RectangleLayout
 		this.measure = measure;
 	}
 	
-	public void initialize(CallAdapter call, Rectangle2D.Double parentExtent, Rectangle2D.Double remainderExtent)
+	public void initialize(CallAdapter parent, CallAdapter call, Rectangle2D.Double parentExtent, Rectangle2D.Double remainderExtent)
 	{
+		this.parent = parent;
 		this.call = call;
 		this.parentExtent = parentExtent;
 		this.remainderExtent = remainderExtent;
@@ -42,9 +44,9 @@ public class RectangleLayout
 		//   spent in children of its parent
 
 		double fractionOfChildren = call.getInclusiveFractionOfParentChildTimes(measure);
-		if ( call.getParent() != null )
+		if ( parent != null )
 		{
-			// fractionOfChildren /= new CallAdapter(call.getParent()).getChildTimeScaleFactor();
+			fractionOfChildren /= parent.getChildTimeScaleFactor();
 		}
 
 		double areaRatio = ( remainderExtent.height / parentExtent.height ) * ( remainderExtent.width / parentExtent.width );

@@ -32,20 +32,20 @@ public class CallLayoutAlgorithm
 		if ( callback == null )
 			throw new NullPointerException("Callback is null in CallLayoutAlgorithm");
 
-		layoutCall(root, rootRectangle, rootRectangle, 0);
+		layoutCall(null, root, rootRectangle, rootRectangle, 0);
 	}
 
 	/**
 	 * Layout the call and return the remainder rectangle (which can be null, signifying that the
 	 * call was not rendered at all).
 	 */
-	private Rectangle2D.Double layoutCall(CallAdapter call, Rectangle2D.Double parentRectangle,
+	private Rectangle2D.Double layoutCall(CallAdapter parent, CallAdapter call, Rectangle2D.Double parentRectangle,
 						  Rectangle2D.Double renderRectangle, int depth)
 	{
 		if ( depth > maxDepth )
 			return null;
 
-		layout.initialize(call, parentRectangle, renderRectangle);
+		layout.initialize(parent, call, parentRectangle, renderRectangle);
 		Rectangle2D.Double extent = layout.getExtent();
 		Rectangle2D.Double rectangle = layout.getRectangle(extent);
 		Rectangle2D.Double remainder = layout.getRemainderExtent(extent);
@@ -63,7 +63,7 @@ public class CallLayoutAlgorithm
 		for ( Iterator i = call.getChildren().iterator(); i.hasNext(); )
 		{
 			Call child = (Call)i.next();
-			Rectangle2D.Double nextRemainder = layoutCall(new CallAdapter(child), parentRectangle,
+			Rectangle2D.Double nextRemainder = layoutCall(call, new CallAdapter(child), parentRectangle,
 														  nextRenderRectangle, depth);
 			if ( nextRemainder != null )
 				nextRenderRectangle = nextRemainder;
