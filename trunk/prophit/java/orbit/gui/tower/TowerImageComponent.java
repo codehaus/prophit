@@ -7,6 +7,7 @@ import gl4java.GLFunc;
 import gl4java.GLUFunc;
 
 import java.awt.Component;
+import java.awt.event.ComponentEvent;
 
 /**
  * Defines the interface for a GL-rendered graphical component that uses the ColorModel for
@@ -23,6 +24,9 @@ public interface TowerImageComponent
 	 */
 	public void initialize(Component canvas, GLFunc gl, GLUFunc glu);
 
+	/** Notify the TowerImageComponent that the bounds of the component have changed */
+	public void componentResized(ComponentEvent e);
+	
 	/**
 	 * Draw the image component. The component can assume that {@link #initialize} and  <code>GLContext.gljMakeCurrent</code>
 	 * have been succesfully invoked.

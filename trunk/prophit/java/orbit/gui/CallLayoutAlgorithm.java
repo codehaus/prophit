@@ -5,6 +5,10 @@ import orbit.model.Call;
 import java.awt.geom.Rectangle2D;
 import java.util.Iterator;
 
+/**
+ * Traverses over the call graph, computing the extent of the blocks and invoking a callback
+ * functor as it goes.
+ */
 public class CallLayoutAlgorithm
 {
 	private final CallAdapter        root;
@@ -14,11 +18,11 @@ public class CallLayoutAlgorithm
 
 	private Callback callback = null;
 	
-	public CallLayoutAlgorithm(CallAdapter root, TimeMeasure measure, int depth, Rectangle2D.Double rootRectangle)
+	public CallLayoutAlgorithm(CallAdapter root, TimeMeasure measure, int maxDepth, Rectangle2D.Double rootRectangle)
 	{
 		this.root = root;
 		this.layout = new RectangleLayout(measure);
-		this.maxDepth = depth;
+		this.maxDepth = maxDepth;
 		this.rootRectangle = rootRectangle;
 	}
 

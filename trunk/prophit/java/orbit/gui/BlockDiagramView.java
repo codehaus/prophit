@@ -1,5 +1,6 @@
 package orbit.gui;
 
+import orbit.gui.tower.LabelComponent;
 import orbit.gui.tower.NameListAlgorithm;
 import orbit.gui.tower.TowerImageComponent;
 import orbit.gui.tower.TowerDiagramSolid;
@@ -32,16 +33,14 @@ import java.util.Map;
 class BlockDiagramView
 	// extends GLJPanel
 	extends GLCanvas
+	implements Constants
 {
 	public static Category LOG = Category.getInstance(BlockDiagramView.class);
 
 	private static double DRAG_ROTATE_FACTOR = 5.0;
 	private static double LEGEND_SHIFT = 1 / 12.0;
 	private static double BLOCK_START_VERTICAL = -0.10;
-	
-	private static int TEXT_OFFSET_FROM_LEFT = 4;
-	private static int FONT_HEIGHT = 14;
-	private static int TEXT_BORDER = 3;
+
 	private static int FONT_TOTAL_HEIGHT = FONT_HEIGHT + 2 * TEXT_BORDER;
 	private static int LEGEND_BLOCK_HEIGHT = FONT_TOTAL_HEIGHT;
 	private static int LEGEND_BLOCK_WIDTH = 20;
@@ -79,6 +78,7 @@ class BlockDiagramView
 	private TowerImageComponent solidComponent = new TowerDiagramSolid();
 	private SelectedCallsComponent selectedCallsComponent = new SelectedCallsComponent();
 	private SearchResultsComponent searchResultsComponent = new SearchResultsComponent();
+	private LabelComponent labelComponent = new LabelComponent();
 	private NameListAlgorithm nameListAlgorithm = new NameListAlgorithm();
 	
 	/* These variables keep their values across calls to setModel */
@@ -95,6 +95,7 @@ class BlockDiagramView
 		towerImageComponents.add(solidComponent);
 		towerImageComponents.add(selectedCallsComponent);
 		towerImageComponents.add(searchResultsComponent);
+		towerImageComponents.add(labelComponent);
 		for ( Iterator i = towerImageComponents.iterator(); i.hasNext(); )
 		{
 			TowerImageComponent c = (TowerImageComponent)i.next();
@@ -291,7 +292,10 @@ class BlockDiagramView
 		drawDiagramRoot();
 		drawMouseOverCall();
 		drawLegend();
-		
+
+		labelComponent.initialize(this, gl, glu);
+		labelComponent.render();
+
 		// All done drawing.  Let's show it.
 		glj.gljSwap();
 		glj.gljCheckGL();
@@ -437,6 +441,18 @@ class BlockDiagramView
 
 					endUpdate();
 				}
+			});
+
+		addComponentListener(new ComponentAdapter()
+			{
+				public void componentResized(ComponentEvent e)
+				{
+					for ( Iterator i = towerImageComponents.iterator(); i.hasNext(); )
+					{
+						TowerImageComponent c = (TowerImageComponent)i.next();
+						c.componentResized(e);
+					}
+				}				
 			});
 	}
 
@@ -670,3 +686,4 @@ class BlockDiagramView
 		}
 	}
 }
+
