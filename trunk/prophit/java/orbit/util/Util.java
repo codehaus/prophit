@@ -18,4 +18,10 @@ public class Util
 		x.printStackTrace();
 		return new ConfigurationException(x.getClass().getName() + " in " + origin.getName() + " : " + x.getMessage());
 	}
+
+	public static NetworkException handleAsNetwork(Class origin, Throwable x)
+	{
+		x.printStackTrace();
+		return new NetworkException(x.getClass().getName() + " in " + origin.getName() + " : " + x.getMessage());
+	}
 }

@@ -128,7 +128,7 @@ public abstract class Command
 
 	protected RuntimeException handle(IOException x)
 	{
-		return Util.handle(getClass(), x);
+		return Util.handleAsNetwork(getClass(), x);
 	}
 	
 	protected void warn(String message)
