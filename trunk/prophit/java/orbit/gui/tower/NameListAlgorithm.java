@@ -12,8 +12,11 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * Builds a mapping from call names to lists of calls. This algorithm is stateful, it keeps track of when
@@ -22,9 +25,6 @@ import java.util.Map;
 public class NameListAlgorithm
 {
 	public static Category LOG = Category.getInstance(NameListAlgorithm.class);
-
-	/** Assume a window size of 1000 pixels */
-	private static double MIN_TIME_THRESHOLD = Constants.MIN_BLOCK_SIZE_THRESHOLD / 1000;
 
 	private BlockDiagramModel model   = null;
 	private boolean           invalid = true;
@@ -91,10 +91,6 @@ public class NameListAlgorithm
 			int maxDepth = model.getLevels();
 			boolean cont = true;
 			if ( maxDepth != -1 && depth > maxDepth )
-				cont = false;
-			else if ( call.getTime() / rootCall.getTime() < MIN_TIME_THRESHOLD )
-				cont = false;
-			if ( !cont )
 			{
 				Log.debug(LOG, "\tEnding traversal");
 				return false;
