@@ -3,6 +3,8 @@
 <project name="orbit" default="dist">
 
   <property name="orbit.version" value="Developer Build" />
+  <property name="orbit.homepage" value="http://orbit.westslopesoftware.com" />
+  <property name="orbit.docpage" value="http://orbit.westslopesoftware.com/doc.html" />
 
   <property name="build" value="build" />
   <property name="dist" value="${build}/dist" />
@@ -45,6 +47,8 @@
 		</copy>
 
 		<replace file="${build}/resources/uitext.properties" token="@@orbit.version@@" value="${orbit.version}" />
+		<replace file="${build}/resources/uitext.properties" token="@@orbit.homepage@@" value="${orbit.homepage}" />
+		<replace file="${build}/resources/uitext.properties" token="@@orbit.docpage@@" value="${orbit.docpage}" />
 
     <jar manifest="manifest.mf" jarfile="${build}/lib/orbit.jar">
 	  <fileset dir="${build}/classes" />
