@@ -4,6 +4,13 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.ArrayList;
 
+/**
+ * A simple Java program which compares the performance of:
+ * <ul>
+ * <li><a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a> and <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/StringBuffer.html">StringBuffer</a></li>
+ * <li><a href="http://java.sun.com/j2se/1.4/docs/api/java/util/ArrayList.html">ArrayList</a> and <a href="http://java.sun.com/j2se/1.4/docs/api/java/util/LinkedList.html">LinkedList</a></li>
+ * </ul>
+ */
 public class HelloList
 {
 	static String HELLO_WORLD = new String("Hello World");	
