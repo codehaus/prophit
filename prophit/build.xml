@@ -76,10 +76,20 @@
   </target>
 
   <target name="web" depends="jar">
+	<delete file="${webdist}/orbit.jnlp" />
+	<delete file="${webdist}/orbit-elrond.jnlp" />
     <copy todir="${webdist}">
  	  <fileset dir="${basedir}/web" includes="**" />
 	</copy>
 	<replace file="${webdist}/orbit.jnlp" token="@@orbit.version@@" value="${orbit.version}" />
+    <copy file="${webdist}/orbit.jnlp" tofile="${webdist}/orbit-elrond.jnlp" />
+
+	<replace file="${webdist}/orbit.jnlp" token="@@host@@" value="${host}" />
+	<replace file="${webdist}/orbit.jnlp" token="@@port@@" value="${port}" />
+
+	<replace file="${webdist}/orbit-elrond.jnlp" token="@@host@@" value="elrond" />
+	<replace file="${webdist}/orbit-elrond.jnlp" token="@@port@@" value="${port}" />
+	<replace file="${webdist}/orbit-elrond.jnlp" token="orbit.jnlp" value="orbit-elrond.jnlp" />
 
     <jar jarfile="${webdist}/lib/data.jar">
 	  <fileset dir="${basedir}/data" />
@@ -92,15 +102,12 @@
 	  <fileset dir="${basedir}/lib/linux" includes="*.so" />
     </jar>
 
-    <copy todir="${webdist}/lib">
-	  <fileset dir="${build}/lib" includes="orbit.jar" />
-	  <fileset dir="lib" includes="*.jar" excludes="junit.jar" />
-	</copy>
+	<signjar jar="${build}/lib/orbit.jar" signedjar="${webdist}/lib/orbit.jar" verbose="true" alias="orbit" keystore="${keystore}" storepass="${keypass}" />
+	<signjar jar="${basedir}/lib/log4jME.jar" signedjar="${webdist}/lib/log4jME.jar" verbose="true" alias="orbit" keystore="${keystore}" storepass="${keypass}" />
+	<signjar jar="${basedir}/lib/png.jar" signedjar="${webdist}/lib/png.jar" verbose="true" alias="orbit" keystore="${keystore}" storepass="${keypass}" />
+	<signjar jar="${basedir}/lib/gl4java.jar" signedjar="${webdist}/lib/gl4java.jar" verbose="true" alias="orbit" keystore="${keystore}" storepass="${keypass}" />
+	<signjar jar="${basedir}/lib/gl4java-glutfonts.jar" signedjar="${webdist}/lib/gl4java-glutfonts.jar" verbose="true" alias="orbit" keystore="${keystore}" storepass="${keypass}" />
 
-	<signjar jar="${webdist}/lib/orbit.jar" verbose="true" alias="orbit" keystore="${keystore}" storepass="${keypass}" />
-	<signjar jar="${webdist}/lib/log4jME.jar" verbose="true" alias="orbit" keystore="${keystore}" storepass="${keypass}" />
-	<signjar jar="${webdist}/lib/gl4java.jar" verbose="true" alias="orbit" keystore="${keystore}" storepass="${keypass}" />
-	<signjar jar="${webdist}/lib/gl4java-glutfonts.jar" verbose="true" alias="orbit" keystore="${keystore}" storepass="${keypass}" />
 	<signjar jar="${webdist}/lib/gl4java-linux.jar" verbose="true" alias="orbit" keystore="${keystore}" storepass="${keypass}" />
 	<signjar jar="${webdist}/lib/gl4java-win32.jar" verbose="true" alias="orbit" keystore="${keystore}" storepass="${keypass}" />
 
