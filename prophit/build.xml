@@ -211,12 +211,12 @@
 	<target name="test" depends="jar,compile,compile-tests,delete-cache">
 		<delete dir="${build}/report" />
 		<mkdir dir="${build}/report" />
-		<junit fork="true">
+		<junit fork="true" printsummary="yes">
 			<sysproperty key="solver.user.name" value="JAVA_USER" />
 			<sysproperty key="basedir" value="${basedir}" />
 			<classpath refid="test.class.path" />
-			<formatter type="brief" usefile="false" />
-			<batchtest fork="yes">
+			<formatter type="plain" usefile="false" />
+			<batchtest>
 				<fileset dir="test/java">
 					<include name="**/Test*.java" />
 					<exclude name="util/**" />
