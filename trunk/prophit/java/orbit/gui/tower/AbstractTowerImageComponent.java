@@ -6,11 +6,14 @@ import orbit.gui.BlockDiagramModel;
 import gl4java.GLFunc;
 import gl4java.GLUFunc;
 
+import java.awt.Component;
+
 public abstract class AbstractTowerImageComponent
 	implements TowerImageComponent
 {
 	protected ColorModel        colorModel;
 	protected BlockDiagramModel model;
+	protected Component         canvas;
 	protected GLFunc            gl;
 	protected GLUFunc           glu;
 
@@ -25,8 +28,9 @@ public abstract class AbstractTowerImageComponent
 		addListeners();
 	}
 	
-	public void initialize(GLFunc gl, GLUFunc glu)
+	public void initialize(Component canvas, GLFunc gl, GLUFunc glu)
 	{
+		this.canvas = canvas;
 		this.gl = gl;
 		this.glu = glu;
 	}
