@@ -109,20 +109,21 @@ MM_reloadPage(true);
                     </tr>
                   </table-->
 				  <blockquote>
-                  <p>Originally shipping with JDK 1.3 (and also available with 
-                    JDK 1.4), <code>hprof</code> is essentially an upgrade to 
-                    <code>-prof</code>. It is invoked from the Java command line 
-                    in a similar manner to <code>-prof</code>:</p>
+                    <p>Originally shipping with JDK 1.3 (and also available with 
+                      JDK 1.4), <code>hprof</code> is essentially an upgrade to 
+                      <code>-prof</code>. It may is invoked from the Java command 
+                      line:</p>
                   <pre>	java -Xrunhprof:&lt;options&gt;
 </pre>
-                  <p><code>hprof</code> has quite a few options. Run <code>java 
-                    -Xrunhprof:help</code> for a listing of its options, and read 
-                    the <b>Resources</b> listed below for more information. Briefly, 
-                    <code>hprof</code> is a native library that runs in-process 
-                    with the Java Virtual Machine. When the VM exits, it dumps 
-                    out a file which can contain one or more of the following 
-                    types of data:</p>
-                  <ul>
+                    <p> or by using the <a href="http://antprof.sf.net/hprof.html">hprof Ant task</a>.</p>
+                    <p><code>hprof</code> has quite a few options. Run <code>java 
+                      -Xrunhprof:help</code> for a listing of its options, and 
+                      read the <b>Resources</b> listed below for more information. 
+                      Briefly, <code>hprof</code> is a native library that runs 
+                      in-process with the Java Virtual Machine. When the VM exits, 
+                      it dumps out a file which can contain one or more of the 
+                      following types of data:</p>
+                    <ul>
                     <li>a heap dump for memory profiling and leak detection</li>
                     <li>monitor (lock) contention</li>
                     <li>CPU timing information</li>
@@ -154,28 +155,31 @@ MM_reloadPage(true);
                   </ul>
                   <div class="header">Disadvantages </div>
                   <ul>
-                    <li>May require HotSpot to be disabled in order to function 
-                      properly, especially for multi-threaded programs running 
-                      with JDK 1.3</li>
+                      <li>May require HotSpot to be disabled in order to function 
+                        properly, especially for multi-threaded programs running 
+                        with JDK 1.2</li>
                     <li><code>cpu=times</code> option is very slow</li>
-                    <li>Harder to learn than <code>-prof</code></li>
+                    <li>Usage is harder to learn than <code>-prof</code>. But the <a href="http://antprof.sf.net/hprof.html">hprof Ant task</a>
+					simplifies things.
                     <li><code>cpu=samples</code> is not accurate for programs 
                       which have very short running times</li>
                   </ul>
                   <div class="header">Tips</div>
-                  <ul>
-                    <li>Specify <code>depth=6</code> or greater, to get better 
-                      CPU data on functions which may have many different callers. 
-                      A good example is a program with database access, such as 
-                      the <a href="hsqldb-hprof-sample.html">HSQLDB sample profile</a>. 
-                    </li>
-                    <li>When running with JDK 1.3, specify the <code>java -classic</code> 
-                      option to turn off HotSpot.</li>
-                    <li>Don't specify <code>format=b</code> (binary output), prophIt 
-                      can't read the binary file data yet.</li>
-                    <li>Don't use <code>cpu=times</code>, except for profiling 
-                      small, single-threaded test programs</li>
-                  </ul>
+                    <ul>
+                      <li>Specify <code>depth=6</code> or greater, to get better 
+                        CPU data on functions which may have many different callers. 
+                        A good example is a program with database access, such 
+                        as the <a href="hsqldb-hprof-sample.html">HSQLDB sample 
+                        profile</a>. The hprof Ant task sets <code>depth=6</code> 
+                        by default.</li>
+                      <li>When running with JDK 1.2, specify the <code>java -classic</code> 
+                        option to turn off HotSpot. The hprof Ant task turns off hotspot by default
+						for JDK 1.2, and has a property which can be used to turn off HotSpot in any JVM version.</li>
+                      <li>Don't specify <code>format=b</code> (binary output). The binay file format is not
+					  documented and prophIt can't read it.</li>
+                      <li>Don't use <code>cpu=times</code>, except for profiling 
+                        small, single-threaded test programs</li>
+                    </ul>
 				  </blockquote>
                   <a name="resources">
                   <div class="header">Resources</div>
@@ -185,7 +189,7 @@ MM_reloadPage(true);
                     <li><a href="http://www.javaworld.com/javaworld/jw-12-2001/jw-1207-hprof.html">Diagnose common runtime problems with hprof</a>, from JavaWorld</li>
                     <li>Documentation for the <a href="http://java.sun.com/j2se/1.3/docs/tooldocs/win32/java.html">Java 
                       1.3 Interpreter</a></li>
-                    <li>An interesting summary of various <a href="http://www.tarma.com/articles/index.htm#1997nov">profiling 
+                    <li>An interesting summary of various <a href="http://www.tarma.com/articles/index.htm#/articles/1997nov.htm#methods">profiling 
                       methods</a>, including sampling and timing</li>
                     <li>A Java Developer Connection <a href="http://developer.java.sun.com/developer/TechTips/2000/tt0124.html#tip2">Tech 
                       Tip </a>on using <code>hprof</code></li>
