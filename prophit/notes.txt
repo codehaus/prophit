@@ -24,6 +24,57 @@ Profile comparison
 
 ---------
 
+Want to do a depth-first traverse of the entire call graph, tracking the call stack
+along the way and computing the adjustments to the inclusive times of each RCC
+
+inclusiveTimeAdjustments = [rccList.size()]
+
+cg.depthFirstTraverse(ComputeInclusiveTimeVisitor())
+
+ComputeInclusiveTimeVisitor:
+
+  traversalStack = Stack(50)
+
+  void visit(CallID id, IntStack stack):
+    # Traverse through the parents of the current id
+    # For each parent, add the fraction-adjusted time of this id to
+    #   its inclusive time
+    traversalStack.clear()
+    traversalStack.addAll(stack)
+    double fraction = fractions[id.getKey()]
+    # Start with to the parent of the current stack
+    traversalStack.pop()
+    while !traversalStack.empty():
+      inclusiveTimeAdjustments += id.getTime() * fraction
+      id = traversalStack.pop()      
+      fractions *= fractions[id.getKey()]
+
+CallGraph:
+  depthFirstTraverse(visitor):
+    for root in roots:
+      depthFirstTraverse(root, Stack(), visitor)
+
+  depthFirstTraverse(id, stack, visitor):
+	stack.push(id)
+    visitor.visit(root, stack)
+
+    IntStack childKeys = childRCCKeys[id.getRCC().getKey()];
+    if ( childKeys != null )
+    {
+		for ( IntIterator i = childKeys.iterator(); i.hasNext(); )
+		{
+			int childKey = i.next();
+			if ( !stack.contains(childKey) )
+			{
+				CallID child = callIDs[childKey];
+				depthFirstTraverse(child, visitor);
+			}
+		}
+	}
+
+    stack.pop()
+
+
 LoaderFactory:
   Loader createLoader(file):
     Parser parser = ParserFactory.instance().createParser(file)

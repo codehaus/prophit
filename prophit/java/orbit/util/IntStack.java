@@ -59,6 +59,20 @@ public class IntStack
 		return hash;
 	}
 
+	public void clear()
+	{
+		for ( int i = 0; i < current; ++i )
+			stack[i] = -1;
+		current = 0;
+	}
+
+	public void addAll(IntStack other)
+	{
+		grow(size() + other.size());
+		System.arraycopy(other.stack, 0, this.stack, current, other.size());
+		current += other.size();
+	}
+		
 	public boolean isEmpty()
 	{
 		return size() == 0;
@@ -143,14 +157,7 @@ public class IntStack
 		
 	public void push(int bit)
 	{
-		if ( current == stack.length )
-		{
-			int[] newStack = new int[stack.length * 2];
-			System.arraycopy(stack, 0, newStack, 0, stack.length);
-			for ( int i = stack.length; i < newStack.length; ++i )
-				newStack[i] = -1;
-			stack = newStack;
-		}
+		grow(current);
 		stack[current] = bit;
 		++current;
 	}
@@ -178,5 +185,18 @@ public class IntStack
 		}
 		sb.append(" ]");
 		return sb.toString();
+	}
+
+	private void grow(int newSize)
+	{
+		if ( newSize >= stack.length )
+		{
+			int newLength = (int)Math.max(stack.length * 2, newSize);
+			int[] newStack = new int[newLength];
+			System.arraycopy(stack, 0, newStack, 0, stack.length);
+			for ( int i = stack.length; i < newStack.length; ++i )
+				newStack[i] = -1;
+			stack = newStack;
+		}
 	}
 }

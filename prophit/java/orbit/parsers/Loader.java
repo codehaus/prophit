@@ -16,6 +16,7 @@ public class Loader
 	private final Solver solver;
 	private final File   file;
 
+	private boolean parsed = false;
 	private String error = null;
 	private String warning = null;
 	
@@ -42,18 +43,25 @@ public class Loader
 	{
 		return warning;
 	}
+
+	public synchronized void parse() throws ParseException
+	{
+		parser.execute();
+		parsed = true;
+	}
 	
-	public CallGraph execute()
+	public synchronized CallGraph solve()
 	{
 		try
-		{
-			parser.execute();
+ 		{
+			if ( !parsed )
+				parser.execute();
 			List callIDs = parser.getCallIDs();
 
 			File fractionsFile = new File(file.getAbsolutePath() + ".graph");
 			CallGraph cg = null;
-			if ( fractionsFile.exists() ||
-				 fractionsFile.lastModified() < file.lastModified() )
+			if ( fractionsFile.exists() &&
+				 fractionsFile.lastModified() >= file.lastModified() )
 			{
 				FileReader reader = new FileReader(fractionsFile);
 				cg = solver.readFromCache(callIDs, reader);

@@ -1,12 +1,10 @@
 package orbit.gui;
 
 import orbit.model.CallID;
-import orbit.model.CallFractionSolver;
-import orbit.model.CallFractionSolverData;
 import orbit.model.CallGraph;
-import orbit.parsers.Parser;
-import orbit.parsers.ParserFactory;
-import orbit.solver.SocketConnection;
+import orbit.parsers.Loader;
+import orbit.parsers.LoaderFactory;
+import orbit.util.Util;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -92,51 +90,31 @@ public class LoadProgressDialog
 	{
 		public void run()
 		{
+			long startTime = System.currentTimeMillis();
+			System.out.println("Parsing " + profileFile);
+
+			String error = null;
 			try
 			{
-				long startTime = System.currentTimeMillis();
-				System.out.println("Parsing " + profileFile);
-
-				Parser parser = ParserFactory.instance().createParser(profileFile);
-				parser.execute();
-
-				System.out.println("\tParsed in " + ( System.currentTimeMillis() - startTime ) + " ms");
-			
-				List callIDs = parser.getCallIDs();
-				double[] fractions;
-			
+				Loader loader = LoaderFactory.instance().createLoader(profileFile);
+				loader.parse();
 				cbParsed.setSelected(true);
-
-				CallFractionSolverData data = new CallFractionSolverData(callIDs);
-				CallFractionSolver solver = new CallFractionSolver(data);
 			
-				File fractionsFile = new File(profileFile.getAbsolutePath() + ".graph");
-				if ( !fractionsFile.exists() ||
-					 fractionsFile.lastModified() < profileFile.lastModified() )
-				{
-					// System.setProperty("solver.user.name", "JAVA_USER");
-					SocketConnection.Factory factory = new SocketConnection.Factory("neos.mcs.anl.gov", 3333);
-					factory.setDebug(true, profileFile.getName());
-					fractions = solver.execute(factory);
-
-					FileWriter writer = new FileWriter(fractionsFile);
-					solver.writeToFile(writer, fractions);
-					writer.close();
-				}
-				else
-				{
-					fractions = solver.readFromFile(new FileReader(fractionsFile), callIDs.size());
-				}
-
-				CallID[] callIDArray = (CallID[])parser.getCallIDs().toArray(new CallID[0]);
-				cg = new CallGraph(callIDArray, fractions);
-			
+				System.out.println("\tParsed in " + ( System.currentTimeMillis() - startTime ) + " ms");
+				
+				cg = loader.solve();
+				error = loader.getError();
 				cbSolved.setSelected(true);
 			}
 			catch (Exception x)
 			{
-				x.printStackTrace();
-				lblError.setText("Error parsing file : " + x.getMessage());
+				Util.handleTrace(getClass(), x);
+				error = "Error parsing profile from file '" + profileFile + "' : " + x.getMessage();
+			}
+
+			if ( error != null )
+			{
+				lblError.setText(error);
 				cg = null;
 			}
 			btnOK.setEnabled(true);

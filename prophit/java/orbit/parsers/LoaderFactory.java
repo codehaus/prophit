@@ -6,7 +6,7 @@ public class LoaderFactory
 {
 	private LoaderFactory() { }
 	
-	public LoaderFactory instance()
+	public static LoaderFactory instance()
 	{
 		return new LoaderFactory();
 	}
@@ -21,8 +21,7 @@ public class LoaderFactory
 		}
 		else
 		{
-			// solver = new HProfSolver();
-			throw new IllegalArgumentException("No solver for parser " + parser);
+			solver = new HProfSolver();
 		}
 		return new Loader(parser, solver, file);
 	}	

@@ -28,7 +28,7 @@ public class Test
 
 			new TestHProfParser("testParse").testParse();
 
-			testCallStack();
+			testIntStack();
 			testBasic();
 			testHProfParserHello();
 			testDashProfParserSimple();
@@ -107,7 +107,7 @@ public class Test
 		
 		TestConnection.Factory factory = new TestConnection.Factory(responses);
 
-		Solver solver = new Solver(factory);
+		orbit.solver.Solver solver = new orbit.solver.Solver(factory);
 		
 		String result = solver.execute(userName, new StringDatum(model), new StringDatum(data), new StringDatum(commands));
 
@@ -138,8 +138,8 @@ public class Test
 	{
 		Parser parser = ParserFactory.instance().createParser(new File(System.getProperty("basedir") + "/data/simple.prof"));
 		parser.execute();
-		Collection callIDs = parser.getCallIDs();
-		Collection proxyCallIDs = parser.getProxyCallIDs();
+		List callIDs = parser.getCallIDs();
+		List proxyCallIDs = CallID.getProxyCallIDs(callIDs);
 
 		assertion(callIDs.size() == 14, callIDs + ".size should be 14");
 		assertion(proxyCallIDs.size() == 4, proxyCallIDs + ".size should be 4");
@@ -153,16 +153,32 @@ public class Test
 		fractions[12] =  0.333333;
 		fractions[13] =  0.666667;
 		CallGraph cg = new CallGraph(callIDArray, fractions);
+
+		class SimpleVisitor
+			implements CallGraph.Visitor
+		{
+			int count = 0;
+
+			int getCount() { return count; }
+			
+			public void visit(CallID callID, IntStack callStack)
+			{
+				++count;
+			}			
+		}
+
+		SimpleVisitor visitor = new SimpleVisitor();
+		cg.depthFirstTraverse(visitor);
+		assertion(visitor.getCount() == 13, "Expected to be visited 13 times");
 	}		
 	
 	public static void testSimpleProfileSolver() throws Exception
 	{
 		DashProfParser parser = new DashProfParser(new FileReader(System.getProperty("basedir") + "/data/simple.prof"));
 		parser.execute();
-		Collection callIDs = parser.getCallIDs();
-		Collection proxyCallIDs = parser.getProxyCallIDs();
+		List callIDs = parser.getCallIDs();
 		
-		CallFractionSolverData data = new CallFractionSolverData(callIDs, proxyCallIDs);
+		CallFractionSolverData data = new CallFractionSolverData(callIDs);
 		assertion(data.getModel().toString().startsWith("[741]option solver kestrel;"),
 				  "Expected " + data.getModel() + " to start with [741]option solver kestrel;");
 		assertion(data.getCommands().toString().startsWith("[171]# Assign initial values for I"),
@@ -201,12 +217,11 @@ public class Test
 		long parseEnd = System.currentTimeMillis();
 		System.out.println("Parsed hsqldb.prof in " + ( parseEnd - parseStart ) + " ms");
 		
-		Collection callIDs = parser.getCallIDs();
-		Collection proxyCallIDs = parser.getProxyCallIDs();
+		List callIDs = parser.getCallIDs();
 
 		System.setProperty("solver.user.name", "JAVA_USER");
 		
-		CallFractionSolverData data = new CallFractionSolverData(callIDs, proxyCallIDs);
+		CallFractionSolverData data = new CallFractionSolverData(callIDs);
 		CallFractionSolver solver = new CallFractionSolver(data);
 		SocketConnection.Factory factory = new SocketConnection.Factory("neos.mcs.anl.gov", 3333);
 		factory.setDebug(true, "hsqldb");
@@ -219,10 +234,12 @@ public class Test
 		System.out.println("Solved hsqldb.prof in " + ( solveEnd - solveStart ) + " ms");
 	}
 	
-	public static void testCallStack()
+	public static void testIntStack()
 	{
+		IntIterator iterator;
 		IntStack stack = new IntStack();
 
+		// Test an empty stack
 		boolean exception = false;
 		try
 		{
@@ -233,7 +250,8 @@ public class Test
 			exception = true;
 		}
 		assertion(exception, "Expected EmptyStackException");
-		
+
+		// Test basic pushing, hashCode, size
 		stack.push(1);
 		stack.push(2);
 		stack.push(3);
@@ -241,6 +259,7 @@ public class Test
 		assertion(stack.hashCode() == 6, "Expected hashCode = 6");
 		assertion(stack.size() == 3, "Expected size = 3");
 
+		// Test clone, pushing on a clone
 		IntStack copy = (IntStack)stack.clone();
 
 		assertion(copy.equals(stack), "Expected copy == stack");
@@ -252,11 +271,45 @@ public class Test
 		assertion(copy.hashCode() == 10, "Expected hashCode = 10");
 		assertion(copy.size() == 4, "Expected size = 4");
 
+		// Grow it
 		IntStack big = new IntStack();
 		for ( int i = 1; i <= 200; ++i )
 			big.push(i);
 		assertion(big.size() == 200, "Expected size = 200");
 		assertion(big.hashCode() == 10, "Expected hashCode = 10");
+
+		// Test clear
+		IntStack toClear = new IntStack();
+		toClear.push(1);
+		toClear.push(2);
+		toClear.push(3);
+
+		assertion(toClear.size() == 3, "Expected size = 3");
+		toClear.clear();
+		assertion(toClear.size() == 0, "Expected size = 0");
+		
+		toClear.push(1);
+		assertion(toClear.size() == 1, "Expected size = 1");
+		iterator = toClear.iterator();
+		assertion(iterator.next() == 1, "Expected iterator.next = 1");
+		assertion(!iterator.hasNext(), "Expected iterator.hasNext = 0");
+
+		// Test addAll
+		IntStack destination = new IntStack();
+		destination.push(1);
+		destination.push(2);
+		destination.push(3);
+
+		destination.addAll(big);
+
+		assertion(destination.size() == 203, "Expected size = 203, is " + destination.size());
+		iterator = destination.iterator();
+		assertion(iterator.next() == 1, "Expected iterator.next = 1");
+		assertion(iterator.next() == 2, "Expected iterator.next = 2");
+		assertion(iterator.next() == 3, "Expected iterator.next = 3");
+		assertion(iterator.next() == 1, "Expected iterator.next = 1");
+		assertion(iterator.next() == 2, "Expected iterator.next = 2");
+		assertion(iterator.next() == 3, "Expected iterator.next = 3");
 	}
 	
 	public static void testBasic()

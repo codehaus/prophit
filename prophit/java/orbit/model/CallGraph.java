@@ -81,6 +81,15 @@ public class CallGraph
 		return roots;
 	}
 
+	public void depthFirstTraverse(Visitor visitor)
+	{
+		for ( Iterator i = getChildren().iterator(); i.hasNext(); )
+		{
+			CallImpl root = (CallImpl)i.next();
+			depthFirstTraverse(root.id, new IntStack(), visitor);
+		}
+	}
+	
 	public String toString()
 	{
 		StringBuffer sb = new StringBuffer();
@@ -100,6 +109,28 @@ public class CallGraph
 		return sb.toString();
 	}
 
+	private void depthFirstTraverse(CallID id, IntStack stack, Visitor visitor)
+	{
+		stack.push(id.getKey());
+		visitor.visit(id, stack);
+
+		IntStack childKeys = childRCCKeys[id.getRCC().getKey()];
+		if ( childKeys != null )
+		{
+			for ( IntIterator i = childKeys.iterator(); i.hasNext(); )
+			{
+				int childKey = i.next();
+				if ( !stack.contains(childKey) )
+				{
+					CallID child = callIDs[childKey];
+					depthFirstTraverse(child, stack, visitor);
+				}
+			}
+		}
+
+		stack.pop();
+	}
+	
 	private void toString(CallImpl call, StringBuffer sb, int depth, int maxDepth)
 	{
 		if ( maxDepth != -1 && depth > maxDepth )
@@ -116,6 +147,11 @@ public class CallGraph
 		}
 	}
 
+	public interface Visitor
+	{
+		public void visit(CallID callID, IntStack callStack);
+	}
+	
 	public class CallImpl
 		implements Call
 	{
