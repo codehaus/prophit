@@ -1,8 +1,8 @@
 package orbit.model;
 
-import org.apache.log4j.Category;
-
 import orbit.util.Log;
+
+import org.apache.log4j.Category;
 
 import java.util.*;
 
@@ -126,9 +126,14 @@ class ModelBuilderImpl
 		{
 			throw new IllegalArgumentException("Must be at least one root callID");
 		}
+		else if ( rootIDs.size() == 1 )
+		{
+			Log.debug(LOG, "Using root ", rootIDs.get(0));
+		}
 		else if ( rootIDs.size() > 1 )
 		{
-			
+			Log.debug(LOG, "Building root CallID from  ", rootIDs);
+
 			/*
 			 * Construct a new CallID which will represent the root of the CallGraph
 			 * Make it the parent of all the root CallIDs

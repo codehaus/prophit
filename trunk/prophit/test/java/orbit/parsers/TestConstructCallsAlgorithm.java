@@ -1,8 +1,14 @@
 package orbit.parsers;
 
-import orbit.model.*;
-import orbit.parsers.ConstructCallsAlgorithm;
-import java.util.*;
+import orbit.model.CallID;
+import orbit.model.RCC;
+import orbit.model.StackTrace;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import junit.framework.TestCase;
 
 public class TestConstructCallsAlgorithm

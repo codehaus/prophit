@@ -49,5 +49,12 @@ public class TestUIUtil
 
 		name = "HelloList.buildAsBuffer();";
 		assertEquals("HelloList.buildAsBuffer", UIUtil.getShortName(name));
+
+		// Test that the file name can be trimmed out
+		name = "UIUtil.getShortName(UIUtil.java)";
+		assertEquals("UIUtil.getShortName", UIUtil.getShortName(name, true));
+
+		name = "orbit/gui/UIUtil.<init>(UIUtil.java:38)";
+		assertEquals("UIUtil.<init>", UIUtil.getShortName(name, true));
 	}
 }

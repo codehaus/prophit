@@ -6,10 +6,10 @@ import orbit.parsers.Loader;
 import orbit.parsers.LoaderFactory;
 import orbit.parsers.ParseException;
 
-import junit.framework.TestCase;
-
 import java.io.File;
 import java.util.List;
+
+import junit.framework.TestCase;
 
 /**
  * Test the BlockDiagramModel by constructing a BlockDiagramModel and manually

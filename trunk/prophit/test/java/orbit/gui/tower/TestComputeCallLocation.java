@@ -1,10 +1,12 @@
 package orbit.gui.tower;
 
-import util.*;
-
-import junit.framework.TestCase;
+import util.BasicTestCalls;
+import util.SimpleCallGraph;
+import util.TestUtil;
 
 import java.awt.geom.Rectangle2D;
+
+import junit.framework.TestCase;
 
 public class TestComputeCallLocation
 	extends TestCase

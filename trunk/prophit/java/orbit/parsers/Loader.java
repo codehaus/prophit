@@ -1,12 +1,6 @@
 package orbit.parsers;
 
 import orbit.model.CallGraph;
-import orbit.model.ModelBuilder;
-import orbit.model.ModelBuilderFactory;
-import orbit.util.Util;
-
-import java.io.*;
-import java.util.List;
 
 /**
  * Coordinates a Parser and a Solver to load a profile from a file.

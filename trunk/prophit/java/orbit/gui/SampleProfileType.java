@@ -1,6 +1,8 @@
 package orbit.gui;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 class SampleProfileType
 {

@@ -1,20 +1,16 @@
 package orbit.parsers;
 
-import util.*;
+import orbit.model.CallGraph;
+import orbit.model.CallID;
+import orbit.model.ModelBuilder;
+import orbit.model.ModelBuilderFactory;
+import orbit.writer.ProphitWriter;
+import util.SimpleCallGraph;
 
-//import orbit.gui.CallAdapter;
-//import orbit.gui.TimeMeasure;
-//import orbit.gui.RectangleLayout;
-import orbit.model.*;
-import orbit.parsers.*;
-import orbit.writer.*;
-import orbit.util.*;
+import java.io.File;
+import java.io.FileReader;
 
 import junit.framework.TestCase;
-
-import java.awt.geom.Rectangle2D;
-import java.util.*;
-import java.io.*;
 
 public class TestProphitParser
 	extends TestCase
@@ -135,11 +131,6 @@ public class TestProphitParser
 		assertTrue("Children are the same", scg.init.equals(newsimple.getRoot().getChildren().get(1)));
 
 		assertEquals(simple.toString(simple.getMaxDepth()), newsimple.toString(newsimple.getMaxDepth()));
-	}
-
-	public void testRoundTripXML() throws Exception
-	{
-		doTestRoundTrip(this.dataPath, "testoutput.xml");
 	}
 
 	public void testRoundTripSampleXML() throws Exception

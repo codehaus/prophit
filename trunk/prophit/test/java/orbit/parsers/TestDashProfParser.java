@@ -1,19 +1,18 @@
 package orbit.parsers;
 
-import util.*;
-
 import orbit.gui.CallAdapter;
-import orbit.gui.TimeMeasure;
 import orbit.gui.RectangleLayout;
+import orbit.gui.TimeMeasure;
 import orbit.model.*;
-import orbit.parsers.*;
-import orbit.util.*;
-
-import junit.framework.TestCase;
+import orbit.util.IntStack;
+import util.BasicTestCalls;
+import util.TestUtil;
 
 import java.awt.geom.Rectangle2D;
-import java.util.*;
-import java.io.*;
+import java.io.File;
+import java.util.List;
+
+import junit.framework.TestCase;
 
 public class TestDashProfParser
 	extends TestCase

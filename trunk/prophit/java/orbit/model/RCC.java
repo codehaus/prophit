@@ -1,6 +1,9 @@
 package orbit.model;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 /**
  * 'RCC' is a 'recorded caller/callee', read from the profile data file.

@@ -5,14 +5,14 @@ import orbit.model.CallID;
 import orbit.model.RCC;
 import orbit.util.Log;
 
-import lp.solve.LP;
-
 import org.apache.log4j.Category;
 
 import java.io.IOException;
 import java.io.Reader;
 import java.io.Writer;
 import java.util.*;
+
+import lp.solve.LP;
 
 /**
  * Solves a call graph in which the RCCs times are specified as inclusive times. In this case, the

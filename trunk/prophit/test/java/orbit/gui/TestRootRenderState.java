@@ -1,11 +1,8 @@
 package orbit.gui;
 
-import util.BasicTestCalls;
-import util.TestCall;
-
 import orbit.model.Call;
-
-import junit.framework.*;
+import util.BasicTestCalls;
+import junit.framework.TestCase;
 
 public class TestRootRenderState
 	extends TestCase

@@ -1,7 +1,6 @@
 package orbit.gui.tower;
 
 import orbit.gui.BlockDiagramModel;
-import orbit.gui.Constants;
 import orbit.model.Call;
 import orbit.model.Traversal;
 import orbit.util.Log;
@@ -12,11 +11,8 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 /**
  * Builds a mapping from call names to lists of calls. This algorithm is stateful, it keeps track of when

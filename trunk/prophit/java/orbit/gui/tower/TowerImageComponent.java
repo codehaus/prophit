@@ -1,8 +1,7 @@
 package orbit.gui.tower;
 
-import orbit.gui.ColorModel;
 import orbit.gui.BlockDiagramModel;
-
+import orbit.gui.ColorModel;
 import gl4java.GLFunc;
 import gl4java.GLUFunc;
 

@@ -1,23 +1,28 @@
 package orbit.gui;
 
-import orbit.parsers.DashProfParser;
 import orbit.model.Call;
-import orbit.model.CallID;
 import orbit.model.CallGraph;
 import orbit.util.Log;
 
 import org.apache.log4j.Category;
 
 import gl4java.GLContext;
+
+import javax.swing.*;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
+
 import java.awt.*;
-import java.awt.event.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import javax.swing.*;
-import javax.swing.event.*;
-import java.applet.*;
-import java.io.*;
-import java.util.*;
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 
 public class MapFrame
@@ -114,6 +119,8 @@ public class MapFrame
 	public MapFrame()
 	{
 		super(Strings.getUILabel(MapFrame.class, "title"));
+
+		// RepaintManager.currentManager(this).setDoubleBufferingEnabled(false);
 
 		createActions();
 		addMenus();

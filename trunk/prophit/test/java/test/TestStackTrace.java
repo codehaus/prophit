@@ -1,7 +1,6 @@
 package test;
 
 import orbit.model.StackTrace;
-
 import junit.framework.TestCase;
 
 public class TestStackTrace

@@ -1,14 +1,11 @@
 package orbit.gui;
 
-import util.SimpleCallGraph;
-import util.TestUtil;
-
-import orbit.model.*;
-import orbit.gui.CallRollupList;
 import orbit.util.Log;
 
 import org.apache.log4j.Category;
 
+import util.SimpleCallGraph;
+import util.TestUtil;
 import junit.framework.TestCase;
 
 // Tests CallRollupList

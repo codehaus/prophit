@@ -1,11 +1,11 @@
 package orbit.gui;
 
+import org.apache.log4j.Category;
+
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Point;
 import java.text.NumberFormat;
-
-import org.apache.log4j.Category;
 
 public class UIUtil
 {
@@ -51,15 +51,27 @@ public class UIUtil
 	}
 
 	/**
+	 * Invoke {@link #getShortName} with <code>trimFileName=false</code>.
+	 * @see #getShortName(String, boolean)
+	 */
+	public static String getShortName(String name)
+	{
+		return getShortName(name, false);
+	}
+
+	/**
 	 * Format function call descriptions into a short format.
 	 * <table>
 	 * <tr><th>Input</th><th>Output</th></tr>
 	 * <tr><td>some.package.Class.method</td><td>Class.method</td></tr>
-	 * <tr><td>some.package.Class.method(Class.java)</td><td>Class.method(Class.java)</td></tr>
+	 * <tr><td>some.package.Class.method(Class.java)</td><td>Class.method</td></tr>
 	 * <tr><td>some.package.Class.method(I)Ljava/lang/String;</td><td>Class.method</td></tr>
 	 * </table>
+	 * 
+	 * @param trimFileName if true, the file name which may appear in parentheses after the method
+	 * name is trimmed as well.
 	 */
-	public static String getShortName(String name)
+	public static String getShortName(String name, boolean trimFileName)
 	{
 		/*
 		 * See if the method String contains the type signature, e.g.
@@ -72,9 +84,10 @@ public class UIUtil
 		{
 			int lastParenOpenIndex = name.lastIndexOf('(');
 			String parenContents = name.substring(lastParenOpenIndex, lastParenCloseIndex);
-			if ( parenContents.indexOf('.') == -1 &&
-				  parenContents.indexOf('<') == -1 &&
-				  parenContents.indexOf(':') == -1 )
+			if ( trimFileName ||
+				  ( parenContents.indexOf('.') == -1 &&
+					 parenContents.indexOf('<') == -1 &&
+					 parenContents.indexOf(':') == -1 ) )
 			{
 				name = name.substring(0, lastParenOpenIndex);
 			}

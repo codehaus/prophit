@@ -1,12 +1,7 @@
 package orbit.gui.tower;
 
-import orbit.gui.ColorModel;
 import orbit.gui.BlockDiagramModel;
-
 import gl4java.GLEnum;
-import gl4java.GLFunc;
-import gl4java.GLUFunc;
-import gl4java.awt.GLCanvas;
 
 public abstract class AbstractDisplayListComponent
 	extends AbstractTowerImageComponent

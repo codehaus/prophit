@@ -1,20 +1,20 @@
 package orbit.parsers;
 
 import orbit.model.Call;
-import orbit.model.CallID;
 import orbit.model.CallGraph;
+import orbit.model.CallID;
 import orbit.model.RCC;
-import orbit.util.IntStack;
 import orbit.util.IntIterator;
+import orbit.util.IntStack;
 import orbit.util.Log;
 
 import org.apache.log4j.Category;
 
-import java.util.Iterator;
-import java.util.List;
 import java.io.IOException;
 import java.io.Reader;
 import java.io.Writer;
+import java.util.Iterator;
+import java.util.List;
 
 public class HProfSolver
 	implements Solver

@@ -1,15 +1,18 @@
 package orbit.writer;
 
-import orbit.model.*;
-import orbit.util.Log;
+import net.n3.nanoxml.IXMLElement;
+import net.n3.nanoxml.XMLElement;
+import net.n3.nanoxml.XMLWriter;
+import orbit.model.CallGraph;
+import orbit.model.CallID;
+import orbit.model.RCC;
+import orbit.model.StackTrace;
 import orbit.util.XMLConstants;
 
 import org.apache.log4j.Category;
-import net.n3.nanoxml.*;
 
 import java.io.*;
-import java.util.*;
-import java.util.zip.*;
+import java.util.Date;
 
 public class ProphitWriter
 {

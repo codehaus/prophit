@@ -1,10 +1,8 @@
 package orbit.util;
 
-import util.*;
+import java.util.EmptyStackException;
 
 import junit.framework.TestCase;
-
-import java.util.EmptyStackException;
 
 public class TestIntStack
 	extends TestCase

@@ -1,14 +1,17 @@
 package orbit.parsers;
 
-import util.*;
+import orbit.model.CallID;
+import orbit.model.ModelBuilder;
+import orbit.model.ModelBuilderFactory;
+import util.TestUtil;
 
-import orbit.model.*;
-import orbit.parsers.*;
+import java.io.File;
+import java.io.FileReader;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
 
 import junit.framework.TestCase;
-
-import java.util.*;
-import java.io.*;
 
 public class TestLPSolver
 	extends TestCase

@@ -1,34 +1,24 @@
 package orbit.gui;
 
-import orbit.gui.tower.LabelComponent;
-import orbit.gui.tower.NameListAlgorithm;
-import orbit.gui.tower.TowerImageComponent;
-import orbit.gui.tower.TowerDiagramSolid;
-import orbit.gui.tower.TowerDiagramWireFrame;
-import orbit.gui.tower.SelectedCallsComponent;
-import orbit.gui.tower.SearchResultsComponent;
-
+import orbit.gui.tower.*;
 import orbit.model.Call;
-import orbit.model.CallGraph;
 import orbit.util.Log;
 
 import org.apache.log4j.Category;
 
 import gl4java.awt.GLCanvas;
-import gl4java.swing.GLJPanel;
-import gl4java.utils.glut.GLUTEnum;
 import gl4java.utils.glut.GLUTFunc;
 import gl4java.utils.glut.fonts.GLUTFuncLightImplWithFonts;
-import java.awt.*;
-import java.awt.geom.Rectangle2D;
+
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Point;
 import java.awt.event.*;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.lang.Math;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 
 class BlockDiagramView
 	// extends GLJPanel
@@ -39,14 +29,12 @@ class BlockDiagramView
 
 	private static double DRAG_ROTATE_FACTOR = 5.0;
 	private static double LEGEND_SHIFT = 1 / 12.0;
-	private static double BLOCK_START_VERTICAL = -0.10;
+	private static double BLOCK_START_VERTICAL = -0.05;
 
 	private static int FONT_TOTAL_HEIGHT = FONT_HEIGHT + 2 * TEXT_BORDER;
 	private static int LEGEND_BLOCK_HEIGHT = FONT_TOTAL_HEIGHT;
 	private static int LEGEND_BLOCK_WIDTH = 20;
 	
-	private float Z_Off = -5.0f;
-
 	// float[] Light_Ambient =  { 0.75f, 0.75f, 0.75f, 1.0f };
 	// float[] Light_Diffuse =  { 1.2f, 1.2f, 1.2f, 1.0f }; 
 	// float[] Light_Ambient1 =  { 0.75f, 0.75f, 0.75f, 1.0f };
@@ -289,8 +277,7 @@ class BlockDiagramView
 		searchResultsComponent.initialize(this, gl, glu);
 		searchResultsComponent.render();
 		
-		drawDiagramRoot();
-		drawMouseOverCall();
+		drawBottomCallLabels();
 		drawLegend();
 
 		labelComponent.initialize(this, gl, glu);
@@ -547,35 +534,51 @@ class BlockDiagramView
 		textEnd();
 	}
 
-	void drawMouseOverCall()
+	void drawBottomCallLabels()
 	{
-		String text = "Mouse over  : ";
-		if ( model.getMouseOverCall() != null )
+		int labelHeight = FONT_TOTAL_HEIGHT - TEXT_BORDER;
+
+		String[] labels = {
+			Strings.getUILabel(BlockDiagramView.class, "diagramRootLabel"),
+			Strings.getUILabel(BlockDiagramView.class, "selectedCallLabel"),
+			Strings.getUILabel(BlockDiagramView.class, "mouseOverCallLabel"),
+		};
+
+		int maxWidth = 0;
+		int y = 0;
+		for ( int i = 0; i < labels.length; ++i, y += labelHeight )
 		{
-			text = text + model.getMouseOverCall().getName();
+			int width = drawText(0, y, labels[i]);
+			maxWidth = (int)Math.max(maxWidth, width);
 		}
 
-		drawText(FONT_TOTAL_HEIGHT - TEXT_BORDER, text);
-	}
-	
-	void drawDiagramRoot()
-	{
-		CallAdapter call = new CallAdapter(model.getRootRenderState().getRenderCall());
-		String text = "Diagram root : " + UIUtil.getShortName(call.getName()) + " [ time = " +
-			UIUtil.formatTime(call.getInclusiveTime(measure)) + ", " +
-			UIUtil.formatPercent( call.getInclusiveTime(measure) / model.getRootCall().getTime() ) + " of total ]";
-		
-		drawText(0, text);
+		drawCallText(maxWidth, labelHeight * 2, model.getMouseOverCall());
+		drawCallText(maxWidth, labelHeight, model.getSelectedCall());
+		drawCallText(maxWidth, 0, model.getRootRenderState().getRenderCall());
 	}
 
-	private void drawText(int y, String text)
+	private int drawCallText(int x, int y, Call call)
+	{
+		String text = " : ";
+		if ( call != null )
+		{
+			CallAdapter ca = new CallAdapter(call);
+			text += Strings.getMessage(BlockDiagramView.class, "callText",
+												new Object[]{ UIUtil.getShortName(ca.getName(), true),
+																  UIUtil.formatTime(ca.getInclusiveTime(measure)),
+																  UIUtil.formatPercent( ca.getInclusiveTime(measure) / model.getRootCall().getTime() ) });
+		}		
+		return drawText(x, y, text);
+	}
+
+	private int drawText(int x, int y, String text)
 	{
 		int width = getSize().width;
 		int height = getSize().height;
 
 		textBegin();
 
-		gl.glTranslatef(0, y, 0);
+		gl.glTranslatef(x, y, 0);
 
 		/*
 		// Make sure we can read the FPS section by first placing a 
@@ -593,12 +596,14 @@ class BlockDiagramView
 		gl.glEnd();
 		*/
 
-		GLUtils.drawText(gl, glut, TEXT_OFFSET_FROM_LEFT, TEXT_BORDER, text, colorModel.getTextColor());
+		int textWidth = GLUtils.drawText(gl, glut, TEXT_OFFSET_FROM_LEFT, TEXT_BORDER, text, colorModel.getTextColor(), true);
 
 		gl.glEnable(GL_LIGHTING);
 		gl.glEnable(GL_DEPTH_TEST);
 		
 		textEnd();
+
+		return textWidth;
 	}
 
 	/*
