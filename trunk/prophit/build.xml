@@ -3,7 +3,7 @@
 <project name="prophit" default="dist">
 
   <property name="prophit.version" value="Developer Build 3" />
-  <property name="prophit.homepage" value="http://prophIt.westslopesoftware.com" />
+  <property name="prophit.homepage" value="http://www.westslopesoftware.com/prophit" />
   <property name="prophit.docpage" value="http://prophIt.westslopesoftware.com/docs/index.html" />
 
   <property name="build" value="build" />
@@ -71,7 +71,7 @@
     </jar>
   </target>
 
-  <target name="dist" depends="jar,make-os-jars">
+  <target name="dist" depends="jar">
     <copy todir="${dist}">
 	  <fileset dir="bin" />
 	</copy>
@@ -125,7 +125,7 @@
 
 	<replace file="${webdist}/prophIt.jnlp" token="@@host@@" value="${host}" />
 	<replace file="${webdist}/prophIt.jnlp" token="@@port@@" value="${port}" />
-	<replace file="${webdist}/prophIt.jnlp" token="@@directory@@" value="" />
+	<replace file="${webdist}/prophIt.jnlp" token="@@directory@@" value="${directory}" />
 
 	<replace file="${webdist}/prophIt-arkanoid.jnlp" token="@@host@@" value="arkanoid" />
 	<replace file="${webdist}/prophIt-arkanoid.jnlp" token="@@port@@" value="90" />
@@ -139,13 +139,13 @@
 
   <!-- Use this as a one-time target to sign the static JAR files -->
   <target name="signlibjars" depends="jar,make-os-jars">
-	<signjar jar="${basedir}/lib/log4jME.jar" signedjar="${basedir}/lib/log4jME.jar" verbose="true" alias="${alias}" keystore="${keystore}" storepass="${keypass}" />
-	<signjar jar="${basedir}/lib/png.jar" signedjar="${basedir}/lib/png.jar" verbose="true" alias="${alias}" keystore="${keystore}" storepass="${keypass}" />
-	<signjar jar="${basedir}/lib/gl4java.jar" signedjar="${basedir}/lib/gl4java.jar" verbose="true" alias="${alias}" keystore="${keystore}" storepass="${keypass}" />
-	<signjar jar="${basedir}/lib/gl4java-glutfonts.jar" signedjar="${basedir}/lib/gl4java-glutfonts.jar" verbose="true" alias="${alias}" keystore="${keystore}" storepass="${keypass}" />
+	<signjar jar="${basedir}/lib/log4jME.jar" verbose="true" alias="${alias}" keystore="${keystore}" storepass="${keypass}" />
+	<signjar jar="${basedir}/lib/png.jar" verbose="true" alias="${alias}" keystore="${keystore}" storepass="${keypass}" />
+	<signjar jar="${basedir}/lib/gl4java.jar" verbose="true" alias="${alias}" keystore="${keystore}" storepass="${keypass}" />
+	<signjar jar="${basedir}/lib/gl4java-glutfonts.jar" verbose="true" alias="${alias}" keystore="${keystore}" storepass="${keypass}" />
 
-	<signjar jar="${basedir}/lib/gl4java-linux.jar" verbose="true" alias="${alias}" keystore="${keystore}" storepass="${keypass}" />
-	<signjar jar="${basedir}/lib/gl4java-win32.jar" verbose="true" alias="${alias}" keystore="${keystore}" storepass="${keypass}" />
+	<signjar jar="${webdist}/lib/gl4java-linux.jar" verbose="true" alias="${alias}" keystore="${keystore}" storepass="${keypass}" />
+	<signjar jar="${webdist}/lib/gl4java-win32.jar" verbose="true" alias="${alias}" keystore="${keystore}" storepass="${keypass}" />
   </target>
 
   <target name="compile-no-gui" depends="init">

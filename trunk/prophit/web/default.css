@@ -5,8 +5,8 @@
 .normal {  font-family: Arial, Helvetica, sans-serif; font-size: 12px}
 	
 	.MenuHeader {  font-family: Verdana, Arial, Helvetica, sans-serif; font-size: small; font-style: normal; font-weight: bold; font-variant: small-caps; color: #333333}
-.MenuItem {  font-family: "Courier New", Courier, mono; font-size: x-small; font-weight: normal; font-variant: small-caps}
-.TopMenu {  font-family: Verdana, Arial, Helvetica, sans-serif; font-size: x-small; font-variant: small-caps}
+.MenuItem {  font-family: Arial, Helvetica, sans-serif; font-size: 14px; font-weight: normal; font-variant: small-caps}
+.TopMenu {  font-family: Verdana, Arial, Helvetica, sans-serif; font-size: 12px; font-variant: small-caps; font-weight: bold}
 A:link
 {
   COLOR: green
