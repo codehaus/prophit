@@ -5,7 +5,7 @@ captured by a profiler.
 -->
 <!ELEMENT call-graph ( date, source-file, user, measurement+, invocation+ )>
 <!ATTLIST call-graph
-  version ( 1 ) #REQUIRED
+  fileVersion ( 1 ) #REQUIRED
   sourceProfiler ( dashprof | hprof ) #REQUIRED
   id ID #REQUIRED
 >
