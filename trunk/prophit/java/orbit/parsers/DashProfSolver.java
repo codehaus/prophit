@@ -2,7 +2,6 @@ package orbit.parsers;
 
 import orbit.model.CallID;
 import orbit.model.CallGraph;
-import orbit.model.CallFractionSolverData;
 import orbit.ampl.SocketConnection;
 import orbit.util.Util;
 
@@ -36,7 +35,7 @@ public class DashProfSolver
 	
 	public CallGraph solve(List callIDs)
 	{
-		CallFractionSolverData data = new CallFractionSolverData(callIDs);
+		DashProfSolverData data = new DashProfSolverData(callIDs);
 																 
 		orbit.ampl.Solver solver = new orbit.ampl.Solver(factory);
 		long solveStart = System.currentTimeMillis();

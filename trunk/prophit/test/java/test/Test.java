@@ -171,7 +171,7 @@ public class Test
 		parser.execute();
 		List callIDs = parser.getCallIDs();
 		
-		CallFractionSolverData data = new CallFractionSolverData(callIDs);
+		DashProfSolverData data = new DashProfSolverData(callIDs);
 		assertion(data.getModel().toString().startsWith("[741]option solver kestrel;"),
 				  "Expected " + data.getModel() + " to start with [741]option solver kestrel;");
 		assertion(data.getCommands().toString().startsWith("[171]# Assign initial values for I"),

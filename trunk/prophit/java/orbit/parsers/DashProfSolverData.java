@@ -1,7 +1,9 @@
-package orbit.model;
+package orbit.parsers;
 
 import orbit.ampl.Datum;
 import orbit.ampl.StringDatum;
+import orbit.model.CallID;
+import orbit.model.RCC;
 import orbit.util.ConfigurationException;
 import orbit.util.Util;
 
@@ -13,7 +15,7 @@ import java.util.StringTokenizer;
 
 // This class really doesn't belong in this package. The 'solver' stuff should be moved into a different package
 //   called something like 'qpsolver', then this class should go into a 'solver' package or perhaps into 'loader'
-public class CallFractionSolverData
+public class DashProfSolverData
 {
 	private static final String modelResourceName = "/ampl/profile.mod";
 	private static final String commandsResourceName = "/ampl/profile.run";
@@ -22,7 +24,7 @@ public class CallFractionSolverData
 	private final List proxyCallIDs;
 	private boolean debug = false;
 	
-	public CallFractionSolverData(List callIDs)
+	public DashProfSolverData(List callIDs)
 	{
 		this.callIDs = callIDs;
 		this.proxyCallIDs = CallID.getProxyCallIDs(callIDs);
