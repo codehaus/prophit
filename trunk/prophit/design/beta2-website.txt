@@ -1,0 +1,41 @@
+
+Site Map
+
+Home
+ - Latest news
+ - Summary of functionality
+ - Thumbnail screenshots with links to full-size images (see thecortext.net/clover)
+News and Status
+Futures
+The Team
+Download
+
+Documentation
+  Quick Start
+    x Get prophIt
+    x Using the GUI
+	  x Run the HProf sample
+	  x Read 'concepts'
+	x Profiling your own application
+	  x Get AntProf
+	  x Run an hprof or dashprof task
+	  x Open the data file with prophIt
+
+  Profiles
+    x hprof
+	  x Mention AntProf
+	x -prof
+	  x Run with AntProf
+
+  Samples
+    x Format so that the HelloList sample and HSQLDB sample are both left-aligned
+	x HSQLDB - change command line to use AntProf hprof task
+
+  HelloList hprof
+    x Change command line to use hprof task
+	What is a good way to demonstrate the functionality of the GUI using a sample profile? 
+	  More screenshots? 
+	  Highlighting screenshots to show the sections of interest?
+	  Flash demo?
+	
+  

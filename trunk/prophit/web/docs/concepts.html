@@ -134,6 +134,8 @@ of your profile, then provides you with the data you need to improve your progra
                     <li><a href="#search">Searching</a></li>
                     <li><a href="#call_tables">Call Tables</a></li>
                     <li><a href="#level_of_detail">Level of Detail</a></li>
+                    <li><a href="#intelligent_labeling">Intelligent Labeling</a></li>
+                    <li><a href="#focus_on_selection">Focus on Selection</a></li>
                     <li><a href="#wireframe">Wireframe</a></li>
                   </ul>
 				  
@@ -383,25 +385,58 @@ of your profile, then provides you with the data you need to improve your progra
 				  <p/>
                   <a name="level_of_detail"> 
                   <h2>Level of Detail</h2>
-                    </a> You can control the amount of detail displayed in the tower 
-                    diagram using the Level of Detail control. If your program 
-                    is very large, or if you just want to get a rough idea of 
-                    the overall profile, lowering the Level of Detail will reduce 
-                    the amount of information shown on the screen, and improve 
-                    the performance of the display. For close examination of the 
-                    profile, increase the level of detail.
-
-					<p/>
-                  <a name="wireframe"> 
-                  <h2>Wireframe</h2>
-                  </a> 
-				  Normally, the blocks in the tower diagram are rendered as solid blocks. While the diagram is being
-				  rotated, the blocks are rendered in wireframe for better performance. Wireframe mode is also
-				  used after you use the Search bar so that you can easily see all the search results throughout the
-				  entire diagram. You can enable or disable Wireframe mode manually at any time using the Wireframe checkbox.
-				   
-					
-					</blockquote>
+                    </a> 
+                    <p>You can control the amount of detail displayed in the tower 
+                      diagram using the Level of Detail control. If your program 
+                      is very large, or if you just want to get a rough idea of 
+                      the overall profile, lowering the Level of Detail will reduce 
+                      the amount of information shown on the screen, and improve 
+                      the performance of the display. When the level of detail 
+                      is reduced, methods which take up a small amount of CPU 
+                      time are removed from the tower diagram. To show all the 
+                      detail that is available in the data file, set the Level 
+                      of Detail to 'Very Fine'. 
+                    <h2><a name="intelligent_labeling">Intelligent Labeling</a></h2>
+                    <p> 
+					The typical capacity of person's short-term memory 
+                    is 7 items. Without labels, keeping track of which blocks 
+                    in the tower diagram correspond to which methods can become 
+                    unmanagable. The tower diagram UI helps to solve this problem 
+                    by intelligently labeling certain blocks. 
+                    <p>Currently, 5 prominent blocks are labeled in the blank 
+                      space above the tower diagram. The block which is under 
+                      the mouse pointer is labeled at the bottom of the diagram. 
+                    </p>
+				  
+                    <p/>
+                    <h2><a name="focus_on_selection">Focus on Selection</a></h2>
+					You will frequently identify a particular method which is 
+                    called from many places in the program and takes up a lot 
+                    of CPU time. The 'Focus on Selection' feature can help you 
+                    figure out all the different ways a method is being used in 
+                    your program. 
+                    <p> Once you have selected a method block, select the 'View/Focus 
+                      on Selection' menu item. The diagram is re-oriented to focus 
+                      that method and its callers. This helps identify situations 
+                      where a method is being called too often (for example, re-searching 
+                      a data structure for an element each time through a loop, 
+                      rather than caching the value before the loop). By navigating 
+                      up and down through the diagram you can get a clear picture 
+                      of all the different contexts in which the method is used, 
+                      and how the program time is divided among all the different 
+                      usages. 
+                    <p>
+                    <a name="wireframe"> 
+                    <h2>Wireframe</h2>
+                    </a> Normally, the blocks in the tower diagram are rendered 
+                    as solid blocks. While the diagram is being rotated, the blocks 
+                    are rendered in wireframe for better performance. Wireframe 
+                    mode is also used after you use the Search bar so that you 
+                    can easily see all the search results throughout the entire 
+                    diagram. Blocks which are search results or instances of the 
+                    selected method are rendered as solid blocks so that they 
+                    can be clearly seen. You can enable or disable Wireframe mode 
+                    manually at any time using the Wireframe checkbox. </blockquote>
 				  <div class="header">So What's Next?</div>
 				  <blockquote>
 				  	Of course we're planning on new and better features to incorporate into prophIt.  
