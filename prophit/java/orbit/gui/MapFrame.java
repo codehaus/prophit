@@ -61,7 +61,6 @@ public class MapFrame
 		
 		MapFrame map = new MapFrame();
 
-		map.setSize(800, 600);
 		UIUtil.centerWindow(map);
 
 		if ( profileFileName != null )
@@ -69,11 +68,16 @@ public class MapFrame
 			map.loadProfile(new File(profileFileName));
 		}
 
+		// map.pack();
 		map.show();
 	}
 
 	public static Category LOG = Category.getInstance(MapFrame.class);
 
+	// For some reason, without this fudge factor the diagram grows in width by 4
+	//   pixels whenever a new profile is loaded
+	private static final int DIAGRAM_WIDTH_FUDGE_FACTOR = 4;
+	
 	private final Controller controller = new Controller();
 	
 	private Action backAction;
@@ -85,10 +89,12 @@ public class MapFrame
 	
 	private BlockDiagramModel blockModel = null;
 
+	private JToolBar         toolbar;
 	private BlockDiagramView blockView = null;
 	private JPanel           pnlContent;
 	private CallDetailsView  callDetails;
 	private JSlider          depthSlider;
+	private JPanel           pnlStatus;
 	private JLabel           lblStatus;
 	
 	public MapFrame()
@@ -102,6 +108,7 @@ public class MapFrame
 
 		enableControls();
 		
+		setSize(800, 600);
 		setDefaultCloseOperation( EXIT_ON_CLOSE );
 	}
 
@@ -154,17 +161,20 @@ public class MapFrame
 
 	private void setCallGraph(CallGraph cg)
 	{
-		if ( pnlContent != null )
+		Dimension contentSize = pnlContent.getSize();
+			
+		getContentPane().remove(pnlContent);
+		
+		if ( blockView != null )
 		{
-			getContentPane().remove(pnlContent);
-				
 			blockView.cvsDispose();
 			blockModel.dispose();
 			blockModel = null;
 			blockView = null;
-			pnlContent = null;
-			System.gc();
 		}
+		
+		pnlContent = null;
+		System.gc();
 			
 		blockModel = new BlockDiagramModel(cg);
 		blockModel.addListener(new PropertyChangeListener()
@@ -194,8 +204,13 @@ public class MapFrame
 			});
 		blockModel.setLevels(depthSlider.getValue());
 
-		System.out.println("size = " + getSize());
-		blockView = new BlockDiagramView((int)( getSize().width * 2.0 / 3.0 ), getSize().height, blockModel);
+		int diagramWidth = contentSize.width - CallDetailsView.PREFERRED_WIDTH - DIAGRAM_WIDTH_FUDGE_FACTOR;
+		int diagramHeight = contentSize.height;
+		  
+		Dimension diagramSize = new Dimension(diagramWidth, diagramHeight);
+		
+		System.out.println("size = " + diagramSize);
+		blockView = new BlockDiagramView(diagramSize.width, diagramSize.height, blockModel);
 		callDetails = new CallDetailsView()
 			{
 				public void callerSelected(String callerName)
@@ -210,10 +225,12 @@ public class MapFrame
 			};
 
 		pnlContent = new ContentPanel(blockView, callDetails);
+
 		getContentPane().add(pnlContent, BorderLayout.CENTER);
 
+		// Without this, the block diagram is rendered to the top-left of where it should
+		//   be...
 		pack();
-
 		blockView.requestFocus();
 
 		enableControls();
@@ -399,7 +416,7 @@ public class MapFrame
 
 	private void addToolbar()
 	{
-		JToolBar toolbar = new JToolBar();
+		toolbar = new JToolBar();
 		toolbar.setFloatable(false);
 
 		toolbar.add(backAction);
@@ -419,10 +436,17 @@ public class MapFrame
 		/*
 		 * Add the 'Status' bar to the bottom of the application
 		 */
-		JPanel pnlStatus = new JPanel(new FlowLayout(FlowLayout.LEFT));
+		pnlStatus = new JPanel(new FlowLayout(FlowLayout.LEFT));
 		pnlStatus.add(new JLabel(Strings.getUILabel(MapFrame.class, "status.label")));
 		lblStatus = new JLabel("              ");
 		pnlStatus.add(lblStatus);
+
+		pnlContent = new JPanel()
+			{
+				public Dimension getSize() { System.out.println(super.getSize()); return super.getSize(); }
+			};
+		getContentPane().add(pnlContent, BorderLayout.CENTER);
+		
 		getContentPane().add(pnlStatus, BorderLayout.SOUTH);
 	}
 

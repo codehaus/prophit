@@ -17,6 +17,11 @@ import javax.swing.table.AbstractTableModel;
 abstract class CallDetailsView
 	extends JPanel
 {
+	public static final int MINIMUM_WIDTH = 150;
+	public static final int MINIMUM_HEIGHT = 100;
+	public static final int PREFERRED_WIDTH = 300;
+	public static final int PREFERRED_HEIGHT = 200;
+	
 	private JTable tblCallInfo;
 	private JTable tblCallers;
 	private JTable tblCallees;
@@ -111,7 +116,7 @@ abstract class CallDetailsView
 												scrollInfo,
 												bottomSplitter);
 
-		Dimension minimum = new Dimension(100, 100);
+		Dimension minimum = new Dimension(150, 100);
 		Dimension preferred = new Dimension(300, 200);
 		
 		scrollCallers.setMinimumSize(minimum);
