@@ -50,7 +50,7 @@ public class TestDepthSliderModel
 		// Filter out the 2nd DBExec but not the first
 		model.setLevelOfDetail(new LevelOfDetail("Custom", 0.35));
 		assertEquals(2, listener.size());
-		assertEquals(3,listener.getDepth());
+		assertEquals(3, listener.getDepth());
 	}
 
 	static class DepthSliderListener
@@ -59,7 +59,7 @@ public class TestDepthSliderModel
 		ArrayList values = new ArrayList();
 
 		public int size() { return values.size(); }
-		public int getDepth() { return ((Integer)values.get(0)).intValue(); }
+		public int getDepth() { return ((Integer)values.get(values.size() - 1)).intValue(); }
 		
 		public void propertyChange(PropertyChangeEvent evt)
 		{
