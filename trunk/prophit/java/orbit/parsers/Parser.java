@@ -1,12 +1,12 @@
 package orbit.parsers;
 
+import orbit.model.ModelBuilder;
+
 import java.util.List;
 
 public interface Parser
 {
 	public boolean isFileFormatRecognized();
 
-	public List getCallIDs();
-	
-	public void execute() throws ParseException;
+	public void execute(ModelBuilder builder) throws ParseException;
 }

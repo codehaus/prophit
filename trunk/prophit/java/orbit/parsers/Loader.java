@@ -1,6 +1,8 @@
 package orbit.parsers;
 
 import orbit.model.CallGraph;
+import orbit.model.ModelBuilder;
+import orbit.model.ModelBuilderFactory;
 import orbit.util.Util;
 
 import java.io.*;
@@ -16,6 +18,7 @@ public class Loader
 	private final Solver solver;
 	private final File   file;
 
+	private ModelBuilder builder = ModelBuilderFactory.newModelBuilder();
 	private boolean parsed = false;
 	private String error = null;
 	private String warning = null;
@@ -86,7 +89,7 @@ public class Loader
 
 	public synchronized void parse() throws ParseException
 	{
-		parser.execute();
+		parser.execute(builder);
 		parsed = true;
 	}
 	
@@ -95,8 +98,8 @@ public class Loader
 		try
  		{
 			if ( !parsed )
-				parser.execute();
-			List callIDs = parser.getCallIDs();
+				parser.execute(builder);
+			List callIDs = builder.getCallIDs();
 
 			File fractionsFile = new File(file.getAbsolutePath() + ".graph");
 			CallGraph cg = null;
