@@ -4,14 +4,17 @@ import orbit.model.Call;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 import javax.swing.JTable;
+import javax.swing.ListSelectionModel;
 import javax.swing.table.AbstractTableModel;
 
-class CallDetailsView
+abstract class CallDetailsView
 	extends JPanel
 {
 	private JTable tblCallInfo;
@@ -25,7 +28,9 @@ class CallDetailsView
 		addComponents();
 	}
 
-	public Dimension getMinimumSize() { return new Dimension(100, 300); }
+	public abstract void callerSelected(String callerName);
+
+	public abstract void calleeSelected(String calleeName);
 
 	public void selectedCallChanged(Call rootCall, Call selectedCall)
 	{
@@ -67,32 +72,60 @@ class CallDetailsView
 				}			
 			};
 		tblCallers = new CallListTable();
+		tblCallers.addMouseListener(new MouseAdapter()
+			{
+				public void mouseClicked(MouseEvent e)
+				{
+					if ( ( e.getModifiers() & MouseEvent.BUTTON1_MASK ) != 0 &&
+						 e.getClickCount() == 2 )
+					{
+						int row = tblCallers.rowAtPoint(e.getPoint());
+						// System.out.println("Double-clicked " + row);
+						callerSelected(((CallDetails.CallTableModel)tblCallers.getModel()).getCallName(row));
+					}
+				}
+			});
 		tblCallees = new CallListTable();
-		/*
-		tblCallInfo.setPreferredSize(new Dimension(100, 100));
-		tblCallers.setPreferredSize(new Dimension(100, 100));
-		tblCallees.setPreferredSize(new Dimension(100, 100));
-		*/
-		
+		tblCallees.addMouseListener(new MouseAdapter()
+			{
+				public void mouseClicked(MouseEvent e)
+				{
+					if ( ( e.getModifiers() & MouseEvent.BUTTON1_MASK ) != 0 &&
+						 e.getClickCount() == 2 )
+					{
+						int row = tblCallees.rowAtPoint(e.getPoint());
+						// System.out.println("Double-clicked " + row);
+						calleeSelected(((CallDetails.CallTableModel)tblCallees.getModel()).getCallName(row));
+					}
+				}
+			});
+
+		JScrollPane scrollCallers = new JScrollPane(tblCallers);
+		JScrollPane scrollCallees = new JScrollPane(tblCallees);
+		JScrollPane scrollInfo    = new JScrollPane(tblCallInfo);
+
 		JSplitPane bottomSplitter = new JSplitPane(JSplitPane.VERTICAL_SPLIT,
-															  new JScrollPane(tblCallers),
-															  new JScrollPane(tblCallees))
-			{
-				public Dimension getPreferredSize() { return new Dimension(300, 250); }
-			};
-
+												   scrollCallers,
+												   scrollCallees);
 		JSplitPane topSplitter = new JSplitPane(JSplitPane.VERTICAL_SPLIT,
-															  new JScrollPane(tblCallInfo),
-															  bottomSplitter)
-			{
-				public Dimension getPreferredSize() { return new Dimension(300, 500); }
-			};
+												scrollInfo,
+												bottomSplitter);
 
+		Dimension minimum = new Dimension(100, 100);
+		Dimension preferred = new Dimension(300, 200);
+		
+		scrollCallers.setMinimumSize(minimum);
+		scrollCallers.setPreferredSize(preferred);
+		scrollCallees.setMinimumSize(minimum);
+		scrollCallees.setPreferredSize(preferred);
+		scrollInfo.setMinimumSize(minimum);
+		scrollInfo.setPreferredSize(preferred);
+		
 		add(topSplitter, BorderLayout.CENTER);
 
+		/*
 		bottomSplitter.resetToPreferredSizes();
 		topSplitter.resetToPreferredSizes();
-		/*
 		topSplitter.setDividerLocation(0.333);
 		bottomSplitter.setDividerLocation(0.5);
 		*/
@@ -173,6 +206,11 @@ class CallDetailsView
 	private static class CallListTable
 		extends JTable
 	{
+		public CallListTable()
+		{
+			setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		}
+		
 		public String getToolTipText(MouseEvent event)
 		{
 			/*

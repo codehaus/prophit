@@ -4,6 +4,9 @@ import orbit.parsers.DashProfParser;
 import orbit.model.Call;
 import orbit.model.CallID;
 import orbit.model.CallGraph;
+import orbit.util.Log;
+
+import org.apache.log4j.Category;
 
 import gl4java.GLContext;
 import java.awt.*;
@@ -68,6 +71,8 @@ public class MapFrame
 		map.show();
 	}
 
+	public static Category LOG = Category.getInstance(MapFrame.class);
+
 	private final Controller controller = new Controller();
 	
 	private Action backAction;
@@ -130,6 +135,8 @@ public class MapFrame
 						if ( BlockDiagramModel.RENDER_CALL_PROPERTY.equals(evt.getPropertyName()) )
 						{
 							enableControls();
+							callDetails.selectedCallChanged(blockModel.getRootRenderState().getRenderCall(),
+															blockModel.getSelectedCall());
 						}
 						else if ( BlockDiagramModel.SELECTED_CALL_PROPERTY.equals(evt.getPropertyName()) )
 						{
@@ -140,6 +147,8 @@ public class MapFrame
 						else if ( BlockDiagramModel.NUM_LEVELS_PROPERTY.equals(evt.getPropertyName()) )
 						{
 							int levels = ((Integer)evt.getNewValue()).intValue();
+							if ( levels > depthSlider.getMaximum() )
+								depthSlider.setMaximum(depthSlider.getMaximum() + 5);
 							depthSlider.setValue(levels);
 						}
 					}
@@ -148,7 +157,18 @@ public class MapFrame
 
 			System.out.println("size = " + getSize());
 			blockView = new BlockDiagramView((int)( getSize().width * 2.0 / 3.0 ), getSize().height, blockModel);
-			callDetails = new CallDetailsView();
+			callDetails = new CallDetailsView()
+				{
+					public void callerSelected(String callerName)
+					{
+						selectSelectionCaller(callerName);
+					}
+
+					public void calleeSelected(String calleeName)
+					{
+						selectSelectionCallee(calleeName);
+					}
+				};
 
 			pnlContent = new ContentPanel(blockView, callDetails);
 			getContentPane().add(pnlContent, BorderLayout.CENTER);
@@ -162,6 +182,65 @@ public class MapFrame
 			return true;
 		}
 	}
+
+	/**
+	 * When the caller of the current displayed selection is selected (in the CallDetailsView),
+	 * select the caller of the current selection if its name matches the selected parent. Otherwise,
+	 * find the new name in the current block diagram.
+	 */
+	private void selectSelectionCaller(String name)
+	{
+		Call selectedCall = blockModel.getSelectedCall();
+		if ( name == null || selectedCall == null )
+			return;
+
+		if ( name.equals(selectedCall.getParent().getName()) )
+		{
+			blockModel.setSelectedCall(selectedCall.getParent());
+		}
+		else
+		{
+			Call root = blockModel.getRootRenderState().getRenderCall();
+			if ( !selectCallByName(root, name, true) )
+			{
+				LOG.error("Unable to find call " + name + " in rootRenderState " + root);
+			}
+		}
+	}
+
+	private void selectSelectionCallee(String name)
+	{
+		Call selectedCall = blockModel.getSelectedCall();
+		if ( name == null || selectedCall == null )
+			return;
+
+		if ( !selectCallByName(selectedCall, name, false) )
+		{
+			Call root = blockModel.getRootRenderState().getRenderCall();
+			if ( !selectCallByName(root, name, true) )
+			{
+				LOG.error("Unable to find call " + name + " in rootRenderState " + root);
+			}
+		}
+	}
+
+	private boolean selectCallByName(Call call, String name, boolean selectThis)
+	{
+		if ( selectThis && name.equals(call.getName()) )
+		{
+			blockModel.setSelectedCall(call);
+			return true;
+		}
+
+		for ( Iterator i = call.getChildren().iterator(); i.hasNext(); )
+		{
+			Call child = (Call)i.next();
+			if ( selectCallByName(child, name, true) )
+				return true;
+		}
+		return false;
+	}
+
 	
 	private void createActions()
 	{
@@ -299,7 +378,7 @@ public class MapFrame
 			backAction.setEnabled(blockModel.getRootRenderState().hasPreviousRenderCall());
 			forwardAction.setEnabled(blockModel.getRootRenderState().hasNextRenderCall());
 			parentAction.setEnabled(blockModel.getRootRenderState().hasParentRenderCall());
-			rootAction.setEnabled(true);
+			rootAction.setEnabled(blockModel.getRootRenderState().getRenderCall().getParent() != null);
 		}
 	}
 	
