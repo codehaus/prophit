@@ -69,14 +69,23 @@ public class MapFrame
 	
 	private BlockDiagramView blockView = null;
 	private BlockDiagramModel blockModel = null;
+
+	private Action backAction;
+	private Action forwardAction;
+	private Action parentAction;
+	private Action rootAction;
+	
 	private JSlider depthSlider;
 	
 	public MapFrame()
 	{
 		super(Strings.getUILabel(MapFrame.class, "title"));
-		
+
+		createActions();
 		addMenus();
 		addToolbar();
+
+		enableControls();
 		
 		setDefaultCloseOperation( EXIT_ON_CLOSE );
 	}
@@ -99,20 +108,68 @@ public class MapFrame
 			{
 				blockView.cvsDispose();
 				getContentPane().remove(blockView);
+				blockModel.dispose();
 				blockModel = null;
+				System.gc();
 			}
 			
 			blockModel = new BlockDiagramModel(cg);
+			blockModel.addListener(new BlockDiagramModel.Listener()
+				{
+					public void modelInvalidated(BlockDiagramModel model)
+					{
+						enableControls();
+					}
+					
+					public void requestRepaint(BlockDiagramModel model)
+					{
+					}
+				});
 			blockModel.setLevels(depthSlider.getValue());
 
 			blockView = new BlockDiagramView(800, 600, blockModel);
 			getContentPane().add(blockView, BorderLayout.CENTER);
 			blockView.requestFocus();
 			pack();
+
+			enableControls();
+			
 			return true;
 		}
 	}
 	
+    private void createActions()
+	{
+		backAction = new AbstractAction("Back") // , new ImageIcon("images/rewind.gif"))
+			{
+				public void actionPerformed(ActionEvent e)
+				{
+					blockModel.getRootRenderState().previousRenderCall();
+				}
+			};
+		forwardAction = new AbstractAction("Forward") // , new ImageIcon("images/rewind.gif"))
+			{
+				public void actionPerformed(ActionEvent e)
+				{
+					blockModel.getRootRenderState().nextRenderCall();
+				}
+			};
+		parentAction = new AbstractAction("Parent") // , new ImageIcon("images/rewind.gif"))
+			{
+				public void actionPerformed(ActionEvent e)
+				{
+					blockModel.getRootRenderState().setRenderCallToParent();
+				}
+			};
+		rootAction = new AbstractAction("Root") // , new ImageIcon("images/rewind.gif"))
+			{
+				public void actionPerformed(ActionEvent e)
+				{
+					blockModel.getRootRenderState().setRenderCall(blockModel.getCallGraph());
+				}
+			};
+	}
+		
     private void addMenus()
     {
 		JMenuBar menuBar = new JMenuBar();
@@ -136,6 +193,13 @@ public class MapFrame
 	{
 		JToolBar toolbar = new JToolBar();
 		toolbar.setFloatable(false);
+
+		toolbar.add(backAction);
+		toolbar.add(forwardAction);
+		toolbar.add(parentAction);
+		toolbar.add(rootAction);
+
+		toolbar.addSeparator();
 
 		toolbar.add(createDepthSlider());
 		
@@ -190,6 +254,24 @@ public class MapFrame
 				public String getDescription() { return "Java profiles"; }
 			});
 		return chooser;
+	}
+
+	protected void enableControls()
+	{
+		if ( blockModel == null )
+		{
+			backAction.setEnabled(false);
+			forwardAction.setEnabled(false);
+			parentAction.setEnabled(false);
+			rootAction.setEnabled(false);
+		}
+		else
+		{
+			backAction.setEnabled(blockModel.getRootRenderState().hasPreviousRenderCall());
+			forwardAction.setEnabled(blockModel.getRootRenderState().hasNextRenderCall());
+			parentAction.setEnabled(blockModel.getRootRenderState().hasParentRenderCall());
+			rootAction.setEnabled(true);
+		}
 	}
 	
 	public class Controller

@@ -37,6 +37,18 @@ public class BlockDiagramModel
 														 cg);
 	}
 
+	/**
+	 * Clean up all references
+	 */
+	public void dispose()
+	{
+		listeners.clear();
+		rootState = null;
+		eyeLocation = null;
+		mouseOverCall = null;
+		selectedCall = null;
+	}
+	
 	public synchronized void addListener(Listener listener)
 	{
 		synchronized ( listeners )
@@ -57,17 +69,12 @@ public class BlockDiagramModel
 	{
 		return cg;
 	}
+
+	public RootRenderState getRootRenderState()
+	{
+		return rootState;
+	}
 	
-	public void setRenderCall(Call call)
-	{
-		rootState.setRenderCall(call);
-	}
-
-	public Call getRenderCall()
-	{
-		return rootState.getRenderCall();
-	}
-
 	public void setSelectedCall(Call call)
 	{
 		selectedCall = call;

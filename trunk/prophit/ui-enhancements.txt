@@ -1,4 +1,115 @@
 
+-------------
+
+'Properties' for a selected Call
+
+callers, callees, nCalls, time, global %, local %
+
+Callers, callees : 
+  scan through the current block diagram
+  need to identify matching Calls by their RCC (or RCC key)
+  each time a matching call is found
+    track the total nCalls and time for that RCC
+    add its caller to the caller list, or add to the time for that caller
+	add its callees to the caleee list, or add to the time for each callee
+
+Then callers and callees can be rendered as a table:
+
+Method : orbit.model.CallGraph.getChildren(CallGraph.java)
+Inclusive Time : 20030
+Exclusive Time : 3882
+nCalls : 372
+% of view  : 75.5%
+% of total : 21.8%
+
+Caller		 % time		 Callees		 % time
+
+
+CallDetails:
+	double inclusiveTime = 0
+	double exclusiveTime = 0
+	int nCalls = 0
+	CallRollupList callersRollup = new CallRollupList()
+	CallRollupList calleesRollup = new CallRollupList()
+	
+	CallDetails(Call root, Call selected):
+
+		class SearchFor:	
+			search(parent, call):
+				match = false
+				if ( call.getStackTraceID() == selected.getStackTraceID() ):
+					match = true
+					adapter.initialize(call)
+					inclusiveTime += adapter.getInclusiveTime()
+					exclusiveTime += adapter.getExclusiveTime()
+					nCalls += call.getCallCount()
+					if parent:
+						callersRollup.add(parent):
+				for child in call.children():
+					if match:
+						calleesRollup.add(child)
+					search(call, child)
+
+		SearchFor search = new SearchFor()
+		search.search(null, root)
+
+		callersRollup.sort()
+		calleesRollup.sort()
+
+	TableModel getCallersModel():
+		return CallList(callersRollup)
+
+	TableModel getCalleesModel():
+		return CallList(calleesRollup)
+
+	CallList(AbstractTableModel):
+		CallList(CallRollupList):
+			
+		public int getRowCount():
+			return list.size()
+		
+		public int getColumnCount():
+			return 0
+		
+		public Object getValueAt(int row, int column):
+			switch ( column ):
+				case 0:
+					return 
+  
+
+CallRollupList:
+	HashMap timeByCall
+	List    calls
+	
+	addCall(call):
+		Double time = timeByCall.get(call.getName()))
+		if ( time == null ):
+			time = new Double(call.getTime())
+		else:
+			time = new Double(time.doubleValue() + call.getTime())
+		timeByCall.put(call.getName(), time)
+
+	sort():
+		# sorts the calls by time
+		List times = new List()
+		calls.addAll(timeByCall.keySet())
+		Collections.sort(calls, Comparator() { return getTime(first) < getTime(second) })
+
+	Call getCall(int index):
+		return calls.get(index)
+
+	double getTime(int index):
+		return getTime(getCall(index))
+
+	int size():
+		return calls.size()
+
+	private double getTime(Call call):
+		return timeByCall.get(call.getName()).doubleValue()
+
+		
+-------------
+
 Want to be able to go back/forward/up/home using toolbar buttons
 
 up is easy : 'p'

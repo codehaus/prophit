@@ -78,14 +78,10 @@ class BlockDiagramView
 							model.removeLevel();
 							break;
 						case 'r':
-							model.setRenderCall(model.getCallGraph());
+							model.getRootRenderState().setRenderCall(model.getCallGraph());
 							break;
 						case 'p':
-							Call parent = model.getRenderCall().getParent();
-							if ( parent != null )
-							{
-								model.setRenderCall(parent);
-							}
+							model.getRootRenderState().setRenderCallToParent();
 							break;
 						}
 						switch ( e.getKeyCode() )
@@ -126,7 +122,7 @@ class BlockDiagramView
 							model.setSelectedCall(selectedCall);
 							if ( selectedCall != null && e.getClickCount() == 2 )
 							{
-								model.setRenderCall(selectedCall);
+								model.getRootRenderState().setRenderCall(selectedCall);
 							}
 						}
 					}
@@ -378,7 +374,7 @@ class BlockDiagramView
 		gl.glDisable(GL_DEPTH_TEST); 
 		gl.glColor3d(1.0, 1.0, 1.0);
 		gl.glRasterPos2i(6, 2);
-		CallAdapter call = new CallAdapter(model.getRenderCall());
+		CallAdapter call = new CallAdapter(model.getRootRenderState().getRenderCall());
 		printString(GLUTEnum.GLUT_BITMAP_HELVETICA_12, "Root = " + call.getName() + ", time = " + call.getInclusiveTime(measure) + ", " + ( call.getInclusiveTime(measure) / model.getCallGraph().getTime() * 100.0 ) + "% of total");
 		gl.glEnable(GL_LIGHTING);
 		gl.glEnable(GL_DEPTH_TEST); 
@@ -487,7 +483,7 @@ class BlockDiagramView
 			}
 			
 			Rectangle2D.Double rootRectangle = new Rectangle2D.Double(0, 0, EXTENT, EXTENT);
-			CallLayoutAlgorithm layout = new CallLayoutAlgorithm(new CallAdapter(model.getRenderCall()),
+			CallLayoutAlgorithm layout = new CallLayoutAlgorithm(new CallAdapter(model.getRootRenderState().getRenderCall()),
 																				  measure,
 																				  model.getLevels(),
 																				  rootRectangle);
