@@ -83,13 +83,18 @@
 	</copy>
 	<replace file="${webdist}/orbit.jnlp" token="@@orbit.version@@" value="${orbit.version}" />
     <copy file="${webdist}/orbit.jnlp" tofile="${webdist}/orbit-elrond.jnlp" />
+    <copy file="${webdist}/orbit.jnlp" tofile="${webdist}/orbit-arkanoid.jnlp" />
 
 	<replace file="${webdist}/orbit.jnlp" token="@@host@@" value="${host}" />
 	<replace file="${webdist}/orbit.jnlp" token="@@port@@" value="${port}" />
 
 	<replace file="${webdist}/orbit-elrond.jnlp" token="@@host@@" value="elrond" />
-	<replace file="${webdist}/orbit-elrond.jnlp" token="@@port@@" value="${port}" />
+	<replace file="${webdist}/orbit-elrond.jnlp" token="@@port@@" value="85" />
 	<replace file="${webdist}/orbit-elrond.jnlp" token="orbit.jnlp" value="orbit-elrond.jnlp" />
+
+	<replace file="${webdist}/orbit-arkanoid.jnlp" token="@@host@@" value="arkanoid" />
+	<replace file="${webdist}/orbit-arkanoid.jnlp" token="@@port@@" value="90" />
+	<replace file="${webdist}/orbit-arkanoid.jnlp" token="orbit.jnlp" value="orbit-arkanoid.jnlp" />
 
     <jar jarfile="${webdist}/lib/data.jar">
 	  <fileset dir="${basedir}/data" />

@@ -55,6 +55,9 @@ public class MapFrame
 		// Solves the lightweight/heavyweight mixing problem
 		JPopupMenu.setDefaultLightWeightPopupEnabled(false);
 		ToolTipManager.sharedInstance().setLightWeightPopupEnabled(false);
+		// Fix JavaWebStart bug
+		// see http://developer.java.sun.com/developer/bugParade/bugs/4387437.html
+		System.setSecurityManager(null);
 		
 		MapFrame map = new MapFrame();
 
