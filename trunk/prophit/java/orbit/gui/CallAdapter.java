@@ -175,6 +175,7 @@ public class CallAdapter
 
 	public int getKey() { return call.getKey(); }
 	public String getName() { return call.getName(); }
+	public int getMaxDepth() { return call.getMaxDepth(); }
 	public int getDepth() { return call.getDepth(); }
 	public int getCallCount() { return call.getCallCount(); }
 	public double getTime() { return call.getTime(); }
@@ -184,6 +185,8 @@ public class CallAdapter
 			parent = call.getParent();
 		return parent;
 	}
+	public Call filter(Filter filter) { return call.filter(filter); }
+	public void depthFirstTraverse(Visitor visitor) { call.depthFirstTraverse(visitor); }
 	public List getChildren()
 	{
 		if ( children == null )
@@ -191,6 +194,7 @@ public class CallAdapter
 		return children;
 	}
 	public String toString() { return "Adapter for " + call.toString(); }
+	public String toString(int depth) { return call.toString(depth); }
 
 	private double getRawTimeInChildren(TimeMeasure measure)
 	{
