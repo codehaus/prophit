@@ -16,6 +16,9 @@ public class TestWildcardMatchExpression
 		
 		WildcardMatchExpression expr;
 
+		expr = new WildcardMatchExpression("*Gilpin*");
+		assertTrue(expr.match(name));
+
 		expr = new WildcardMatchExpression("*");
 		assertTrue(expr.match(name));
 
@@ -26,6 +29,9 @@ public class TestWildcardMatchExpression
 		assertTrue(expr.match(name));
 
 		expr = new WildcardMatchExpression("*evin Gilpin");
+		assertTrue(expr.match(name));
+
+		expr = new WildcardMatchExpression("*Kevin Gilpin*");
 		assertTrue(expr.match(name));
 
 		expr = new WildcardMatchExpression("K*");
@@ -41,7 +47,7 @@ public class TestWildcardMatchExpression
 		assertTrue(expr.match(name));
 
 		expr = new WildcardMatchExpression("??vin *il?in*");
-		assertTrue(!expr.match(name));
+		assertTrue(expr.match(name));
 
 		expr = new WildcardMatchExpression("?");
 		assertTrue(!expr.match(name));
@@ -51,5 +57,11 @@ public class TestWildcardMatchExpression
 
 		expr = new WildcardMatchExpression("KE*");
 		assertTrue(!expr.match(name));
+
+		expr = new WildcardMatchExpression("<root>");
+		assertTrue(expr.match("<root>"));
+		
+		expr = new WildcardMatchExpression("*<root>*");
+		assertTrue(expr.match("<root>"));
 	}
 }
