@@ -112,22 +112,22 @@ public class CallGraph
 	private void depthFirstTraverse(CallID id, IntStack stack, Visitor visitor)
 	{
 		stack.push(id.getKey());
-		visitor.visit(id, stack);
-
-		IntStack childKeys = childRCCKeys[id.getRCC().getKey()];
-		if ( childKeys != null )
+		if ( visitor.visit(id, stack) )
 		{
-			for ( IntIterator i = childKeys.iterator(); i.hasNext(); )
+			IntStack childKeys = childRCCKeys[id.getRCC().getKey()];
+			if ( childKeys != null )
 			{
-				int childKey = i.next();
-				if ( !stack.contains(childKey) )
+				for ( IntIterator i = childKeys.iterator(); i.hasNext(); )
 				{
-					CallID child = callIDs[childKey];
-					depthFirstTraverse(child, stack, visitor);
+					int childKey = i.next();
+					if ( !stack.contains(childKey) )
+					{
+						CallID child = callIDs[childKey];
+						depthFirstTraverse(child, stack, visitor);
+					}
 				}
 			}
 		}
-
 		stack.pop();
 	}
 	
@@ -149,7 +149,10 @@ public class CallGraph
 
 	public interface Visitor
 	{
-		public void visit(CallID callID, IntStack callStack);
+		/**
+		 * @return true if the Visitor wants to continue visiting the children of <code>callID</code>.
+		 */
+		public boolean visit(CallID callID, IntStack callStack);
 	}
 	
 	public class CallImpl

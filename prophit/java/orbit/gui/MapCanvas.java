@@ -24,7 +24,7 @@ class MapCanvas extends GLCanvas
 	// If a function makes up more than this amount of time of the parent call, its coloring tends towards red
 	// If less, it tends towards blue
 	private static double FRACTION_THRESHOLD = 0.20;
-	private static double LINES_MINIMUM_TIME = 10;
+	private static double LINES_MINIMUM_TIME_FRACTION = 0.1;
 	// Object smaller than this (in pixels) are not drawn
 	private static double SIZE_THRESHOLD = 2.0;
 	private static double SHIFT_STEP = 0.05;
@@ -56,6 +56,7 @@ class MapCanvas extends GLCanvas
 	private Call mouseOverCall = null;
 	private Call selectedCall = null;
 
+	private boolean generateLists = true;
 	private int linesList = -1;
 	private int quadsList = -1;
 
@@ -480,16 +481,25 @@ class MapCanvas extends GLCanvas
 		glj.gljFree();
 	}
 	
-	void compileDisplayLists()
+	synchronized void compileDisplayLists()
 	{
-		if ( linesList == -1 )
+		if ( generateLists )
 		{
+			generateLists = false;
+
 			// TODO: can use Call keys as GL names
 			nameToCallMap.clear();
 			names = 0;
-			
-			linesList = gl.glGenLists(2);
-			quadsList = linesList + 1;
+
+			if ( linesList == -1 )
+			{
+				linesList = gl.glGenLists(2);
+				quadsList = linesList + 1;
+			}
+			else
+			{
+				gl.glDeleteLists(linesList, 2);
+			}
 			
 			gl.glNewList(linesList, GL_COMPILE);
 
@@ -520,8 +530,14 @@ class MapCanvas extends GLCanvas
 		if ( depth > levels )
 			return null;
 
-		if ( renderMode == GL_LINES && call.getTime(measure) < LINES_MINIMUM_TIME )
-			return null;
+		/*
+		if ( renderMode == GL_LINES )
+		{
+			double fractionOfRoot = call.getTime(measure) / new CallAdapter(rootRenderCall).getTime(measure);
+			if ( fractionOfRoot < LINES_MINIMUM_TIME_FRACTION )
+				return null;
+		}
+		*/
 
 		// double expense = call.getSelfFractionOfParentTime(measure);
 		double expense = call.getTimeInSelf(measure) / call.getTime(measure);
@@ -542,11 +558,19 @@ class MapCanvas extends GLCanvas
 			adjustment = -(int)( ( FRACTION_THRESHOLD - expense ) / negativeScale * 127.0 );
 		}
 
-		red = green = blue = 128;
+		green = 160;
+		red = blue = 128;
 		red += adjustment;
 		blue -= adjustment;
+
+		// Brighten the colors a bit
+		red = (int)( red * 1.3 );
+		blue = (int)( blue * 1.3 );
+
 		red = clamp(red);
 		blue = clamp(blue);
+
+
 		Color color;
 		try {
 			color = new Color(red, green, blue);
@@ -747,8 +771,7 @@ class MapCanvas extends GLCanvas
 
 	private void clearCallLists()
 	{
-		linesList = -1;
-		quadsList = -1;
+		generateLists = true;
 	}
 	
 	private void glColor(Color color)
