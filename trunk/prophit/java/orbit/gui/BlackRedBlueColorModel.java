@@ -7,6 +7,11 @@ class BlackRedBlueColorModel
 {
 	private double brightness = 1.3;
 
+	public Color getLightColor()
+	{
+		return new Color(1.0f, 1.0f, 1.0f, 1.0f );
+	}
+
 	public Color getBackgroundColor()
 	{
 		return new Color(0.1f, 0.1f, 0.1f);
