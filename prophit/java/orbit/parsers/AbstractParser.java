@@ -2,6 +2,7 @@ package orbit.parsers;
 
 import orbit.model.CallGraph;
 import orbit.model.CallID;
+import orbit.model.ModelBuilder;
 
 import java.io.*;
 import java.util.*;
@@ -12,12 +13,12 @@ public abstract class AbstractParser
 	protected final LineNumberReader reader;
 	private int token = 0;
 
-	protected static void main(String[] args, AbstractParser parser) throws Exception
+	protected static void main(String[] args, AbstractParser parser, ModelBuilder builder) throws Exception
 	{
-		List callIDs = parser.getCallIDs();
+		List callIDs = builder.getCallIDs();
 		if ( "-debug".equals(args[1]) )
 		{
-			System.out.println(parser.getCallIDs());
+			System.out.println(callIDs);
 		}
 	}
 	
@@ -26,9 +27,7 @@ public abstract class AbstractParser
 	 */
 	public abstract boolean isFileFormatRecognized();
 
-	public abstract List getCallIDs();
-	
-	public abstract void execute() throws ParseException;
+	public abstract void execute(ModelBuilder builder) throws ParseException;
 
 	protected AbstractParser(LineNumberReader reader)
 	{
