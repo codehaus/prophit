@@ -50,6 +50,7 @@ public class MapFrame
 
 		// Solves the lightweight/heavyweight mixing problem
 		JPopupMenu.setDefaultLightWeightPopupEnabled(false);
+		ToolTipManager.sharedInstance().setLightWeightPopupEnabled(false);
 		
 		MapFrame map = new MapFrame();
 
@@ -142,7 +143,7 @@ public class MapFrame
 				});
 			blockModel.setLevels(depthSlider.getValue());
 
-			blockView = new BlockDiagramView(800, 500, blockModel);
+			blockView = new BlockDiagramView(800, 400, blockModel);
 			mainSplitter.setTopComponent(blockView);
 			blockView.requestFocus();
 			pack();

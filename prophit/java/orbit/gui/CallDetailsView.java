@@ -5,6 +5,7 @@ import orbit.model.Call;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 import javax.swing.JTable;
 import javax.swing.table.AbstractTableModel;
@@ -45,14 +46,14 @@ class CallDetailsView
 		tblCallees = new JTable();
 		
 		JSplitPane rightSplitter = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT,
-															  tblCallers,
-															  tblCallees)
+															  new JScrollPane(tblCallers),
+															  new JScrollPane(tblCallees))
 			{
 				public Dimension getMinimumSize() { return new Dimension(400, 200); }
 			};
 
 		JSplitPane leftSplitter = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT,
-															  tblCallInfo,
+															  new JScrollPane(tblCallInfo),
 															  rightSplitter)
 			{
 				public Dimension getMinimumSize() { return new Dimension(200, 200); }
@@ -92,7 +93,7 @@ class CallDetailsView
 				switch ( column )
 				{
 				case 0:
-					return "Name";
+					return Strings.getUILabel(CallDetailsView.class, "columnName.name");
 				case 1:
 					return details.getCallName();
 				}
@@ -100,7 +101,7 @@ class CallDetailsView
 				switch ( column )
 				{
 				case 0:
-					return "Inclusive time";
+					return Strings.getUILabel(CallDetailsView.class, "columnName.inclusive");
 				case 1:
 					return new Double(details.getInclusiveTime());
 				}
@@ -108,7 +109,7 @@ class CallDetailsView
 				switch ( column )
 				{
 				case 0:
-					return "Exclusive time";
+					return Strings.getUILabel(CallDetailsView.class, "columnName.exclusive");
 				case 1:
 					return new Double(details.getExclusiveTime());
 				}
@@ -116,7 +117,7 @@ class CallDetailsView
 				switch ( column )
 				{
 				case 0:
-					return "Number of calls";
+					return Strings.getUILabel(CallDetailsView.class, "columnName.nCalls");
 				case 1:
 					return new Integer(details.getNumCalls());
 				}
