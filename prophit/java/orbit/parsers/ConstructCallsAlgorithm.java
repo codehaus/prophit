@@ -76,12 +76,6 @@ class ConstructCallsAlgorithm
 
 	private List getCallersList(Map rccListByCallee, RCC rcc, int stackSize)
 	{
-		/*
-		if ( rcc.getStack().toString().startsWith("test.HelloList.buildAsStrings") ||
-			 rcc.getStack().toString().startsWith("test.HelloList.linkedAndString") )
-			System.out.println("Caller stack for " + rcc + " is : " + rcc.getParentStack(stackSize));
-		*/
-		
 		List callers = null;
 		if ( rcc.getStack().size() > stackSize )
 		{
