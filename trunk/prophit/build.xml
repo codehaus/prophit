@@ -44,6 +44,10 @@
 	  <fileset dir="${build}/classes" />
 	  <fileset dir="resources" />
     </jar>
+
+    <jar jarfile="${build}/lib/data.jar">
+	  <fileset dir="${basedir}/data" includes="hello.hprof.txt,hello.prof,hsqldb.hprof.txt"/>
+    </jar>
   </target>
 
   <target name="compile-no-gui" depends="init">
@@ -96,10 +100,6 @@
 	<replace file="${webdist}/orbit-arkanoid.jnlp" token="@@port@@" value="90" />
 	<replace file="${webdist}/orbit-arkanoid.jnlp" token="orbit.jnlp" value="orbit-arkanoid.jnlp" />
 
-    <jar jarfile="${webdist}/lib/data.jar">
-	  <fileset dir="${basedir}/data" />
-    </jar>
-
     <jar jarfile="${webdist}/lib/gl4java-win32.jar">
 	  <fileset dir="${basedir}/lib/win32" includes="*.dll" />
     </jar>
@@ -108,6 +108,7 @@
     </jar>
 
 	<signjar jar="${build}/lib/orbit.jar" signedjar="${webdist}/lib/orbit.jar" verbose="true" alias="orbit" keystore="${keystore}" storepass="${keypass}" />
+	<signjar jar="${build}/lib/data.jar" signedjar="${webdist}/lib/data.jar" verbose="true" alias="orbit" keystore="${keystore}" storepass="${keypass}" />
 
 	<signjar jar="${basedir}/lib/log4jME.jar" signedjar="${webdist}/lib/log4jME.jar" verbose="true" alias="orbit" keystore="${keystore}" storepass="${keypass}" />
 	<signjar jar="${basedir}/lib/png.jar" signedjar="${webdist}/lib/png.jar" verbose="true" alias="orbit" keystore="${keystore}" storepass="${keypass}" />
@@ -128,6 +129,7 @@
 <!--	  <arg line="d:/java/hsqldb_v.1.61/demo/java.prof - -fractions fraw.txt" /> -->
 <!-- 	  <arg line="weblogic-system.prof - -fractions weblogic-system.prof.fractions" /> -->
 <!--  	  <arg line="data/hsqldb.prof" /> -->
+		  <arg line="data/hsqldb.hprof.txt" />
 		<sysproperty key="solver.user.name" value="JAVA_USER" />
     </java>
   </target>

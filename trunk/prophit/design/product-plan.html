@@ -25,20 +25,9 @@ Priorities are ranked from 1 to 5, with 5 being the highest.
     <th width="20%" bgcolor="ccccff">Task Doc</th>
   </tr>
   <tr bgcolor="eeeeee"> 
-    <td width="70%">Implement a data loader for for cpu=times</td>
-    <td width="10%"> 
-      <div align="left">5</div>
-    </td>
-    <td width="20%"><a href="parse-hprof-times.txt">parse-hprof-times.txt</a></td>
-    <td width="20%">&nbsp;</td>
-  </tr>
-  <tr bgcolor="eeeeee"> 
-    <td width="70%">Implement a data loader for samples and times in the binary 
-      hprof format</td>
-    <td width="10%"> 
-      <div align="left">3</div>
-    </td>
-    <td width="20%">&nbsp;</td>
+    <td width="70%">File menu option to open a sample profile</td>
+    <td width="10%">5</td>
+    <td width="20%"><a href="sample-profile.txt">sample-profile.txt</a></td>
     <td width="20%">&nbsp;</td>
   </tr>
   <tr bgcolor="eeeeee"> 
@@ -60,21 +49,39 @@ Priorities are ranked from 1 to 5, with 5 being the highest.
     <td width="20%">&nbsp;</td>
     <td width="20%">&nbsp;</td>
   </tr>
-  <tr bgcolor="eeeeee">
+  <tr bgcolor="eeeeee"> 
     <td width="70%">Mechanism for searching for a method call</td>
     <td width="10%">4</td>
     <td width="20%">&nbsp;</td>
     <td width="20%">&nbsp;</td>
   </tr>
   <tr bgcolor="eeeeee"> 
-    <td width="70%">&nbsp;</td>
-    <td width="10%">&nbsp;</td>
+    <td width="70%">Implement a data loader for for cpu=times</td>
+    <td width="10%"> 
+      <div align="left">4</div>
+    </td>
+    <td width="20%"><a href="parse-hprof-times.txt">parse-hprof-times.txt</a></td>
+    <td width="20%">&nbsp;</td>
+  </tr>
+  <tr bgcolor="eeeeee"> 
+    <td width="70%">Parsed profile caching implementation should be made more 
+      complete, general, and robust</td>
+    <td width="10%">4</td>
     <td width="20%">&nbsp;</td>
     <td width="20%">&nbsp;</td>
   </tr>
   <tr bgcolor="eeeeee"> 
-    <td width="70%">&nbsp;</td>
-    <td width="10%">&nbsp;</td>
+    <td width="70%">Implement a data loader for samples and times in the binary 
+      hprof format</td>
+    <td width="10%"> 
+      <div align="left">3</div>
+    </td>
+    <td width="20%">&nbsp;</td>
+    <td width="20%">&nbsp;</td>
+  </tr>
+  <tr bgcolor="eeeeee">
+    <td width="70%">GUI should show a splash screen while it is initializing</td>
+    <td width="10%">2</td>
     <td width="20%">&nbsp;</td>
     <td width="20%">&nbsp;</td>
   </tr>
@@ -94,15 +101,6 @@ Priorities are ranked from 1 to 5, with 5 being the highest.
     <th width="10%" bgcolor="ccccff" height="10">Priority</th>
     <th width="20%" bgcolor="ccccff" height="10">Details</th>
     <th width="20%" bgcolor="ccccff" height="10">Task Doc</th>
-  </tr>
-  <tr bgcolor="eeeeee"> 
-    <td width="70%">In some cases, the children of a block with very little exclusive 
-      time do not take up most of the area of their parent.</td>
-    <td width="10%"> 
-      <div align="left">5</div>
-    </td>
-    <td width="20%">&nbsp;</td>
-    <td width="20%">&nbsp;</td>
   </tr>
   <tr bgcolor="eeeeee"> 
     <td width="70%">If the window is maximized, the bottom part of the block diagram 
@@ -133,12 +131,12 @@ Priorities are ranked from 1 to 5, with 5 being the highest.
     <td width="20%">&nbsp;</td>
   </tr>
   <tr bgcolor="eeeeee"> 
-    <td width="70%">&nbsp;</td>
-    <td width="10%">&nbsp;</td>
+    <td width="70%">Root block should always be 1 unit square in size</td>
+    <td width="10%">3</td>
     <td width="20%">&nbsp;</td>
     <td width="20%">&nbsp;</td>
   </tr>
-  <tr bgcolor="eeeeee">
+  <tr bgcolor="eeeeee"> 
     <td width="70%">&nbsp;</td>
     <td width="10%">&nbsp;</td>
     <td width="20%">&nbsp;</td>
@@ -209,44 +207,55 @@ Priorities are ranked from 1 to 5, with 5 being the highest.
 <h2>Bugs Fixed</h2>
 <table width="90%" border="0" cellspacing="1">
   <tr> 
-    <th width="44%" bgcolor="ccccff" height="23">Description</th>
-    <th width="9%" bgcolor="ccccff" height="23">Priority</th>
-    <th width="18%" bgcolor="ccccff" height="23">Details</th>
-    <th width="14%" bgcolor="ccccff" height="23">Date Closed</th>
-    <th width="15%" bgcolor="ccccff" height="23">Task Doc</th>
+    <th width="26%" bgcolor="ccccff" height="23">Description</th>
+    <th width="5%" bgcolor="ccccff" height="23">Priority</th>
+    <th width="55%" bgcolor="ccccff" height="23">Details</th>
+    <th width="9%" bgcolor="ccccff" height="23">Date Closed</th>
+    <th width="5%" bgcolor="ccccff" height="23">Task Doc</th>
+  </tr>
+  <tr bgcolor="eeeeee">
+    <td width="26%">In some cases, the children of a block with very little exclusive 
+      time do not take up most of the area of their parent.</td>
+    <td width="5%"> 
+      <div align="left">5</div>
+    </td>
+    <td width="55%">A calculation error in the calculation of inclusive times 
+      from exclusive times was causing inflated inclusive times to be displayed</td>
+    <td width="9%">2002/09/11</td>
+    <td width="5%">&nbsp;</td>
   </tr>
   <tr bgcolor="eeeeee"> 
-    <td width="44%">Parse error messages are not visible in the Load dialog</td>
-    <td width="9%"> 
+    <td width="26%">Parse error messages are not visible in the Load dialog</td>
+    <td width="5%"> 
       <div align="left">4</div>
     </td>
-    <td width="18%">Load dialog replaced by status messages</td>
-    <td width="14%">2002/09/08</td>
-    <td width="15%">&nbsp;</td>
+    <td width="55%">Load dialog replaced by status messages</td>
+    <td width="9%">2002/09/08</td>
+    <td width="5%">&nbsp;</td>
   </tr>
   <tr bgcolor="eeeeee"> 
-    <td width="44%">HProf profile loader crashes if there is no CPU data</td>
-    <td width="9%">5</td>
-    <td width="18%">&nbsp;</td>
-    <td width="14%">2002/09/08</td>
-    <td width="15%">&nbsp;</td>
+    <td width="26%">HProf profile loader crashes if there is no CPU data</td>
+    <td width="5%">5</td>
+    <td width="55%">&nbsp;</td>
+    <td width="9%">2002/09/08</td>
+    <td width="5%">&nbsp;</td>
   </tr>
   <tr bgcolor="eeeeee"> 
-    <td width="44%">After launching the app with JavaWebStart and selecting File/Open, 
+    <td width="26%">After launching the app with JavaWebStart and selecting File/Open, 
       an error dialog shows up with a message 'No disk in Drive A'. Choosing 'Continue' 
       contiues the file open process without further issues.</td>
-    <td width="9%">4</td>
-    <td width="18%">Implemented System.setSecurityManager workaround, described 
+    <td width="5%">4</td>
+    <td width="55%">Implemented System.setSecurityManager workaround, described 
       at http://developer.java.sun.com/developer/bugParade/bugs/4387437.html</td>
-    <td width="14%">2002/09/08</td>
-    <td width="15%">&nbsp;</td>
+    <td width="9%">2002/09/08</td>
+    <td width="5%">&nbsp;</td>
   </tr>
   <tr bgcolor="eeeeee"> 
-    <td width="44%">&nbsp;</td>
+    <td width="26%">&nbsp;</td>
+    <td width="5%">&nbsp;</td>
+    <td width="55%">&nbsp;</td>
     <td width="9%">&nbsp;</td>
-    <td width="18%">&nbsp;</td>
-    <td width="14%">&nbsp;</td>
-    <td width="15%">&nbsp;</td>
+    <td width="5%">&nbsp;</td>
   </tr>
 </table>
 <h2>&nbsp;</h2>

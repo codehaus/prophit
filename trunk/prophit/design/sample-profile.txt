@@ -1,0 +1,160 @@
+
+Objective
+---------
+To be able to easily open a sample profile from the JavaWebStart installer
+
+Plan
+----
+Menu option File/Sample Profiles/<profile type>/<list of samples>
+Menu option File/Sample Profiles/About - link to a web page which describes the samples
+
+Sample list should be data-driven
+Sample doc URL should be in a resource
+Samples should load from a compressed JAR file as a resource
+
+*Sample menu item names will not be localized
+
+Sample list:
+prof/HelloList
+hprof/HelloList
+hprof/hsqldb
+
+Design
+------
+samples menu described by:
+
+sampleProfiles.properties:
+documentation.url=http://ironworks.no-ip.org/orbit/samples.html
+prof-HelloList.profileType=prof
+prof-HelloList.name=HelloList
+prof-HelloList.dataResource=hello.prof
+hprof-HelloList.profileType=hprof
+hprof-HelloList.name=HelloList
+hprof-HelloList.dataResource=hello.hprof.txt
+hprof-hsqldb.profileType=hprof
+hprof-hsqldb.name=hsqldb
+hprof-hsqldb.dataResource=hsqldb.hprof.txt
+
+TestSampleProfiles:
+	setUp():
+		SampleProfiles samples = SampleProfiles.load("sampleProfiles.properties")
+	
+	testDocURL():
+		assertEquals("http://ironworks.no-ip.org/orbit/samples.html", samples.getDocURL())
+
+	testProfileData():	
+		assertEquals(2, samples.getProfileTypes().size())
+
+		pt = samples.getProfileTypes().get(0)
+		assertEquals("prof", pt.getName())
+		assertEquals(1, pt.getProfiles().size())
+		
+		profile = pt.getProfiles().get(0)
+		assertEquals("HelloList", profile.getName())
+		
+		pt = samples.getProfileTypes().get(1)
+		assertEquals("hprof", pt.getName())
+		assertEquals(2, pt.getProfiles().size())
+		
+		profile = pt.getProfiles().get(0)
+		assertEquals("HelloList", profile.getName())
+		profile = pt.getProfiles().get(1)
+		assertEquals("hsqldb", profile.getName())
+
+	testFileExtract():
+		prof = samples.getProfileTypes().get(0)
+		helloList = prof.getProfiles().get(0)
+		File tmpFile = helloList.getFile()
+		assertEquals(103702, tmpFile.length())
+
+		hprof = samples.getProfileTypes().get(1)
+		helloList = hprof.getProfiles().get(0)
+		File tmpFile = helloList.getFile()
+		assertEquals(64121, tmpFile.length())
+
+SampleProfiles:
+	ArrayList profileTypes = new ArrayList()
+	String docURL
+
+	SampleProfiles load(String resourceName):
+		InputStream is = getClass().getResourceAsStream(resourceName)
+		Properties props = new Properties()
+		props.load(is)
+		return new SampleProfiles(props)
+	
+	SampleProfiles(Properties sampleDataFiles):
+		sampleNames = HashSet()
+		for name in sampleDataFiles.getPropertyNames():
+			if "documentation.url".equals(name):
+				docURL = sampleDataFiles.getProperty(name)
+			else:
+				tok = StringTokenizer(name)
+				sampleName = tok.nextToken()
+				value = tok.nextToken()
+				sampleNames.add(sampleName)
+				if "profileType".equals(value):
+					pt = getProfileType(value, false)
+					if pt == null:
+						pt = new SampleProfileType(value)
+						profileTypes.add(pt)
+
+		if docURL == null:
+			throw new RuntimeException("documentation.url not found in " + sampleDataFiles)
+
+		for sampleName in sampleNames:
+			profileTypeName = sampleDataFiles.getProperty(sampleName + ".profileType")
+			name = sampleDataFiles.getProperty(sampleName + ".name")
+			dataResource = sampleDataFiles.getProperty(sampleName + ".dataResource")
+			pt = getProfileType(profileTypeName, true)
+			pt.add(new SampleProfile(name, dataResource))
+
+	getDocURL():
+		return docURL
+
+	getProfileTypes():
+		return profileTypes
+
+	private getProfileType(String name, boolean must):
+		for pt in profileTypes:
+			if name.equals(pt.getName()):
+				return pt
+		if must:
+			throw new RuntimeException("Profile type " + name + " not found in " + profileTypes)
+		else:
+			return null
+
+SampleProfileType:
+	profiles = new ArrayList()
+	
+	ProfileType(name):
+		this.name = name
+
+	addProfile(SampleProfile profile):
+		profiles.add(profile)
+
+	getProfiles():
+		return profiles
+		
+SampleProfile:
+	SampleProfile(name, resource):
+		this.name = name
+		this.resource = resource
+
+	String getName():
+		return name
+
+	getFile():
+		File tempFile = null
+		try:
+			InputStream is = getClass().getClassLoader().getResourceAsStream(resource)
+			tempFile = File.createTempFile(name, null)
+			FileOutputStream fos = new FileOutputStream(tempFile)
+			int read
+			byte[] bytes = new byte[8192]
+			while ( ( read = is.read(bytes) ) != -1 ):
+				fos.write(bytes, 0, read)
+			fos.close()
+			return tempFile
+		catch IOException:
+			throw new RuntimeException("Unable to extract sample profile " + name + " to temp file " + tempFile)
+		

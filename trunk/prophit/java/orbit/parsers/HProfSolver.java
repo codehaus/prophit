@@ -75,6 +75,7 @@ public class HProfSolver
 			CallID callID = (CallID)i.next();
 			RCC parent = callID.getParentRCC();
 			fractions[callID.getKey()] = parent.getCallCount() / (double)totalCallsByRCC[callID.getRCC().getKey()];
+			// System.out.println(callID.getKey() + " = " + fractions[callID.getKey()]);
 		}
 		
 		return fractions;
@@ -109,15 +110,21 @@ public class HProfSolver
 					//   its inclusive time
 					traversalStack.clear();
 					traversalStack.addAll(callStack);
-					double fraction = fractions[callID.getKey()];
+					double fraction = 1.0; // fractions[callID.getKey()];
+					for ( IntIterator i = callStack.iterator(); i.hasNext(); )
+					{
+						fraction *= fractions[i.next()];
+					}
 					// Start with the parent of the current stack
 					traversalStack.pop();
 					while ( !traversalStack.isEmpty() )
 					{
 						int parentID = traversalStack.pop();
 						CallID parentCall = (CallID)callIDs.get(parentID);
-						inclusiveTimeAdjustments[parentCall.getRCC().getKey()] += callID.getRCC().getTime() * fraction;
-						fraction *= fractions[parentID];
+						double adjustment = callID.getRCC().getTime() * fraction;
+						// System.out.println("Adding " + adjustment + " to " + parentCall.getRCC());
+						inclusiveTimeAdjustments[parentCall.getRCC().getKey()] += adjustment;
+						// fraction *= fractions[parentID];
 					}
 				}
 				// return callStack.size() > STACK_THRESHOLD && fraction * callID.getRCC().getTime() > GRAPH_THRESHOLD;
