@@ -19,6 +19,9 @@ import java.awt.geom.Rectangle2D;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
+/**
+ * Renders the solid view of the tower diagram.
+ */
 public class TowerDiagramSolid
 	extends AbstractDisplayListComponent
 	implements GLEnum
@@ -58,6 +61,5 @@ public class TowerDiagramSolid
 		layout.execute();
 		
 		model.setGLNameToCallMap(renderer.getGLNameToCallMap());
-		model.setNameToCallListMap(renderer.getNameToCallListMap());
 	}
 }

@@ -71,6 +71,15 @@ class TowerDiagramWireFrame(AbstractDisplayListComponent):
 															 model.getLevels(),
 															 rootRectangle);
 		renderer = new BlockRenderer(gl, BlockRenderer.RENDER_WIREFRAME, colorModel);
+
+		if model.isWireframe():
+			renderer.addSolidBlock(model.getMouseOverCall())
+			for name in model.getNameSearchNames():
+				renderer.addSolidBlocks(model.getCallsByName(name))
+			if model.getSelectedCall() != null:
+				renderer.addSolidBlock(model.getSelectedCall())
+				renderer.addSolidBlocks(model.getCallsByName(model.getSelectedCall().getName()))
+
 		layout.setCallback(renderer);
 		
 		gl.glDisable(GL_DITHER);
@@ -88,14 +97,6 @@ class TowerDiagramSolid(AbstractDisplayListComponent):
 															 model.getLevels(),
 															 rootRectangle);
 		renderer = new BlockRenderer(gl, BlockRenderer.RENDER_SOLID, colorModel);
-		if model.isWireframe():
-			renderer.addSolidBlock(model.getMouseOverCall())
-			for name in model.getNameSearchNames():
-				renderer.addSolidBlocks(model.getCallsByName(name))
-			if model.getSelectedCall() != null:
-				renderer.addSolidBlock(model.getSelectedCall())
-				renderer.addSolidBlocks(model.getCallsByName(model.getSelectedCall().getName()))
-				
 		layout.setCallback(renderer);
 		
 		gl.glEnable(GL_DITHER);
@@ -122,10 +123,10 @@ class BlockRenderer:
 	public boolean beginCall(CallAdapter call, Rectangle2D.Double rectangle, int depth):
 		if size < SIZE_THRESHOLD: return false
 
-		if renderMode == RENDER_WIREFRAME:
-			renderAsLines()
-		else if renderMode == RENDER_SOLID && ( solidCalls == null || solidCalls.contains(call.getCall()) ):
+		if renderMode == RENDER_SOLID || ( solidCalls != null && solidCalls.contains(call.getCall()) ):
 			renderAsQuads()
+		else // if renderMode == RENDER_WIREFRAME
+			renderAsLines()
 			
 		return true
 

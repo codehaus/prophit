@@ -1,8 +1,11 @@
 package orbit.gui;
 
+import orbit.gui.tower.NameListAlgorithm;
 import orbit.gui.tower.TowerImageComponent;
 import orbit.gui.tower.TowerDiagramSolid;
 import orbit.gui.tower.TowerDiagramWireFrame;
+import orbit.gui.tower.SelectedCallsComponent;
+import orbit.gui.tower.SearchResultsComponent;
 
 import orbit.model.Call;
 import orbit.model.CallGraph;
@@ -75,6 +78,9 @@ class BlockDiagramView
 	private List towerImageComponents = new ArrayList();
 	private TowerImageComponent wireFrameComponent = new TowerDiagramWireFrame();
 	private TowerImageComponent solidComponent = new TowerDiagramSolid();
+	private SelectedCallsComponent selectedCallsComponent = new SelectedCallsComponent();
+	private SearchResultsComponent searchResultsComponent = new SearchResultsComponent();
+	private NameListAlgorithm nameListAlgorithm = new NameListAlgorithm();
 	
 	/* These variables keep their values across calls to setModel */
 	private int selectedCallsList = -1;
@@ -88,6 +94,8 @@ class BlockDiagramView
 
 		towerImageComponents.add(wireFrameComponent);
 		towerImageComponents.add(solidComponent);
+		towerImageComponents.add(selectedCallsComponent);
+		towerImageComponents.add(searchResultsComponent);
 		for ( Iterator i = towerImageComponents.iterator(); i.hasNext(); )
 		{
 			TowerImageComponent c = (TowerImageComponent)i.next();
@@ -112,29 +120,22 @@ class BlockDiagramView
 		this.renderMode = Constants.RENDER_SOLID;
 
 		this.model = blockModel;
+		this.model.addListener(new PropertyChangeListener()
+			{
+				public void propertyChange(PropertyChangeEvent evt)
+				{
+					repaint = true;
+					checkUpdate();
+				}
+			});
 
+		nameListAlgorithm.setModel(blockModel);
 		for ( Iterator i = towerImageComponents.iterator(); i.hasNext(); )
 		{
 			TowerImageComponent c = (TowerImageComponent)i.next();
 			c.setModel(blockModel);
 		}
 		
-		this.model.addListener(new PropertyChangeListener()
-			{
-				public void propertyChange(PropertyChangeEvent evt)
-				{
-					if ( BlockDiagramModel.RENDER_CALL_PROPERTY.equals(evt.getPropertyName()) ||
-						 BlockDiagramModel.NUM_LEVELS_PROPERTY.equals(evt.getPropertyName()) ||
-						 BlockDiagramModel.SELECTED_CALL_PROPERTY.equals(evt.getPropertyName()) ||
-						 BlockDiagramModel.NAME_SEARCH_STRING_PROPERTY.equals(evt.getPropertyName()) )
-					{
-						generateSelectedLists = true;
-					}
-					repaint = true;
-					checkUpdate();
-				}
-			});
-
 		repaint();
 	}
 
@@ -257,7 +258,7 @@ class BlockDiagramView
 			return;
 		}
 
-		compileDisplayLists();
+		nameListAlgorithm.execute();
 		
 		// Clear the color and depth buffers.
 		gl.glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -273,20 +274,20 @@ class BlockDiagramView
 						  0, 0, 0, 0, 0, 1);
 		gl.glTranslated(-0.5, -0.5, -0.5);
 
-		TowerImageComponent c = null;
-		if ( renderMode == Constants.RENDER_WIREFRAME || model.isWireframe() )
+		wireFrameComponent.initialize(gl, glu);
+		wireFrameComponent.render();
+		if ( renderMode == Constants.RENDER_SOLID && !model.isWireframe() )
 		{
-			c = wireFrameComponent;
+			solidComponent.initialize(gl, glu);
+			solidComponent.render();
 		}
-		else // if ( renderMode == Constants.RENDER_SOLID )
-		{			
-			c = solidComponent;
-		}
-		c.initialize(gl, glu);
-		c.render();
 
-		gl.glCallList(selectedCallsList);
+		selectedCallsComponent.initialize(gl, glu);
+		selectedCallsComponent.render();
 
+		searchResultsComponent.initialize(gl, glu);
+		searchResultsComponent.render();
+		
 		drawDiagramRoot();
 		drawMouseOverCall();
 		drawLegend();
@@ -532,97 +533,6 @@ class BlockDiagramView
 		textEnd();
 	}
 
-	void drawSearchedForCalls()
-	{
-		java.util.List callNames = model.getNameSearchNames();
-		for ( Iterator i = callNames.iterator(); i.hasNext(); )
-		{
-			String name = (String)i.next();
-			for ( Iterator j = model.getCallsByName(name).iterator(); j.hasNext(); )
-			{
-				Call call = (Call)j.next();
-				drawSelected(call, colorModel.getSearchMatchColor());
-			}
-		}
-	}
-
-	void drawSelectedCalls()
-	{
-		Call selectedCall = model.getSelectedCall();
-		Log.debug(LOG, "selectedCall is ", selectedCall);
-		if ( selectedCall == null )
-			return;
-
-		if ( !drawSelected(selectedCall, colorModel.getSelectedCallColor()) )
-		{
-			model.setSelectedCall(null);
-			return;
-		}
-
-		for ( Iterator i = model.getCallsByName(selectedCall.getName()).iterator(); i.hasNext(); )
-		{
-			Call call = (Call)i.next();
-			if ( !call.equals(selectedCall) )
-			{
-				drawSelected(call, colorModel.getMatchingSelectedCallColor());
-			}
-		}
-	}
-
-	/**
-	 * @return true if the selectedCall has a rectangle on the screen.
-	 */
-	boolean drawSelected(Call selectedCall, Color color)
-	{
-		ComputeCallLocation computeLocation = new ComputeCallLocation(selectedCall, model.getRootRenderState().getRenderCall());
-		computeLocation.execute();
-
-		Rectangle2D.Double rectangle = computeLocation.getRectangle();
-
-		if ( rectangle == null )
-		{
-			Log.debug(LOG, "selectedCall ", selectedCall, " not found in diagram");
-			return false;
-		}
-		
-		int depth = computeLocation.getRenderDepth();
-		double bottomZ = ( depth ) * Constants.BLOCK_HEIGHT;
-		double midZ = ( depth + 0.5 ) * Constants.BLOCK_HEIGHT;
-		double topZ = ( depth + 1.0 ) * Constants.BLOCK_HEIGHT;
-
-		Log.debug(LOG, "Rendering selectedCall ", selectedCall, " at ", rectangle);
-
-		gl.glDisable(GL_LIGHTING);
-		
-		GLUtils.glColor(gl, color);
-
-		// Wrap the selected rectangle up like a christmas present
-		gl.glBegin(GL_LINE_LOOP);
-		gl.glVertex3d(rectangle.x, rectangle.y, midZ);
-		gl.glVertex3d(rectangle.x + rectangle.width, rectangle.y, midZ);
-		gl.glVertex3d(rectangle.x + rectangle.width, rectangle.y + rectangle.height, midZ);
-		gl.glVertex3d(rectangle.x, rectangle.y + rectangle.height, midZ);
-		gl.glEnd();
-
-		gl.glBegin(GL_LINE_LOOP);
-		gl.glVertex3d(rectangle.x + rectangle.width / 2, rectangle.y, bottomZ);
-		gl.glVertex3d(rectangle.x + rectangle.width / 2, rectangle.y, topZ);
-		gl.glVertex3d(rectangle.x + rectangle.width / 2, rectangle.y + rectangle.height, topZ);
-		gl.glVertex3d(rectangle.x + rectangle.width / 2, rectangle.y + rectangle.height, bottomZ);
-		gl.glEnd();
-
-		gl.glBegin(GL_LINE_LOOP);
-		gl.glVertex3d(rectangle.x, rectangle.y + rectangle.height / 2, bottomZ);
-		gl.glVertex3d(rectangle.x, rectangle.y + rectangle.height / 2, topZ);
-		gl.glVertex3d(rectangle.x + rectangle.width, rectangle.y + rectangle.height / 2, topZ);
-		gl.glVertex3d(rectangle.x + rectangle.width, rectangle.y + rectangle.height / 2, bottomZ);
-		gl.glEnd();
-		
-		gl.glEnable(GL_LIGHTING);
-
-		return true;
-	}
-	
 	void drawMouseOverCall()
 	{
 		String text = "Mouse over  : ";
@@ -752,30 +662,6 @@ class BlockDiagramView
 		glj.gljFree();
 
 		return mouseOverCall;
-	}
-	
-	synchronized void compileDisplayLists()
-	{
-		if ( generateSelectedLists )
-		{
-			generateSelectedLists = false;
-			
-			if ( selectedCallsList == -1 )
-			{
-				selectedCallsList = gl.glGenLists(1);
-			}
-			else
-			{
-				gl.glDeleteLists(selectedCallsList, 1);
-			}
-
-			gl.glNewList(selectedCallsList, GL_COMPILE);
-			
-			drawSelectedCalls();
-			drawSearchedForCalls();
-			
-			gl.glEndList();
-		}
 	}
 	
 	private void checkUpdate()

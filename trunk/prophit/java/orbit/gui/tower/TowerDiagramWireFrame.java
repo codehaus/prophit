@@ -20,6 +20,11 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.Iterator;
 
+/**
+ * Renders the wire-frame view of the tower diagram. If the BlockDiagramModel is in wireframe mode, then
+ * blocks which are selected or search-results are rendered as solid. This makes them stand out from the
+ * rest of the diagram.
+ */
 public class TowerDiagramWireFrame
 	extends AbstractDisplayListComponent
 	implements GLEnum

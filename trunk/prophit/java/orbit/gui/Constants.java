@@ -19,4 +19,7 @@ public interface Constants
 	 * If less, it is rendered in the base block color
 	 */ 
 	public static final double FRACTION_THRESHOLD = 0.30;
+
+	/** Blocks smaller than this are not rendered at all */
+	public static final double MIN_BLOCK_SIZE_THRESHOLD = 3.0;
 }
