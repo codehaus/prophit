@@ -54,7 +54,7 @@ MM_reloadPage(true);
   <table cellspacing="0" cellpadding="4" width="100%">
     <tr>
 			
-      <td class="TopMenu"> Last Published: 10/27/2002 </td>
+      <td class="TopMenu"> Last Published: 10/28/2002 </td>
 			<td>
 				
         <div align="right"> <span class="TopMenu"><a href="../index.html">prophIt</a> 
@@ -74,7 +74,7 @@ MM_reloadPage(true);
           <p><span class="MenuHeader">prophIt</span><br>
             <span class="MenuItem"> - <a href="../index.html">Home Page</a><br>
             - <a href="../news.html">News and Status</a><br>
-            - <a href="../product-plan.html">Product Plan</a><br>
+            - <a href="../product-plan.html">Futures</a><br>
             - <a href="../team.html">The Team</a><br>
             - <a href="../download.html">Download</a></span><span class="MenuItem"><br>
             </span></p>
@@ -96,7 +96,7 @@ MM_reloadPage(true);
 					<tr>
 						<td><div id="mainContentLayer">
 						<!-- #BeginEditable "Main%20Content%20Region" --> 
-                  <div class="header"><font size=4>hprof</font></div>
+                  <div class="header"><font size=4>Profilers: hprof</font></div>
                   <!--table border="0" cellspacing="0" cellpadding="0" bgcolor="eeeeee">
                     <tr> 
                       <td width="179" nowrap>Previous : <a href="dash-prof.html">Java 
@@ -108,6 +108,7 @@ MM_reloadPage(true);
                       <td width="234" nowrap>Next : </td>
                     </tr>
                   </table-->
+				  <blockquote>
                   <p>Originally shipping with JDK 1.3 (and also available with 
                     JDK 1.4), <code>hprof</code> is essentially an upgrade to 
                     <code>-prof</code>. It is invoked from the Java command line 
@@ -141,7 +142,7 @@ MM_reloadPage(true);
                   <p>In <code>times</code> mode, <code>hprof</code> keeps track 
                     of every single function call that the Java program makes, 
                     adding up all the times spent in each function. </p>
-                  <h4>Advantages</h4>
+                  <div class="header">Advantages</div>
                   <ul>
                     <li>Built into the JDK</li>
                     <li><code>cpu=samples</code> option does not dramatically 
@@ -151,7 +152,7 @@ MM_reloadPage(true);
                       graph data</li>
                     <li>Correctly profiles multi-threaded applications</li>
                   </ul>
-                  <h4>Disadvantages </h4>
+                  <div class="header">Disadvantages </div>
                   <ul>
                     <li>May require HotSpot to be disabled in order to function 
                       properly, especially for multi-threaded programs running 
@@ -161,7 +162,7 @@ MM_reloadPage(true);
                     <li><code>cpu=samples</code> is not accurate for programs 
                       which have very short running times</li>
                   </ul>
-                  <h4>Tips</h4>
+                  <div class="header">Tips</div>
                   <ul>
                     <li>Specify <code>depth=6</code> or greater, to get better 
                       CPU data on functions which may have many different callers. 
@@ -175,9 +176,11 @@ MM_reloadPage(true);
                     <li>Don't use <code>cpu=times</code>, except for profiling 
                       small, single-threaded test programs</li>
                   </ul>
+				  </blockquote>
                   <a name="resources">
-                  <h4>Resources</h4>
+                  <div class="header">Resources</div>
                   </a> 
+				  <blockquote>
                   <ul>
                     <li><a href="http://www.javaworld.com/javaworld/jw-12-2001/jw-1207-hprof.html%20">http://www.javaworld.com/javaworld/jw-12-2001/jw-1207-hprof.html 
                       </a></li>
@@ -194,12 +197,13 @@ MM_reloadPage(true);
                       describing in detail the design the profiling support in 
                       the Java Virtual Machine</li>
                   </ul>
+				  </blockquote>
 				  <div class="docnav" align="center">
 				  	Previous : <a href="dash-prof.html">Java 
                         <code>-prof</code></a>  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 					Up : <a href="profiler-types.html">Profiler 
                         Types</a> 		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-					Next :   &nbsp;&nbsp;
+					   &nbsp;&nbsp;
 				  </div>				  
                   <!--table border="0" cellspacing="0" cellpadding="0" bgcolor="eeeeee">
                     <tr> 
@@ -212,7 +216,7 @@ MM_reloadPage(true);
                       <td width="234" nowrap>Next : </td>
                     </tr>
                   </table-->
-                  <h1>&nbsp;</h1>
+                  
                   <!-- #EndEditable -->
 						</div></td>
 					</tr>
