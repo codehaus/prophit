@@ -22,6 +22,7 @@
     <j2se version = "1.3+" max-heap-size="128M" />
     
     <jar href = "lib/orbit.jar"/>
+    <jar href = "lib/data.jar"/>
     <jar href = "lib/log4jME.jar"/>
     <jar href = "lib/gl4java.jar"/>
     <jar href = "lib/gl4java-glutfonts.jar"/>
