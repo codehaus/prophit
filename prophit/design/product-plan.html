@@ -15,7 +15,7 @@
 
 
 <h2>Overview</h2>
-Priorities are ranked from 1 to 5, with 5 being the highest.
+Priorities range from 1 to 5, with 5 being the highest.
 <h2>Open Features</h2>
 <table width="90%" border="0" cellspacing="1">
   <tr> 
@@ -32,18 +32,6 @@ Priorities are ranked from 1 to 5, with 5 being the highest.
   </tr>
   <tr bgcolor="eeeeee"> 
     <td width="70%">'Getting Started' guide (cookbook)</td>
-    <td width="10%">5</td>
-    <td width="20%">&nbsp;</td>
-    <td width="20%">&nbsp;</td>
-  </tr>
-  <tr bgcolor="eeeeee"> 
-    <td width="70%">Document the hsqldb hprof sample</td>
-    <td width="10%">5</td>
-    <td width="20%">&nbsp;</td>
-    <td width="20%">&nbsp;</td>
-  </tr>
-  <tr bgcolor="eeeeee"> 
-    <td width="70%">Document the HelloList hprof sample</td>
     <td width="10%">5</td>
     <td width="20%">&nbsp;</td>
     <td width="20%">&nbsp;</td>
@@ -131,23 +119,23 @@ Priorities are ranked from 1 to 5, with 5 being the highest.
     <td width="20%">&nbsp;</td>
     <td width="20%">&nbsp;</td>
   </tr>
-  <tr bgcolor="eeeeee"> 
-    <td width="70%">Block diagram and call details should be resizeable. Currently, if you re-size the frame, the block diagram is grown or shrunk in repsonse. But the call details panel always stays at the same size</td>
-    <td width="10%">4</td>
+  <tr bgcolor="eeeeee">
+    <td width="70%">Memory usage appears to grow over time as more profiles are 
+      opened and the previous ones (presumably) closed</td>
+    <td width="10%">5</td>
     <td width="20%">&nbsp;</td>
     <td width="20%">&nbsp;</td>
   </tr>
   <tr bgcolor="eeeeee"> 
     <td width="70%">New Orbit builds should not require the user to re-download 
-      the supporting libraries (log4jme, gl4java)</td>
+      the supporting libraries (log4jme, gl4java). These JARs are regenerated during the build and then re-signed</td>
     <td width="10%">4</td>
     <td width="20%">&nbsp;</td>
     <td width="20%">&nbsp;</td>
   </tr>
-  <tr bgcolor="eeeeee">
-    <td width="70%">Memory usage appears to grow over time as more profiles are 
-      opened and the previous ones (presumably) closed</td>
-    <td width="10%">4</td>
+  <tr bgcolor="eeeeee"> 
+    <td width="70%">Block diagram and call details should be resizeable. Currently, if you re-size the frame, the block diagram is grown or shrunk in repsonse. But the call details panel always stays at the same size</td>
+    <td width="10%">3</td>
     <td width="20%">&nbsp;</td>
     <td width="20%">&nbsp;</td>
   </tr>
@@ -179,7 +167,7 @@ Priorities are ranked from 1 to 5, with 5 being the highest.
     <td width="20%">&nbsp;</td>
   </tr>
   <tr bgcolor="eeeeee"> 
-    <td width="70%">The first time a diagram is opened, the Orbit frame changes size. This doesn't happen if JFrame.pack() is not called after the content panel is added to the frame. But if pack() is not called, the GL canvas for the block diagram renders to the top-left of where it should be, obscuring the toolbar, and the call details tables are not laid out properl.</td>
+    <td width="70%">The first time a diagram is opened, the Orbit frame changes size. This doesn't happen if JFrame.pack() is not called after the content panel is added to the frame. But if pack() is not called, the GL canvas for the block diagram renders to the top-left of where it should be, obscuring the toolbar, and the call details tables are not laid out properly.</td>
     <td width="10%">2</td>
     <td width="20%">&nbsp;</td>
     <td width="20%">&nbsp;</td>
@@ -275,6 +263,20 @@ Priorities are ranked from 1 to 5, with 5 being the highest.
     <th width="55%" bgcolor="ccccff" height="23">Details</th>
     <th width="9%" bgcolor="ccccff" height="23">Date Closed</th>
     <th width="5%" bgcolor="ccccff" height="23">Task Doc</th>
+  </tr>
+  <tr bgcolor="eeeeee"> 
+    <td width="26%">Document the hsqldb hprof sample</td>
+    <td width="5%">5</td>
+    <td width="55%"><a href="../web/hsqldb-hprof-sample.html">hsqldb-hprof-sample.html</a></td>
+    <td width="9%">2002/09/15</td>
+    <td width="5%">&nbsp;</td>
+  </tr>
+  <tr bgcolor="eeeeee"> 
+    <td width="26%">Document the HelloList hprof sample</td>
+    <td width="5%">5</td>
+    <td width="55%"><a href="../web/hello-list-hprof-sample.html">hello-list-hprof-sample.html</a></td>
+    <td width="9%">2002/09/15</td>
+    <td width="5%">&nbsp;</td>
   </tr>
   <tr bgcolor="eeeeee">
     <td width="26%">As new profiles are opened, the Orbit frame grows bigger with 
