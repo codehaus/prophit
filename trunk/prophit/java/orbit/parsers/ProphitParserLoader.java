@@ -146,7 +146,8 @@ public class ProphitParserLoader implements Parser, Loader
 	 */
 	public void execute(ModelBuilder builder) throws ParseException
 	{
-		try {
+		try 
+		{
 			// initialize the xml parser
 			IXMLParser xmlparser = (IXMLParser)XMLParserFactory.createDefaultXMLParser();
 			IXMLReader xmlreader = new XMLReader(this.reader);
@@ -156,13 +157,9 @@ public class ProphitParserLoader implements Parser, Loader
 	    
 			Log.debug(LOG, "ELEMENT: ", callgraph.getFullName());
 			//Log.debug(LOG, "User: ", callgraph.getFirstChildNamed(XMLConstants.USER).getContent());
-
+			
 			this.callgraph = makeNewCallGraph( callgraph );
-
-			//XMLWriter writer = new XMLWriter(System.out);
-			//writer.write(callgraph);
 		}
-
 		catch (XMLException x)
 		{
 			Log.error(LOG, x);
@@ -230,7 +227,7 @@ public class ProphitParserLoader implements Parser, Loader
 								Long.parseLong(measurement.getAttribute(XMLConstants.TIME)), 
 								-1, 
 								Integer.parseInt(measurement.getAttribute(XMLConstants.ID)));
-	
+		//LOG.info(rcc.toString());
 		return ( rcc );
 	}
 
@@ -257,7 +254,7 @@ public class ProphitParserLoader implements Parser, Loader
 		CallID cid = null;
 	
 		cid = new CallID( rccArray[rccID], ((parentID != -1) ?  rccArray[parentID] : null), key );
-		Log.debug(LOG, "New CallID : ", cid);
+		LOG.info( "New CallID : " + cid.toString());
 		return (cid);
 	}
 
@@ -314,8 +311,8 @@ public class ProphitParserLoader implements Parser, Loader
 			invocation = (IXMLElement)invocations.elementAt(i);
 			fraction = makeNewCallFraction(invocation);
 			// if fraction != -1 then we have a callfraction to process as well (not a proxy call)
-			c = makeNewCallID(invocation, rccArray, (fraction != -1) ? callkey + i : -1);
-	    
+			c = makeNewCallID(invocation, rccArray, (fraction != -1) ? callkey++ : -1);
+	      LOG.info("callkey is : " + callkey);
 			// we use getKey() to place the callID into the index. 
 			// quite simply, that is what the CallGraph constructor is expecting, that 
 			// a callID's key will match the parent RCC key, or else it will be a proxy call.
@@ -349,7 +346,7 @@ public class ProphitParserLoader implements Parser, Loader
 		processInvocations( vInvocations, rccArray, calls, callFractions );
 
 		LOG.info("Finished Invocations. " + calls.length);
-	
+		LOG.info("ACTUAL ITEMS: " + (vInvocations.size()));
 		CallGraph cg;
 		try 
 		{
