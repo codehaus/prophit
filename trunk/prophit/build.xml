@@ -94,8 +94,11 @@
     <javac classpathref="compile.class.path" srcdir="test/java" debug="yes" destdir="${build}/classes" />
   </target>
 
-  <target name="test" depends="jar,compile-tests">
+  <target name="build" depends="compile,compile-tests" />
+
+  <target name="test" depends="jar,compile,compile-tests">
     <java fork="true" classpathref="test.class.path" classname="test.Test">
+		<sysproperty key="basedir" value="${basedir}" />
 	</java>
   </target>
 

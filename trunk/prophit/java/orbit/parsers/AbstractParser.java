@@ -58,13 +58,20 @@ public abstract class AbstractParser
 	 */
 	public abstract boolean isFileFormatRecognized();
 
-	public abstract Collection getCallIDs();
+	public abstract List getCallIDs();
 	
-	public abstract Collection getProxyCallIDs();
+	public abstract List getProxyCallIDs();
 
 	public abstract void execute() throws ParseException;
-	
-	protected Collection getProxyCallIDs(Collection callIDs)
+
+	/**
+	 * Default implementation does nothing.
+	 */
+	public void postProcess(double[] fractions)
+	{
+	}
+
+	protected List getProxyCallIDs(Collection callIDs)
 	{
 		ArrayList proxyCalls = new ArrayList(callIDs.size());
 		for ( Iterator i = callIDs.iterator(); i.hasNext(); )

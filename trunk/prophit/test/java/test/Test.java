@@ -6,6 +6,8 @@ import orbit.parsers.*;
 import orbit.solver.*;
 import orbit.util.*;
 
+import junit.framework.TestSuite;
+
 import java.awt.geom.Rectangle2D;
 import java.io.*;
 import java.util.*;
@@ -20,8 +22,11 @@ public class Test
 		{
 			new TestConstructCallsAlgorithm("testBasicGraph").testBasicGraph();
 			new TestConstructCallsAlgorithm("testGaps").testGaps();
+			new TestConstructCallsAlgorithm("testAmbiguity").testAmbiguity();
 
 			new TestStackTrace("testStackTrace").testStackTrace();
+
+			new TestHProfParser("testParse").testParse();
 
 			testCallStack();
 			testBasic();
@@ -125,13 +130,13 @@ public class Test
 
 	public static void testHProfParserHello() throws Exception
 	{
-		Parser parser = ParserFactory.instance().createParser(new File("data/hello.hprof.txt"));
+		Parser parser = ParserFactory.instance().createParser(new File(System.getProperty("basedir") + "/data/hello.hprof.txt"));
 		parser.execute();
 	}
 
 	public static void testDashProfParserSimple() throws Exception
 	{
-		Parser parser = ParserFactory.instance().createParser(new File("data/simple.prof"));
+		Parser parser = ParserFactory.instance().createParser(new File(System.getProperty("basedir") + "/data/simple.prof"));
 		parser.execute();
 		Collection callIDs = parser.getCallIDs();
 		Collection proxyCallIDs = parser.getProxyCallIDs();
@@ -152,7 +157,7 @@ public class Test
 	
 	public static void testSimpleProfileSolver() throws Exception
 	{
-		DashProfParser parser = new DashProfParser(new FileReader("data/simple.prof"));
+		DashProfParser parser = new DashProfParser(new FileReader(System.getProperty("basedir") + "/data/simple.prof"));
 		parser.execute();
 		Collection callIDs = parser.getCallIDs();
 		Collection proxyCallIDs = parser.getProxyCallIDs();
@@ -190,7 +195,7 @@ public class Test
 	{
 		long parseStart = System.currentTimeMillis();
 		
-		DashProfParser parser = new DashProfParser(new FileReader("data/hsqldb.prof"));
+		DashProfParser parser = new DashProfParser(new FileReader(System.getProperty("basedir") + "/data/hsqldb.prof"));
 		parser.execute();
 
 		long parseEnd = System.currentTimeMillis();
