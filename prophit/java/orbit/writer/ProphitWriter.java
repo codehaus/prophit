@@ -64,6 +64,7 @@ public class ProphitWriter
 		{
 			if (rccs[i] != null) 
 			{
+				//LOG.info("rcc at index: " + i + " is: " + rccs[i]);
 				IXMLElement measurement = rccToXML(rccs[i]);
 				parent.addChild(measurement);
 			} //else LOG.info("rcc at index: " + i);
@@ -116,9 +117,15 @@ public class ProphitWriter
 
 	public IXMLElement rccToXML(RCC rcc)
 	{
+		//System.out.println("TIME: " + rcc.getTime());
+		//System.out.println(rcc.toString());
 		IXMLElement measurement = new XMLElement(XMLConstants.MEASUREMENT);
 		measurement.setAttribute(XMLConstants.ID, String.valueOf(rcc.getKey()));
-		measurement.setAttribute(XMLConstants.TIME, String.valueOf(rcc.getTime()));
+		if (rcc.getTime() != -1) 
+			measurement.setAttribute(XMLConstants.TIME, String.valueOf(rcc.getTime()));
+		else
+			measurement.setAttribute(XMLConstants.TIME, String.valueOf(rcc.getExclusiveTime()));
+
 		measurement.setAttribute(XMLConstants.NUMCALLS, String.valueOf(rcc.getCallCount()));
 		IXMLElement stacktrace = stackTraceToXML(rcc.getStack());		
 		measurement.addChild(stacktrace);
