@@ -22,19 +22,19 @@ class BlockRenderer
 	public static final double HEIGHT = 0.05;
 
 	private static final double SIZE_THRESHOLD = 3.0;
-	// If a function makes up more than this amount of time of the parent call, its coloring tends towards red
-	// If less, it tends towards blue
-	private static final double FRACTION_THRESHOLD = 0.30;
+	// If a function makes up more than this amount of time of the parent call, its coloring is shaded
+	// If less, it is rendered in the base block color
+	protected static final double FRACTION_THRESHOLD = 0.30;
 
 	private final GLFunc            gl;
 	private final int               renderMode;
+	private final BlockDiagramView.ColorModel colorModel;
 	private final int[]             viewport = new int[4];
 	// TODO: can use Call keys as GL names
 	private final HashMap glNameToCallMap = new HashMap();
 	private final HashMap nameToCallListMap = new HashMap();
 
-	private int nextName = 0;
-	private double brightness = 1.3;
+	private int    nextName   = 0;
 	private TimeMeasure measure = TimeMeasure.TotalTime;
 
 	/**
@@ -44,17 +44,18 @@ class BlockRenderer
 	 * @param gl the interface to OpenGL
 	 * @param renderMode one of RENDER_SOLID or RENDER_WIREFRAME
 	 */
-	public BlockRenderer(GLFunc gl, int renderMode)
+	public BlockRenderer(GLFunc gl, int renderMode, BlockDiagramView.ColorModel colorModel)
 	{
 		this.gl = gl;
 		this.renderMode = renderMode;
+		this.colorModel = colorModel;
 
 		gl.glGetIntegerv(GL_VIEWPORT, viewport);
 		
 		if ( renderMode != RENDER_SOLID && renderMode != RENDER_WIREFRAME )
 			throw new IllegalArgumentException("Invalid renderMode : " + renderMode);
 	}
-
+	
 	/**
 	 * If the digram is rendered solidly, the BlockRenderer returns a map of OpenGL 'names' (integers)
 	 * to {@link CallAdapter}s. This map can be used to map from a mouse selection back to a CallAdapter.
@@ -110,38 +111,7 @@ class BlockRenderer
 		//   in the future
 		double expense = call.getExclusiveTime(measure) / call.getInclusiveTime(measure);
 
-		// Neutral color is roughly 0.5, 0.5, 0.5 (though not really)
-		// More than 50% of parent time skews towards Red
-		// Less than 50% of parent time skews towards Blue
-		// Overall, the colors are lightened to make them stand out from the black background.
-		int red, green, blue;
-		int adjustment;
-		double positiveScale = 1 - FRACTION_THRESHOLD;
-		double negativeScale = FRACTION_THRESHOLD;
-		if ( expense >= FRACTION_THRESHOLD )
-		{
-			adjustment = (int)( ( expense - FRACTION_THRESHOLD ) / positiveScale * 127.0 );
-		}
-		else
-		{
-			adjustment = -(int)( ( FRACTION_THRESHOLD - expense ) / negativeScale * 127.0 );
-		}
-
-		// green = 160;
-		green = 0;
-		red = blue = 128;
-		red += adjustment;
-		blue -= adjustment;
-
-		// Brighten the colors a bit
-		red = (int)( red * brightness );
-		blue = (int)( blue * brightness );
-
-		// Be sure that they are legal color values
-		red = GLUtils.clamp(red);
-		blue = GLUtils.clamp(blue);
-
-		Color color = new Color(red, green, blue);
+		Color color = colorModel.getBlockColor(0, FRACTION_THRESHOLD, 1, expense);
 
 		if ( renderMode == RENDER_SOLID )
 		{
@@ -235,7 +205,7 @@ class BlockRenderer
 
 		gl.glBegin(GL_LINE_LOOP);
 			
-		GLUtils.glColor(gl, Color.black);
+		GLUtils.glColor(gl, colorModel.getBlockBorderColor());
 		gl.glVertex3d(rectangle.x, rectangle.y, topZ);
 		gl.glVertex3d(rectangle.x, rectangle.y + rectangle.height, topZ);
 		gl.glVertex3d(rectangle.x + rectangle.width, rectangle.y + rectangle.height, topZ);

@@ -23,6 +23,7 @@ public class BlockDiagramModel
 	public static final String NUM_LEVELS_PROPERTY = "numLevels";
 
 	public static final String SELECTED_CALL_PROPERTY = "selectedCall";
+	public static final String NAME_SEARCH_STRING_PROPERTY = "nameSearchString";
 	public static final String MOUSEOVER_CALL_PROPERTY = "mouseOverCall";
 
 	public static final String SHIFT_HORIZONTAL_PROPERTY = "shiftHorizontal";
@@ -50,7 +51,9 @@ public class BlockDiagramModel
 	private EyeLocation eyeLocation;
 	private Call mouseOverCall = null;
 	private Call selectedCall = null;
-
+	private String searchString = null;
+	private ArrayList nameSearchMatches = new ArrayList();
+	
 	public BlockDiagramModel(CallGraph cg)
 	{
 		this.eyeLocation = (EyeLocation)DEFAULT_EYE_LOCATION.clone();
@@ -121,6 +124,45 @@ public class BlockDiagramModel
 		return selectedCall;
 	}
 
+	/**
+	 * Set the search string that the user typed in to the name-search. This search
+	 * string is used to construct a list of matching names.
+	 *
+	 * @see #getNameSearchNames
+	 * @see #getCallsByName
+	 */
+	public void setNameSearchString(String newSearchString)
+	{
+		if ( newSearchString == null )
+			newSearchString = "";
+		
+		if ( !newSearchString.equals(this.searchString) )
+		{
+			String oldSearchString = this.searchString;
+			this.searchString = newSearchString;
+			WildcardMatchExpression expr = new WildcardMatchExpression(searchString);
+			nameSearchMatches.clear();
+			for ( Iterator i = nameToCallListMap.keySet().iterator(); i.hasNext(); )
+			{
+				String name = (String)i.next();
+				if ( expr.match(name) )
+				{
+					Log.debug(LOG, "Search matches ", name);
+					nameSearchMatches.add(name);
+				}
+			}
+			changeSupport.firePropertyChange(NAME_SEARCH_STRING_PROPERTY, oldSearchString, searchString);
+		}
+	}
+
+	/**
+	 * @return a list of names which match the user's search string. Initially an empty list.
+	 */
+	public List getNameSearchNames()
+	{
+		return Collections.unmodifiableList(nameSearchMatches);
+	}
+	
 	public void setMouseOverCall(Call call)
 	{
 		Call oldCall = mouseOverCall;

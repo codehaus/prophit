@@ -83,7 +83,7 @@
 	</copy>
     <copy todir="${dist}/lib">
 	  <fileset dir="${build}/lib" />
-	  <fileset dir="lib" includes="log4jME.jar" />
+	  <fileset dir="lib" excludes="**/CVS" />
 	</copy>
 	<zip zipfile="${build}/orbit.zip">
 	  <fileset dir="${dist}" />

@@ -478,12 +478,40 @@ public class MapFrame
 		toolbar.add(forwardAction);
 		toolbar.add(parentAction);
 		toolbar.add(rootAction);
-
 		toolbar.addSeparator();
-
 		toolbar.add(createDepthSlider());
+
+		JPanel pnlSearch = new JPanel();
+		pnlSearch.setLayout(new FlowLayout(FlowLayout.LEFT));
+		pnlSearch.add(new JLabel(Strings.getUILabel(MapFrame.class, "search.label")));
+		final JTextField txtSearch = (JTextField)pnlSearch.add(new JTextField(30)
+			{
+				public Dimension getMaximumSize()
+				{
+					return new Dimension(super.getMaximumSize().width, getPreferredSize().height);
+				}
+			});
+		txtSearch.addActionListener(new ActionListener()
+			{
+				public void actionPerformed(ActionEvent evt)
+				{
+					String searchText = txtSearch.getText();
+					Log.debug(LOG, "Name search text set to ", searchText);
+					if ( blockModel != null )
+					{
+						if ( !"".equals(searchText) )
+							searchText = "*" + txtSearch.getText() + "*";
+						blockModel.setNameSearchString(searchText);
+					}
+				}
+			});
 		
-		getContentPane().add(toolbar, BorderLayout.NORTH);
+		JPanel pnlTools = new JPanel();
+		pnlTools.setLayout(new BorderLayout());
+		pnlTools.add(toolbar, BorderLayout.NORTH);
+		pnlTools.add(pnlSearch, BorderLayout.SOUTH);
+		
+		getContentPane().add(pnlTools, BorderLayout.NORTH);
 	}
 
 	private void addComponents()
