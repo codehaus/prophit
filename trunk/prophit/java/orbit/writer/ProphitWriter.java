@@ -102,11 +102,14 @@ public class ProphitWriter
 	{
 		IXMLElement stacktrace = new XMLElement(XMLConstants.STACKTRACE);
 		String [] methods = st.getMethods();
-		for (int m = 0; m < methods.length; m++)
+		for (int m = methods.length-1; m >=0; m--)
 		{
-			IXMLElement method = stacktrace.createElement(XMLConstants.METHOD);
-			method.setContent(methods[m]);
-			stacktrace.addChild(method);
+			if (!methods[m].equals("<unknown caller>"))
+			{
+				IXMLElement method = stacktrace.createElement(XMLConstants.METHOD);
+				method.setContent(methods[m]);
+				stacktrace.addChild(method);
+			}
 		}
 		return ( stacktrace );
 	}
