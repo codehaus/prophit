@@ -17,6 +17,7 @@ class ModelBuilderImpl
 	private HashMap   stackStrings = new HashMap();
 	private HashMap   rccsByStack  = new HashMap();
 	private ArrayList rccList      = new ArrayList();
+	private ArrayList callIDs      = null;
 	
 	public void initialize(TimeData td)
 	{
@@ -94,13 +95,58 @@ class ModelBuilderImpl
 		Log.debug(LOG, "Construction complete");
 	}
 
-	public List getCallIDs()
+	public synchronized List getCallIDs()
 	{
-		Log.debug(LOG, "Constructing call list");
+		if ( callIDs == null )
+		{
+			Log.debug(LOG, "Constructing call list");
+			
+			fillInStackTraces();
+			constructCallIDs();
+			constructCallGraphRoot();
+		}
+		return callIDs;
+	}
 
-		//if ( maxStackSize > 2 )
-		fillInStackTraces();
-		return constructCallIDs();
+	private void constructCallGraphRoot()
+	{
+		long rootTime = 0;
+		ArrayList rootIDs = new ArrayList();
+		for ( int i = 0; i < callIDs.size(); ++i )
+		{
+			CallID id = (CallID)callIDs.get(i);
+			if ( id != null && id.getParentRCCKey() == -1 )
+			{
+				rootIDs.add(id);
+				rootTime += id.getRCC().getTime();
+			}
+		}
+		
+		if ( rootIDs.size() == 0 )
+		{
+			throw new IllegalArgumentException("Must be at least one root callID");
+		}
+		else if ( rootIDs.size() > 1 )
+		{
+			
+			/*
+			 * Construct a new CallID which will represent the root of the CallGraph
+			 * Make it the parent of all the root CallIDs
+			 */
+			RCC rootRCC;
+			if ( td == TimeData.Inclusive )
+				rootRCC = new RCC(new StackTrace(new String[0]), 1, rootTime, -1, 0);
+			else // td == TimeData.Exclusive
+				rootRCC = new RCC(new StackTrace(new String[0]), 1, -1, 0, 0);
+			
+			CallID rootCallID = new CallID(rootRCC, null);
+			for ( Iterator i = rootIDs.iterator(); i.hasNext(); )
+			{
+				CallID callID = (CallID)i.next();
+				callID.setParent(rootRCC);
+			}
+			callIDs.set(rootCallID.getKey(), rootCallID);
+		}
 	}
 
 	private void fillInStackTraces()
@@ -154,7 +200,7 @@ class ModelBuilderImpl
 		 * Some of these roots may get matched to a parent, the rest will be tried again during
 		 *   the next iteration
 		 */
-		ArrayList callIDs = new ArrayList();
+		callIDs = new ArrayList();
 		ArrayList rootRCCList = new ArrayList(rccList.size());
 		rootRCCList.addAll(rccList);
 		
