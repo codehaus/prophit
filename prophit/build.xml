@@ -144,7 +144,7 @@
 		<delete file="test/data/profile-data.dtd" />
 	</target>
 
-	<!-- Use this as a one-time target to build the OS-specific JARs for gl4java -->
+	<!-- Use this as a one-time target to build the OS-specific JARs for gl4java and LPSolve -->
 	<target name="make-os-jars">
 		<jar jarfile="${basedir}/lib/native-win32.jar">
 			<fileset dir="${basedir}/lib/win32" includes="*.dll" />
@@ -161,8 +161,8 @@
 		<signjar jar="${basedir}/lib/gl4java.jar" signedjar="${webdist}/lib/gl4java.jar" verbose="true" alias="${alias}" keystore="${keystore}" storepass="${keypass}" />
 		<signjar jar="${basedir}/lib/gl4java-glutfonts.jar" signedjar="${webdist}/lib/gl4java-glutfonts.jar" verbose="true" alias="${alias}" keystore="${keystore}" storepass="${keypass}" />
 
-		<signjar jar="${basedir}/lib/gl4java-linux.jar" verbose="true" alias="${alias}" keystore="${keystore}" storepass="${keypass}" />
-		<signjar jar="${basedir}/lib/gl4java-win32.jar" verbose="true" alias="${alias}" keystore="${keystore}" storepass="${keypass}" />
+		<signjar jar="${basedir}/lib/native-linux.jar" verbose="true" alias="${alias}" keystore="${keystore}" storepass="${keypass}" />
+		<signjar jar="${basedir}/lib/native-win32.jar" verbose="true" alias="${alias}" keystore="${keystore}" storepass="${keypass}" />
 	</target>
 
 	<target name="compile-no-gui" depends="init">
