@@ -29,9 +29,20 @@ public class TestHProfParser
 		System.out.println("TestHProfParser needs more work");
 	}
 
+	/**
+	 * Just tests that the hsqldb.hprof.txt file can be loaded without exceptions. Pretty lame.
+	 */
+	public void testParseSamples2() throws Exception
+	{
+		File file = new File(System.getProperty("basedir") + "/data/hsqldb.hprof.txt");
+		
+		HProfParser parser = new HProfParser(new FileReader(file));
+		parser.execute();
+	}
+
 	public void testParseTimes() throws Exception
 	{
-		File file = new File(System.getProperty("basedir") + "/test/data/hello.times.txt");
+		File file = new File(System.getProperty("basedir") + "/data/hello.times.txt");
 		
 		HProfParser parser = new HProfParser(new FileReader(file));
 		parser.execute();
@@ -65,7 +76,7 @@ public class TestHProfParser
 		CallGraph cg = solver.solve(callIDs);
 		// System.out.println(cg.toString(-1));
 
-		Call main = (Call)cg.getChildren().get(0);
+		Call main = (Call)cg.getRoot();
 		assertEquals("main", main.getName());
 		assertEquals(1, main.getCallCount());
 		assertEquals(945.0, main.getTime(), 0.0001);
