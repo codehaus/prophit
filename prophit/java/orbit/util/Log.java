@@ -39,6 +39,12 @@ public class Log
 			log.debug("" + msg1 + msg2);
 	}
 
+	public static void debug(Category log, Object msg1, double msg2)
+	{
+		if ( log.isDebugEnabled() )
+			log.debug("" + msg1 + msg2);
+	}
+
 	public static void debug(Category log, Object msg1, Object msg2, Object msg3)
 	{
 		if ( log.isDebugEnabled() )
