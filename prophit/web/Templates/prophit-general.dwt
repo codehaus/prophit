@@ -109,10 +109,22 @@ MM_reloadPage(true);
 	</tr>
 </table>
 </div>
-<div id="wsswFooter" align="bottom">
-<a href="http://www.westslopesoftware.com" target=_blank><img src="../assets/wsswLogo.jpg" width="673" height="99" border="0"></a>
- 
-</div>
+<div id="footer">
+<table border="0" width="100%">
+<tr>
+      <td> 
+        <div id="wsswFooter" align="bottom"> 
+          <p class="MenuItem"><a href="http://www.westslopesoftware.com" target=_blank><img src="../assets/wsswLogo.jpg" width="673" height="99" border="0"></a> 
+          </p>
+        </div>
+</td>
+      <td align="right"> 
+        <div id="ironworksFooter" align="bottom"> 
+        <p class="MenuItem"><font size="+1"><a href="http://www.ironworks.cc">Ironworks.cc</a></font></p>
+      </div>
+</td>
+</tr>
+</table>
 <p>&nbsp;</p>
-</body>
+</div></body>
 </html>
