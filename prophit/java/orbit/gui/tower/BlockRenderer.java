@@ -28,16 +28,12 @@ import java.util.Map;
 class BlockRenderer
 	implements CallLayoutAlgorithm.Callback, GLEnum, Constants
 {
-	/** Blocks smaller than this are not rendered at all */
-	private static final double SIZE_THRESHOLD = 3.0;
-
 	private final GLFunc                      gl;
 	private final int                         renderMode;
 	private final ColorModel                  colorModel;
 	private final int[]                       viewport = new int[4];
 	// TODO: can use Call keys as GL names
 	private final HashMap glNameToCallMap = new HashMap();
-	private final HashMap nameToCallListMap = new HashMap();
 
 	/** If empty, all calls should be rendered as wireframe in wireframe mode */
 	private HashSet solidCalls = null;
@@ -73,14 +69,6 @@ class BlockRenderer
 	}
 
 	/**
-	 * @return a Map in which the keys are call {@link Call#getName name}s, and the values are Lists of {@link Call}s.
-	 */
-	public Map getNameToCallListMap()
-	{
-		return nameToCallListMap;
-	}
-
-	/**
 	 * Add a list of {@link Call}s which should always be rendered as solid.
 	 */
 	public void addSolidBlocks(List calls)
@@ -113,19 +101,11 @@ class BlockRenderer
 	 */
 	public boolean beginCall(CallAdapter call, Rectangle2D.Double rectangle, int depth)
 	{
-		if ( rectangle.width * viewport[2] < SIZE_THRESHOLD ||
-			  rectangle.height * viewport[3] < SIZE_THRESHOLD )
+		if ( rectangle.width * viewport[2] < MIN_BLOCK_SIZE_THRESHOLD ||
+			  rectangle.height * viewport[3] < MIN_BLOCK_SIZE_THRESHOLD )
 		{
 			return false;
 		}
-
-		List list = (List)nameToCallListMap.get(call.getName());
-		if ( list == null )
-		{
-			list = new ArrayList(3);
-			nameToCallListMap.put(call.getName(), list);
-		}
-		list.add(call.getCall());
 
 		// Used to shade the block according to whether it is a 'hotspot'. This shading can be made configurable
 		//   in the future

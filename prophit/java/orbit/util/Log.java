@@ -50,4 +50,10 @@ public class Log
 		if ( log.isDebugEnabled() )
 			log.debug("" + msg1 + msg2 + msg3 + msg4);
 	}
+
+	public static void debug(Category log, Object msg1, Object msg2, Object msg3, int msg4)
+	{
+		if ( log.isDebugEnabled() )
+			log.debug("" + msg1 + msg2 + msg3 + msg4);
+	}
 }

@@ -149,12 +149,14 @@ MM_reloadPage(true);
                   of visible selected and search-result blocks, whereas in solid 
                   mode one can only see the blocks which make up the outer perimiter 
                   of the tower diagram. 
-                  <p> An option to manually switch to wire-frame mode wolud allow 
-                    the user to see all the way through the diagram. Rendering 
-                    the selected and search-result blocks as solids, even in manual 
-                    wire-frame mode, will allow the user to examine and select 
-                    blocks which would not be easy to find in solid mode. Several 
-                    designs are possible for implementing manual wire-frame mode: 
+                  <p> An option to manually switch to wire-frame mode when the 
+                    diagram is not being rotated would allow the user to see all 
+                    the way through it. Rendering the selected and search-result 
+                    blocks as solid blocks while the rest of the diagram is in 
+                    manual wire-frame mode would allow the user to examine and 
+                    select blocks which would not be easy to find if the entire 
+                    diagram was solid. Several designs are possible for implementing 
+                    manual wire-frame mode: 
                   <ol>
                     <li>Wire-frame mode could be automatically entered when the 
                       user executes a search. Upon executing the search, all blocks 
@@ -184,15 +186,18 @@ MM_reloadPage(true);
                       </ul>
                     </li>
                   </ol>
-
-                  <a name="selection_feedback"><div class="header">Enhanced selection feedback</div></a>
-                  <p>When a block is selected 
-                    by a mouse-click (a 'selected' block) or identified by a search 
-                    (a 'search-result' block), thin lines similar to the ribbons 
-                    on a present are drawn around the block to hilight it. This 
-                    hilighting is not particularly prominent or visible. In order 
-                    to enhance the visibility of these hilights, one or more of 
-                    the following may be implemented:</p>
+				  
+				  <p>If intelligent labeling is implemented, all of the blocks 
+                    which render as solid in wire-frame mode can be labeled. </p>
+                  <a name="selection_feedback">
+                  <div class="header">Enhanced selection feedback</div>
+                  </a> 
+                  <p>When a block is selected by a mouse-click (a 'selected' block) 
+                    or identified by a search (a 'search-result' block), thin 
+                    lines similar to the ribbons on a present are drawn around 
+                    the block to hilight it. This hilighting is not particularly 
+                    prominent or visible. In order to enhance the visibility of 
+                    these hilights, one or more of the following may be implemented:</p>
                   <ol>
                     <li>Bolder lines. The hilight lines are currently one-pixel-wide 
                       lines of a single color. The lines could be thickened, composed 
@@ -205,12 +210,12 @@ MM_reloadPage(true);
                       around the blocks with dotted lines that slowly progress 
                       around the block's edges.</li>
                   </ol>
-                  
-				  <a name="new_coloring"><div class="header">New Coloring options</div></a>
-                  <p>The coloring on the call graph 
-                    currently shows the exclusive time of each block. New coloring 
-                    algorithms could be used to present other information about 
-                    the profile. For example:</p>
+                  <a name="new_coloring"> 
+                  <div class="header">New Coloring options</div>
+                  </a> 
+                  <p>The coloring on the call graph currently shows the exclusive 
+                    time of each block. New coloring algorithms could be used 
+                    to present other information about the profile. For example:</p>
                   <ol>
                     <li>Total exclusive time. The block coloring could show the 
                       total exclusive time for the block's function call, rather 
@@ -229,35 +234,39 @@ MM_reloadPage(true);
                       identical to, a coloring based on total exclusive or inclusive 
                       time. </li>
                   </ol>
-
-                  <a name="enhanced_searching"><div class="header">Enhanced searching</div></a>
-                  <p>The prophIt search bar 
-                    currently only searches by function call name. The ability 
-                    to search based on additional fields such as inclusive time 
-                    or exclusive time (as percentages of total program time), 
-                    to display the results in tabular form, and to sort the results 
-                    based on some timing data, would greatly enhance the search 
-                    feature. For instance, this would provide a straightforward 
-                    mechanism to display a table of hot-spots, sorted in descending 
-                    order of exclusive time.</p>
+                  <a name="enhanced_searching"> 
+                  <div class="header">Enhanced searching</div>
+                  </a> 
+                  <p>The prophIt search bar currently only searches by function 
+                    call name. The ability to search based on additional fields 
+                    such as inclusive time or exclusive time (as percentages of 
+                    total program time), to display the results in tabular form, 
+                    and to sort the results based on some timing data, would greatly 
+                    enhance the search feature. For instance, this would provide 
+                    a straightforward mechanism to display a table of hot-spots, 
+                    sorted in descending order of exclusive time.</p>
                   <p>It is common for profilers to show a bar chart that goes 
                     along with this hot-spot view. prophIt could show the search 
                     data with this enhancement as well.</p>
-                  <a name="compact_data_format"><div class="header">Compact call graph data format</div>
+                  <a name="compact_data_format"> 
+                  <div class="header">Compact call graph data format</div>
                   </a> prophIt should have its own compact call graph data format 
                   which it can use to distribute profile data in a lightweight 
                   fashion. This format can be used for distributing additional 
                   samples, for storing interesting call graphs on the server, 
                   and for caching call graphs on the users' client machines. 
-                  <p>
-                  <a name="recursion_collapse"><div class="header">Collapse recursive functions</div></a>
-				  
-				  Recursive functions can be hard to profile, because each instance of the function call has its own caller
-				  and callee time breakdown. Frequently it would be more useful to be able to combine the callers and callees 
-				  for all the recursive call instances into one call. This gives a more accurate picture of the time taken
-				  by the recursive function and its callees.
-				 <p>
-                  <a name="profile_comparison"><div class="header">Profile Comparison</div>
+                  <p> 
+                  <a name="recursion_collapse"> 
+                  <div class="header">Collapse recursive functions</div>
+                  </a> Recursive functions can be hard to profile, because each 
+                  instance of the function call has its own caller and callee 
+                  time breakdown. Frequently it would be more useful to be able 
+                  to combine the callers and callees for all the recursive call 
+                  instances into one call. This gives a more accurate picture 
+                  of the time taken by the recursive function and its callees. 
+                  <p> 
+                  <a name="profile_comparison"> 
+                  <div class="header">Profile Comparison</div>
                   </a> Profiling is part of an iterative process in which a program 
                   is analyzed, then improved, then analyzed again. It would be 
                   very useful to be able to compare profile data gathered on a 
@@ -272,8 +281,8 @@ MM_reloadPage(true);
                   Functions which are added to or dropped from the old profile 
                   can also be highlighted using distinctive colors. 
                   <p>&nbsp;</p>
-                  <!-- #EndEditable -->
-						</div></td>
+                  <!-- #EndEditable --> </div>
+              </td>
 					</tr>
 				</table>
 				<table width="100%" border="0" cellspacing="0" cellpadding="0">
