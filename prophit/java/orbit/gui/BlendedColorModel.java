@@ -50,6 +50,11 @@ class BlendedColorModel
 	
 	private static final Color[] shadeColors = { primaryBlock, blockShade1, blockShade2, blockShade3 };
 	
+	public Color getLightColor()
+	{
+		return primaryBlock;
+	}
+
 	public Color getBackgroundColor()
 	{
 		return background;
