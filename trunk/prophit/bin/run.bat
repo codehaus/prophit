@@ -47,7 +47,7 @@ set LOCALCLASSPATH="%SCRIPT_HOME%\lib\prophit.jar";"%SCRIPT_HOME%\lib\data.jar";
 if "%JAVA_HOME%" == "" goto noJavaHome
 if "%_JAVACMD%" == "" set _JAVACMD=%JAVA_HOME%\jre\bin\java
 set BACKUPPATH=%PATH%
-set PATH=%JAVA_HOME%\jre\bin;"%SCRIPT_HOME%\bin";%PATH%
+set PATH=%JAVA_HOME%\jre\bin;%SCRIPT_HOME%\bin;%PATH%
 
 goto run
 
