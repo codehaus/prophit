@@ -1,5 +1,7 @@
 package lp;
 
+import lp.solve.LP;
+
 import junit.framework.TestCase;
 
 public class TestLPSolve
@@ -20,40 +22,38 @@ public class TestLPSolve
 		int numVariables = 6;
 		int numRows = 6;
 
-		solve lpSolve = new solve();
-		lprec lpIn = new lprec(numRows, numVariables);
-		String s;
-		s = "0			 0				1		1		0		 0";
-		lpSolve.str_set_obj_fn(lpIn, s);
-		lpSolve.set_minim(lpIn);
+		LP lpSolve = new LP(numRows, numVariables);
+		double[] objective = { 0, 0, 1, 1, 0, 0 };
+		lpSolve.setObjectiveFunction(objective);
+		lpSolve.setMinimize(true);
 		double[] rhs  = { -1/3.0, 1/3.0, -2/3.0, 2/3.0, 1.0, 3.0 };
-		short[]  test = { constant.GE, constant.GE, constant.GE, constant.GE, constant.EQ, constant.LE };
-		String[] str  = {
-			"0			 0				1		0	  -1		 0",
-			"0			 0				1		0	  1		 0",
-			"0			 0				0		1	  0		 -1",
-			"0			 0				0		1	  0		 1",
-			"0			 0				0		0	  1		 1",
-			"0			 0				0		0	  3       3",
+		short[]  test = { LP.CONSTRAINT_TYPE_GE, LP.CONSTRAINT_TYPE_GE, LP.CONSTRAINT_TYPE_GE, 
+								LP.CONSTRAINT_TYPE_GE, LP.CONSTRAINT_TYPE_EQ, LP.CONSTRAINT_TYPE_LE };
+		double[][] constraints  = {
+			{ 0,			 0,				1,		0,	  -1,		 0 },
+			{ 0,			 0,				1,		0,	  1,		 0 },
+			{ 0,			 0,				0,		1,	  0,		 -1 },
+			{ 0,			 0,				0,		1,	  0,		 1 },
+			{ 0,			 0,				0,		0,	  1,		 1 },
+			{ 0,			 0,				0,		0,	  3,       3 },
 		};
     
-		int numConstraints = 0;
 		for (int i = 0; i < rhs.length; i++ ) 
 		{
-			numConstraints = lpSolve.str_add_constraint(lpIn, str[i], test[i], rhs[i]);
+			lpSolve.addConstraint(constraints[i], test[i], rhs[i]);
 		}
 		
-		// lpSolve.write_LP(lpIn, System.out);
+		lpSolve.printLP();
 
-		int result = lpSolve.solve(lpIn);
-		assertTrue(result == constant.OPTIMAL);
+		boolean solved = lpSolve.solve();
+		assertTrue(solved);
 
-		// lpSolve.print_solution(lpIn);
+		lpSolve.printSolution();
 
 		double[] expectedSolution = { 0, 0, 0, 0, 1/3.0, 2/3.0 };
 		for ( int i = 0; i < expectedSolution.length; ++i )
 		{
-			assertEquals(expectedSolution[i], lpIn.getBestSolution(numConstraints + i + 1), 0.001);
+			assertEquals(expectedSolution[i], lpSolve.getSolutionValue(i + 1), 0.001);
 		}
 	}
 }
