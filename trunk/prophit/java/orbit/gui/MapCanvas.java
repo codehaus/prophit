@@ -786,6 +786,7 @@ class MapCanvas extends GLCanvas
 		glut.glutBitmapString(font, str);
 	}
 
+	
 	private static class EyeLocation
 	{
 		public final double radius;
@@ -814,6 +815,10 @@ class MapCanvas extends GLCanvas
 			
 			return new EyeLocation(radius + dR, eyeYaw + dYaw, pitch);
 		}
+
+		public double getRadius() { return radius; }
+		public double getPitch() { return eyePitch; }
+		public double getYaw() { return eyeYaw; }
 
 		public double getX()
 		{

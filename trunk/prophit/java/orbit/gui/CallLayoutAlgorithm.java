@@ -49,10 +49,11 @@ public class CallLayoutAlgorithm
 		Rectangle2D.Double extent = layout.getExtent();
 		Rectangle2D.Double rectangle = layout.getRectangle(extent);
 		Rectangle2D.Double remainder = layout.getRemainderExtent(extent);
-		if ( callback.nextCall(call, rectangle, depth) )
+		if ( callback.beginCall(call, rectangle, depth) )
 		{
 			layoutChildren(call, rectangle, depth + 1);
 		}
+		callback.endCall(call);
 		return remainder;
 	}
 
@@ -71,6 +72,8 @@ public class CallLayoutAlgorithm
 		
 	public interface Callback
 	{
-		public boolean nextCall(CallAdapter call, Rectangle2D.Double rectangle, int depth);
+		public boolean beginCall(CallAdapter call, Rectangle2D.Double rectangle, int depth);
+
+		public void endCall(CallAdapter call);
 	}
 }
