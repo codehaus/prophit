@@ -14,13 +14,14 @@ public class HProfParser
 	public static void main(String[] args) throws Exception
 	{
 		HProfParser parser;
+		ModelBuilder builder = ModelBuilderFactory.newModelBuilder();
 		{
 			FileReader reader = new FileReader(args[0]);
 			parser = new HProfParser(reader);
-			parser.execute();
+			parser.execute(builder);
 		}
 
-		AbstractParser.main(args, parser);
+		AbstractParser.main(args, parser, builder);
 	}
 
 	private static final String TRACE = "TRACE";
@@ -28,21 +29,15 @@ public class HProfParser
 	private static final String CPU_SAMPLES_END = "CPU SAMPLES END";
 	private static final String CPU_TIME_BEGIN = "CPU TIME (ms) BEGIN";
 	private static final String CPU_TIME_END = "CPU TIME (ms) END";
-		
-	private ArrayList callIDs = null;
-	private boolean readHeader = false;
-	private int maxStackSize = 0;
+
+	private ModelBuilder builder = null;
+	private boolean      readHeader = false;
 	
 	public HProfParser(Reader reader)
 	{
 		super(new LineNumberReader(reader));
 	}
 
-	public List getCallIDs()
-	{
-		return callIDs;
-	}
-	
 	public boolean isFileFormatRecognized()
 	{
 		try
@@ -59,7 +54,7 @@ public class HProfParser
 		return false;
 	}
 
-	public void execute() throws ParseException
+	public void execute(ModelBuilder builder) throws ParseException
 	{
 		/*
 		 * If the header has not been read, read it
@@ -71,6 +66,9 @@ public class HProfParser
 		 * Else if the next line is CPU SAMPLES BEGIN
 		 *   parse CPU samples
 		 */
+		this.builder = builder;
+		builder.initialize(TimeData.Exclusive);
+		
 		try
 		{
 			if ( !readHeader )
@@ -116,125 +114,15 @@ public class HProfParser
 
 			parseTiming.initialize(stackTracesByID, rccList);
 			parseTiming.execute();
-			
-			/*
-			 * At each stack depth, if there is no existing stacktrace for a sub-stack of
-			 * a stack trace, make a new RCC for the sub-stack and add it to the list
-			 */
-			int nextKey = parseTiming.getKey();
-			HashSet stackTraceSet = new HashSet();
-			ArrayList newRCCs = new ArrayList();
-			for ( int size = maxStackSize; size > 0; --size )
-			{
-				// First add the 'natural' stacks at the current size
-				for ( Iterator i = rccList.iterator(); i.hasNext(); )
-				{
-					RCC rcc = (RCC)i.next();
-					if ( rcc.getStack().size() == size )
-					{
-						hashStack(stackTraceSet, rcc.getStack());
-					}
-				}
-				newRCCs.clear();
-				for ( Iterator i = rccList.iterator(); i.hasNext(); )
-				{
-					RCC rcc = (RCC)i.next();
-					if ( rcc.getStack().size() > size )
-					{
-						StackTrace parentStack = rcc.getParentStack(size);
-						if ( parentStack != null &&
-							 stackTraceSet.add(parentStack) )
-						{
-							RCC newRCC = new RCC(parentStack, rcc.getCallCount(), 0, nextKey++);
-								// System.out.println("Adding new rcc " + newRCC);
-							newRCCs.add(newRCC);
-							hashStack(stackTraceSet, parentStack);
-						}
-					}
-				}
-				rccList.addAll(newRCCs);
-			}
-			
-			/*
-			 * In general, the parent of a stack trace (the 'leaf') may only have a sub-set of the
-			 *   parent calls that are listed in the leaf.
-			 * This algorithm matches each stack trace up with its parent traces in a greedy manner,
-			 *   finding all parents which match 'n' calls in the leaf before moving to 'n - 1'.
-			 * Each time, the algorithm is only run on the RCCs which are still marked as being 'roots'
-			 * Some of these roots may get matched to a parent, the rest will be tried again during
-			 *   the next iteration
-			 */
-			ArrayList rootRCCList = new ArrayList(rccList.size());
-			rootRCCList.addAll(rccList);
-			
-			ConstructCallsAlgorithm algorithm = new ConstructCallsAlgorithm(rccList.size());
-			
-			int maxSize = maxStackSize - 1;
-			for ( int size = maxSize; size > 0; )
-			{
-				// System.out.println("Size : " + size);
-				// System.out.println("Looking for " + rootRCCList);
-					
-				Map rccListByCallee = mapByCallee(rccList, size);
-
-				// System.out.println("Callee map " + rccListByCallee);
-
-				algorithm.execute(rootRCCList, rccListByCallee, size);
-				callIDs = algorithm.getCallIDs();
-
-				--size;
-				// Don't bother to re-build the root list on the last time through
-				if ( size > 0 )
-				{
-					rootRCCList.clear();
-					for ( Iterator j = rccList.iterator(); j.hasNext(); )
-					{
-						RCC rcc = (RCC)j.next();
-						int key = rcc.getKey();
-						CallID callID = (CallID)callIDs.get(key);
-						if ( callID != null && callID.getParentRCC() == null )
-							rootRCCList.add(callID.getRCC());
-					}
-				}
-			}
 		}
 		catch (IOException x)
 		{
 			throw new ParseException("IOException at line " + lineNumber() + " : " + x.getMessage());
 		}
-	}
-
-	private void hashStack(HashSet set, StackTrace st)
-	{
-		for ( int size = st.size(); size >= 1; --size )
+		finally
 		{
-			set.add(st.getLeafStack(size));
+			builder.end();
 		}
-	}
-	
-	private Map mapByCallee(List rccList, int stackSize)
-	{
-		HashMap rccListByCallee = new HashMap();
-		for ( Iterator i = rccList.iterator(); i.hasNext(); )
-		{
-			RCC rcc = (RCC)i.next();
-			/*
-			 * If there are longer stacks in the trace file, then the entire stack
-			 * should be matched
-			 */
-			StackTrace calleeStack = rcc.getLeafStack(stackSize);
-			if ( calleeStack != null )
-			{
-				ArrayList subList = (ArrayList)rccListByCallee.get(calleeStack);
-				if ( subList == null )
-				{
-					subList = new ArrayList();
-					rccListByCallee.put(calleeStack, subList);
-				}
-				subList.add(rcc);
-			}
-		}
-		return rccListByCallee;
 	}
 
 	/**
@@ -245,9 +133,6 @@ public class HProfParser
 	 */
 	private String parseTraces(String line, Map stackTracesByID) throws ParseException, IOException
 	{
-		HashMap map = new HashMap();
-		HashMap lineCache = new HashMap();
-		int lineCount = 0;
 		ArrayList stack = new ArrayList();
 		do
 		{
@@ -275,21 +160,13 @@ public class HProfParser
 					sb.append(line.substring(0, colon));
 					sb.append(line.substring(paren, line.length()));
 					line = sb.toString();
-					String existing = (String)lineCache.get(line);
-					if ( existing != null )
-						line = existing;
-					else
-						lineCache.put(line, line);
-					++lineCount;
 				}
 				stack.add(line);
 			}
 			String[] stackArray = (String[])stack.toArray(new String[stack.size()]);
-			StackTrace st = new StackTrace(stackArray);
+			ModelBuilder.ID stackID = builder.newStackTrace(stackArray);
 			// System.out.println(st);
-			stackTracesByID.put(id, st);
-			if ( stack.size() > maxStackSize )
-				maxStackSize = stack.size();
+			stackTracesByID.put(id, stackID);
 		}
 		while ( line != null && 
 				!line.startsWith(CPU_TIME_BEGIN) &&
@@ -323,15 +200,9 @@ public class HProfParser
 
 	abstract class ParseTimingData
 	{
-		private int  key             = 1;
 		private Map  rccsByStack     = new HashMap();
 		private Map  stackTracesByID = null;
 		private List rccList         = null;
-
-		public int getKey()
-		{
-			return key;
-		}
 
 		public void initialize(Map stackTracesByID, List rccList)
 		{
@@ -343,22 +214,10 @@ public class HProfParser
 
 		protected void addRCC(Integer traceID, int nCalls, long time) throws ParseException
 		{
-			StackTrace st = (StackTrace)stackTracesByID.get(traceID);
-			if ( st == null )
+			ModelBuilder.ID stackID = (ModelBuilder.ID)stackTracesByID.get(traceID);
+			if ( stackID == null )
 				throw new ParseException("TRACE id " + traceID + " not found at line " + lineNumber());
-
-			RCC rcc = (RCC)rccsByStack.get(st);
-			if ( rcc == null )
-			{
-				rcc = new RCC(st, nCalls, time, key++);
-				rccsByStack.put(st, rcc);
-				rccList.add(rcc);
-			}
-			else
-			{
-				rcc.adjustTime(time);
-				rcc.adjustCalls(nCalls);
-			}
+			builder.newRecordedCall(stackID, nCalls, time);
 		}
 	}
 
