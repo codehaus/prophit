@@ -24,13 +24,6 @@ Priorities range from 1 to 5, with 5 being the highest.
     <th width="28%" bgcolor="ccccff">Details</th>
     <th width="13%" bgcolor="ccccff">Task Doc</th>
   </tr>
-  <tr bgcolor="eeeeee"> 
-    <td width="52%">Mechanism for searching for a method call</td>
-    <td width="7%">4</td>
-    <td width="28%">Should hi-lite the diagram using a different selection mechanism 
-      or color</td>
-    <td width="13%"><a href="search-method-call.txt">search-method-call.txt</a></td>
-  </tr>
   <tr bgcolor="ffeeff"> 
     <td width="52%">FAQ, common problems, for the web site</td>
     <td width="7%">3</td>
@@ -101,6 +94,21 @@ Priorities range from 1 to 5, with 5 being the highest.
     <td width="16%">&nbsp;</td>
   </tr>
   <tr bgcolor="ffeeff"> 
+    <td width="43%">Lighting model makes the cells change color as the diagram 
+      is rotated. </td>
+    <td width="6%">3</td>
+    <td width="35%">The cells don't match the legend properly as the diagram is 
+      rotated </td>
+    <td width="16%">&nbsp;</td>
+  </tr>
+  <tr bgcolor="ffeeff"> 
+    <td width="43%">Label on the legend should be more clear</td>
+    <td width="6%">3</td>
+    <td width="35%">'Exclusive time (% of Inclusive Time)' does not have an obvious 
+      meaning </td>
+    <td width="16%">&nbsp;</td>
+  </tr>
+  <tr bgcolor="ffeeff"> 
     <td width="43%">HelloList.java.txt shows up as HTML formatted in IE. It should 
       look like pre-formatted Java but instead there are no linebreaks.</td>
     <td width="6%">3</td>
@@ -133,31 +141,25 @@ Priorities range from 1 to 5, with 5 being the highest.
     <td width="16%" bgcolor="ffeeff">&nbsp;</td>
   </tr>
   <tr bgcolor="ffeeff"> 
-    <td width="43%">Occassional error in checkGL while loading the first profile 
-      into the UI</td>
-    <td width="6%">3</td>
-    <td width="35%">De-prioritizing because I haven't seen this very much and 
-      simply re-trying to load the profile seems to work</td>
+    <td width="43%">Searching for '&lt;root&gt;' doesn't work</td>
+    <td width="6%">2</td>
+    <td width="35%">The search algorithm doesn't seem to check the root Call for 
+      some reason</td>
     <td width="16%">&nbsp;</td>
   </tr>
   <tr bgcolor="ffeeff"> 
-    <td width="43%">Memory usage appears to grow over time as more profiles are 
-      opened and the previous ones (presumably) closed. </td>
+    <td width="43%">Occassional error in checkGL while loading the first profile 
+      into the UI</td>
     <td width="6%">2</td>
-    <td width="35%">
-      <p>This problem has been mitigated by making sure that the CallGraph data 
-        is cleaned up when the profile is closed. Though there may still be a 
-        moderate-sized leak resulting from the GL4Java JNI implementation holding 
-        a reference to the GLCanvas.</p>
-      <p>Should fix this by only ever constructing one GL Canvas and just changing 
-        what it renders.</p>
-      </td>
+    <td width="35%">De-prioritizing because I haven't seen this for a while, and 
+      simply re-trying to load the profile seems to work. May have been caused 
+      by not following the Swing threading rules</td>
     <td width="16%">&nbsp;</td>
   </tr>
   <tr bgcolor="ffeeff"> 
     <td width="43%">If the width of the frame is reduced to a very small amount, 
       the call details tables start to be clipped on the left hand side</td>
-    <td width="6%">2</td>
+    <td width="6%">1</td>
     <td width="35%">&nbsp;</td>
     <td width="16%">&nbsp;</td>
   </tr>
@@ -169,30 +171,38 @@ Priorities range from 1 to 5, with 5 being the highest.
     <th width="6%" bgcolor="ccccff">Priority</th>
     <th width="20%" bgcolor="ccccff">Details</th>
     <th width="10%" bgcolor="ccccff">Date Closed</th>
-    <th width="15%" bgcolor="ccccff">Task Doc</th>
   </tr>
-  <tr bgcolor="eeeeee">
+  <tr bgcolor="eeeeee"> 
+    <td width="52%" height="66">Mechanism for searching for a method call</td>
+    <td width="7%" height="66">4</td>
+    <td width="28%" height="66"> 
+      <p>A Search bar is rendered underneath the navigation buttons and 'Levels' 
+        slider. hi-lites the diagram using a new color to identify the search 
+        results. This hi-liting mechanism should be enhanced to make it more usable 
+        and clear</p>
+      <p>See <a href="search-method-call.txt">search-method-call.txt</a></p>
+    </td>
+    <td width="13%" height="66">2002/10/09</td>
+  </tr>
+  <tr bgcolor="eeeeee"> 
     <td width="52%">Implement a data loader for for cpu=times</td>
     <td width="7%"> 
       <div align="left">4</div>
     </td>
     <td width="28%"><a href="parse-hprof-times.txt">parse-hprof-times.txt</a></td>
     <td width="13%">2002/09/25</td>
-    <td width="5%">&nbsp;</td>
   </tr>
   <tr bgcolor="eeeeee"> 
     <td width="52%">User documentation for the application</td>
     <td width="7%">5</td>
     <td width="28%">see <a href="../web/index.html">index.html</a></td>
     <td width="13%">2002/09/23</td>
-    <td width="5%">&nbsp;</td>
   </tr>
   <tr bgcolor="eeeeee"> 
     <td width="26%">'Getting Started' guide (cookbook)</td>
     <td width="5%">5</td>
     <td width="55%">see <a href="../web/quick-start.html">quick-start.html</a></td>
     <td width="9%">2002/09/22</td>
-    <td width="5%">&nbsp;</td>
   </tr>
   <tr bgcolor="eeeeee"> 
     <td width="49%" height="2">When a sample is opened, the application can open 
@@ -203,28 +213,24 @@ Priorities range from 1 to 5, with 5 being the highest.
     <td width="20%" height="2">Added entries to sampleProfiles.properties, and 
       code to use the JNLP BasicService to show the document in a browser window.</td>
     <td width="10%" height="2">2002/09/17</td>
-    <td width="15%" height="2">&nbsp;</td>
   </tr>
   <tr bgcolor="eeeeee"> 
     <td width="49%" height="2">Document the HelloList -prof sample</td>
     <td width="6%" height="2">5</td>
     <td width="20%" height="2">see web/hello-list-prof-sample.html</td>
     <td width="10%" height="2">2002/09/14</td>
-    <td width="15%" height="2">&nbsp;</td>
   </tr>
   <tr bgcolor="eeeeee"> 
     <td width="49%" height="2">Describe the -prof and hprof profilers</td>
     <td width="6%" height="2">5</td>
     <td width="20%" height="2">see web/hprof.html and web/dash-prof.html</td>
     <td width="10%" height="2">2002/09/14</td>
-    <td width="15%" height="2">&nbsp;</td>
   </tr>
   <tr bgcolor="eeeeee"> 
     <td width="49%" height="2">File menu option to open a sample profile</td>
     <td width="6%" height="2">4</td>
     <td width="20%" height="2">&nbsp;</td>
     <td width="10%" height="2">2002/09/11</td>
-    <td width="15%" height="2">&nbsp;</td>
   </tr>
   <tr bgcolor="eeeeee"> 
     <td width="49%">Double-clicking on a cell in the caller/callee table should 
@@ -234,7 +240,6 @@ Priorities range from 1 to 5, with 5 being the highest.
     <td width="6%">5</td>
     <td width="20%"><a href="ui-enhancements.txt">ui-enhancements.txt</a></td>
     <td width="10%">2002/08/12</td>
-    <td width="15%">&nbsp;</td>
   </tr>
   <tr bgcolor="eeeeee"> 
     <td width="49%" height="2">Change the behavior of block selection so that 
@@ -243,7 +248,6 @@ Priorities range from 1 to 5, with 5 being the highest.
     <td width="6%" height="2">5</td>
     <td width="20%" height="2"><a href="ui-enhancements.txt">ui-enhancements.txt</a></td>
     <td width="10%" height="2">2002/08/12</td>
-    <td width="15%" height="2">&nbsp;</td>
   </tr>
   <tr bgcolor="eeeeee"> 
     <td width="49%" height="2">Want to be able to go back/forward/up/home using 
@@ -251,14 +255,12 @@ Priorities range from 1 to 5, with 5 being the highest.
     <td width="6%" height="2">5</td>
     <td width="20%" height="2"><a href="ui-enhancements.txt">ui-enhancements.txt</a></td>
     <td width="10%" height="2">2002/08/12</td>
-    <td width="15%" height="2">&nbsp;</td>
   </tr>
   <tr bgcolor="eeeeee"> 
     <td width="49%" height="2">Implement a JavaWebStart installer for Orbit</td>
     <td width="6%" height="2">5</td>
     <td width="20%" height="2">&nbsp;</td>
     <td width="10%" height="2">2002/08/14</td>
-    <td width="15%" height="2">&nbsp;</td>
   </tr>
   <tr bgcolor="eeeeee"> 
     <td width="49%" height="2">&nbsp;</td>
@@ -267,7 +269,6 @@ Priorities range from 1 to 5, with 5 being the highest.
     </td>
     <td width="20%" height="2">&nbsp;</td>
     <td width="10%" height="2">&nbsp;</td>
-    <td width="15%" height="2">&nbsp;</td>
   </tr>
 </table>
 <h2>Bugs Exterminated</h2>
@@ -277,9 +278,53 @@ Priorities range from 1 to 5, with 5 being the highest.
     <th width="0%" bgcolor="ccccff" height="23">Priority</th>
     <th width="54%" bgcolor="ccccff" height="23">Details</th>
     <th width="8%" bgcolor="ccccff" height="23">Date Closed</th>
-    <th width="8%" bgcolor="ccccff" height="23">Task Doc</th>
   </tr>
-  <tr bgcolor="eeeeee">
+  <tr bgcolor="eeeeee"> 
+    <td width="43%" bgcolor="eeeeee">Search label does not show up until the application 
+      is re-sized</td>
+    <td width="6%" bgcolor="eeeeee">5</td>
+    <td width="35%" bgcolor="eeeeee">Added a little hack to adjust the frame size 
+      before it is shown. This causes the layout routine to run which shows the 
+      Search label. This should not be necessary...</td>
+    <td width="16%" bgcolor="eeeeee">2002/10/09</td>
+  </tr>
+  <tr bgcolor="eeeeee"> 
+    <td width="43%" bgcolor="eeeeee">Diagram is shifted too far over to the right</td>
+    <td width="6%" bgcolor="eeeeee">2</td>
+    <td width="35%" bgcolor="eeeeee">The diagram needs to be moved over to the 
+      right a little bit to make room for the legend. But not too far...</td>
+    <td width="16%" bgcolor="eeeeee">2002/10/09</td>
+  </tr>
+  <tr bgcolor="eeeeee"> 
+    <td width="43%" bgcolor="eeeeee">CallDetails does not seem to invalidate cleanly</td>
+    <td width="6%" bgcolor="eeeeee">4</td>
+    <td width="35%" bgcolor="eeeeee">Caused by the initial content JPanel which 
+      was not being removed when loading a profile</td>
+    <td width="16%" bgcolor="eeeeee">2002/10/09</td>
+  </tr>
+  <tr bgcolor="eeeeee"> 
+    <td width="43%" bgcolor="eeeeee">Diagram loader should not modify the UI outside 
+      of the event processing thread</td>
+    <td width="6%" bgcolor="eeeeee">3</td>
+    <td width="35%" bgcolor="eeeeee">This is against the rules for Swing. Use 
+      <a href="http://java.sun.com/j2se/1.3/docs/api/javax/swing/SwingUtilities.html#invokeLater(java.lang.Runnable)">SwingUtilities.invokeLater</a></td>
+    <td width="16%" bgcolor="eeeeee">2002/10/08</td>
+  </tr>
+  <tr bgcolor="eeeeee"> 
+    <td width="43%" bgcolor="eeeeee">Memory usage appears to grow over time as 
+      more profiles are opened and the previous ones (presumably) closed. </td>
+    <td width="6%" bgcolor="eeeeee">2</td>
+    <td width="35%" bgcolor="eeeeee"> 
+      <p>This problem has been mitigated by making sure that the CallGraph data 
+        is cleaned up when the profile is closed. Though there may still be a 
+        moderate-sized leak resulting from the GL4Java JNI implementation holding 
+        a reference to the GLCanvas.</p>
+      <p>Fixed this by only ever constructing one GL Canvas and just changing 
+        what it renders.</p>
+    </td>
+    <td width="16%" bgcolor="eeeeee">2002/10/07</td>
+  </tr>
+  <tr bgcolor="eeeeee"> 
     <td width="43%">If the window is maximized, the bottom part of the block diagram 
       does not render properly</td>
     <td width="6%"> 
@@ -288,7 +333,6 @@ Priorities range from 1 to 5, with 5 being the highest.
     <td width="35%">Seems to have been corrected. The problem was probably the 
       'blank-out' rectangle which was drawn under the text</td>
     <td width="16%">2002/10/06</td>
-    <td width="8%">&nbsp;</td>
   </tr>
   <tr bgcolor="eeeeee"> 
     <td width="43%">Orbit should give a good warning when an unsupported profile 
@@ -296,7 +340,6 @@ Priorities range from 1 to 5, with 5 being the highest.
     <td width="6%">4</td>
     <td width="35%">Dialog gives an error when the file fails to parse</td>
     <td width="16%">2002/09/29</td>
-    <td width="8%">&nbsp;</td>
   </tr>
   <tr bgcolor="eeeeee"> 
     <td width="30%">Need an 'About' box for the GUI</td>
@@ -305,7 +348,6 @@ Priorities range from 1 to 5, with 5 being the highest.
       once it is available. Would also be nice to have the home page URL be a 
       hyperlink, at least in the JavaWebStart version</td>
     <td width="8%">2002/09/23</td>
-    <td width="8%">&nbsp;</td>
   </tr>
   <tr bgcolor="eeeeee"> 
     <td width="30%">Deadlock opening a profile on top of another profile</td>
@@ -313,7 +355,6 @@ Priorities range from 1 to 5, with 5 being the highest.
     <td width="54%">pick() and cvsDispose() were deadlocked. Fixed by synchronizing 
       access to the BlockDiagramView</td>
     <td width="8%">2002/09/23</td>
-    <td width="8%">&nbsp;</td>
   </tr>
   <tr bgcolor="eeeeee"> 
     <td width="30%">-prof profiles do not load correctly when 'debug' is turned 
@@ -323,7 +364,6 @@ Priorities range from 1 to 5, with 5 being the highest.
       log out to ByteArrayOutputStreams which are then conditionally written to 
       the log4j log using the standard configuration mechanism (log.properties)</td>
     <td width="8%">2002/09/22</td>
-    <td width="8%">&nbsp;</td>
   </tr>
   <tr bgcolor="eeeeee"> 
     <td width="30%">New Orbit builds should not require the user to re-download 
@@ -333,21 +373,18 @@ Priorities range from 1 to 5, with 5 being the highest.
     <td width="54%">Addressed by checking in the signed JAR files and changing 
       build.xml to not re-sign them.</td>
     <td width="8%">2002/09/19</td>
-    <td width="8%">&nbsp;</td>
   </tr>
   <tr bgcolor="eeeeee"> 
     <td width="30%">Document the hsqldb hprof sample</td>
     <td width="0%">5</td>
     <td width="54%"><a href="../web/hsqldb-hprof-sample.html">hsqldb-hprof-sample.html</a></td>
     <td width="8%">2002/09/15</td>
-    <td width="8%">&nbsp;</td>
   </tr>
   <tr bgcolor="eeeeee"> 
     <td width="30%">Document the HelloList hprof sample</td>
     <td width="0%">5</td>
     <td width="54%"><a href="../web/hello-list-hprof-sample.html">hello-list-hprof-sample.html</a></td>
     <td width="8%">2002/09/15</td>
-    <td width="8%">&nbsp;</td>
   </tr>
   <tr bgcolor="eeeeee"> 
     <td width="30%">As new profiles are opened, the Orbit frame grows bigger with 
@@ -357,7 +394,6 @@ Priorities range from 1 to 5, with 5 being the highest.
       the size of the existing content panel, minus the preferred size of the 
       call details view (caller/callee tables)</td>
     <td width="8%">2002/09/15</td>
-    <td width="8%">&nbsp;</td>
   </tr>
   <tr bgcolor="eeeeee"> 
     <td width="30%">-prof method names not displaying correctly</td>
@@ -365,7 +401,6 @@ Priorities range from 1 to 5, with 5 being the highest.
     <td width="54%">Updated the UIUtil class to correctly implement getShortName() 
       for -prof output</td>
     <td width="8%">2002/09/14</td>
-    <td width="8%">&nbsp;</td>
   </tr>
   <tr bgcolor="eeeeee"> 
     <td width="30%">In some cases, the children of a block with very little exclusive 
@@ -376,7 +411,6 @@ Priorities range from 1 to 5, with 5 being the highest.
     <td width="54%">A calculation error in the calculation of inclusive times 
       from exclusive times was causing inflated inclusive times to be displayed</td>
     <td width="8%">2002/09/11</td>
-    <td width="8%">&nbsp;</td>
   </tr>
   <tr bgcolor="eeeeee"> 
     <td width="30%">Parse error messages are not visible in the Load dialog</td>
@@ -385,14 +419,12 @@ Priorities range from 1 to 5, with 5 being the highest.
     </td>
     <td width="54%">Load dialog replaced by status messages</td>
     <td width="8%">2002/09/08</td>
-    <td width="8%">&nbsp;</td>
   </tr>
   <tr bgcolor="eeeeee"> 
     <td width="30%">HProf profile loader crashes if there is no CPU data</td>
     <td width="0%">5</td>
     <td width="54%">&nbsp;</td>
     <td width="8%">2002/09/08</td>
-    <td width="8%">&nbsp;</td>
   </tr>
   <tr bgcolor="eeeeee"> 
     <td width="30%">After launching the app with JavaWebStart and selecting File/Open, 
@@ -402,13 +434,11 @@ Priorities range from 1 to 5, with 5 being the highest.
     <td width="54%">Implemented System.setSecurityManager workaround, described 
       at http://developer.java.sun.com/developer/bugParade/bugs/4387437.html</td>
     <td width="8%">2002/09/08</td>
-    <td width="8%">&nbsp;</td>
   </tr>
   <tr bgcolor="eeeeee"> 
     <td width="30%">&nbsp;</td>
     <td width="0%">&nbsp;</td>
     <td width="54%">&nbsp;</td>
-    <td width="8%">&nbsp;</td>
     <td width="8%">&nbsp;</td>
   </tr>
 </table>
