@@ -29,11 +29,11 @@
   </resources>
   
   <resources os = "Linux">
-    <nativelib href = "lib/gl4java-linux.jar"/>
+    <nativelib href = "lib/native-linux.jar"/>
   </resources>
   
   <resources os = "Windows">
-    <nativelib href = "lib/gl4java-win32.jar"/>
+    <nativelib href = "lib/native-win32.jar"/>
   </resources>
   
   <application-desc main-class="orbit.gui.MapFrame"/>

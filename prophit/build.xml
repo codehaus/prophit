@@ -145,10 +145,10 @@
 
 	<!-- Use this as a one-time target to build the OS-specific JARs for gl4java -->
 	<target name="make-os-jars">
-		<jar jarfile="${basedir}/lib/gl4java-win32.jar">
+		<jar jarfile="${basedir}/lib/native-win32.jar">
 			<fileset dir="${basedir}/lib/win32" includes="*.dll" />
 		</jar>
-		<jar jarfile="${basedir}/lib/gl4java-linux.jar">
+		<jar jarfile="${basedir}/lib/native-linux.jar">
 			<fileset dir="${basedir}/lib/linux" includes="*.so" />
 		</jar>
 	</target>
