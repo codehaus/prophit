@@ -25,12 +25,6 @@ Priorities range from 1 to 5, with 5 being the highest.
     <th width="13%" bgcolor="ccccff">Task Doc</th>
   </tr>
   <tr bgcolor="eeeeee"> 
-    <td width="52%">User documentation for the application</td>
-    <td width="7%">5</td>
-    <td width="28%">in progress, see <a href="../web/index.html">index.html</a></td>
-    <td width="13%">&nbsp;</td>
-  </tr>
-  <tr bgcolor="eeeeee"> 
     <td width="52%">Mechanism for searching for a method call</td>
     <td width="7%">4</td>
     <td width="28%">Should hi-lite the diagram using a different selection mechanism 
@@ -104,14 +98,6 @@ Priorities range from 1 to 5, with 5 being the highest.
   <tr bgcolor="eeeeee"> 
     <td width="43%">Orbit should give a good warning when an unsupported profile 
       is loaded (e.g. binary hprof)</td>
-    <td width="6%">4</td>
-    <td width="35%">&nbsp;</td>
-    <td width="16%">&nbsp;</td>
-  </tr>
-  <tr bgcolor="eeeeee"> 
-    <td width="43%">New Orbit builds should not require the user to re-download 
-      the supporting libraries (log4jme, gl4java). These JARs are regenerated 
-      during the build and then re-signed</td>
     <td width="6%">4</td>
     <td width="35%">&nbsp;</td>
     <td width="16%">&nbsp;</td>
@@ -190,6 +176,13 @@ Priorities range from 1 to 5, with 5 being the highest.
     <th width="20%" bgcolor="ccccff">Details</th>
     <th width="10%" bgcolor="ccccff">Date Closed</th>
     <th width="15%" bgcolor="ccccff">Task Doc</th>
+  </tr>
+  <tr bgcolor="eeeeee">
+    <td width="52%">User documentation for the application</td>
+    <td width="7%">5</td>
+    <td width="28%">see <a href="../web/index.html">index.html</a></td>
+    <td width="13%">2002/09/23</td>
+    <td width="5%">&nbsp;</td>
   </tr>
   <tr bgcolor="eeeeee"> 
     <td width="26%">'Getting Started' guide (cookbook)</td>
@@ -277,119 +270,132 @@ Priorities range from 1 to 5, with 5 being the highest.
 <h2>Bugs Fixed</h2>
 <table width="90%" border="0" cellspacing="1">
   <tr> 
-    <th width="26%" bgcolor="ccccff" height="23">Description</th>
-    <th width="5%" bgcolor="ccccff" height="23">Priority</th>
-    <th width="55%" bgcolor="ccccff" height="23">Details</th>
-    <th width="9%" bgcolor="ccccff" height="23">Date Closed</th>
-    <th width="5%" bgcolor="ccccff" height="23">Task Doc</th>
-  </tr>
-
-  <tr bgcolor="eeeeee"> 
-    <td width="26%">Link from the app to the doc page</td>
-    <td width="5%">5</td>
-    <td width="55%">Help/Documentation menu item added. URL is configured in the build file by the orbit.docpage property</td>
-    <td width="9%">2002/09/23</td>
-    <td width="5%">&nbsp;</td>
+    <th width="30%" bgcolor="ccccff" height="23">Description</th>
+    <th width="0%" bgcolor="ccccff" height="23">Priority</th>
+    <th width="54%" bgcolor="ccccff" height="23">Details</th>
+    <th width="8%" bgcolor="ccccff" height="23">Date Closed</th>
+    <th width="8%" bgcolor="ccccff" height="23">Task Doc</th>
   </tr>
   <tr bgcolor="eeeeee"> 
-    <td width="26%">Need an 'About' box for the GUI</td>
-    <td width="5%">4</td>
-    <td width="55%">Help/About menu item added. Will need to add an icon or logo once it is available. Would also be nice to have the home page URL be a hyperlink, at least in the JavaWebStart version</td>
-    <td width="9%">2002/09/23</td>
-    <td width="5%">&nbsp;</td>
+    <td width="30%">Link from the app to the doc page</td>
+    <td width="0%">5</td>
+    <td width="54%">Help/Documentation menu item added. URL is configured in the 
+      build file by the orbit.docpage property</td>
+    <td width="8%">2002/09/23</td>
+    <td width="8%">&nbsp;</td>
   </tr>
   <tr bgcolor="eeeeee"> 
-    <td width="26%">Deadlock opening a profile on top of another profile</td>
-    <td width="5%">5</td>
-    <td width="55%">pick() and cvsDispose() were deadlocked. Fixed by synchronizing access to the BlockDiagramView</td>
-    <td width="9%">2002/09/23</td>
-    <td width="5%">&nbsp;</td>
+    <td width="30%">Need an 'About' box for the GUI</td>
+    <td width="0%">4</td>
+    <td width="54%">Help/About menu item added. Will need to add an icon or logo 
+      once it is available. Would also be nice to have the home page URL be a 
+      hyperlink, at least in the JavaWebStart version</td>
+    <td width="8%">2002/09/23</td>
+    <td width="8%">&nbsp;</td>
   </tr>
   <tr bgcolor="eeeeee"> 
-    <td width="26%">-prof profiles do not load correctly when 'debug' is turned 
+    <td width="30%">Deadlock opening a profile on top of another profile</td>
+    <td width="0%">5</td>
+    <td width="54%">pick() and cvsDispose() were deadlocked. Fixed by synchronizing 
+      access to the BlockDiagramView</td>
+    <td width="8%">2002/09/23</td>
+    <td width="8%">&nbsp;</td>
+  </tr>
+  <tr bgcolor="eeeeee"> 
+    <td width="30%">-prof profiles do not load correctly when 'debug' is turned 
       off in the connection.properties</td>
-    <td width="5%">5</td>
-    <td width="55%">Original cause not determined. Fixed by having the ConnectionFactory 
+    <td width="0%">5</td>
+    <td width="54%">Original cause not determined. Fixed by having the ConnectionFactory 
       log out to ByteArrayOutputStreams which are then conditionally written to 
       the log4j log using the standard configuration mechanism (log.properties)</td>
-    <td width="9%">2002/09/22</td>
-    <td width="5%">&nbsp;</td>
+    <td width="8%">2002/09/22</td>
+    <td width="8%">&nbsp;</td>
+  </tr>
+  <tr bgcolor="eeeeee">
+    <td width="30%">New Orbit builds should not require the user to re-download 
+      the supporting libraries (log4jme, gl4java). These JARs are regenerated 
+      during the build and then re-signed</td>
+    <td width="0%">4</td>
+    <td width="54%">Addressed by checking in the signed JAR files and changing 
+      build.xml to not re-sign them.</td>
+    <td width="8%">2002/09/19</td>
+    <td width="8%">&nbsp;</td>
   </tr>
   <tr bgcolor="eeeeee"> 
-    <td width="26%">Document the hsqldb hprof sample</td>
-    <td width="5%">5</td>
-    <td width="55%"><a href="../web/hsqldb-hprof-sample.html">hsqldb-hprof-sample.html</a></td>
-    <td width="9%">2002/09/15</td>
-    <td width="5%">&nbsp;</td>
+    <td width="30%">Document the hsqldb hprof sample</td>
+    <td width="0%">5</td>
+    <td width="54%"><a href="../web/hsqldb-hprof-sample.html">hsqldb-hprof-sample.html</a></td>
+    <td width="8%">2002/09/15</td>
+    <td width="8%">&nbsp;</td>
   </tr>
   <tr bgcolor="eeeeee"> 
-    <td width="26%">Document the HelloList hprof sample</td>
-    <td width="5%">5</td>
-    <td width="55%"><a href="../web/hello-list-hprof-sample.html">hello-list-hprof-sample.html</a></td>
-    <td width="9%">2002/09/15</td>
-    <td width="5%">&nbsp;</td>
+    <td width="30%">Document the HelloList hprof sample</td>
+    <td width="0%">5</td>
+    <td width="54%"><a href="../web/hello-list-hprof-sample.html">hello-list-hprof-sample.html</a></td>
+    <td width="8%">2002/09/15</td>
+    <td width="8%">&nbsp;</td>
   </tr>
   <tr bgcolor="eeeeee"> 
-    <td width="26%">As new profiles are opened, the Orbit frame grows bigger with 
+    <td width="30%">As new profiles are opened, the Orbit frame grows bigger with 
       each one</td>
-    <td width="5%">3</td>
-    <td width="55%">Changed the diagram-sizing code to construct the diagram with 
+    <td width="0%">3</td>
+    <td width="54%">Changed the diagram-sizing code to construct the diagram with 
       the size of the existing content panel, minus the preferred size of the 
       call details view (caller/callee tables)</td>
-    <td width="9%">2002/09/15</td>
-    <td width="5%">&nbsp;</td>
+    <td width="8%">2002/09/15</td>
+    <td width="8%">&nbsp;</td>
   </tr>
   <tr bgcolor="eeeeee"> 
-    <td width="26%">-prof method names not displaying correctly</td>
-    <td width="5%">4</td>
-    <td width="55%">Updated the UIUtil class to correctly implement getShortName() 
+    <td width="30%">-prof method names not displaying correctly</td>
+    <td width="0%">4</td>
+    <td width="54%">Updated the UIUtil class to correctly implement getShortName() 
       for -prof output</td>
-    <td width="9%">2002/09/14</td>
-    <td width="5%">&nbsp;</td>
+    <td width="8%">2002/09/14</td>
+    <td width="8%">&nbsp;</td>
   </tr>
   <tr bgcolor="eeeeee"> 
-    <td width="26%">In some cases, the children of a block with very little exclusive 
+    <td width="30%">In some cases, the children of a block with very little exclusive 
       time do not take up most of the area of their parent.</td>
-    <td width="5%"> 
+    <td width="0%"> 
       <div align="left">5</div>
     </td>
-    <td width="55%">A calculation error in the calculation of inclusive times 
+    <td width="54%">A calculation error in the calculation of inclusive times 
       from exclusive times was causing inflated inclusive times to be displayed</td>
-    <td width="9%">2002/09/11</td>
-    <td width="5%">&nbsp;</td>
+    <td width="8%">2002/09/11</td>
+    <td width="8%">&nbsp;</td>
   </tr>
   <tr bgcolor="eeeeee"> 
-    <td width="26%">Parse error messages are not visible in the Load dialog</td>
-    <td width="5%"> 
+    <td width="30%">Parse error messages are not visible in the Load dialog</td>
+    <td width="0%"> 
       <div align="left">4</div>
     </td>
-    <td width="55%">Load dialog replaced by status messages</td>
-    <td width="9%">2002/09/08</td>
-    <td width="5%">&nbsp;</td>
+    <td width="54%">Load dialog replaced by status messages</td>
+    <td width="8%">2002/09/08</td>
+    <td width="8%">&nbsp;</td>
   </tr>
   <tr bgcolor="eeeeee"> 
-    <td width="26%">HProf profile loader crashes if there is no CPU data</td>
-    <td width="5%">5</td>
-    <td width="55%">&nbsp;</td>
-    <td width="9%">2002/09/08</td>
-    <td width="5%">&nbsp;</td>
+    <td width="30%">HProf profile loader crashes if there is no CPU data</td>
+    <td width="0%">5</td>
+    <td width="54%">&nbsp;</td>
+    <td width="8%">2002/09/08</td>
+    <td width="8%">&nbsp;</td>
   </tr>
   <tr bgcolor="eeeeee"> 
-    <td width="26%">After launching the app with JavaWebStart and selecting File/Open, 
+    <td width="30%">After launching the app with JavaWebStart and selecting File/Open, 
       an error dialog shows up with a message 'No disk in Drive A'. Choosing 'Continue' 
       contiues the file open process without further issues.</td>
-    <td width="5%">4</td>
-    <td width="55%">Implemented System.setSecurityManager workaround, described 
+    <td width="0%">4</td>
+    <td width="54%">Implemented System.setSecurityManager workaround, described 
       at http://developer.java.sun.com/developer/bugParade/bugs/4387437.html</td>
-    <td width="9%">2002/09/08</td>
-    <td width="5%">&nbsp;</td>
+    <td width="8%">2002/09/08</td>
+    <td width="8%">&nbsp;</td>
   </tr>
   <tr bgcolor="eeeeee"> 
-    <td width="26%">&nbsp;</td>
-    <td width="5%">&nbsp;</td>
-    <td width="55%">&nbsp;</td>
-    <td width="9%">&nbsp;</td>
-    <td width="5%">&nbsp;</td>
+    <td width="30%">&nbsp;</td>
+    <td width="0%">&nbsp;</td>
+    <td width="54%">&nbsp;</td>
+    <td width="8%">&nbsp;</td>
+    <td width="8%">&nbsp;</td>
   </tr>
 </table>
 <h2>&nbsp;</h2>
