@@ -63,15 +63,19 @@ public class MapFrame
 		System.setSecurityManager(null);
 		
 		MapFrame map = new MapFrame();
+		map.pack();
+
+		// For some reason, without this line the Search bar doesn't show up unless the frame
+		//   is resized
+		map.setSize(new Dimension(map.getSize().width + 1, map.getSize().height));
 
 		UIUtil.centerWindow(map);
-
+		
 		if ( profileFileName != null )
 		{
 			map.loadProfile(new File(profileFileName));
 		}
 
-		// map.pack();
 		map.show();
 	}
 
@@ -111,7 +115,7 @@ public class MapFrame
 
 		enableControls();
 		
-		setSize(800, 600);
+		// setSize(800, 600);
 		setDefaultCloseOperation( EXIT_ON_CLOSE );
 	}
 
@@ -121,41 +125,60 @@ public class MapFrame
 
 		ProfileLoaderThread loader =
 			new ProfileLoaderThread(profileFile,
-									new ProfileLoaderThread.Callback()
+				new ProfileLoaderThread.Callback()
+					{
+						public void parsed()
+						{
+							SwingUtilities.invokeLater(new Runnable()
+								{
+									public void run()
+									{
+										lblStatus.setText(Strings.getUILabel(MapFrame.class, "status.reconstructingGraph"));
+									}
+								});
+						}
+																	 
+						public void solved()
+						{
+							SwingUtilities.invokeLater(new Runnable()
+								{
+									public void run()
+									{
+										lblStatus.setText(Strings.getMessage(MapFrame.class, "status.loaded", profileFile));
+									}
+								});
+						}
+																	 
+						public void loadComplete(final CallGraph cg, final String errorText)
+						{
+							SwingUtilities.invokeLater(new Runnable()
+								{
+									public void run()
+									{
+										MapFrame.this.setCursor(Cursor.DEFAULT_CURSOR);
+										if ( cg != null )
 										{
-											public void parsed()
-											{
-												lblStatus.setText(Strings.getUILabel(MapFrame.class, "status.reconstructingGraph"));
-											}
-																	 
-											public void solved()
-											{
-												lblStatus.setText(Strings.getMessage(MapFrame.class, "status.loaded", profileFile));
-											}
-																	 
-											public void loadComplete(CallGraph cg, String errorText)
-											{
-												MapFrame.this.setCursor(Cursor.DEFAULT_CURSOR);
-												if ( cg != null )
-												{
-													setCallGraph(cg);												
-												}
-												else
-												{
-													if ( errorText == null )
-														errorText = "<unknown error>";
-													String errorMsg = Strings.getMessage(MapFrame.class, "errorParsing.message",
-																						 new Object[]{ profileFile.getName(),
-																									   errorText });
-													LOG.warn(errorMsg);
-													lblStatus.setText(errorMsg);
-													JOptionPane.showMessageDialog(MapFrame.this,
-																				  errorMsg,
-																				  Strings.getUILabel(MapFrame.class, "errorParsing.title"),
-																				  JOptionPane.ERROR_MESSAGE);
-												}
-											}
-										});
+											setCallGraph(cg);												
+										}
+										else
+										{
+											String text = errorText;
+											if ( text == null )
+												text = "<unknown error>";
+											String errorMsg = Strings.getMessage(MapFrame.class, "errorParsing.message",
+																				 new Object[]{ profileFile.getName(),
+																							   text });
+											LOG.warn(errorMsg);
+											lblStatus.setText(errorMsg);
+											JOptionPane.showMessageDialog(MapFrame.this,
+																		  errorMsg,
+																		  Strings.getUILabel(MapFrame.class, "errorParsing.title"),
+																		  JOptionPane.ERROR_MESSAGE);
+										}
+									}
+								});
+						}
+					});
 		lblStatus.setText(Strings.getMessage(MapFrame.class, "status.parsingFile",
 											 profileFile.getName()));
 		setCursor(Cursor.WAIT_CURSOR);
@@ -164,28 +187,17 @@ public class MapFrame
 
 	private void setCallGraph(CallGraph cg)
 	{
-		Dimension contentSize = pnlContent.getSize();
-
-		if ( blockView != null )
+		if ( !( pnlContent instanceof ContentPanel ) )
 		{
-			synchronized ( blockView )
-			{
-				blockView.cvsDispose();
-				blockView = null;
-			}
+			getContentPane().remove(pnlContent);
 		}
-
+		
 		if ( blockModel != null )
 		{
 			blockModel.dispose();
 			blockModel = null;
 		}
-			
-		getContentPane().remove(pnlContent);
 		
-		pnlContent = null;
-		System.gc();
-			
 		blockModel = new BlockDiagramModel(cg);
 		blockModel.addListener(new PropertyChangeListener()
 			{
@@ -194,14 +206,6 @@ public class MapFrame
 					if ( BlockDiagramModel.RENDER_CALL_PROPERTY.equals(evt.getPropertyName()) )
 					{
 						enableControls();
-						callDetails.selectedCallChanged(blockModel.getRootRenderState().getRenderCall(),
-														blockModel.getSelectedCall());
-					}
-					else if ( BlockDiagramModel.SELECTED_CALL_PROPERTY.equals(evt.getPropertyName()) )
-					{
-						Call selectedCall = (Call)evt.getNewValue();
-						callDetails.selectedCallChanged(blockModel.getRootRenderState().getRenderCall(),
-														selectedCall);
 					}
 					else if ( BlockDiagramModel.NUM_LEVELS_PROPERTY.equals(evt.getPropertyName()) )
 					{
@@ -214,33 +218,47 @@ public class MapFrame
 			});
 		blockModel.setLevels(depthSlider.getValue());
 
-		int diagramWidth = contentSize.width - CallDetailsView.PREFERRED_WIDTH - DIAGRAM_WIDTH_FUDGE_FACTOR;
-		int diagramHeight = contentSize.height;
+		if ( blockView == null )
+		{
+			Dimension contentSize = pnlContent.getSize();
+			int diagramWidth = contentSize.width - CallDetailsView.PREFERRED_WIDTH - DIAGRAM_WIDTH_FUDGE_FACTOR;
+			int diagramHeight = contentSize.height;
 		  
-		Dimension diagramSize = new Dimension(diagramWidth, diagramHeight);
+			Dimension diagramSize = new Dimension(diagramWidth, diagramHeight);
 		
-		System.out.println("size = " + diagramSize);
-		blockView = new BlockDiagramView(diagramSize.width, diagramSize.height, blockModel);
-		callDetails = new CallDetailsView()
-			{
-				public void callerSelected(String callerName)
+			System.out.println("size = " + diagramSize);
+			blockView = new BlockDiagramView(diagramSize.width, diagramSize.height, blockModel);
+			callDetails = new CallDetailsView(blockModel);
+			callDetails.addListener(new PropertyChangeListener()
 				{
-					selectSelectionCaller(callerName);
-				}
+					public void propertyChange(PropertyChangeEvent evt)
+					{
+						String callName = (String)evt.getNewValue();
+						if ( CallDetailsView.SELECTED_CALLER_PROPERTY.equals(evt.getPropertyName()) )
+						{
+							selectSelectionCaller(callName);
+						}
+						else if ( CallDetailsView.SELECTED_CALLEE_PROPERTY.equals(evt.getPropertyName()) )
+						{
+							selectSelectionCallee(callName);
+						}
+					}
+				});
 
-				public void calleeSelected(String calleeName)
-				{
-					selectSelectionCallee(calleeName);
-				}
-			};
+			pnlContent = new ContentPanel(blockView, callDetails);
 
-		pnlContent = new ContentPanel(blockView, callDetails);
+			getContentPane().add(pnlContent, BorderLayout.CENTER);
 
-		getContentPane().add(pnlContent, BorderLayout.CENTER);
+			// Without this, the block diagram is rendered to the top-left of where it should
+			//   be...
+			pack();
+		}
+		else
+		{
+			blockView.setModel(blockModel);
+			callDetails.setModel(blockModel);
+		}
 
-		// Without this, the block diagram is rendered to the top-left of where it should
-		//   be...
-		pack();
 		blockView.requestFocus();
 
 		enableControls();
@@ -510,8 +528,17 @@ public class MapFrame
 		pnlTools.setLayout(new BorderLayout());
 		pnlTools.add(toolbar, BorderLayout.NORTH);
 		pnlTools.add(pnlSearch, BorderLayout.SOUTH);
+
+		/*
+		SGLayout layout = new SGLayout(2, 1);
+		pnlTools.setLayout(layout);
+		pnlTools.add(toolbar);
+		pnlTools.add(pnlSearch);
+		*/
 		
 		getContentPane().add(pnlTools, BorderLayout.NORTH);
+		
+		// getContentPane().add(toolbar, BorderLayout.NORTH);
 	}
 
 	private void addComponents()
@@ -526,6 +553,8 @@ public class MapFrame
 
 		pnlContent = new JPanel()
 			{
+				public Dimension getPreferredSize() { return new Dimension(800, 550); }
+				
 				public Dimension getSize() { System.out.println(super.getSize()); return super.getSize(); }
 			};
 		getContentPane().add(pnlContent, BorderLayout.CENTER);
