@@ -52,6 +52,7 @@ public class CallGraph
 		}
 	}
 
+	/** @return a key which is greater than the maximum key of any Call in the CallGraph. */
 	public int getKey() { return callIDs.length; }
 	public String getName() { return "<root>"; }
 	public int getDepth() { return 0; }

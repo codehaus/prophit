@@ -1,5 +1,71 @@
 
 -------------
+Want to colorize the chart in other ways besides just call exclusive time
+	  o method exclusive time
+	  o method inclusive time
+	  o threshold values & scaling should be parameterizable
+	  o as should the colors?
+
+Should be able to render parts of the diagram as wireframe... such as all calls
+  whose exclusive time is below a threshold value. This would 
+  potentially make the chart information more dense	  
+
+-------------
+
+Double-clicking on a cell in the caller/callee table should focus
+  the application on the method associated with that cell, and hi-lite
+  the calls of that method
+Should use setSelectionMode to ensure that only 1 row can be selected
+Detect a double-click event on the table and hi-lite the selected cell
+  choose the one that is the child or parent of the current selectedCell
+  set the child as the new renderRoot if it is not shown at all (e.g. if it is a caller
+  of the current renderRoot)
+
+if not ListSelectionEvent.getValueIsAdjusting()
+
+see http://java.sun.com/docs/books/tutorial/uiswing/components/table.html#selection
+
+Should hi-lite the blocks associated with the selected row in the caller and callee table
+
+ListSelectionModel rowSM = table.getSelectionModel();
+rowSM.addListSelectionListener(new ListSelectionListener() {                                                           
+
+-------------
+
+Change the behavior of block selection so that the other blocks which have the same RCC
+  as the selected block are also high-lighted, in a different color (yellow?)
+
+Need to be able to identify the master Method for a Call, then find all Calls 
+  whose method is this master, then hi-lite them all
+The calls are already indexed by their 'name' (OpenGL name, which is just an ID)
+They could also be indexed by their master Method ID
+
+BlockDiagramView:
+  pick:
+    methodKeyToCallListMap = renderer.getMethodKeyToCallListMap()
+
+  drawSelected():
+    selectedCall = model.getSelectedCall()
+    drawSelected(selectedCall, Color.white)
+    List calls = (List)methodKeyToCallListMap.get(selectedCall.getKey())
+    for call in calls:
+      if call != selectedCall:
+        drawSelected(call, Color.yellow)
+
+Call:
+  int getMethodKey()
+
+CallGraph:
+  # Can use the same value as the key
+  int getMethodKey(): return getKey()
+
+CallGraph.CallImpl:
+  int getMethodKey():
+    return id.getRCC().getKey()
+
+  
+
+-------------
 
 Need to tie the CallDetails into the GUI
 
