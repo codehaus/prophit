@@ -14,22 +14,10 @@ import java.util.*;
 
 public class Test
 {
-	static double TOLERANCE = 1e-5;
-
 	public static void main(String[] args) throws Throwable
 	{
 		try
 		{
-			new TestRootRenderState("testRootRenderState").testRootRenderState();
-
-			new TestConstructCallsAlgorithm("testBasicGraph").testBasicGraph();
-			new TestConstructCallsAlgorithm("testGaps").testGaps();
-			new TestConstructCallsAlgorithm("testAmbiguity").testAmbiguity();
-
-			new TestStackTrace("testStackTrace").testStackTrace();
-
-			new TestHProfParser("testParse").testParse();
-
 			testIntStack();
 			testBasic();
 			testHProfParserHello();
@@ -198,10 +186,10 @@ public class Test
 		double[] fractions = solver.execute(factory);
 
 		assertion(fractions.length == 14, "Expected " + fractions.length + " = 14");
-		assertion(equal(fractions[0], 1), "Expected " + fractions[0] + " = 1");
-		assertion(equal(fractions[1], 1), "Expected " + fractions[1] + " = 1");
-		assertion(equal(fractions[10], 0.333333), "Expected " + fractions[10] + " = 1/3");
-		assertion(equal(fractions[11], 0.666667), "Expected " + fractions[10] + " = 2/3");
+		assertion(TestUtil.equal(fractions[0], 1), "Expected " + fractions[0] + " = 1");
+		assertion(TestUtil.equal(fractions[1], 1), "Expected " + fractions[1] + " = 1");
+		assertion(TestUtil.equal(fractions[10], 0.333333), "Expected " + fractions[10] + " = 1/3");
+		assertion(TestUtil.equal(fractions[11], 0.666667), "Expected " + fractions[10] + " = 2/3");
 		/*
 		for ( int i = 0; i < fractions.length; ++i )
 		{
@@ -360,17 +348,17 @@ public class Test
 		assertRectangle(layout.getExtent(), new Rectangle2D.Double(0.8, 0.5, 0.2, 0.5));
 		assertRectangle(layout.getRemainderExtent(layout.getExtent()), new Rectangle2D.Double(0.8, 0, 0.2, 0.5));
 		// Rendered area should the same fraction of the Extent as the fractionOfParent / fractionOfChild
-		assertion(equal(area(layout.getRectangle(layout.getExtent())) / area(layout.getExtent()), 4 / 7.0 / 0.8), "Incorrect area ratio");
+		assertion(TestUtil.equal(area(layout.getRectangle(layout.getExtent())) / area(layout.getExtent()), 4 / 7.0 / 0.8), "Incorrect area ratio");
 		
 		System.out.println(layout.getRectangle(layout.getExtent()));
 	}
 
 	static void assertRectangle(Rectangle2D.Double first, Rectangle2D.Double second)
 	{
-		if ( !equal(first.x, second.x) ||
-			 !equal(first.y, second.y) ||
-			 !equal(first.width, second.width) ||
-			 !equal(first.height, second.height) )
+		if ( !TestUtil.equal(first.x, second.x) ||
+			 !TestUtil.equal(first.y, second.y) ||
+			 !TestUtil.equal(first.width, second.width) ||
+			 !TestUtil.equal(first.height, second.height) )
 		{
 			assertion(false, "Expected " + first + " = " + second);
 		}
@@ -379,11 +367,6 @@ public class Test
 	static double area(Rectangle2D.Double rectangle)
 	{
 		return rectangle.height * rectangle.width;
-	}
-
-	static boolean equal(double first, double second)
-	{
-		return Math.abs(second - first ) < TOLERANCE;
 	}
 
 	public static void assertion(boolean test, String message)

@@ -1,6 +1,9 @@
 package orbit.parsers;
 
 import orbit.model.*;
+import orbit.util.Log;
+
+import org.apache.log4j.Category;
 
 import java.io.*;
 import java.util.*;
@@ -19,7 +22,9 @@ public class DashProfParser
 
 		AbstractParser.main(args, parser);
 	}
-		
+
+	public static Category LOG = Category.getInstance(DashProfParser.class);
+	
 	private ArrayList callIDs = null;
 	private boolean readHeader = false;
 	
@@ -87,9 +92,7 @@ public class DashProfParser
 		{
 			throw new ParseException("IOException at line " + lineNumber() + " : " + x.getMessage());
 		}
-		System.out.println("Found " + rccList.size() + " recorded caller/callees in file");
-
-		// System.out.println("Map : " + rccListByCallee);
+		Log.debug(LOG, "DashProfParser found ", rccList.size(), " recorded caller/callees in file");
 
 		ConstructCallsAlgorithm algorithm = new ConstructCallsAlgorithm(rccList.size());
 		algorithm.execute(rccList, rccListByCallee, 1);

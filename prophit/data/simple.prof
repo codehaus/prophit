@@ -1,10 +1,10 @@
 count callee caller time
-1 main <unknown caller> 100
-1 test main 60
-1 init main 40
-1 DBExec init 30
-2 DBExec test 40
-1 insert DBExec 10
-5 update DBExec 20
-100 append insert 5
-200 append update 10
+1 main <unknown caller> 300
+1 test main 180
+1 init main 120
+1 DBExec init 90
+2 DBExec test 120
+1 insert DBExec 30
+5 update DBExec 60
+100 append insert 15
+200 append update 30
