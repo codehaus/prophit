@@ -3,6 +3,8 @@ package orbit.parsers;
 import orbit.model.CallID;
 import orbit.model.CallGraph;
 import orbit.model.RCC;
+import orbit.util.IntStack;
+import orbit.util.IntIterator;
 
 import java.util.Iterator;
 import java.util.List;
@@ -22,9 +24,12 @@ public class HProfSolver
 		this.proxyCallIDs = CallID.getProxyCallIDs(callIDs);
 
 		double[] fractions = solveCallFractions();
-		computeInclusiveTimes();
 
-		return new CallGraph(callIDs, fractions);
+		CallGraph cg = new CallGraph(callIDs, fractions);
+
+		computeInclusiveTimes(cg, fractions);
+
+		return cg;
 	}
 
 	/**
@@ -74,8 +79,50 @@ public class HProfSolver
 	/**
 	 * The inclusive time of each RCC needs to be computed by summing the exclusive times of itself and all its children.
 	 */
-	private void computeInclusiveTimes()
+	private void computeInclusiveTimes(CallGraph cg, final double[] fractions)
 	{
-		// TODO (for now)
+		final IntStack traversalStack = new IntStack();
+		int numRCCs = callIDs.size() - proxyCallIDs.size();
+		final double[] inclusiveTimeAdjustments = new double[callIDs.size() - proxyCallIDs.size()];
+		final RCC[] rccs = new RCC[numRCCs];
+
+		class ComputeInclusiveTimeVisitor
+			implements CallGraph.Visitor
+		{
+			public void visit(CallID callID, IntStack callStack)
+			{
+				// Store the RCC of the callID
+				rccs[callID.getRCC().getKey()] = callID.getRCC();
+				
+				// Traverse through the parents of the current CallID
+				// For each parent, add the fraction-adjusted time of this CallID to
+				//   its inclusive time
+				traversalStack.clear();
+				traversalStack.addAll(callStack);
+				double fraction = fractions[callID.getKey()];
+				// Start with to the parent of the current stack
+				traversalStack.pop();
+				while ( !traversalStack.isEmpty() )
+				{
+					int parentID = traversalStack.pop();
+					CallID parentCall = (CallID)callIDs.get(parentID);
+					inclusiveTimeAdjustments[parentCall.getRCC().getKey()] += callID.getRCC().getTime() * fraction;
+					fraction *= fractions[parentID];
+				}
+			}
+		}
+
+		cg.depthFirstTraverse(new ComputeInclusiveTimeVisitor());
+
+		// Apply the time adjustments to the RCCs
+		for ( int i = 0; i < rccs.length; ++i )
+		{
+			RCC rcc = rccs[i];
+			if ( rcc != null )
+			{
+				rcc.adjustTime((long)inclusiveTimeAdjustments[i]);
+			}
+		}
 	}
 }
+
