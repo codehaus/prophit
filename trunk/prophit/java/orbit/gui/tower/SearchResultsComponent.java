@@ -35,15 +35,10 @@ public class SearchResultsComponent
 	
 	public void paintComponent()
 	{
-		List callNames = model.getNameSearchNames();
-		for ( Iterator i = callNames.iterator(); i.hasNext(); )
+		for ( Iterator i = model.getAllSearchResultCalls().iterator(); i.hasNext(); )
 		{
-			String name = (String)i.next();
- 			for ( Iterator j = model.getCallsByName(name).iterator(); j.hasNext(); )
-			{
-				Call call = (Call)j.next();
-				highlightBlock(call, colorModel.getSearchMatchColor());
-			}
+			Call call = (Call)i.next();
+			highlightBlock(call, colorModel.getSearchMatchColor());
 		}
 	}
 }
