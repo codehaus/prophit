@@ -81,7 +81,8 @@ public class RootRenderState
 
 	protected void callChanged(Call oldCall)
 	{
-		listener.renderCallChanged(oldCall, getRenderCall());
+		if ( !getRenderCall().equals(oldCall) )
+			listener.renderCallChanged(oldCall, getRenderCall());
 	}
 
 	public interface Listener

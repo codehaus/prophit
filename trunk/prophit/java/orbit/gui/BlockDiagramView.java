@@ -105,7 +105,7 @@ class BlockDiagramView
 				public void propertyChange(PropertyChangeEvent evt)
 				{
 					if ( BlockDiagramModel.RENDER_CALL_PROPERTY.equals(evt.getPropertyName()) ||
-						  BlockDiagramModel.NUM_LEVELS_PROPERTY.equals(evt.getPropertyName()) )
+						 BlockDiagramModel.NUM_LEVELS_PROPERTY.equals(evt.getPropertyName()) )
 					{
 						generateDiagramLists = true;
 						generateSelectedLists = true;
@@ -344,6 +344,7 @@ class BlockDiagramView
 						if ( e.getModifiers() == MouseEvent.BUTTON1_MASK )
 						{
 							Call selectedCall = pick(e.getPoint());
+							Log.debug(LOG, "Mouse selected call ", selectedCall);
 							model.setMouseOverCall(selectedCall);
 							model.setSelectedCall(selectedCall);
 							if ( selectedCall != null && e.getClickCount() == 2 )
@@ -558,6 +559,7 @@ class BlockDiagramView
 
 		if ( rectangle == null )
 		{
+			Log.debug(LOG, "selectedCall ", selectedCall, " not found in diagram");
 			return false;
 		}
 		

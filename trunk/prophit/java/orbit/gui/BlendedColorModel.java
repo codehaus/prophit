@@ -41,9 +41,12 @@ class BlendedColorModel
 	private static final Color text = color("333333");
 	private static final Color searchMatchColor = color("999933");
 	private static final Color primaryBlock = color("F1D092");
-	private static final Color blockShade1 = color("EDC274");
-	private static final Color blockShade2 = color("EBBB63");
-	private static final Color blockShade3 = color("E6AB3E");
+	// private static final Color blockShade1 = color("EDC274");
+	// private static final Color blockShade2 = color("EBBB63");
+	// private static final Color blockShade3 = color("E6AB3E");
+	private static final Color blockShade1 = color("EBBB63");
+	private static final Color blockShade2 = color("E39F50");
+	private static final Color blockShade3 = color("E07F40");
 	private static final Color blockEdge = color("F2ECCE");
 	private static final Color selectedBlock = color("004284");
 	private static final Color secondarySelectedBlock = color("006AD5");
