@@ -147,17 +147,6 @@ public class TestProphitParser
 			System.out.println("");
 			System.out.println("SECOND: " + newsimple.toString(newsimple.getMaxDepth()));
 
-			/*
-			String s = simple.toString(); 
-			String t = newsimple.toString(); 
-			FileWriter w = new FileWriter(new File(System.getProperty("basedir") + "/data/compare.txt")); 
-			w.write("first: \n", 0, 8); 
-			w.write(s, 0, s.length()); 
-			w.write("\nsecond: \n", 0, 10); 
-			w.write(t, 0, t.length()); 
-			w.flush(); 
-			w.close();
-			*/
 		}
 		catch (Exception x)
 		{
@@ -167,6 +156,25 @@ public class TestProphitParser
 		}
 	}
 
+	public void testRoundTripXML() throws Exception
+	{
+		try 
+		{
+			ProphitParserLoader p1 = new ProphitParserLoader( new FileReader(new File(System.getProperty("basedir") + "/data/testoutput.xml")));
+			CallGraph c1 = p1.solve();
+			ProphitWriter writer = new ProphitWriter(c1, new File(System.getProperty("basedir") + "/data/testoutput2.xml"));
+			writer.write();
+			ProphitParserLoader p2 = new ProphitParserLoader( new FileReader(new File(System.getProperty("basedir") + "/data/testoutput2.xml")));
+			CallGraph c2 = p2.solve();
+			System.out.println("FIRST: " + c1.toString(c1.getMaxDepth()));
+			System.out.println(" ");
+			System.out.println("SECOND: " + c2.toString(c2.getMaxDepth()));
+		} catch (Exception x)
+		{
+			x.printStackTrace();
+			throw new RuntimeException("Unable to load.");
+		}
+	}
 }
 
 
