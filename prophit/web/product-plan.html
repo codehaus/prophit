@@ -107,12 +107,14 @@ MM_reloadPage(true);
 				  <ul>
                     <li><a href="#intelligent_labeling">Intelligent labeling</a></li>
                     <li><a href="#wire_frame">Wire-frame mode</a></li>
+                    <li><a href="#improve_depth_slider">Improve depth slider</a></li>
+                    <li><a href="#time_threshold">Set time threshold</a></li>
                     <li><a href="#selection_feedback">Enhanced selection feedback</a></li>
                     <li><a href="#new_coloring">New coloring options</a></li>
                     <li><a href="#enhanced_searching">Enhanced searching</a></li>
                   	<li><a href="#compact_data_format">Compact call graph data format</a></li>
                   	<li><a href="#recursion_collapse">Collapse recursive functions</a></li>
-                  	<li><a href="#profile_comparison">Profile Comparison</a></li>
+                  	<li><a href="#profile_comparison">Profile comparison</a></li>
                   	<li><a href="#python_loader">Python profile loader</a></li>
                   	<li><a href="#perl_loader">Perl profile loader</a></li>
                   	<li><a href="#haskell_loader">Haskell profile loader</a></li>
@@ -150,7 +152,10 @@ MM_reloadPage(true);
                   Expanding the canvas by maximizing the ProphIt application creates 
                   a large amount of label space. If the ProphIt application window 
                   is small, very few labels will fit on the canvas. 
+                  <p>For large prominent blocks, the labels could be written into 
+                    the blocks themselves.</p>
 				  </blockquote>
+
                   <a name="wire_frame"><div class="header">Wire-frame mode</div></a>
 				  <blockquote>
                   When it is being rotated, the tower diagram currently renders 
@@ -201,7 +206,49 @@ MM_reloadPage(true);
 				  
 				  <p>If intelligent labeling is implemented, all of the blocks 
                     which render as solid in wire-frame mode can be labeled. </p>
+					
                   </blockquote>
+
+                  <a name="improve_depth_slider"><div class="header">Improve depth slider</div></a>
+				  <p>
+				  The maximum stack depth that the prophIt application will show by default is 15. This
+				  can be increased by pressing the '+' key with the focus on the tower diagram, but there
+				  are several problems with this feature:
+				  </p>
+				  <ol>
+                    <li>It is not very well-documented</li>
+                    <li>It is not intuitive</li>
+                    <li>The application does not provide any indication of what 
+                      the maximum depth of the call graph actually is</li>
+                    <li>If there are fewer than 15 calls in the call graph subset 
+                      displayed by the diagram, there is no indication that moving 
+                      the depth slider higher will not show any more information</li>
+                  </ol>
+                  <p>It is possible to determine from the call graph what the 
+                    maximum depth actually is. This maximum depth could be used 
+                    to set the max value on the depth slider, and this max value 
+                    could be adjusted as the user explores the tower diagram. 
+                    For instance, if the deepest function has 30 functions in 
+                    its call stack, the maximum depth is 30. </p>
+                  <a name="time_threshold"><div class="header">Set time threshold</div></a>
+				  <p> The tower diagram clips out any functions which take up 
+                    less than a predetermined amount of time as a percentage of 
+                    the diagram root call. This value is currently about 3 / W, 
+                    where <code>W</code> equals the width of the tower diagram 
+                    window. Allowing the user to set this threshold manually, 
+                    or adjusting automatically it in a more intelligent manner 
+                    would have some benefits:</p>
+                  <ol>
+                    <li>Functions which do not contribute significantly to the 
+                      program time (at least in the current diagram) would be 
+                      removed from the diagram. When the user first loads a profile, 
+                      the threshold could be set to a high value to show a rough 
+                      picture of the profile. At a later time, the threshold can 
+                      be lowered to show more detail</li>
+                    <li>If the threshold were raised as deeper stack depths are 
+                      shown, the performance impact of showing a deeper stack 
+                      could be mitigated</li>
+                  </ol>
 				  <a name="selection_feedback">
                   <div class="header">Enhanced selection feedback</div>
                   </a> 
@@ -303,6 +350,7 @@ MM_reloadPage(true);
                   Functions which are added to or dropped from the old profile 
                   can also be highlighted using distinctive colors. 
 				  </blockquote>
+
  				  <a name="python_loader"><div class="header">Python profile loader</div></a>
 				  <blockquote>
 				  Python has a built-in <a href="http://www.python.org/doc/current/lib/profile.html">profiler</a>
@@ -317,17 +365,15 @@ MM_reloadPage(true);
                     a <code>-prof</code> profile, or an <code>hprof</code> profile 
                     with <i>depth=2</i>. Full stack information could potentially 
                     be obtained by writing a <code>Profiler</code> subclass. This 
-                    is theoretically possible but the procedure is not well documented.
-
-				  <p/>
+                    is theoretically possible but the procedure is not well documented. 
 				  </blockquote>
+
  				  <a name="perl_loader"><div class="header">Perl profile loader</div></a>
 				  <blockquote>
 				  Perl has a built-in profiler called <a href="http://www.perldoc.com/perl5.6/lib/Devel/DProf.html">Devel::DProf</a>.
 				  This profiler dumps out profiling data to yet another text file format which prophIt could be adapted to read.
-
-				  <p>
 				  </blockquote>
+				  
  				  <a name="haskell_loader"><div class="header">Haskell profile loader</div></a>
                   <blockquote>The functional language Haskell 
                     also has a <a href="http://www.haskell.org/ghc/docs/latest/html/users_guide/profiling.html">built-in 
