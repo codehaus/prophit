@@ -2,7 +2,7 @@
 
 <project name="prophit" default="dist">
 
-  <property name="prophit.version" value="Developer Build 3" />
+  <property name="prophit.version" value="Beta-1" />
   <property name="prophit.homepage" value="http://prophit.westslopesoftware.com/" />
   <property name="prophit.docpage"  value="http://prophit.westslopesoftware.com/docs/index.html" />
 
