@@ -51,7 +51,7 @@ public class TestSampleProfiles
 		
 		profile = (SampleProfile)pt.getProfiles().get(0);
 		assertEquals("HelloList", profile.getName());
-		assertEquals("hello-list-prof-sample.html", profile.getDocURL());
+		assertEquals("docs/hello-list-prof-sample.html", profile.getDocURL());
 	}
 
 	/**
