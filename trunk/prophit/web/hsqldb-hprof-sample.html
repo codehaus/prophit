@@ -18,8 +18,25 @@
     <td width="163" nowrap>Next : </td>
   </tr>
 </table>
+
+<table border="0">
+<tr><td>
+
+<table align="right" border="0" cellspacing="2">
+<tr><td><img src="processDelete.jpeg" /></td></tr>
+<tr><td align="center">Screenshot highlighting the <code>processDelete</code> function in the context of <code>Log.open</code>.
+</table>
+
 <p>This sample shows <code>java -Xrunhprof</code> output from the <a href="samples.html#hsqldb">HSQLDB 
   demo</a>. </p>
+<ul>
+<li>The diagram shows that the time to execute <code>Log.open</code> is largely (45%) spent in <code>Log.runScript</code>, which is mostly (71%) spent in <code>Parser.processDelete</code>. <code>Log.open</code> is called primarily by <code>Database.&lt;init></code>, which suggests that database initialization time could be significantly optimized by speeding up the operation of <code>Parser.processDelete</code>.</li>
+<li>The diagram shows that the time to execute <code>Parser.processInsert</code> is primarily (61%) spent in <code>Parser.getValue</code></li>
+</ul>
+
+</td></tr>
+</table>
+
 <table border="0" cellspacing="0" cellpadding="0" bgcolor="eeeeee">
   <tr> 
     <td width="247" nowrap>Previous : <a href="hello-list-hprof-sample.html">HelloList <code>hprof</code> 
