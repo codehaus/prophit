@@ -128,7 +128,7 @@
         <!--replace file="${webdist}/**.html" token="@@date" value="${date}"/-->
   </target>
 
-  <target name="clean">
+  <target name="clean" depends="delete-cache">
 		<delete dir="${build}" />
   </target>
 
@@ -231,7 +231,7 @@
 	</java>
   </target>
 
-  <target name="run-test" depends="build,jar,delete-cache">
+  <target name="run-test" depends="build,jar">
     <junit fork="true">
 	  <sysproperty key="solver.user.name" value="JAVA_USER" />
 	  <sysproperty key="basedir" value="${basedir}" />
@@ -258,3 +258,4 @@
   </target>
 
 </project>
+
