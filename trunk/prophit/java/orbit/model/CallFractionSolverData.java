@@ -1,7 +1,7 @@
 package orbit.model;
 
-import orbit.solver.Datum;
-import orbit.solver.StringDatum;
+import orbit.ampl.Datum;
+import orbit.ampl.StringDatum;
 import orbit.util.ConfigurationException;
 import orbit.util.Util;
 

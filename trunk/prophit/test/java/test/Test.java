@@ -5,7 +5,7 @@ import util.*;
 import orbit.gui.*;
 import orbit.model.*;
 import orbit.parsers.*;
-import orbit.solver.*;
+import orbit.ampl.*;
 import orbit.util.*;
 
 import junit.framework.TestSuite;
@@ -98,7 +98,7 @@ public class Test
 		
 		TestConnection.Factory factory = new TestConnection.Factory(responses);
 
-		orbit.solver.Solver solver = new orbit.solver.Solver(factory);
+		orbit.ampl.Solver solver = new orbit.ampl.Solver(factory);
 		
 		String result = solver.execute(userName, new StringDatum(model), new StringDatum(data), new StringDatum(commands));
 

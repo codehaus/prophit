@@ -27,23 +27,23 @@ class CallRollupList
 	private double totalTime = -1;
 
 	/**
-	 * Add a new call. The time spent in the call will be aggregated with the time
-	 * spent in other calls whose {@link Call#getName name} is the same.
+	 * Add a new caller for <code>call</code>. The time spent in <code>call</code>
+	 * be aggregated with the time for other callers with the same {@link Call#getName name}.
 	 */
-	public void addCall(Call call, double t)
+	public void addCaller(Call caller, Call call)
 	{
-		Double time = (Double)timeByCallName.get(call.getName());
-		if ( time == null )
-		{
-			time = new Double(t);
-		}
-		else
-		{
-			time = new Double(time.doubleValue() + t);
-		}
-		timeByCallName.put(call.getName(), time);
+		addCall(caller, call.getTime());
 	}
 
+	/**
+	 * Add a new callee, <code>call</code>. The time spent in <code>call</code>
+	 * be aggregated with the time for other callees with the same {@link Call#getName name}.
+	 */
+	public void addCallee(Call call)
+	{
+		addCall(call, call.getTime());
+	}
+	
 	/**
 	 * After this method is invoked, the other methods of CallRollupList aside from {@link #addCall}
 	 * can be used.
@@ -95,6 +95,24 @@ class CallRollupList
 	{
 		checkForNull();
 		return callNames.size();
+	}
+
+	/**
+	 * Add a new call. The time spent in the call will be aggregated with the time
+	 * spent in other calls whose {@link Call#getName name} is the same.
+	 */
+	private void addCall(Call call, double t)
+	{
+		Double time = (Double)timeByCallName.get(call.getName());
+		if ( time == null )
+		{
+			time = new Double(t);
+		}
+		else
+		{
+			time = new Double(time.doubleValue() + t);
+		}
+		timeByCallName.put(call.getName(), time);
 	}
 
 	private void checkForNull()
