@@ -12,8 +12,9 @@ import java.util.Map;
 class BlockRenderer
 	implements CallLayoutAlgorithm.Callback, GLEnum
 {
-	private static final int RENDER_SOLID = 0;
-	private static final int RENDER_WIREFRAME = 1;
+	public static final int RENDER_SOLID = 0;
+	public static final int RENDER_WIREFRAME = 1;
+
 	private static final double HEIGHT = 0.05;
 
 	private static final double SIZE_THRESHOLD = 2.0;
@@ -21,14 +22,14 @@ class BlockRenderer
 	// If less, it tends towards blue
 	private static final double FRACTION_THRESHOLD = 0.20;
 
-	private final BlockDiagramModel model;
 	private final GLFunc            gl;
 	private final int               renderMode;
 	private final int[]             viewport = new int[4];
+	// TODO: can use Call keys as GL names
 	private final HashMap nameToCallMap = new HashMap();
 
 	private int nextName = 0;
-	private double brightness = 0.3;
+	private double brightness = 1.3;
 	private TimeMeasure measure = TimeMeasure.TotalTime;
 
 	/**
@@ -38,10 +39,9 @@ class BlockRenderer
 	 * @param gl the interface to OpenGL
 	 * @param renderMode one of RENDER_SOLID or RENDER_WIREFRAME
 	 */
-	public BlockRenderer(BlockDiagramModel model, GLFunc gl, int renderMode)
+	public BlockRenderer(GLFunc gl, int renderMode)
 	{
 		this.gl = gl;
-		this.model = model;
 		this.renderMode = renderMode;
 
 		gl.glGetIntegerv(GL_VIEWPORT, viewport);
@@ -70,9 +70,6 @@ class BlockRenderer
 	 */
 	public boolean beginCall(CallAdapter call, Rectangle2D.Double rectangle, int depth)
 	{
-		if ( depth > model.getLevels() )
-			return false;
-
 		if ( rectangle.width * viewport[2] < SIZE_THRESHOLD ||
 			  rectangle.height * viewport[3] < SIZE_THRESHOLD )
 		{
@@ -131,6 +128,8 @@ class BlockRenderer
 			gl.glPushName(name);
 
 			renderAsQuads(call, rectangle, depth, color);
+
+			gl.glPopName();
 		}
 		else if ( renderMode == RENDER_WIREFRAME )
 		{
@@ -141,10 +140,6 @@ class BlockRenderer
 
 	public void endCall(CallAdapter call)
 	{
-		if ( renderMode == RENDER_SOLID )
-		{
-			gl.glPopName();
-		}
 	}
 
 	protected void renderAsQuads(CallAdapter call, Rectangle2D.Double rectangle, int depth, Color color)

@@ -1,27 +1,35 @@
 package orbit.gui;
 
 import orbit.model.Call;
+import orbit.model.CallGraph;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 
 public class BlockDiagramModel
 {
+	private static int DEFAULT_LEVELS = 5;
 	private static EyeLocation DEFAULT_EYE_LOCATION = new EyeLocation(2.5, -Math.PI / 4, Math.PI / 4);
 	private static double SHIFT_STEP = 0.05;
 
 	private final ArrayList listeners = new ArrayList();
+	private final CallGraph cg;
 	
-	private int levels;
+	private Call rootRenderCall;
+
+	private int levels = DEFAULT_LEVELS;
 	private double shiftVertical = 0;
 	private double shiftHorizontal = 0;
 	private EyeLocation eyeLocation;
 	private Call mouseOverCall = null;
 	private Call selectedCall = null;
 
-	public BlockDiagramModel()
+	public BlockDiagramModel(CallGraph cg)
 	{
 		eyeLocation = (EyeLocation)DEFAULT_EYE_LOCATION.clone();
+
+		this.cg = cg;
+		this.rootRenderCall = cg;
 	}
 
 	public synchronized void addListener(Listener listener)
@@ -39,11 +47,54 @@ public class BlockDiagramModel
 			listeners.remove(listener);
 		}
 	}
+
+	public CallGraph getCallGraph()
+	{
+		return cg;
+	}
 	
+	public void setRenderCall(Call call)
+	{
+		rootRenderCall = call;
+		invalidate();
+	}
+
+	public Call getRenderCall()
+	{
+		return rootRenderCall;
+	}
+
+	public void setSelectedCall(Call call)
+	{
+		selectedCall = call;
+		repaint();
+	}
+
+	public Call getSelectedCall()
+	{
+		return selectedCall;
+	}
+
+	public void setMouseOverCall(Call call)
+	{
+		mouseOverCall = call;
+		repaint();
+	}
+
+	public Call getMouseOverCall()
+	{
+		return mouseOverCall;
+	}
+
 	public void moveEye(double yaw, double pitch)
 	{
 		eyeLocation = eyeLocation.move(0, yaw, pitch);
 		repaint();
+	}
+
+	public EyeLocation getEye()
+	{
+		return eyeLocation;
 	}
 
 	public void shiftVertical(boolean up)
@@ -55,6 +106,11 @@ public class BlockDiagramModel
 		repaint();
 	}
 
+	public double getShiftVertical()
+	{
+		return shiftVertical;
+	}
+
 	public void shiftHorizontal(boolean right)
 	{
 		if ( right )
@@ -62,6 +118,11 @@ public class BlockDiagramModel
 		else
 			shiftHorizontal -= SHIFT_STEP;
 		repaint();
+	}
+
+	public double getShiftHorizontal()
+	{
+		return shiftHorizontal;
 	}
 
 	public void setLevels(int levels)
@@ -116,59 +177,5 @@ public class BlockDiagramModel
 		public void modelInvalidated(BlockDiagramModel model);
 
 		public void requestRepaint(BlockDiagramModel model);
-	}
-	
-	private static class EyeLocation
-	{
-		public final double radius;
-		public final double eyeYaw;
-		public final double eyePitch;
-				
-		public EyeLocation(double radius, double eyeYaw, double eyePitch)
-		{
-			this.radius = radius;
-			this.eyeYaw = eyeYaw;
-			this.eyePitch = eyePitch;
-		}
-
-		public Object clone()
-		{
-			return new EyeLocation(radius, eyeYaw, eyePitch);
-		}
-		
-		public EyeLocation move(double dR, double dYaw, double dPitch)
-		{
-			double pitch = eyePitch + dPitch;
-			if ( pitch > Math.PI / 2 )
-				pitch = Math.PI / 2;
-			else if ( pitch < 0 )
-				pitch = 0;
-			
-			return new EyeLocation(radius + dR, eyeYaw + dYaw, pitch);
-		}
-
-		public double getRadius() { return radius; }
-		public double getPitch() { return eyePitch; }
-		public double getYaw() { return eyeYaw; }
-
-		public double getX()
-		{
-			return radius * Math.cos(eyeYaw) * Math.cos(eyePitch);
-		}
-
-		public double getY()
-		{
-			return radius * Math.sin(eyeYaw) * Math.cos(eyePitch);
-		}
-
-		public double getZ()
-		{
-			return radius * Math.sin(eyePitch);
-		}
-
-		public String toString()
-		{
-			return "r = " + radius + ", yaw = " + eyeYaw + ", pitch = " + eyePitch;
-		}
 	}
 }

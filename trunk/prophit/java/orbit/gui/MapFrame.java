@@ -67,7 +67,9 @@ public class MapFrame
 
 	private final Controller controller = new Controller();
 	
-	private MapCanvas cvsMap = null;
+	// private MapCanvas cvsMap = null;
+	private BlockDiagramView blockView = null;
+	private BlockDiagramModel blockModel = null;
 	private JSlider depthSlider;
 	
 	public MapFrame()
@@ -94,16 +96,19 @@ public class MapFrame
 		}
 		else
 		{
-			if ( cvsMap != null )
+			if ( blockView != null )
 			{
-				cvsMap.cvsDispose();
-				getContentPane().remove(cvsMap);
+				blockView.cvsDispose();
+				getContentPane().remove(blockView);
+				blockModel = null;
 			}
 			
-			cvsMap = new MapCanvas(800, 600, cg);
-			cvsMap.setLevels(depthSlider.getValue());
-			getContentPane().add(cvsMap, BorderLayout.CENTER);
-			cvsMap.requestFocus();
+			blockModel = new BlockDiagramModel(cg);
+			blockModel.setLevels(depthSlider.getValue());
+
+			blockView = new BlockDiagramView(800, 600, blockModel);
+			getContentPane().add(blockView, BorderLayout.CENTER);
+			blockView.requestFocus();
 			pack();
 			return true;
 		}
@@ -153,9 +158,9 @@ public class MapFrame
 				public void stateChanged(ChangeEvent e)
 				{
 					JSlider source = (JSlider)e.getSource();
-					if ( cvsMap != null && !source.getValueIsAdjusting() )
+					if ( blockModel != null && !source.getValueIsAdjusting() )
 					{
-						cvsMap.setLevels(source.getValue());
+						blockModel.setLevels(source.getValue());
 					}
 				}
 			});
@@ -209,7 +214,7 @@ public class MapFrame
 		{ 
 			// Log.debug(LOG, "doCloseDocument");
 			boolean close = true;
-			if ( cvsMap != null )
+			if ( blockView != null )
 			{
 				int option = JOptionPane.showConfirmDialog(null, 
 														   Strings.getUILabel(MapFrame.class, "doClose.message"),
@@ -224,9 +229,9 @@ public class MapFrame
 		{
 			if ( doCloseDocument() )
 			{
-				if ( cvsMap != null )
+				if ( blockView != null )
 				{
-					cvsMap.cvsDispose();
+					blockView.cvsDispose();
 				}
 				dispose();
 				System.exit( 0 );

@@ -7,31 +7,31 @@ import java.util.Iterator;
 
 public class CallLayoutAlgorithm
 {
-	private final CallAdapter root;
-	private final Callback    callback;
-	private final RectangleLayout layout;
-	private int   maxDepth = -1;
-	private Rectangle2D.Double rootRectangle = new Rectangle2D.Double(0, 0, 1, 1);
+	private final CallAdapter        root;
+	private final RectangleLayout    layout;
+	private final int                maxDepth;
+	private final Rectangle2D.Double rootRectangle;
+
+	private Callback callback = null;
 	
-	public CallLayoutAlgorithm(CallAdapter root, TimeMeasure measure, Callback callback)
+	public CallLayoutAlgorithm(CallAdapter root, TimeMeasure measure, int depth, Rectangle2D.Double rootRectangle)
 	{
 		this.root = root;
 		this.layout = new RectangleLayout(measure);
-		this.callback = callback;
-	}
-
-	public void setMaxDepth(int depth)
-	{
 		this.maxDepth = depth;
+		this.rootRectangle = rootRectangle;
 	}
 
-	public void setRootRectangle(Rectangle2D.Double rootRectangle)
+	public void setCallback(Callback callback)
 	{
-		this.rootRectangle = rootRectangle;
+		this.callback = callback;
 	}
 
 	public void execute()
 	{
+		if ( callback == null )
+			throw new NullPointerException("Callback is null in CallLayoutAlgorithm");
+
 		layoutCall(root, rootRectangle, rootRectangle, 0);
 	}
 
@@ -52,8 +52,8 @@ public class CallLayoutAlgorithm
 		if ( callback.beginCall(call, rectangle, depth) )
 		{
 			layoutChildren(call, rectangle, depth + 1);
+			callback.endCall(call);
 		}
-		callback.endCall(call);
 		return remainder;
 	}
 
