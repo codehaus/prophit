@@ -16,18 +16,29 @@ public class RCC
 
 	private int    nCalls;
 	private long   time;
+	private long   exclusiveTime;
 
+	// TODO: remove this method
+	public RCC(StackTrace st, int nCalls, long time, int key)
+	{
+		this(st, nCalls, time, -1, key);
+	}
+	
 	/**
 	 * @param st the stack trace of the RCC as recorded in the data file
 	 * @param nCalls number of times that this RCC was invoked.
-	 * @param time total time spent in this RCC
+	 * @param time total time spent in this RCC. May be -1 if unknown, but in that case
+	 * exclusiveTime must not be -1.
+	 * @param exclusiveTime exclusive time (time not spent in callees) spent in this RCC.
+	 * May be -1 if unknown, but in that case exclusiveTime must not be -1.
 	 * @param key a number which is unique to this RCC across all the RCCs
 	 */
-	public RCC(StackTrace st, int nCalls, long time, int key)
+	public RCC(StackTrace st, int nCalls, long time, long exclusiveTime, int key)
 	{
 		this.st = st;
 		this.nCalls = nCalls;
 		this.time = time;
+		this.exclusiveTime = exclusiveTime;
 		this.key = key;
 	}
 
@@ -57,14 +68,22 @@ public class RCC
 	
 	public int    getCallCount() { return nCalls; }
 	public long   getTime() { return time; }
+	public long   getExclusiveTime() { return exclusiveTime; }
 	public int    getKey() { return key; }
 
-	public void adjustTime(long delta) { time += delta; }
-	public void adjustCalls(int delta) { nCalls += delta; }
+	public void setTime(long time) { this.time = time; }
+	public void setExclusiveTime(long time) { this.exclusiveTime = time; }
+
+	protected void aggregate(int nCallsAdjust, long timeAdjust, long exclusiveTimeAdjust)
+	{
+		time += timeAdjust;
+		exclusiveTime += exclusiveTimeAdjust;
+		nCalls += nCallsAdjust;
+	}
 	
 	public String toString()
 	{
-		return nCalls + " " + st.getLeafMethod() + " " + st.getLeafParentMethod() + " " + time + " [" + key + "]";
+		return st.getLeafParentMethod() + " -> " + st.getLeafMethod() + " { nCalls=" + nCalls + ", time=" + time + ", key=" + key + " }";
 	}
 }
 
