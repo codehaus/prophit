@@ -18,6 +18,7 @@ import gl4java.awt.GLCanvas;
 import java.awt.geom.Rectangle2D;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.util.Iterator;
 
 public class TowerDiagramWireFrame
 	extends AbstractDisplayListComponent
@@ -32,7 +33,10 @@ public class TowerDiagramWireFrame
 				public void propertyChange(PropertyChangeEvent evt)
 				{
 					if ( BlockDiagramModel.RENDER_CALL_PROPERTY.equals(evt.getPropertyName()) ||
-						 BlockDiagramModel.NUM_LEVELS_PROPERTY.equals(evt.getPropertyName()) )
+						 BlockDiagramModel.NUM_LEVELS_PROPERTY.equals(evt.getPropertyName()) ||
+						 BlockDiagramModel.WIREFRAME_PROPERTY.equals(evt.getPropertyName()) ||
+						 BlockDiagramModel.SELECTED_CALL_PROPERTY.equals(evt.getPropertyName()) ||
+						 BlockDiagramModel.NAME_SEARCH_STRING_PROPERTY.equals(evt.getPropertyName()) )
 					{
 						Log.debug(LOG, "Got PropertyChangeEvent ", evt, ". Invalidating TowerDiagramWireFrame");
 						invalidate();
@@ -50,7 +54,25 @@ public class TowerDiagramWireFrame
 															 rootRectangle);
 		BlockRenderer renderer = new BlockRenderer(gl, Constants.RENDER_WIREFRAME, colorModel);
 		layout.setCallback(renderer);
-		
+
+		/*
+		 * If the wireframe checkbox is checked, render all the search-result
+		 *   and selected calls as solid blocks.
+		 */
+		if ( model.isWireframe() )
+		{
+			for ( Iterator i = model.getNameSearchNames().iterator(); i.hasNext(); )
+			{
+				String name = (String)i.next();
+				renderer.addSolidBlocks(model.getCallsByName(name));
+			}
+			if ( model.getSelectedCall() != null )
+			{
+				renderer.addSolidBlock(model.getSelectedCall());
+				renderer.addSolidBlocks(model.getCallsByName(model.getSelectedCall().getName()));
+			}
+		}
+
 		gl.glDisable(GL_DITHER);
 		gl.glDisable(GL_LIGHTING);
 		gl.glDisable(GL_CULL_FACE);

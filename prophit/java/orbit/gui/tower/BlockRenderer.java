@@ -16,6 +16,8 @@ import java.awt.Dimension;
 import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -36,6 +38,9 @@ class BlockRenderer
 	// TODO: can use Call keys as GL names
 	private final HashMap glNameToCallMap = new HashMap();
 	private final HashMap nameToCallListMap = new HashMap();
+
+	/** If empty, all calls should be rendered as wireframe in wireframe mode */
+	private HashSet solidCalls = null;
 
 	private int    nextName   = 0;
 	private TimeMeasure measure = TimeMeasure.TotalTime;
@@ -76,6 +81,30 @@ class BlockRenderer
 	}
 
 	/**
+	 * Add a list of {@link Call}s which should always be rendered as solid.
+	 */
+	public void addSolidBlocks(List calls)
+	{
+		for ( Iterator i = calls.iterator(); i.hasNext(); )
+		{
+			Call call = (Call)i.next();
+			addSolidBlock(call);
+		}
+	}
+		
+	/**
+	 * Add a {@link Call} which should always be rendered as solid.
+	 */
+	public synchronized void addSolidBlock(Call call)
+	{
+		if ( solidCalls == null )
+		{
+			solidCalls = new HashSet();
+		}
+		solidCalls.add(call);
+	}	
+	
+	/**
 	 * Renders a {@link CallAdapter} at the specified depth (relative to the root rendered block, not the root
 	 * of the call graph), inside the specified rectangle.
 	 * 
@@ -104,7 +133,9 @@ class BlockRenderer
 
 		Color color = colorModel.getBlockColor(0, FRACTION_THRESHOLD, 1, expense);
 
-		if ( renderMode == RENDER_SOLID )
+		/** Render specifically solidified calls as solid even in WIREFRAME mode */
+		if ( renderMode == RENDER_SOLID ||
+			 ( solidCalls != null && solidCalls.contains(call.getCall()) ) )
 		{
 			int name = nextName++;
 			glNameToCallMap.put(new Integer(name), call.getCall());
@@ -114,7 +145,7 @@ class BlockRenderer
 
 			gl.glPopName();
 		}
-		else if ( renderMode == RENDER_WIREFRAME )
+		else // renderMode == RENDER_WIREFRAME
 		{
 			renderAsLines(call, rectangle, depth, color);
 		}
@@ -204,7 +235,7 @@ class BlockRenderer
 		gl.glVertex3d(rectangle.x + rectangle.width, rectangle.y, topZ);
 			
 		gl.glEnd();
-			
+
 		gl.glBegin(GL_LINES);
 		gl.glVertex3d(rectangle.x, rectangle.y, topZ);
 		gl.glVertex3d(rectangle.x, rectangle.y, bottomZ);
