@@ -30,7 +30,9 @@ class BlockDiagramView
 
 	private static double MOVE_INCREMENT = 0.5;
 	private static double DRAG_ROTATE_FACTOR = 5.0;
+	private static double LEGEND_SHIFT = 1 / 12.0;
 
+	
 	private static int TEXT_OFFSET_FROM_LEFT = 4;
 	private static int FONT_HEIGHT = 14;
 	private static int TEXT_BORDER = 3;
@@ -44,7 +46,6 @@ class BlockDiagramView
 	// float[] Light_Diffuse =  { 1.2f, 1.2f, 1.2f, 1.0f }; 
 	// float[] Light_Ambient1 =  { 0.75f, 0.75f, 0.75f, 1.0f };
 	// float[] Light_Specular1 =  { 0.0f, 0.0f, 0.0f, 1.0f };
-	float[] Light_Diffuse1 =  { 1.0f, 1.0f, 1.0f, 1.0f };
 	float[] Light_Position1 = { 5.0f, 5.0f, 5.0f, 1.0f };
 
 	// float[] Light_Ambient2 =  { 0.35f, 0.35f, 0.35f, 1.0f };
@@ -54,39 +55,49 @@ class BlockDiagramView
 	float bevel_mat_shininess[] = { 50.0f };
 	float bevel_mat_specular[] = { 1.0f, 1.0f, 1.0f, 1.0f };
 
-	private int[] selectBuffer = new int[512];
-	
-	private TimeMeasure measure = TimeMeasure.TotalTime;
+	private final ColorModel  colorModel   = new BlendedColorModel();
+	private final int[]       selectBuffer = new int[512];
+	private final TimeMeasure measure      = TimeMeasure.TotalTime;
 
-	private int updateCount = 0;
+	/* All these variables are initialized in setModel */
+	private int updateCount;
+	private boolean repaint;
+	private boolean generateDiagramLists;
+	private boolean generateSelectedLists;
+	private Point mouseClickPoint;
+	private EyeLocation mouseClickLocation;
+	private int renderMode;
+	private BlockDiagramModel model;
 
-	private boolean repaint = false;
-	private boolean generateDiagramLists = true;
-	private boolean generateSelectedLists = true;
-
+	/* These variables keep their values across calls to setModel */
 	private int linesList = -1;
 	private int quadsList = -1;
 	private int selectedCallsList = -1;
-
-	private Point mouseClickPoint = null;
-	private EyeLocation mouseClickLocation = null;
-
-	private GLUTFunc glut       = null;
-	private int      renderMode = BlockRenderer.RENDER_SOLID;
-
-	// private ColorModel colorModel = new BlackRedBlueColorModel();
-	private ColorModel colorModel = new BlendedColorModel();
-
-	private BlockDiagramModel model;
+	private GLUTFunc glut = null;
 
 	public BlockDiagramView(int w, int h, BlockDiagramModel blockModel)
 	{
 		super(w, h, null, null);
-		// super(true);
 
 		System.out.println("Constructing with dimensions (" + w + ", " + h + ")");
 
-		// setSize(w, h);
+		addListeners();
+
+		setModel(blockModel);
+	}
+
+	public synchronized void setModel(BlockDiagramModel blockModel)
+	{
+		this.updateCount = 0;
+
+		this.repaint = true;
+		this.generateDiagramLists = true;
+		this.generateSelectedLists = true;
+
+		this.mouseClickPoint = null;
+		this.mouseClickLocation = null;
+
+		this.renderMode = BlockRenderer.RENDER_SOLID;
 
 		this.model = blockModel;
 		this.model.addListener(new PropertyChangeListener()
@@ -108,11 +119,170 @@ class BlockDiagramView
 					checkUpdate();
 				}
 			});
+
+		repaint();
+	}
+
+	public Dimension getPreferredSize()
+	{
+		Dimension d = super.getPreferredSize();
+		Log.debug(LOG, "preferredSize = ", d);
+		return d;
+	}
+	
+	public void removeNotify() 
+	{
+		super.removeNotify();
+
+		/**
+		 * Strictly speaking, it shouldn't be necessary to release references explicitly.
+		 * However, there may be a problem with the native code retaining a reference to the BlockDiagramView.
+		 * If that is the case, we should try and ensure that as much cleanup happens as possible.
+		 */
+		model = null;
+		glut = null;
+	}
+
+	public void preInit() 
+	{
+	    doubleBuffer = true;
+	    stereoView = false; 
+	}
+
+	public void init()
+	{
+		glut = new GLUTFuncLightImplWithFonts(gl, glu);
+
+		// Color to clear color buffer to.
+		GLUtils.glClearColor(gl, colorModel.getBackgroundColor());
 		
+		// Depth to clear depth buffer to; type of test.
+		gl.glEnable(GL_CULL_FACE);
+		gl.glCullFace(GL_BACK);
+		gl.glEnable(GL_DEPTH_TEST);
+
+		gl.glClearDepth(1.0);
+		gl.glDepthFunc(GL_LESS); 
+
+		// Enables Smooth Color Shading; try GL_FLAT for (lack of) fun.
+		gl.glShadeModel(GL_FLAT);
+
+		gl.glMaterialfv(GL_FRONT, GL_SHININESS, bevel_mat_shininess);
+		gl.glMaterialfv(GL_FRONT, GL_SPECULAR, bevel_mat_specular);
+
+		// gl.glColorMaterial(GL_FRONT_AND_BACK, GL_DIFFUSE);
+		gl.glColorMaterial(GL_FRONT, GL_DIFFUSE);
+		gl.glEnable(GL_COLOR_MATERIAL);
+		
+		// Set up lights, turn them on.
+		// gl.glLightfv(GL_LIGHT0, GL_AMBIENT,  Light_Ambient1);
+		Color lightColor = colorModel.getLightColor();
+		/*
+		gl.glLightfv(GL_LIGHT0,
+					 GL_DIFFUSE,
+					 new float[]{ lightColor.getRed() / 255.0f,
+								  lightColor.getGreen() / 255.0f,
+								  lightColor.getBlue() / 255.0f,
+								  lightColor.getAlpha() / 255.0f  });
+		*/
+		gl.glLightfv(GL_LIGHT0,
+					 GL_AMBIENT,
+					 new float[]{ 0.7f, 0.7f, 0.7f, 1.0f });
+		gl.glLightfv(GL_LIGHT0,
+					 GL_DIFFUSE,
+					 new float[]{ lightColor.getRed() / 255.0f,
+								  lightColor.getGreen() / 255.0f,
+								  lightColor.getBlue() / 255.0f,
+								  lightColor.getAlpha() / 255.0f  });
+		gl.glLightfv(GL_LIGHT0, GL_SPECULAR, new float[]{ 0.0f, 0.0f, 0.0f, 1.0f });
+		gl.glLightfv(GL_LIGHT0, GL_POSITION, Light_Position1);
+
+		// gl.glLightfv(GL_LIGHT1, GL_AMBIENT,  Light_Ambient2);
+		gl.glLightfv(GL_LIGHT1, GL_DIFFUSE,  Light_Diffuse2);
+		gl.glLightfv(GL_LIGHT1, GL_POSITION, Light_Position2);
+
+		gl.glEnable(GL_LIGHT0); 
+		// gl.glEnable(GL_LIGHT1); 
+		gl.glEnable(GL_LIGHTING);
+		
+		reshape(getSize().width, getSize().height);
+	}
+
+	public void reshape(int width, int height)
+	{
+		super.reshape(width, height);
+
+		gl.glMatrixMode(GL_PROJECTION);
+		// gl.glOrtho(-EXTENT * 0.1, EXTENT * 1.1, -EXTENT * 0.1, EXTENT * 1.1, -1.0, 100.0);
+		gl.glLoadIdentity();
+
+		createPerspectiveTransform(width, height);
+		
+		gl.glMatrixMode(GL_MODELVIEW);
+		glj.gljCheckGL();
+	}
+
+	public synchronized void display()
+	{
+		/* Standard GL4Java Init */
+		if( !glj.gljMakeCurrent() ) 
+		{
+			return;
+		}
+
+		compileDisplayLists();
+		
+		// Clear the color and depth buffers.
+		gl.glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+		gl.glMatrixMode(GL_MODELVIEW);
+		gl.glLoadIdentity();
+
+		// System.out.println(eyeLocation);
+
+		gl.glTranslated(LEGEND_SHIFT, LEGEND_SHIFT, 0);
+		gl.glTranslated(model.getShiftHorizontal(), model.getShiftVertical(), 0);
+		glu.gluLookAt(model.getEye().getX(), model.getEye().getY(), model.getEye().getZ(), 
+						  0, 0, 0, 0, 0, 1);
+		gl.glTranslated(-0.5, -0.5, -0.5);
+
+		if ( renderMode == BlockRenderer.RENDER_WIREFRAME )
+		{
+			gl.glDisable(GL_DITHER);
+			gl.glDisable(GL_LIGHTING);
+			gl.glDisable(GL_CULL_FACE);
+			
+			gl.glCallList(linesList);
+		}
+		else if ( renderMode == BlockRenderer.RENDER_SOLID )
+		{			
+			gl.glEnable(GL_DITHER);
+			gl.glEnable(GL_LIGHTING);
+			gl.glEnable(GL_CULL_FACE);
+			
+			gl.glCallList(quadsList);
+		}
+
+		gl.glCallList(selectedCallsList);
+
+		drawDiagramRoot();
+		drawMouseOverCall();
+		drawLegend();
+		
+		// All done drawing.  Let's show it.
+		glj.gljSwap();
+		glj.gljCheckGL();
+		glj.gljFree();
+	}
+
+	private void addListeners()
+	{
 		addKeyListener(new KeyAdapter()
 			{
 				public void keyPressed(KeyEvent e)
 				{
+					boolean processedChar = true;
+					boolean processedCode = true;
 					beginUpdate();
 					try
 					{
@@ -131,6 +301,8 @@ class BlockDiagramView
 						case 'p':
 							model.getRootRenderState().setRenderCallToParent();
 							break;
+						default:
+							processedChar = false;
 						}
 						switch ( e.getKeyCode() )
 						{
@@ -146,11 +318,17 @@ class BlockDiagramView
 						case KeyEvent.VK_LEFT:
 							model.shiftHorizontal(false);
 							break;
+						default:
+							processedCode = false;
 						}
 					}
 					finally
 					{
 						endUpdate();
+						if ( !processedCode && !processedChar )
+						{
+							propagateKeyEvent(e);
+						}
 					}
 				}
 			});
@@ -236,145 +414,13 @@ class BlockDiagramView
 					endUpdate();
 				}
 			});
-
 	}
 
-	public Dimension getPreferredSize()
+	private void propagateKeyEvent(KeyEvent e)
 	{
-		Dimension d = super.getPreferredSize();
-		Log.debug(LOG, "preferredSize = ", d);
-		return d;
+		getParent().dispatchEvent(e);
 	}
 	
-	public void removeNotify() 
-	{
-		super.removeNotify();
-
-		/**
-		 * Strictly speaking, it shouldn't be necessary to release references explicitly.
-		 * However, there may be a problem with the native code retaining a reference to the BlockDiagramView.
-		 * If that is the case, we should try and ensure that as much cleanup happens as possible.
-		 */
-		model = null;
-		glut = null;
-	}
-
-	public void preInit() 
-	{
-	    doubleBuffer = true;
-	    stereoView = false; 
-	}
-
-	public void init()
-	{
-		glut = new GLUTFuncLightImplWithFonts(gl, glu);
-
-		// Color to clear color buffer to.
-		GLUtils.glClearColor(gl, colorModel.getBackgroundColor());
-		
-		// Depth to clear depth buffer to; type of test.
-		gl.glEnable(GL_CULL_FACE);
-		gl.glCullFace(GL_BACK);
-		gl.glEnable(GL_DEPTH_TEST);
-
-		gl.glClearDepth(1.0);
-		gl.glDepthFunc(GL_LESS); 
-
-		// Enables Smooth Color Shading; try GL_FLAT for (lack of) fun.
-		gl.glShadeModel(GL_FLAT);
-
-		gl.glMaterialfv(GL_FRONT, GL_SHININESS, bevel_mat_shininess);
-		gl.glMaterialfv(GL_FRONT, GL_SPECULAR, bevel_mat_specular);
-
-		// gl.glColorMaterial(GL_FRONT_AND_BACK, GL_DIFFUSE);
-		gl.glColorMaterial(GL_FRONT, GL_DIFFUSE);
-		gl.glEnable(GL_COLOR_MATERIAL);
-		
-		// Set up lights, turn them on.
-		// gl.glLightfv(GL_LIGHT0, GL_AMBIENT,  Light_Ambient1);
-		gl.glLightfv(GL_LIGHT0, GL_DIFFUSE,  Light_Diffuse1);
-		// gl.glLightfv(GL_LIGHT0, GL_SPECULAR,  Light_Specular1);
-		gl.glLightfv(GL_LIGHT0, GL_POSITION, Light_Position1);
-
-		// gl.glLightfv(GL_LIGHT1, GL_AMBIENT,  Light_Ambient2);
-		gl.glLightfv(GL_LIGHT1, GL_DIFFUSE,  Light_Diffuse2);
-		gl.glLightfv(GL_LIGHT1, GL_POSITION, Light_Position2);
-
-		gl.glEnable(GL_LIGHT0); 
-		gl.glEnable(GL_LIGHT1); 
-		gl.glEnable(GL_LIGHTING);
-		
-		reshape(getSize().width, getSize().height);
-	}
-
-	public void reshape(int width, int height)
-	{
-		super.reshape(width, height);
-
-		gl.glMatrixMode(GL_PROJECTION);
-		// gl.glOrtho(-EXTENT * 0.1, EXTENT * 1.1, -EXTENT * 0.1, EXTENT * 1.1, -1.0, 100.0);
-		gl.glLoadIdentity();
-
-		createPerspectiveTransform(width, height);
-		
-		gl.glMatrixMode(GL_MODELVIEW);
-		glj.gljCheckGL();
-	}
-
-	public synchronized void display()
-	{
-		/* Standard GL4Java Init */
-		if( !glj.gljMakeCurrent() ) 
-		{
-			return;
-		}
-
-		compileDisplayLists();
-		
-		// Clear the color and depth buffers.
-		gl.glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-		gl.glMatrixMode(GL_MODELVIEW);
-		gl.glLoadIdentity();
-
-		// System.out.println(eyeLocation);
-
-		double legendShift = 1 / 8.0;
-		gl.glTranslated(legendShift, legendShift, 0);
-		gl.glTranslated(model.getShiftHorizontal(), model.getShiftVertical(), 0);
-		glu.gluLookAt(model.getEye().getX(), model.getEye().getY(), model.getEye().getZ(), 
-						  0, 0, 0, 0, 0, 1);
-		gl.glTranslated(-0.5, -0.5, -0.5);
-
-		if ( renderMode == BlockRenderer.RENDER_WIREFRAME )
-		{
-			gl.glDisable(GL_DITHER);
-			gl.glDisable(GL_LIGHTING);
-			gl.glDisable(GL_CULL_FACE);
-			
-			gl.glCallList(linesList);
-		}
-		else if ( renderMode == BlockRenderer.RENDER_SOLID )
-		{			
-			gl.glEnable(GL_DITHER);
-			gl.glEnable(GL_LIGHTING);
-			gl.glEnable(GL_CULL_FACE);
-			
-			gl.glCallList(quadsList);
-		}
-
-		gl.glCallList(selectedCallsList);
-
-		drawDiagramRoot();
-		drawMouseOverCall();
-		drawLegend();
-		
-		// All done drawing.  Let's show it.
-		glj.gljSwap();
-		glj.gljCheckGL();
-		glj.gljFree();
-	}
-
 	private void createPerspectiveTransform(int width, int height)
 	{
 		double aspectRatio = width / (double)height;
@@ -793,6 +839,8 @@ class BlockDiagramView
 
 	public interface ColorModel
 	{
+		public Color getLightColor();
+
 		public Color getBackgroundColor();
 
 		public Color getSearchMatchColor();

@@ -60,6 +60,8 @@
     <jar jarfile="${build}/lib/data.jar">
 	  <fileset dir="${basedir}/data" includes="hello.hprof.txt,hello.prof,hsqldb.hprof.txt"/>
     </jar>
+
+	<copy file="${build}/lib/orbit.jar" todir="${dist}/lib/" />
   </target>
 
   <target name="compile-no-gui" depends="init">
@@ -84,6 +86,9 @@
     <copy todir="${dist}/lib">
 	  <fileset dir="${build}/lib" />
 	  <fileset dir="lib" excludes="**/CVS" />
+	</copy>
+    <copy todir="${dist}/bin">
+	  <fileset dir="lib/win32" includes="*.dll" />
 	</copy>
 	<zip zipfile="${build}/orbit.zip">
 	  <fileset dir="${dist}" />
