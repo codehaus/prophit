@@ -42,7 +42,7 @@ public class CallLayoutAlgorithm
 	private Rectangle2D.Double layoutCall(CallAdapter parent, CallAdapter call, Rectangle2D.Double parentRectangle,
 						  Rectangle2D.Double renderRectangle, int depth)
 	{
-		if ( depth > maxDepth )
+		if ( maxDepth != -1 && depth > maxDepth )
 			return null;
 
 		layout.initialize(parent, call, parentRectangle, renderRectangle);

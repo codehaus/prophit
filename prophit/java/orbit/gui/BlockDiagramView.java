@@ -2,6 +2,9 @@ package orbit.gui;
 
 import orbit.model.Call;
 import orbit.model.CallGraph;
+import orbit.util.Log;
+
+import org.apache.log4j.Category;
 
 import gl4java.awt.GLCanvas;
 import gl4java.swing.GLJPanel;
@@ -21,6 +24,8 @@ class BlockDiagramView
 	// extends GLJPanel
 	extends GLCanvas
 {
+	public static Category LOG = Category.getInstance(BlockDiagramView.class);
+
 	private static double EXTENT = 1.0;
 
 	private static double MOVE_INCREMENT = 0.5;
@@ -261,13 +266,6 @@ class BlockDiagramView
 		// gl.glColorMaterial(GL_FRONT, GL_AMBIENT_AND_DIFFUSE);
 		// gl.glEnable(GL_COLOR_MATERIAL);
 
-		/*
-		gl.glMatrixMode(GL_PROJECTION);
-		// gl.glOrtho(-EXTENT * 0.1, EXTENT * 1.1, -EXTENT * 0.1, EXTENT * 1.1, -1.0, 100.0);
-		glu.gluPerspective(45, 800 / 400.0, 0.1, 100);
-		gl.glMatrixMode(GL_MODELVIEW);
-		glj.gljCheckGL();
-		*/
 		reshape(getSize().width, getSize().height);
 	}
 
@@ -278,10 +276,9 @@ class BlockDiagramView
 		gl.glMatrixMode(GL_PROJECTION);
 		// gl.glOrtho(-EXTENT * 0.1, EXTENT * 1.1, -EXTENT * 0.1, EXTENT * 1.1, -1.0, 100.0);
 		gl.glLoadIdentity();
-		double aspectRatio = width / (double)height;
-		System.out.println("Reshaping to ( " + width + ", " + height + " )");
-		System.out.println(" Aspect ratio = " + aspectRatio);
-		glu.gluPerspective(45, aspectRatio, 0.1, 100);
+
+		createPerspectiveTransform(width, height);
+		
 		gl.glMatrixMode(GL_MODELVIEW);
 		glj.gljCheckGL();
 	}
@@ -326,6 +323,7 @@ class BlockDiagramView
 			gl.glCallList(quadsList);
 		}
 
+		drawSelected();
 		drawStats();
 		drawName();
 		
@@ -333,6 +331,12 @@ class BlockDiagramView
 		glj.gljSwap();
 		glj.gljCheckGL();
 		glj.gljFree();
+	}
+
+	private void createPerspectiveTransform(int width, int height)
+	{
+		double aspectRatio = width / (double)height;
+		glu.gluPerspective(45, aspectRatio, 0.1, 100);
 	}
 
 	private void textBegin()
@@ -361,6 +365,52 @@ class BlockDiagramView
 		gl.glPopMatrix();
 		
 		glj.gljCheckGL();
+	}
+
+	void drawSelected()
+	{
+		Call selectedCall = model.getSelectedCall();
+		if ( selectedCall == null )
+			return;
+
+		ComputeCallLocation computeLocation = new ComputeCallLocation(selectedCall, model.getRootRenderState().getRenderCall());
+		computeLocation.execute();
+
+		Rectangle2D.Double rectangle = computeLocation.getRectangle();
+		int depth = computeLocation.getRenderDepth();
+		double bottomZ = ( depth ) * BlockRenderer.HEIGHT;
+		double midZ = ( depth + 0.5 ) * BlockRenderer.HEIGHT;
+		double topZ = ( depth + 1.0 ) * BlockRenderer.HEIGHT;
+
+		Log.debug(LOG, "Rendering selectedCall ", selectedCall, " at ", rectangle);
+
+		gl.glDisable(GL_LIGHTING);
+		
+		GLUtils.glColor(gl, Color.white);
+
+		// Wrap the selected rectangle up like a christmas present
+		gl.glBegin(GL_LINE_LOOP);
+		gl.glVertex3d(rectangle.x, rectangle.y, midZ);
+		gl.glVertex3d(rectangle.x + rectangle.width, rectangle.y, midZ);
+		gl.glVertex3d(rectangle.x + rectangle.width, rectangle.y + rectangle.height, midZ);
+		gl.glVertex3d(rectangle.x, rectangle.y + rectangle.height, midZ);
+		gl.glEnd();
+
+		gl.glBegin(GL_LINE_LOOP);
+		gl.glVertex3d(rectangle.x + rectangle.width / 2, rectangle.y, bottomZ);
+		gl.glVertex3d(rectangle.x + rectangle.width / 2, rectangle.y, topZ);
+		gl.glVertex3d(rectangle.x + rectangle.width / 2, rectangle.y + rectangle.height, topZ);
+		gl.glVertex3d(rectangle.x + rectangle.width / 2, rectangle.y + rectangle.height, bottomZ);
+		gl.glEnd();
+
+		gl.glBegin(GL_LINE_LOOP);
+		gl.glVertex3d(rectangle.x, rectangle.y + rectangle.height / 2, bottomZ);
+		gl.glVertex3d(rectangle.x, rectangle.y + rectangle.height / 2, topZ);
+		gl.glVertex3d(rectangle.x + rectangle.width, rectangle.y + rectangle.height / 2, topZ);
+		gl.glVertex3d(rectangle.x + rectangle.width, rectangle.y + rectangle.height / 2, bottomZ);
+		gl.glEnd();
+		
+		gl.glEnable(GL_LIGHTING);
 	}
 	
 	void drawName()
@@ -470,7 +520,8 @@ class BlockDiagramView
 		gl.glPushMatrix();
 		gl.glLoadIdentity();
 		glu.gluPickMatrix(screenPoint.x, viewport[3] - screenPoint.y, 1, 1, viewport);
-		glu.gluPerspective(45, 800 / 600.0, 0.1, 100);
+
+		createPerspectiveTransform(getSize().width, getSize().height);
 		
 		gl.glCallList(quadsList);
 		

@@ -284,7 +284,7 @@ public class CallGraph
 		{
 			StringBuffer sb = new StringBuffer();
 			sb.append(getName());sb.append(" { numInvocations : ");sb.append(getCallCount());
-			sb.append(", timeMillis : ");sb.append(getTime());sb.append(" }");
+			sb.append(", timeMillis : ");sb.append(getTime());sb.append(", callStack : ");sb.append(stack);sb.append(" }");
 			return sb.toString();
 		}
 		

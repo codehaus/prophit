@@ -28,6 +28,24 @@ public class CallAdapter
 		initialize(call);
 	}
 
+	public int hashCode()
+	{
+		return call.hashCode();
+	}
+
+	public boolean equals(Object other)
+	{
+		if ( other instanceof CallAdapter )
+			return equals((CallAdapter)other);
+		else
+			return false;
+	}
+
+	public boolean equals(CallAdapter other)
+	{
+		return other != null && call.equals(other.call);
+	}
+
 	public Call getCall()
 	{
 		return call;
@@ -172,7 +190,7 @@ public class CallAdapter
 			children = Collections.unmodifiableList(call.getChildren());
 		return children;
 	}
-	public String toString() { return call.toString(); }
+	public String toString() { return "Adapter for " + call.toString(); }
 
 	private double getRawTimeInChildren(TimeMeasure measure)
 	{

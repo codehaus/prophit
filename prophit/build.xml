@@ -11,9 +11,9 @@
   </path>
 
   <path id="test.class.path">
+	 <pathelement path="${build}/classes" />
 	 <path refid="run.class.path" />
 	 <fileset dir="${basedir}/lib" />
-	 <pathelement path="${build}/classes" />
   </path>
 
   <path id="compile.class.path">
@@ -121,6 +121,16 @@
 		<sysproperty key="solver.user.name" value="JAVA_USER" />
 		<sysproperty key="basedir" value="${basedir}" />
 	</java>
+  </target>
+
+  <target name="run-test" depends="build">
+    <junit fork="true">
+	  <sysproperty key="solver.user.name" value="JAVA_USER" />
+	  <sysproperty key="basedir" value="${basedir}" />
+	  <classpath refid="test.class.path" />
+	  <formatter type="brief" usefile="false" />
+	  <test name="${test.name}" />
+    </junit>
   </target>
 
   <target name="hello" depends="jar,compile-tests">

@@ -1,5 +1,7 @@
 package util;
 
+import java.awt.geom.Rectangle2D;
+
 public class TestUtil
 {
 	public static double TOLERANCE = 1e-5;
@@ -12,5 +14,10 @@ public class TestUtil
 	public static boolean equal(double first, double second)
 	{
 		return Math.abs(second - first ) < TOLERANCE;
+	}
+	
+	public static double area(Rectangle2D.Double rectangle)
+	{
+		return rectangle.height * rectangle.width;
 	}
 }
