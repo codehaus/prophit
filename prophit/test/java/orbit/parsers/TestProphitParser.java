@@ -23,12 +23,12 @@ public class TestProphitParser
 	super(name);
     }
 
-    public void testExampleXML() throws Exception
+    public void testXMLSampleParser() throws Exception
     {
 	try {
 	    //System.out.println("HEY");
 
-	    Parser parser = new ProphitParser(new FileReader(System.getProperty("basedir") + "/test/data/simple-profile-std.xml")); 
+	    Parser parser = new ProphitParserLoader(new FileReader(System.getProperty("basedir") + "/test/data/simple-profile-std.xml")); 
 
 	    assertTrue("File Format is recognized.", parser.isFileFormatRecognized());
 	    ModelBuilder builder = ModelBuilderFactory.newModelBuilder();
@@ -41,5 +41,7 @@ public class TestProphitParser
 	    }
 
     }
+
+    
 
 }

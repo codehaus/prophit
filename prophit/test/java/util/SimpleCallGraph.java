@@ -60,6 +60,7 @@ public class SimpleCallGraph
 		}
 		catch (Exception x)
 		{
+		    //System.out.println(x.getMessage());
 			x.printStackTrace();
 			throw new RuntimeException("Unable to load simple.prof : " + x);
 		}
