@@ -1,0 +1,85 @@
+<html>
+
+<head>
+<title>Orbit Samples</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link rel="stylesheet" href="default.css" type="text/css">
+</head>
+
+<body class="normal" bgcolor="#FFFFFF" text="#000000">
+
+<h1 align="center">Orbit Samples</h1>
+<table border="0" cellspacing="0" cellpadding="0" bgcolor="eeeeee">
+  <tr> 
+    <td width="179" nowrap>Previous : <a href="profiler-types.html">Profiler Types</a></td>
+    <td width="20" bgcolor="ffffff" nowrap>&nbsp;</td>
+    <td width="157" nowrap>Up : <a href="doc.html">Documentation</a></td>
+    <td width="20" bgcolor="ffffff" nowrap>&nbsp;</td>
+    <td width="234" nowrap>Next : <a href="glossary.html">Glossary</a></td>
+  </tr>
+</table>
+<h1>The HelloList sample program</h1>
+
+<a href="java/util/HelloList.java.txt">HelloList.java</a> is a simple Java program which compares the performance of:
+<ul>
+  <li><a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a> and <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/StringBuffer.html">StringBuffer</a></li>
+  <li><a href="http://java.sun.com/j2se/1.4/docs/api/java/util/ArrayList.html">ArrayList</a> and <a href="http://java.sun.com/j2se/1.4/docs/api/java/util/LinkedList.html">LinkedList</a></li>
+</ul>
+
+<p>The program runs four loops, each of which tests one combination of String 
+  and Collection classes: </p>
+<table width="90%" border="0" cellspacing="1">
+  <tr> 
+    <th width="22%" bgcolor="ccccff">Sample</th>
+    <th width="78%" bgcolor="ccccff">Description</th>
+  </tr>
+  <tr bgcolor="eeeeee"> 
+    <td width="22%">arrayAndString</td>
+    <td width="78%">For each iteration, builds an ArrayList of Strings, each of 
+      which is created by using the <code>+=</code> operator to concatenate the 
+      characters in the phrase <i>Hello World</i></td>
+  </tr>
+  <tr bgcolor="eeeeee"> 
+    <td width="22%">arrayAndBuffer</td>
+    <td width="78%">For each iteration, builds an ArrayList of Strings, each of 
+      which is created by using a StringBuffer to concatenate the characters in 
+      the phrase <i>Hello World</i></td>
+  </tr>
+  <tr bgcolor="eeeeee"> 
+    <td width="22%">linkedAndString</td>
+    <td width="78%">For each iteration, builds an LinkedList of Strings, each 
+      of which is created by using the <code>+=</code> operator to concatenate 
+      the characters in the phrase <i>Hello World</i></td>
+  </tr>
+  <tr bgcolor="eeeeee"> 
+    <td width="22%">linkedAndBuffer</td>
+    <td width="78%">For each iteration, builds an LinkedList of Strings, each 
+      of which is created by using a StringBuffer to concatenate the characters 
+      in the phrase <i>Hello World</i></td>
+  </tr>
+</table>
+<h1><a name="hsqldb"></a>HSQLDB</h1>
+<p><a href="http://hsqldb.sourceforge.net/">HSQLDB</a> is the hqsl Database Engine, 
+  an Open Source Java database. The sample profile in Orbit was created by running 
+  the script <i>hsqldb_v1.61/demo/run.bat</i> with Java version 1.4.0-b92 on Windows 
+  2000 with the following Java command-line options:</p>
+<pre> java -Xrunhprof:cpu=samples,depth=6</pre>
+<h1>Subsections</h1>
+<ul>
+  <li><a href="hello-list-prof-sample.html">HelloList <code>java -prof </code>Profile</a></li>
+  <li><a href="hello-list-hprof-sample.html">HelloList <code>hprof</code> Profile</a></li>
+  <li><a href="hsqldb-hprof-sample.html">HSQLDB <code>hprof</code> Profile</a></li>
+</ul>
+<table border="0" cellspacing="0" cellpadding="0" bgcolor="eeeeee">
+  <tr> 
+    <td width="179" nowrap>Previous : <a href="profiler-types.html">Profiler Types</a></td>
+    <td width="20" bgcolor="ffffff" nowrap>&nbsp;</td>
+    <td width="157" nowrap>Up : <a href="doc.html">Documentation</a></td>
+    <td width="20" bgcolor="ffffff" nowrap>&nbsp;</td>
+    <td width="234" nowrap>Next : <a href="glossary.html">Glossary</a></td>
+  </tr>
+</table>
+<h1>&nbsp;</h1>
+
+</body>
+</html>

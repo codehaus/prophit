@@ -1,0 +1,65 @@
+<html>
+
+<head>
+<title>Java -prof</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link rel="stylesheet" href="default.css" type="text/css">
+</head>
+
+<body class="normal" bgcolor="#FFFFFF" text="#000000">
+<h1 align="center">Java <code>-prof</code></h1>
+<table border="0" cellspacing="0" cellpadding="0" bgcolor="eeeeee">
+  <tr> 
+    <td width="179" nowrap>Previous : <a href="profiler-types.html">Profiler Types</a></td>
+    <td width="20" bgcolor="ffffff" nowrap>&nbsp;</td>
+    <td width="157" nowrap>Up : <a href="profiler-types.html">Profiler Types</a></td>
+    <td width="20" bgcolor="ffffff" nowrap>&nbsp;</td>
+    <td width="234" nowrap>Next : <a href="hprof.html"><code>hprof</code></a></td>
+  </tr>
+</table>
+<p><code>-prof</code> is a profiler that originally shipped with the JDK 1.1. 
+  Using <code>-prof</code> is very simple, you just run your Java program with 
+  the <code>-prof</code> option:</p>
+<pre>	java -prof -classpath &lt;path&gt; your.Test</pre>
+<h4>Advantages</h4>
+<ul>
+  <li>Built into the JDK</li>
+  <li>Very simple to run</li>
+  <li>Works with JDKs 1.1 and above</li>
+  <li>Generally does not require the JIT compiler (or HotSpot) to be disabled 
+    in order to function properly</li>
+  <li>Fine-grained timing information seems to be quite accurate for single-threded 
+    programs (see below about multi-threaded programs)</li>
+</ul>
+<h4>Disadvantages </h4>
+<ul>
+  <li> Does not work with multi-threaded programs. Profile data for all the threads 
+    is all mixed up together</li>
+  <li>Has a significant performance impact. You can expect your program to take 
+    several times longer to run than without the <code>-prof</code> option. The 
+    HelloList program takes 2:31 to profile with <code>-prof</code> and 0:28 to 
+    profile with <code>hprof</code>, both running JDK 1.3.</li>
+  <li>Only captures 2 levels of stack depth. If function A calls function X which 
+    calls function Y, and function B calls function X which calls function Y, 
+    <code>-prof</code> does not provide any way to tell how much time in function 
+    Y was in calls from A and how much was in calls from B.</li>
+  <li>Not very much information is available about <code>-prof</code></li>
+</ul>
+<a name="resources"><h4>Resources</h4></a>
+<ul>
+  <li>Documentation for the <a href="http://java.sun.com/products/jdk/1.1/docs/tooldocs/win32/java.html">Java 
+    1.1 Interpreter </a> </li>
+</ul>
+<table border="0" cellspacing="0" cellpadding="0" bgcolor="eeeeee">
+  <tr> 
+    <td width="179" nowrap>Previous : <a href="profiler-types.html">Profiler Types</a></td>
+    <td width="20" bgcolor="ffffff" nowrap>&nbsp;</td>
+    <td width="157" nowrap>Up : <a href="profiler-types.html">Profiler Types</a></td>
+    <td width="20" bgcolor="ffffff" nowrap>&nbsp;</td>
+    <td width="234" nowrap>Next : <a href="hprof.html"><code>hprof</code></a></td>
+  </tr>
+</table>
+<h1>&nbsp;</h1>
+
+</body>
+</html>
