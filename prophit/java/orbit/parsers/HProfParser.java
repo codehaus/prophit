@@ -22,6 +22,12 @@ public class HProfParser
 
 		AbstractParser.main(args, parser);
 	}
+
+	private static final String TRACE = "TRACE";
+	private static final String CPU_SAMPLES_BEGIN = "CPU SAMPLES BEGIN";
+	private static final String CPU_SAMPLES_END = "CPU SAMPLES END";
+	private static final String CPU_TIME_BEGIN = "CPU TIME (ms) BEGIN";
+	private static final String CPU_TIME_END = "CPU TIME (ms) END";
 		
 	private ArrayList callIDs = null;
 	private boolean readHeader = false;
@@ -55,73 +61,149 @@ public class HProfParser
 
 	public void execute() throws ParseException
 	{
+		/*
+		 * If the header has not been read, read it
+		 * Look for the first 'THREAD START ('
+		 * Look for the first 'TRACE'
+		 * Parse all the traces
+		 * If next line is CPU TIME
+		 *   parse CPU times
+		 * Else if the next line is CPU SAMPLES BEGIN
+		 *   parse CPU samples
+		 */
 		try
 		{
 			if ( !readHeader )
 				checkHeader();
 			seek("THREAD START (", true);
-			String line = seek("TRACE", true);
+			String line = seek(TRACE, true);
 			final HashMap stackTracesByID = new HashMap();
 			line = parseTraces(line, stackTracesByID);
 			if ( line == null )
 			{
 				throw new ParseException("File does not contain any CPU profile data. Make sure you are using a 'cpu' option with hprof");
 			}
-			else if ( line.startsWith("CPU SAMPLES BEGIN") )
+			else
 			{
-				// eat the header line
-				seek("rank", true);
-
 				final ArrayList rccList = new ArrayList();
 
-				class ParseSamples
+				ParseTimingData parseTiming = null;
+				
+				if ( line.startsWith(CPU_SAMPLES_BEGIN) )
 				{
-					int key = 1;
-					HashMap rccsByStack = new HashMap();
-
-					public int getKey()
+					class ParseSamples
+						implements ParseTimingData
 					{
-						return key;
-					}
+						int key = 1;
+						HashMap rccsByStack = new HashMap();
 
-					public void execute() throws ParseException, IOException
-					{
-						String line;
-						while ( !( line = nextLine(true) ).startsWith("CPU SAMPLES END") )
+						public int getKey()
 						{
-							StringTokenizer tok = new StringTokenizer(line, " ");
-							String rank = nextToken(tok, true);
-							String self = nextToken(tok, true);
-							String accum = nextToken(tok, true);
-							int count = Integer.parseInt(nextToken(tok, true));
-							Integer traceID = Integer.valueOf(nextToken(tok, true));
-							String method = nextToken(tok, true);
+							return key;
+						}
 
-							StackTrace st = (StackTrace)stackTracesByID.get(traceID);
-							RCC rcc = (RCC)rccsByStack.get(st);
-							if ( rcc == null )
+						public void execute() throws ParseException, IOException
+						{
+							String line;
+							while ( !( line = nextLine(true) ).startsWith(CPU_SAMPLES_END) )
 							{
-								rcc = new RCC(st, count, count, key++);
-								rccsByStack.put(st, rcc);
-								rccList.add(rcc);
-							}
-							else
-							{
-								rcc.adjustTime(count);
-								rcc.adjustCalls(count);
+								StringTokenizer tok = new StringTokenizer(line, " ");
+								String rank = nextToken(tok, true);
+								String self = nextToken(tok, true);
+								String accum = nextToken(tok, true);
+								int count = Integer.parseInt(nextToken(tok, true));
+								Integer traceID = Integer.valueOf(nextToken(tok, true));
+								String method = nextToken(tok, true);
+
+								StackTrace st = (StackTrace)stackTracesByID.get(traceID);
+								RCC rcc = (RCC)rccsByStack.get(st);
+								if ( rcc == null )
+								{
+									rcc = new RCC(st, count, count, key++);
+									rccsByStack.put(st, rcc);
+									rccList.add(rcc);
+								}
+								else
+								{
+									rcc.adjustTime(count);
+									rcc.adjustCalls(count);
+								}
 							}
 						}
-					}
-				}			
+					}			
 
-				ParseSamples ps = new ParseSamples();
-				ps.execute();
+					seek("rank", true);
+					parseTiming = new ParseSamples();
+				}
+				else if ( line.startsWith(CPU_TIME_BEGIN) )
+				{
+					String totalEquals = "total = ";
+					int totalBegin = line.indexOf(totalEquals);
+					if ( totalBegin == -1 )
+						throw new ParseException("ParseException at line " + lineNumber() + 
+														 ". Expected line to contain '(" + totalEquals + "'");
+					int totalEnd = line.indexOf(")", totalBegin);
+					if ( totalBegin == -1 )
+						throw new ParseException("ParseException at line " + lineNumber() + 
+														 ". Expected line to contain '(" + totalEquals + "<some number>)'");
+					final int totalTime = Integer.parseInt(line.substring(totalBegin + totalEquals.length(), totalEnd));
+
+					class ParseTimes
+						implements ParseTimingData
+					{
+						int key = 1;
+						HashMap rccsByStack = new HashMap();
+
+						public int getKey()
+						{
+							return key;
+						}
+
+						public void execute() throws ParseException, IOException
+						{
+							String line;
+							while ( !( line = nextLine(true) ).startsWith(CPU_TIME_END) )
+							{
+								StringTokenizer tok = new StringTokenizer(line, " ");
+								String rank = nextToken(tok, true);
+								String selfPercentStr = nextToken(tok, true);
+								// Strip off the '%' and divide by 100
+								double selfFraction = Double.parseDouble(selfPercentStr.substring(0, selfPercentStr.length() - 1)) / 100.0;
+								String accum = nextToken(tok, true);
+								int count = Integer.parseInt(nextToken(tok, true));
+								Integer traceID = Integer.valueOf(nextToken(tok, true));
+								String method = nextToken(tok, true);
+
+								double time = selfFraction * totalTime;
+
+								StackTrace st = (StackTrace)stackTracesByID.get(traceID);
+								RCC rcc = (RCC)rccsByStack.get(st);
+								if ( rcc == null )
+								{
+									rcc = new RCC(st, count, (long)time, key++);
+									rccsByStack.put(st, rcc);
+									rccList.add(rcc);
+								}
+								else
+								{
+									rcc.adjustTime(count);
+									rcc.adjustCalls(count);
+								}
+							}
+						}
+					}			
+
+					seek("rank", true);
+					parseTiming = new ParseTimes();
+				}
+
+				parseTiming.execute();
 				
 				/*
 				 * At each stack depth, if there is no existing stacktrace for a sub-stack of
 				 * a stack trace, make a new RCC for the sub-stack and add it to the list
 				 */
-				int nextKey = ps.getKey();
+				int nextKey = parseTiming.getKey();
 				HashSet stackTraceSet = new HashSet();
 				ArrayList newRCCs = new ArrayList();
 				for ( int size = maxStackSize; size > 0; --size )
@@ -243,6 +325,12 @@ public class HProfParser
 		return rccListByCallee;
 	}
 
+	/**
+	 * Reads TRACE blocks from the file
+	 * This method terminates when it encounteres a line that does not start with one of 
+	 *   'TRACE', 'CPU SAMPLES BEGIN', 'CPU TIME'
+	 * It returns the first line that is not parsed as a trace (e.g. 'CPU SAMPLES BEGIN')
+	 */
 	private String parseTraces(String line, Map stackTracesByID) throws ParseException, IOException
 	{
 		HashMap map = new HashMap();
@@ -253,13 +341,14 @@ public class HProfParser
 		{
 			// These are the non-useful characters in the file. They look fun in this order.
 			StringTokenizer tok = new StringTokenizer(line, "( =:)");
-			assertEqual(nextToken(tok, true), "TRACE");
+			assertEqual(nextToken(tok, true), TRACE);
 			Integer id = Integer.valueOf(nextToken(tok, true));
 			stack.clear();
 			while ( ( line = nextLine(false) ) != null &&
 					!"".equals( line = line.trim() ) &&
-					!line.startsWith("TRACE") &&
-					!line.startsWith("CPU SAMPLES BEGIN") )
+					!line.startsWith(TRACE) &&
+					!line.startsWith(CPU_TIME_BEGIN) &&
+					!line.startsWith(CPU_SAMPLES_BEGIN) )
 			{
 				line = line.trim();
 				// Strip out line number, "Native method", "Unknown line"
@@ -290,7 +379,9 @@ public class HProfParser
 			if ( stack.size() > maxStackSize )
 				maxStackSize = stack.size();
 		}
-		while ( line != null && !line.startsWith("CPU SAMPLES BEGIN") );
+		while ( line != null && 
+				  !line.startsWith(CPU_TIME_BEGIN) &&
+				  !line.startsWith(CPU_SAMPLES_BEGIN) );
 
 		// System.out.println("Found " + lineCache.size() + " unique lines among " + lineCount + " lines");
 
@@ -316,5 +407,12 @@ public class HProfParser
 				!line.startsWith(start) )
 		{ }
 		return line;
+	}
+
+	interface ParseTimingData
+	{
+		public int getKey();
+		
+		public void execute() throws ParseException, IOException;
 	}
 }
