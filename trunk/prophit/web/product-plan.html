@@ -1,0 +1,21 @@
+
+<body>
+	
+	<h3>Intelligent labeling of the tower diagram</h3>
+	
+	The typical capacity of person's short-term memory is 7 items. Without labels, keeping track of which blocks in the tower diagram correspond to which functions can become unmanagable. The tower diagram UI helps solve this problem by intelligently labeling certain blocks. Labels are grouped into 3 categories:
+	
+	<ol>
+		<li>Prominent blocks : These are blocks which stand out in the diagram. A block can be a prominent block if:
+			<ul>
+				<li>It has unusually large inclusive time and its children are not rendered in the diagram</li>
+				<li>It has unusually large exclusive time</li>
+			</ul>
+		</li>
+		<li>Recently selected blocks : Blocks which have recently been selected with the mouse</li>
+		<li>Hover-over blocks : When the user hovers over a block for a short period of time (approximately half a second), a label is added to the block </li>
+	</ol>
+
+	Within each category of block label, there can only be a fixed number of labeled blocks. The number of labeled blocks depends on the available real estate inside the tower diagram's canvas that is not taken up by the diagram itself or by the legend. Expanding the canvas by maximizing the ProphIt application creates a large amount of label space. If the ProphIt application window is small, very few labels will fit on the canvas.
+
+</body>
