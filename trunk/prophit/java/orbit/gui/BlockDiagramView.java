@@ -221,7 +221,7 @@ class BlockDiagramView
 
 	public void init()
 	{
-	    glut = new GLUTFuncLightImplWithFonts(gl, glu);
+		glut = new GLUTFuncLightImplWithFonts(gl, glu);
 
 		// Color to clear color buffer to.
 		gl.glClearColor(0.1f, 0.1f, 0.1f, 0.0f);
@@ -254,9 +254,26 @@ class BlockDiagramView
 		// gl.glColorMaterial(GL_FRONT, GL_AMBIENT_AND_DIFFUSE);
 		// gl.glEnable(GL_COLOR_MATERIAL);
 
+		/*
 		gl.glMatrixMode(GL_PROJECTION);
 		// gl.glOrtho(-EXTENT * 0.1, EXTENT * 1.1, -EXTENT * 0.1, EXTENT * 1.1, -1.0, 100.0);
-		glu.gluPerspective(45, 800 / 600.0, 0.1, 100);
+		glu.gluPerspective(45, 800 / 400.0, 0.1, 100);
+		gl.glMatrixMode(GL_MODELVIEW);
+		glj.gljCheckGL();
+		*/
+		reshape(getSize().width, getSize().height);
+	}
+
+	public void reshape(int width, int height)
+	{
+		super.reshape(width, height);
+
+		gl.glMatrixMode(GL_PROJECTION);
+		// gl.glOrtho(-EXTENT * 0.1, EXTENT * 1.1, -EXTENT * 0.1, EXTENT * 1.1, -1.0, 100.0);
+		gl.glLoadIdentity();
+		double aspectRatio = width / (double)height;
+		System.out.println("Reshaping to aspect ratio " + aspectRatio);
+		glu.gluPerspective(45, aspectRatio, 0.1, 100);
 		gl.glMatrixMode(GL_MODELVIEW);
 		glj.gljCheckGL();
 	}

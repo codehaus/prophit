@@ -24,6 +24,7 @@ class CallRollupList
 	
 	private final HashMap timeByCallName = new HashMap();
 	private List callNames = null;
+	private double totalTime = -1;
 
 	/**
 	 * Add a new call. The time spent in the call will be aggregated with the time
@@ -74,6 +75,20 @@ class CallRollupList
 	{
 		checkForNull();
 		return getTime(getCallName(index));
+	}
+
+	public double getTotalTime()
+	{
+		if ( totalTime == -1 )
+		{
+			totalTime = 0;
+			for ( Iterator i = timeByCallName.values().iterator(); i.hasNext(); )
+			{
+				Double t = (Double)i.next();
+				totalTime += t.doubleValue();
+			}
+		}
+		return totalTime;
 	}
 
 	public int size()

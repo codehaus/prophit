@@ -6,6 +6,7 @@ import orbit.util.Log;
 import org.apache.log4j.Category;
 
 import java.util.Iterator;
+import java.text.NumberFormat;
 import javax.swing.table.TableModel;
 import javax.swing.table.AbstractTableModel;
 
@@ -21,6 +22,17 @@ import javax.swing.table.AbstractTableModel;
 class CallDetails
 {
 	public static Category LOG = Category.getInstance(CallDetails.class);
+
+	private static NumberFormat TIME_FORMAT;
+	private static NumberFormat TIME_PERCENT_FORMAT;
+
+	static
+	{
+		TIME_FORMAT = NumberFormat.getInstance();
+		TIME_FORMAT.setMaximumFractionDigits(2);
+		TIME_PERCENT_FORMAT = NumberFormat.getPercentInstance();
+		TIME_PERCENT_FORMAT.setMaximumFractionDigits(2);
+	}
 
 	private final String callName;
 	private double inclusiveTime = 0;
@@ -145,10 +157,17 @@ class CallDetails
 			case 0:
 				return list.getCallName(row);
 			case 1:
-				return new Double(list.getTime(row));
+				return getTimeString(row);
 			default:
 				return "<unexpected column " + column + ">";
 			}
+		}
+
+		private String getTimeString(int index)
+		{
+			double time = list.getTime(index);
+			double totalTime = list.getTotalTime();
+			return TIME_FORMAT.format(time) + " (" + TIME_PERCENT_FORMAT.format(time / totalTime) + ")";
 		}
 	}
 }
