@@ -1,15 +1,17 @@
 package orbit.gui.tower;
 
 import orbit.gui.ColorModel;
+import orbit.gui.Constants;
 import orbit.gui.BlockDiagramModel;
 
 import gl4java.GLFunc;
 import gl4java.GLUFunc;
 
 import java.awt.Component;
+import java.awt.event.ComponentEvent;
 
 public abstract class AbstractTowerImageComponent
-	implements TowerImageComponent
+	implements TowerImageComponent, Constants
 {
 	protected ColorModel        colorModel;
 	protected BlockDiagramModel model;
@@ -35,6 +37,11 @@ public abstract class AbstractTowerImageComponent
 		this.glu = glu;
 	}
 
+	/** Notify the TowerImageComponent that the bounds of the component have changed */
+	public void componentResized(ComponentEvent e)
+	{
+	}
+	
 	/**
 	 * Override this method to draw the component using the supplied graphical APIs. Assume that
 	 * {@link #initialize} has already been called. 

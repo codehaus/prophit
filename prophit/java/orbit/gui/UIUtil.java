@@ -7,7 +7,7 @@ import java.text.NumberFormat;
 
 import org.apache.log4j.Category;
 
-class UIUtil
+public class UIUtil
 {
 	public static Category LOG = Category.getInstance(UIUtil.class);
 

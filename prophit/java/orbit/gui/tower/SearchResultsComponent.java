@@ -11,6 +11,10 @@ import java.beans.PropertyChangeListener;
 import java.util.Iterator;
 import java.util.List;
 
+/**
+ * Draws a highlight on each block which is a search result.
+ * Drawing the search result blocks as solid blocks is handled by TowerDiagramWireFrame.
+ */
 public class SearchResultsComponent
 	extends AbstractHighlightBlockComponent
 {
