@@ -1,0 +1,53 @@
+<html>
+
+<head>
+<title>Glossary</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link rel="stylesheet" href="default.css" type="text/css">
+</head>
+
+<body class="normal" bgcolor="#FFFFFF" text="#000000">
+
+<h1 align="center">Glossary</h1>
+<table border="0" cellspacing="0" cellpadding="0" bgcolor="eeeeee">
+  <tr> 
+    <td width="200" nowrap>Previous : <a href="samples.html">Sample Profiles</a></td>
+    <td width="20" bgcolor="ffffff" nowrap>&nbsp;</td>
+    <td width="157" nowrap>Up : <a href="doc.html">Documentation</a></td>
+    <td width="20" bgcolor="ffffff" nowrap>&nbsp;</td>
+    <td width="234" nowrap>Next : </td>
+  </tr>
+</table>
+<dl> 
+  <dt><a name="caller">caller</a></dt>
+  <dd>A function which has invoked the current function. The caller function is 
+    displayed as the block underneath the current block in the tower diagram. 
+    The <a href="#inclusive">inclusive time</a> of a function is always less than 
+    or equal to the inclusive time of its caller.</dd>
+  <dt><a name="callee">callee</a></dt>
+  <dd>A function which has been invoked by the current function. Callee functions 
+    are displayed as the blocks stacked on top of the current block in the tower 
+    diagram. The sum of the <a href="#inclusive">inclusive times</a> of the callees 
+    of a function is always less than or equal to the inclusive time of that function. 
+  </dd>
+  <dt><a name="inclusive">inclusive time</a></dt>
+  <dd>Amount of time spent in a function, including the time spent in its <a href="#callee">callees</a>.</dd>
+  <dt><a name="exclusive">exclusive time</a></dt>
+  <dd>Amount of time spent in a function, not counting the time spent in its <a href="#callee">callees</a>. 
+    The exclusive time is the sum of the time spent in all the statements and 
+    instructions of the function itself. A function with a large exclusive time 
+    is commonly referred to as a 'hotspot'.</dd>
+</dl>
+<table border="0" cellspacing="0" cellpadding="0" bgcolor="eeeeee">
+  <tr> 
+    <td width="200" nowrap>Previous : <a href="samples.html">Sample Profiles</a></td>
+    <td width="20" bgcolor="ffffff" nowrap>&nbsp;</td>
+    <td width="157" nowrap>Up : <a href="doc.html">Documentation</a></td>
+    <td width="20" bgcolor="ffffff" nowrap>&nbsp;</td>
+    <td width="234" nowrap>Next : </td>
+  </tr>
+</table>
+<h1>&nbsp;</h1>
+
+</body>
+</html>
