@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+
+<project name="lpsolve" default="dist">
+
+	<property name="classes" value="${basedir}/build/classes" />
+	<property name="srcgen" value="${basedir}/build/srcgen" />
+
+	<target name="init">
+		<mkdir dir="${classes}" />
+		<mkdir dir="${srcgen}" />
+	</target>
+
+	<target name="clean">
+		<delete dir="${srcgen}" />
+		<delete dir="${classes}" />
+	</target>
+
+	<target name="dist" depends="init">
+		<javac srcdir="." destdir="${classes}" includes="LPLibrary.java,LP.java" />
+
+		<javah class="lp.solve.LPLibrary" classpath="${classes}" verbose="yes" destdir="${srcgen}" />
+	</target>
+
+</project>
