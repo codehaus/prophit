@@ -3,6 +3,7 @@ package orbit.gui;
 import orbit.model.Call;
 import orbit.model.CallGraph;
 import orbit.model.InclusiveTimeFilter;
+import orbit.model.MethodProfileFilter;
 import orbit.util.Log;
 
 import org.apache.log4j.Category;
@@ -60,6 +61,7 @@ public class BlockDiagramModel
 	private Map nameToCallListMap = null;
 
 	private int levels = DEFAULT_LEVELS;
+	private String        focusMethodName = null;
 	private LevelOfDetail lod = LevelOfDetail.Standard;
 	private boolean wireframe = false;
 	private double shiftVertical = 0;
@@ -111,7 +113,7 @@ public class BlockDiagramModel
 
 	public Call getRootCall()
 	{
-		return cg.getRoot().filter(createFilter());
+		return filterCall(cg.getRoot());
 	}
 
 	public RootRenderState getRootRenderState()
@@ -362,8 +364,26 @@ public class BlockDiagramModel
 		if ( lod != newLOD )
 		{
 			lod = newLOD;
-			invalidateDiagram();
-			rootState.setRenderCall(rootState.getRenderCall().filter(createFilter()));
+			updateFilter();
+		}
+	}
+
+	public String getFocusMethod()
+	{
+		return focusMethodName;
+	}
+
+	public void setFocusMethod(String methodName)
+	{
+		if ( methodName == null && this.focusMethodName == null )
+		{
+			// ignore
+		}
+		else if ( methodName == null && this.focusMethodName != null ||
+				  !methodName.equals(focusMethodName) )
+		{
+			focusMethodName = methodName;
+			updateFilter();
 		}
 	}
 
@@ -376,9 +396,25 @@ public class BlockDiagramModel
 		return Collections.unmodifiableList(nameSearchMatches);
 	}
 
-	private Call.Filter createFilter()
+	private void updateFilter()
 	{
-		return new InclusiveTimeFilter(lod.getThreshold());
+		invalidateDiagram();
+
+		Call renderCall = filterCall(rootState.getRenderCall());
+		rootState.setRenderCall(renderCall);
+	}
+
+	private Call filterCall(Call call)
+	{
+		Call renderCall = call;
+		Call.Filter timeFilter = new InclusiveTimeFilter(lod.getThreshold());
+		renderCall = renderCall.filter(timeFilter);
+		if ( focusMethodName != null )
+		{
+			Call.Filter profileFilter = new MethodProfileFilter(focusMethodName, renderCall);
+			renderCall = renderCall.filter(profileFilter);
+		}
+		return renderCall;
 	}
 	
 	/**
