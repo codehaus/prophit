@@ -113,7 +113,7 @@ public class HProfSolver
 				
 				// The RCCs which are generated from sub-stacks of the calls in the profile file
 				//   have time=0. There can be quite a few of these...
-				if ( callID.getRCC().getTime() > 0 )
+				if ( callID.getRCC().getExclusiveTime() > 0 )
 				{
 					// Traverse through the parents of the current CallID
 					// For each parent, add the fraction-adjusted time of this CallID to
@@ -131,7 +131,7 @@ public class HProfSolver
 					{
 						int parentID = traversalStack.pop();
 						CallID parentCall = (CallID)callIDs[parentID];
-						double adjustment = callID.getRCC().getTime() * fraction;
+						double adjustment = callID.getRCC().getExclusiveTime() * fraction;
 						// System.out.println("Adding " + adjustment + " to " + parentCall.getRCC());
 						inclusiveTimeAdjustments[parentCall.getRCC().getKey()] += adjustment;
 						// fraction *= fractions[parentID];
@@ -151,7 +151,7 @@ public class HProfSolver
 			RCC rcc = rccs[i];
 			if ( rcc != null )
 			{
-				rcc.adjustTime((long)inclusiveTimeAdjustments[i]);
+				rcc.setTime(rcc.getExclusiveTime() + (long)inclusiveTimeAdjustments[i]);
 			}
 		}
 	}
