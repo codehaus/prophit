@@ -9,6 +9,7 @@ import org.apache.log4j.Category;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.Iterator;
+import java.util.List;
 
 public class SelectedCallsComponent
 	extends AbstractHighlightBlockComponent
@@ -34,24 +35,25 @@ public class SelectedCallsComponent
 	
 	public void paintComponent()
 	{
-		Call selectedCall = model.getSelectedCall();
-		Log.debug(LOG, "selectedCall is ", selectedCall);
-		if ( selectedCall == null )
+		List selectedCalls = model.getAllSelectedCalls();
+
+		Log.debug(LOG, "selectedCalls are ", selectedCalls);
+		if ( selectedCalls.isEmpty() )
 			return;
 
+		Iterator i = selectedCalls.iterator();
+		Call selectedCall = (Call)i.next();
 		if ( !highlightBlock(selectedCall, colorModel.getSelectedCallColor()) )
 		{
 			model.setSelectedCall(null);
 			return;
 		}
 
-		for ( Iterator i = model.getCallsByName(selectedCall.getName()).iterator(); i.hasNext(); )
+		while ( i.hasNext() )
 		{
 			Call call = (Call)i.next();
-			if ( !call.equals(selectedCall) )
-			{
-				highlightBlock(call, colorModel.getMatchingSelectedCallColor());
-			}
+			highlightBlock(call, colorModel.getMatchingSelectedCallColor(), true);
+			// highlightBlock(call, colorModel.getSelectedCallColor(), true);
 		}
 	}
 
