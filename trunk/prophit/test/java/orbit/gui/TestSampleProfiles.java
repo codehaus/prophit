@@ -41,6 +41,7 @@ public class TestSampleProfiles
 
 		SampleProfile profile = (SampleProfile)pt.getProfiles().get(0);
 		assertEquals("HelloList", profile.getName());
+			
 		profile = (SampleProfile)pt.getProfiles().get(1);
 		assertEquals("hsqldb", profile.getName());
 
@@ -50,6 +51,7 @@ public class TestSampleProfiles
 		
 		profile = (SampleProfile)pt.getProfiles().get(0);
 		assertEquals("HelloList", profile.getName());
+		assertEquals("hello-list-prof-sample.html", profile.getDocURL());
 	}
 
 	/**
@@ -61,13 +63,13 @@ public class TestSampleProfiles
 			SampleProfileType hprof = (SampleProfileType)samples.getProfileTypes().get(0);
 			SampleProfile helloList = (SampleProfile)hprof.getProfiles().get(0);
 			File tmpFile = helloList.getFile();
-			assertEquals(64121, tmpFile.length());
+			assertEquals(73992, tmpFile.length());
 		}	
 		{
 			SampleProfileType prof = (SampleProfileType)samples.getProfileTypes().get(1);
 			SampleProfile helloList = (SampleProfile)prof.getProfiles().get(0);
 			File tmpFile = helloList.getFile();
-			assertEquals(103702, tmpFile.length());
+			assertEquals(153267, tmpFile.length());
 		}
 	}
 }

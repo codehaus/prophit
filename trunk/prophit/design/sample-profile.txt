@@ -11,6 +11,8 @@ Menu option File/Sample Profiles/About - link to a web page which describes the 
 Sample list should be data-driven
 Sample doc URL should be in a resource
 Samples should load from a compressed JAR file as a resource
+Sample may have an associated web page which may be optionally launched when the 
+  sample is opened
 
 *Sample menu item names will not be localized
 
@@ -28,12 +30,15 @@ documentation.url=http://ironworks.no-ip.org/orbit/samples.html
 prof-HelloList.profileType=prof
 prof-HelloList.name=HelloList
 prof-HelloList.dataResource=hello.prof
+prof-HelloList.docURL=hello-list-prof-sample.html
 hprof-HelloList.profileType=hprof
 hprof-HelloList.name=HelloList
 hprof-HelloList.dataResource=hello.hprof.txt
+hprof-HelloList.docURL=hello-list-hprof-sample.html
 hprof-hsqldb.profileType=hprof
 hprof-hsqldb.name=hsqldb
 hprof-hsqldb.dataResource=hsqldb.hprof.txt
+hprof-hsqldb.docURL=hsqldb-hprof-sample.html
 
 TestSampleProfiles:
 	setUp():
@@ -51,6 +56,7 @@ TestSampleProfiles:
 		
 		profile = pt.getProfiles().get(0)
 		assertEquals("HelloList", profile.getName())
+		assertEquals("hello-list-prof-sample.html", profile.getDocURL())
 		
 		pt = samples.getProfileTypes().get(1)
 		assertEquals("hprof", pt.getName())

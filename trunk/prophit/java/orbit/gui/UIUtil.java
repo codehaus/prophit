@@ -4,8 +4,12 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.text.NumberFormat;
 
+import org.apache.log4j.Category;
+
 class UIUtil
 {
+	public static Category LOG = Category.getInstance(UIUtil.class);
+
 	private static NumberFormat TIME_FORMAT;
 	private static NumberFormat TIME_PERCENT_FORMAT;
 
@@ -15,6 +19,24 @@ class UIUtil
 		TIME_FORMAT.setMaximumFractionDigits(2);
 		TIME_PERCENT_FORMAT = NumberFormat.getPercentInstance();
 		TIME_PERCENT_FORMAT.setMaximumFractionDigits(2);
+	}
+
+	public static boolean isShowDocumentPossible()
+	{
+		BrowserLauncher launcher = getBrowserLauncher();
+		if ( launcher != null )
+			return launcher.isLaunchPossible();
+		else
+			return false;
+	}
+
+	public static boolean showDocument(String href)
+	{
+		BrowserLauncher launcher = getBrowserLauncher();
+		if ( launcher != null )
+			return launcher.showDocument(href);
+		else
+			return false;
 	}
 
 	public static String formatTime(double time)
@@ -85,4 +107,23 @@ class UIUtil
 		Dimension size = window.getSize();
 		window.setLocation( (screenSize.width - size.width) / 2, (screenSize.height - size.height) / 2 );
     }
+	
+	private static BrowserLauncher getBrowserLauncher()
+	{
+		try
+		{
+			/*
+			 * It is important to not import JWSBrowserLauncher into this namespace, because that would
+			 * cause this class to fail to load when JavaWebStart is not available.
+			 */
+			Class cls = Class.forName("orbit.gui.jws.JWSBrowserLauncher");
+			return (BrowserLauncher)cls.newInstance();
+		}
+		catch (Exception x)
+		{
+			LOG.debug("Unable to create JWSBrowserLauncher");
+			LOG.debug(x);
+			return null;
+		}
+	}
 }

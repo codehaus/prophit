@@ -12,16 +12,23 @@ class SampleProfile
 
 	private final String name;
 	private final String resource;
+	private final String docURL;
 
-	public SampleProfile(String name, String resource)
+	public SampleProfile(String name, String resource, String docURL)
 	{
 		this.name = name;
 		this.resource = resource;
+		this.docURL = docURL;
 	}
 
 	public String getName()
 	{
 		return name;
+	}
+
+	public String getDocURL()
+	{
+		return docURL;
 	}
 
 	public File getFile()
