@@ -12,13 +12,17 @@ import orbit.model.Call;
 import orbit.util.Log;
 
 import gl4java.GLEnum;
+import gl4java.GLFunc;
+import gl4java.GLUFunc;
+import gl4java.utils.glut.GLUTEnum;
 import gl4java.utils.glut.GLUTFunc;
 import gl4java.utils.glut.fonts.GLUTFuncLightImplWithFonts;
 
 import org.apache.log4j.Category;
 
+import java.awt.*;
 import java.awt.geom.Rectangle2D;
-import java.awt.event.ComponentEvent;
+import java.awt.event.*;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
@@ -40,16 +44,59 @@ public class LabelComponent
 	private static final double LABEL_X_SPACING = 20;
 	
 	public static Category LOG = Category.getInstance(LabelComponent.class);
-	
-	/**
-	 * Need to invalidate the display list because the mapping from model to window
-	 * coordinates implemented by gluProject and gluUnProject will be changed.
-	 */
-	public void componentResized(ComponentEvent e)
+
+	private List callHolderList = new ArrayList();
+
+	public void initialize(Component canvas, GLFunc gl, GLUFunc glu)
 	{
-		invalidate();
+		super.initialize(canvas, gl, glu);
+
+		canvas.addComponentListener(new ComponentAdapter()
+			{
+				public void componentResized(ComponentEvent e)
+				{
+					invalidate();
+				}				
+			});
+		
+		canvas.addMouseListener(new MouseAdapter()
+			{
+				public void mouseClicked(MouseEvent e)
+				{
+					// System.out.println(e);
+					if ( e.getModifiers() == MouseEvent.BUTTON1_MASK )
+					{
+						CallHolder ch = getCallFromPoint(e.getPoint());
+						if ( ch != null )
+						{
+							Call selectedCall = ch.call.getCall();
+							Log.debug(LOG, "Mouse selected call ", selectedCall);
+							if ( e.getClickCount() == 2 )
+							{
+								model.getRootRenderState().setRenderCall(selectedCall);
+							}
+							else
+							{
+								model.setSelectedCall(selectedCall);
+							}
+						}
+					}
+				}
+			});
+		
+		canvas.addMouseMotionListener(new MouseMotionAdapter()
+			{
+				public void mouseMoved(MouseEvent e)
+				{
+					CallHolder ch = getCallFromPoint(e.getPoint());
+					if ( ch != null )
+					{
+						model.setMouseOverCall(ch.call.getCall());
+					}
+				}
+			});
 	}
-	
+
 	protected void addListeners()
 	{
 		this.model.addListener(new PropertyChangeListener()
@@ -57,6 +104,8 @@ public class LabelComponent
 				public void propertyChange(PropertyChangeEvent evt)
 				{
 					if ( BlockDiagramModel.RENDER_CALL_PROPERTY.equals(evt.getPropertyName()) ||
+						 BlockDiagramModel.MOUSEOVER_CALL_PROPERTY.equals(evt.getPropertyName()) ||
+						 BlockDiagramModel.SELECTED_CALL_PROPERTY.equals(evt.getPropertyName()) ||
 						 BlockDiagramModel.NUM_LEVELS_PROPERTY.equals(evt.getPropertyName()) ||
 						 BlockDiagramModel.SHIFT_HORIZONTAL_PROPERTY.equals(evt.getPropertyName()) ||
 						 BlockDiagramModel.SHIFT_VERTICAL_PROPERTY.equals(evt.getPropertyName()) ||
@@ -69,7 +118,7 @@ public class LabelComponent
 			});
 	}
 	
-	public void paintComponent()
+	public synchronized void paintComponent()
 	{
 		Rectangle2D.Double rootRectangle = new Rectangle2D.Double(0, 0, Constants.DIAGRAM_EXTENT, Constants.DIAGRAM_EXTENT);
 		CallLayoutAlgorithm layout = new CallLayoutAlgorithm(new CallAdapter(model.getRootRenderState().getRenderCall()),
@@ -81,7 +130,7 @@ public class LabelComponent
 		layout.setCallback(search);
 		layout.execute();
 
-		List calls = search.getList();
+		List unsortedCalls = search.getList();
 
 		final int[] viewport = new int[4];
 		final double[] mvMatrix = new double[16], projMatrix = new double[16],
@@ -227,12 +276,12 @@ public class LabelComponent
 			}
 		}
 
-		calls = new LineInterceptSearch().execute(calls);
+		callHolderList = new LineInterceptSearch().execute(unsortedCalls);
 	
 		// TODO: standardize the construction of this
 		GLUTFunc glut = new GLUTFuncLightImplWithFonts(gl, glu);
 		int index = 0;
-		for ( Iterator i = calls.iterator(); i.hasNext(); ++index )
+		for ( Iterator i = callHolderList.iterator(); i.hasNext(); ++index )
 		{
 			CallHolder holder = (CallHolder)i.next();
 
@@ -253,23 +302,59 @@ public class LabelComponent
 			double[] blockCoordinates = holder.getWorldCoordinates();
 			Rectangle2D.Double rect = holder.rectangle;
 			double topZ = ( holder.depth + 1 ) * Constants.BLOCK_HEIGHT;
-						
-			gl.glBegin(GLEnum.GL_LINES);
-			gl.glVertex3d(worldCoordinates[0], worldCoordinates[1], worldCoordinates[2]);
-			gl.glVertex3d(rect.x + rect.width / 2, rect.y + rect.height / 2, topZ);
-			gl.glEnd();
+			int textX = (int)( labelX + index * labelDX );
+			int textY = (int)( labelY + index * labelDY );
+			
+			String labelText = UIUtil.getShortName(holder.call.getName()) + " [ " + UIUtil.formatPercent( holder.call.getInclusiveTime(TimeMeasure.TotalTime) / model.getRootRenderState().getRenderCall().getTime() ) + " ] ";
+			
+			holder.setLabelRectangle(new Rectangle(textX,
+												   (int)( viewport[3] - textY - FONT_HEIGHT + TEXT_BORDER ),
+												   glut.glutBitmapLength(GLUTEnum.GLUT_BITMAP_HELVETICA_12, labelText),
+												   FONT_HEIGHT));
 
-			textBegin();
-			gl.glTranslated(labelX + index * labelDX,
-							labelY + index * labelDY,
-							0);
-			GLUtils.drawText(gl,
-							 glut,
-							 0,
-							 0,
-							 holder.call.getName() + " [ " + UIUtil.formatPercent( holder.call.getInclusiveTime(TimeMeasure.TotalTime) / model.getRootRenderState().getRenderCall().getTime() ) + " ] ",
-							 colorModel.getTextColor());
-			textEnd();
+			gl.glPushAttrib(GLEnum.GL_LINE_BIT);
+			gl.glPushAttrib(GLEnum.GL_COLOR_BUFFER_BIT);
+			try
+			{
+				if ( model.getMouseOverCall() != null &&
+						  model.getMouseOverCall().equals(holder.call.getCall()) )
+				{
+					gl.glLineWidth(3);
+				}
+				else if ( model.getSelectedCall() != null &&
+					 model.getSelectedCall().equals(holder.call.getCall()) )
+				{
+					GLUtils.glColor(gl, colorModel.getSelectedCallColor());
+					gl.glLineWidth(2);
+				}
+				else
+				{
+					gl.glLineWidth(1);
+				}
+			
+				gl.glBegin(GLEnum.GL_LINES);
+				gl.glVertex3d(worldCoordinates[0], worldCoordinates[1], worldCoordinates[2]);
+				gl.glVertex3d(rect.x + rect.width / 2, rect.y + rect.height / 2, topZ);
+				gl.glEnd();
+
+				textBegin();
+				gl.glTranslated(textX,
+								textY,
+								0);
+				GLUtils.drawText(gl,
+								 glut,
+								 0,
+								 0,
+								 labelText,
+								 colorModel.getTextColor());
+
+				textEnd();
+			}
+			finally
+			{
+				gl.glPopAttrib();
+				gl.glPopAttrib();
+			}			
 		}
 	}
 
@@ -298,6 +383,20 @@ public class LabelComponent
 
 		gl.glMatrixMode(GLEnum.GL_PROJECTION);
 		gl.glPopMatrix();
+	}
+
+	private CallHolder getCallFromPoint(Point point)
+	{
+		for ( Iterator i = callHolderList.iterator(); i.hasNext(); )
+		{
+			CallHolder ch = (CallHolder)i.next();
+			if ( ch.getLabelRectangle() != null &&
+				 ch.getLabelRectangle().contains(point) )
+			{
+				return ch;		
+			}
+		}
+		return null;
 	}
 
 	private class LabelSearch
@@ -377,6 +476,7 @@ public class LabelComponent
 		private final CallAdapter call;
 		private final Rectangle2D.Double rectangle;
 		private final int depth;
+		private Rectangle labelRectangle = null;
 		
 		public CallHolder(CallAdapter call, Rectangle2D.Double rectangle, int depth)
 		{
@@ -385,6 +485,16 @@ public class LabelComponent
 			this.depth = depth;
 		}
 
+		public void setLabelRectangle(Rectangle rect)
+		{
+			this.labelRectangle = rect;
+		}
+		
+		public Rectangle getLabelRectangle()
+		{
+			return labelRectangle;
+		}
+		
 		public double[] getWorldCoordinates()
 		{
 			double topZ = ( depth + 1 ) * Constants.BLOCK_HEIGHT;

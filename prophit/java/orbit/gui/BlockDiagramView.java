@@ -371,12 +371,17 @@ class BlockDiagramView
 						if ( e.getModifiers() == MouseEvent.BUTTON1_MASK )
 						{
 							Call selectedCall = pick(e.getPoint());
-							Log.debug(LOG, "Mouse selected call ", selectedCall);
-							model.setMouseOverCall(selectedCall);
-							model.setSelectedCall(selectedCall);
-							if ( selectedCall != null && e.getClickCount() == 2 )
+							if ( selectedCall != null )
 							{
-								model.getRootRenderState().setRenderCall(selectedCall);
+								Log.debug(LOG, "Mouse selected call ", selectedCall);
+								if ( e.getClickCount() == 2 )
+								{
+									model.getRootRenderState().setRenderCall(selectedCall);
+								}
+								else
+								{
+									model.setSelectedCall(selectedCall);
+								}
 							}
 						}
 					}
@@ -441,18 +446,6 @@ class BlockDiagramView
 
 					endUpdate();
 				}
-			});
-
-		addComponentListener(new ComponentAdapter()
-			{
-				public void componentResized(ComponentEvent e)
-				{
-					for ( Iterator i = towerImageComponents.iterator(); i.hasNext(); )
-					{
-						TowerImageComponent c = (TowerImageComponent)i.next();
-						c.componentResized(e);
-					}
-				}				
 			});
 	}
 
