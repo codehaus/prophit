@@ -20,6 +20,8 @@ public class Test
 	{
 		try
 		{
+			new TestRootRenderState("testRootRenderState").testRootRenderState();
+
 			new TestConstructCallsAlgorithm("testBasicGraph").testBasicGraph();
 			new TestConstructCallsAlgorithm("testGaps").testGaps();
 			new TestConstructCallsAlgorithm("testAmbiguity").testAmbiguity();
@@ -312,32 +314,19 @@ public class Test
 		assertion(iterator.next() == 2, "Expected iterator.next = 2");
 		assertion(iterator.next() == 3, "Expected iterator.next = 3");
 	}
-	
+
 	public static void testBasic()
 	{
-		// 100 seconds in the root
-		TestCall rootCall = new TestCall("root", 1, 100);
+		BasicTestCalls calls = new BasicTestCalls();
 
-		TestCall mainCall = new TestCall("main", 1, 70);
-		TestCall eventsCall = new TestCall("events", 1, 30);
-		rootCall.addChild(mainCall);
-		rootCall.addChild(eventsCall);
+		CallAdapter root = new CallAdapter(calls.root);
 
-		TestCall dbOpenCall = new TestCall("dbOpen", 1, 40);
-		TestCall dbCloseCall = new TestCall("dbClose", 1, 5);
-		TestCall dbInitCall = new TestCall("dbInit", 1, 5);
-		mainCall.addChild(dbOpenCall);
-		mainCall.addChild(dbCloseCall);
-		mainCall.addChild(dbInitCall);
+		CallAdapter main = new CallAdapter(calls.main);
+		CallAdapter events = new CallAdapter(calls.events);
 
-		CallAdapter root = new CallAdapter(rootCall);
-
-		CallAdapter main = new CallAdapter(mainCall);
-		CallAdapter events = new CallAdapter(eventsCall);
-
-		CallAdapter dbOpen = new CallAdapter(dbOpenCall);
-		CallAdapter dbClose = new CallAdapter(dbCloseCall);
-		CallAdapter dbInit = new CallAdapter(dbInitCall);
+		CallAdapter dbOpen = new CallAdapter(calls.dbOpen);
+		CallAdapter dbClose = new CallAdapter(calls.dbClose);
+		CallAdapter dbInit = new CallAdapter(calls.dbInit);
 
 		assertion(main.getExclusiveTime(TimeMeasure.TotalTime) == 20, "main.timeInSelf should be 20, is " + main.getExclusiveTime(TimeMeasure.TotalTime));
 

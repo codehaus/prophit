@@ -15,8 +15,8 @@ public class BlockDiagramModel
 
 	private final ArrayList listeners = new ArrayList();
 	private final CallGraph cg;
-	
-	private Call rootRenderCall;
+
+	private RootRenderState rootState;
 
 	private int levels = DEFAULT_LEVELS;
 	private double shiftVertical = 0;
@@ -30,7 +30,11 @@ public class BlockDiagramModel
 		eyeLocation = (EyeLocation)DEFAULT_EYE_LOCATION.clone();
 
 		this.cg = cg;
-		this.rootRenderCall = cg;
+		this.rootState = new RootRenderState(new RootRenderState.Client()
+			{
+				public void invalidate() { BlockDiagramModel.this.invalidate(); }
+			}, 
+														 cg);
 	}
 
 	public synchronized void addListener(Listener listener)
@@ -56,13 +60,12 @@ public class BlockDiagramModel
 	
 	public void setRenderCall(Call call)
 	{
-		rootRenderCall = call;
-		invalidate();
+		rootState.setRenderCall(call);
 	}
 
 	public Call getRenderCall()
 	{
-		return rootRenderCall;
+		return rootState.getRenderCall();
 	}
 
 	public void setSelectedCall(Call call)
