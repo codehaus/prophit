@@ -370,7 +370,8 @@ public class BlockDiagramModel
 	/**
 	 * @return a list of names which match the user's search string. Initially an empty list.
 	 */
-	private List getNameSearchNames()
+	// protected so that the test case TestBlockDiagramModel can use it
+	protected List getNameSearchNames()
 	{
 		return Collections.unmodifiableList(nameSearchMatches);
 	}
