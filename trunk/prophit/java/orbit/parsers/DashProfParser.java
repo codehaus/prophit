@@ -14,28 +14,24 @@ public class DashProfParser
 	public static void main(String[] args) throws Exception
 	{
 		DashProfParser parser;
+		ModelBuilder builder = ModelBuilderFactory.newModelBuilder();
 		{
 			FileReader reader = new FileReader(args[0]);
 			parser = new DashProfParser(reader);
-			parser.execute();
+			parser.execute(builder);
 		}
 
-		AbstractParser.main(args, parser);
+		AbstractParser.main(args, parser, builder);
 	}
 
 	public static Category LOG = Category.getInstance(DashProfParser.class);
 	
-	private ArrayList callIDs = null;
-	private boolean readHeader = false;
+	private boolean      readHeader = false;
+	private ModelBuilder builder = null;
 	
 	public DashProfParser(Reader reader)
 	{
 		super(new LineNumberReader(reader));
-	}
-
-	public List getCallIDs()
-	{
-		return callIDs;
 	}
 	
 	public boolean isFileFormatRecognized()
@@ -54,14 +50,13 @@ public class DashProfParser
 		return false;
 	}
 
-	public void execute() throws ParseException
+	public void execute(ModelBuilder builder) throws ParseException
 	{
+		this.builder = builder;
+		builder.initialize(TimeData.Inclusive);
+		
 		String line;
 		StringTokenizer tok;
-
-		final ArrayList rccList = new ArrayList();
-		final HashMap   rccListByCallee = new HashMap();
-		int key = 1;
 		try
 		{
 			if ( !readHeader )
@@ -76,16 +71,8 @@ public class DashProfParser
 				long time = Long.parseLong(nextToken(tok, true));
 				if ( time > 0 )
 				{
-					StackTrace st = new StackTrace(new String[]{ callee, caller });
-					RCC rcc = new RCC(st, count, time, key++);
-					rccList.add(rcc);
-					ArrayList subList = (ArrayList)rccListByCallee.get(rcc.getLeafStack(1));
-					if ( subList == null )
-					{
-						subList = new ArrayList();
-						rccListByCallee.put(rcc.getLeafStack(1), subList);
-					}
-					subList.add(rcc);
+					ModelBuilder.ID stackID = builder.newStackTrace(new String[]{ callee, caller });
+					builder.newRecordedCall(stackID, count, time);
 				}
 			}
 		}
@@ -93,11 +80,10 @@ public class DashProfParser
 		{
 			throw new ParseException("IOException at line " + lineNumber() + " : " + x.getMessage());
 		}
-		Log.debug(LOG, "DashProfParser found ", rccList.size(), " recorded caller/callees in file");
-
-		ConstructCallsAlgorithm algorithm = new ConstructCallsAlgorithm(rccList.size());
-		algorithm.execute(rccList, rccListByCallee, 1);
-		callIDs = algorithm.getCallIDs();
+		finally
+		{
+			builder.end();
+		}
 	}
 
 	private void checkHeader() throws ParseException, IOException
