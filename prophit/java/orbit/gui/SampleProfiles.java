@@ -88,10 +88,13 @@ class SampleProfiles
 			String profileTypeName = sampleDataFiles.getProperty(profileID + ".profileType");
 			String name = sampleDataFiles.getProperty(profileID + ".name");
 			String dataResource = sampleDataFiles.getProperty(profileID + ".dataResource");
+			String docURL = sampleDataFiles.getProperty(profileID + ".docURL");
+			if ( "".equals(docURL) )
+				docURL = null;
 			if ( profileTypeName == null || name == null || dataResource == null )
 				throw new ConfigurationException("profileType, name, or dataResource missing for profileID " + profileID);
 			SampleProfileType pt = getProfileType(profileTypeName, true);
-			pt.addProfile(new SampleProfile(name, dataResource));
+			pt.addProfile(new SampleProfile(name, dataResource, docURL));
 		}
 	}
 

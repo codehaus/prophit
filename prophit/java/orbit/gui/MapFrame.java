@@ -390,6 +390,26 @@ public class MapFrame
 								SampleProfile profile = (SampleProfile)profilesByMenuItem.get(source);
 								if ( profile != null )
 								{
+									Log.debug(LOG, "Profile ", profile.getName(), ".docURL = ", profile.getDocURL());
+									if ( profile.getDocURL() != null && UIUtil.isShowDocumentPossible() )
+									{
+										int showDoc =
+											JOptionPane.showConfirmDialog(null, 
+																		  Strings.getMessage(MapFrame.class, "showDocURL.message", profile.getDocURL()),
+																		  Strings.getUILabel(MapFrame.class, "showDocURL.title"),
+																		  JOptionPane.YES_NO_OPTION);
+										if ( showDoc == JOptionPane.YES_OPTION )
+										{
+											if ( !UIUtil.showDocument(profile.getDocURL()) )
+											{
+												LOG.warn("Unable to show profile document");
+											}
+										}
+									}
+									else
+									{
+										LOG.debug("Browser not available");
+									}
 									loadProfile(profile.getFile());
 								}
 								else

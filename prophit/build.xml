@@ -22,7 +22,7 @@
   </path>
 
   <path id="compile.class.path">
-	 <fileset dir="${basedir}/lib" includes="log4jME.jar,gl4java.jar,gl4java-glutfonts.jar"/>
+	 <fileset dir="${basedir}/lib" includes="jnlp.jar,log4jME.jar,gl4java.jar,gl4java-glutfonts.jar"/>
   </path>
 
   <target name="init">
