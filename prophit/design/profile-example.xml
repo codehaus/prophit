@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE call-graph SYSTEM "profile-data.dtd" >
+
+<!--
+This file represents the parsed and solved profile in data/simple.prof (which is in -prof format)
+-->
+<call-graph>
+	<date>2002-12-10 10:39:00</date>
+	<source-file>d:/home/kgilpin/orbit/data/simple.prof</source-file>
+	<user>kgilpin</user>
+	<!-- In a generated call-graph the measurement/@id attributes will be integers -->
+	<measurement id="main" time="300" numCalls="1">
+		<stacktrace>
+			<method>main()</method>
+		</stacktrace>
+	</measurement>
+	<measurement id="main:test" time="180" numCalls="1">
+		<stacktrace>
+			<method>main()</method>
+			<method>test()</method>
+		</stacktrace>
+	</measurement>
+	<measurement id="main:init" time="120" numCalls="1">
+		<stacktrace>
+			<method>main()</method>
+			<method>init()</method>
+		</stacktrace>
+	</measurement>
+	<measurement id="init:DBExec" time="90" numCalls="1">
+		<stacktrace>
+			<method>init()</method>
+			<method>DBExec()</method>
+		</stacktrace>
+	</measurement>
+	<measurement id="test:DBExec" time="120" numCalls="2">
+		<stacktrace>
+			<method>test()</method>
+			<method>DBExec()</method>
+		</stacktrace>
+	</measurement>
+	<measurement id="DBExec:insert" time="30" numCalls="1">
+		<stacktrace>
+			<method>DBExec()</method>
+			<method>insert()</method>
+		</stacktrace>
+	</measurement>
+	<measurement id="DBExec:update" time="60" numCalls="5">
+		<stacktrace>
+			<method>DBExec()</method>
+			<method>update()</method>
+		</stacktrace>
+	</measurement>
+	<measurement id="insert:append" time="100" numCalls="15">
+		<stacktrace>
+			<method>insert()</method>
+			<method>append()</method>
+		</stacktrace>
+	</measurement>
+	<measurement id="update:append" time="200" numCalls="30">
+		<stacktrace>
+			<method>update()</method>
+			<method>append()</method>
+		</stacktrace>
+	</measurement>
+	<invocation measurementID="main" />
+	<invocation parentMeasurementID="main" measurementID="main:test" />
+	<invocation parentMeasurementID="main" measurementID="main:init" />
+	<invocation parentMeasurementID="main:test" measurementID="test:DBExec" />
+	<invocation parentMeasurementID="main:init" measurementID="init:DBExec" />
+	<!-- 
+	These two invocations are invocations are DBExec:insert from 2 different contexts
+	Thus the callFraction numbers specify how the measured data for DBExec:insert should be split
+	  between the two invocations
+
+	For -prof profiles, the times are split according to the numCalls of the parentMeasurementIDs.
+	  In this case, the split is 1/3 and 2/3, because measurement[@id = 'test:DBExec']/@numCalls = 2
+	  and measurement[@id = 'test:DBExec']/@numCalls = 1 
+	  (this strange syntax is XPath)	
+	--> 
+	<invocation parentMeasurementID="test:DBExec" measurementID="DBExec:insert" callFraction="0.6666666667" />
+	<invocation parentMeasurementID="init:DBExec" measurementID="DBExec:insert" callFraction="0.3333333333" />
+	<!-- Likewise for DBExec:update -->
+	<invocation parentMeasurementID="test:DBExec" measurementID="DBExec:update" callFraction="0.6666666667" />
+	<invocation parentMeasurementID="init:DBExec" measurementID="DBExec:update" callFraction="0.3333333333" />
+	<invocation parentMeasurementID="DBExec:insert" measurementID="insert:append" />
+	<invocation parentMeasurementID="DBExec:update" measurementID="update:append" />
+</call-graph>
