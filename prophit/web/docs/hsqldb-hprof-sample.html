@@ -25,14 +25,15 @@ MM_reloadPage(true);
 	A:active {color: red! important}
 	#topMenuLayer A {text-decoration: none}
 	#leftcol A {text-decoration: none}
-	DIV.header {background-color: #EBDEA9; font-family: Arial, Helvetica, sans serif; font-size: small; color: #333333; font-variant: small-caps; font-weight: bold }
+	DIV.header {border: solid; border-bottom-width: 1px; border-top-width: 1px; border-left-width: 1px; border-right-width: 1px; border-color: #AAAAAA #AAAAAA #AAAAAA #AAAAAA; background-color: #EBDEA9; font-family: Arial, Helvetica, sans serif; font-size: small; color: #333333; font-variant: small-caps; font-weight: bold }
+	DIV.docnav {border: solid; border-bottom-width: 0px; border-top-width: 1px; border-left-width: 0px; border-right-width: 0px; border-color: #AAAAAA #AAAAAA #AAAAAA #AAAAAA; font-family: Arial, Helvetica, sans serif; font-size: small; color: #333333; font-variant: small-caps; font-weight: normal }
 	.news {font-size: 2; font-family: "Courier New" }
 </STYLE>
 </head>
 
 <body bgcolor="#FFFFFF" text="#333333">
-<div id="HeadingLayer"> <font face="   "></font>
-<table id="HeaderTable" width="100%" border="0" cellpadding="8" cellspacing="0">
+<div id="HeadingLayer">
+  <table id="HeaderTable" width="100%" border="0" cellpadding="8" cellspacing="0">
     <tr>
   	  <td bgcolor="#EBDEA9" width="100%" > 
         <p><font size="6" face="Georgia, Times New Roman, Times, serif" color="#000000"><b><a href="../index.html" style="text-decoration: none"><font color="222222">proph<font face="Courier New, Courier, mono">It</font></font></a></b></font> 
@@ -49,14 +50,12 @@ MM_reloadPage(true);
   <table cellspacing="0" cellpadding="4" width="100%">
     <tr>
 			
-      <td class="TopMenu"> Last Published: @@date </td>
+      <td class="TopMenu"> Last Published: 10/17/2002 </td>
 			<td>
 				
-        <div align="right"> 
-		<span class="TopMenu"><a href="../index.html">prophIt</a> 
+        <div align="right"> <span class="TopMenu"><a href="../index.html">prophIt</a> 
           | <a href="index.html">Documentation</a> | <a href="../download.html">Download</a> 
-        </span>
-		</div>
+          </span> </div>
 			
         <font face="Arial, Helvetica, sans-serif"></font></td>
 		</tr>
@@ -87,18 +86,17 @@ MM_reloadPage(true);
 					<tr>
 						<td><div id="mainContentLayer">
 						<!-- #BeginEditable "Main%20Content%20Region" --> 
-                  <h1 align="center">HSQLDB <code>hprof</code> Profile</h1>
-                  <table border="0" cellspacing="0" cellpadding="0" bgcolor="eeeeee">
+                  <div class="header"><font size=4>HSQLDB hprof Profile</font></div>
+                  <!--table border="0" cellspacing="0" cellpadding="0" bgcolor="eeeeee">
                     <tr> 
                       <td width="247" nowrap>Previous : <a href="hello-list-hprof-sample.html">HelloList 
-                        <code>hprof</code> Profile</a> </td>
+                        <code>hprof</code> Profile</a></td>
                       <td width="20" bgcolor="ffffff" nowrap>&nbsp;</td>
-                      <td width="107" nowrap>Up : <a href="samples.html">Samples</a></td>
+                      <td width="107" nowrap>Up : <a href="docs/samples.html">Samples</a></td>
                       <td width="20" bgcolor="ffffff" nowrap>&nbsp;</td>
-                      <td width="236" nowrap>Next : <a href="hello-list-prof-sample.html">HelloList 
-                        <code>-prof</code> Profile</a></td>
+                      <td width="163" nowrap>Next : </td>
                     </tr>
-                  </table>
+                  </table-->
                   <table border="0">
                     <tr>
                       <td> 
@@ -136,15 +134,18 @@ MM_reloadPage(true);
                         </font> </td>
                     </tr>
                   </table>
+				  <div class="docnav" align="center"> Previous : <a href="hello-list-hprof-sample.html">HelloList 
+                    <code>hprof</code> Profile</a> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+                    Up : <a href="samples.html">Samples</a> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+                    Next : &nbsp;&nbsp; </div>				  
                   <table border="0" cellspacing="0" cellpadding="0" bgcolor="eeeeee">
                     <tr> 
                       <td width="247" nowrap>Previous : <a href="hello-list-hprof-sample.html">HelloList 
-                        <code>hprof</code> Profile</a> </td>
+                        <code>hprof</code> Profile</a></td>
                       <td width="20" bgcolor="ffffff" nowrap>&nbsp;</td>
                       <td width="107" nowrap>Up : <a href="samples.html">Samples</a></td>
                       <td width="20" bgcolor="ffffff" nowrap>&nbsp;</td>
-                      <td width="236" nowrap>Next : <a href="hello-list-prof-sample.html">HelloList 
-                        <code>-prof</code> Profile</a></td>
+                      <td width="163" nowrap>Next : </td>
                     </tr>
                   </table>
                   <!-- #EndEditable -->
@@ -154,7 +155,7 @@ MM_reloadPage(true);
 				<table width="100%" border="0" cellspacing="0" cellpadding="0">
 				  <tr>
 					
-              <td><a href="http://www.westslopesoftware.com"><img src="../assets/wsswLogo.jpg" width="673" height="99" border="0"></a></td>
+              <td></td>
 				  </tr>
 				</table>
 			</div>
@@ -162,6 +163,10 @@ MM_reloadPage(true);
 		</td>
 	</tr>
 </table>
+</div>
+<div id="wsswFooter" align="bottom">
+<a href="http://www.westslopesoftware.com" target=_blank><img src="../assets/wsswLogo.jpg" width="673" height="99" border="0"></a>
+ 
 </div>
 <p>&nbsp;</p>
 </body>
