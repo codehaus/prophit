@@ -100,10 +100,16 @@ public class LoadProgressDialog
 				loader.parse();
 				cbParsed.setSelected(true);
 			
+				System.gc();
 				System.out.println("\tParsed in " + ( System.currentTimeMillis() - startTime ) + " ms");
 				
+				startTime = System.currentTimeMillis();
 				cg = loader.solve();
 				error = loader.getError();
+
+				System.gc();
+				System.out.println("\tSolved in " + ( System.currentTimeMillis() - startTime ) + " ms");
+
 				cbSolved.setSelected(true);
 			}
 			catch (Exception x)
