@@ -476,8 +476,9 @@ class MapCanvas extends GLCanvas
 			// System.out.println("mouseOverCall = " + mouseOverCall);
 		}
 		
-		drawName();
-		glj.gljSwap();
+		// drawName();
+		// This is causing all that nasty flickering
+		// glj.gljSwap();
 		glj.gljFree();
 	}
 	
@@ -572,10 +573,12 @@ class MapCanvas extends GLCanvas
 
 
 		Color color;
-		try {
+		try 
+		{
 			color = new Color(red, green, blue);
 		}
-		catch (IllegalArgumentException x) {
+		catch (IllegalArgumentException x) 
+		{
 			System.out.println("call = " + call);
 			for ( Iterator i = call.getChildren().iterator(); i.hasNext(); )
 			{
