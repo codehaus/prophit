@@ -4,7 +4,8 @@ import orbit.model.CallID;
 import orbit.model.CallFractionSolver;
 import orbit.model.CallFractionSolverData;
 import orbit.model.CallGraph;
-import orbit.parsers.DashProfParser;
+import orbit.parsers.Parser;
+import orbit.parsers.ParserFactory;
 import orbit.solver.SocketConnection;
 
 import java.awt.*;
@@ -95,8 +96,8 @@ public class LoadProgressDialog
 			{
 				long startTime = System.currentTimeMillis();
 				System.out.println("Parsing " + profileFile);
-			
-				DashProfParser parser = new DashProfParser(new FileReader(profileFile));
+
+				Parser parser = ParserFactory.instance().createParser(profileFile);
 				parser.execute();
 
 				System.out.println("\tParsed in " + ( System.currentTimeMillis() - startTime ) + " ms");
