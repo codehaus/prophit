@@ -257,6 +257,7 @@ public class HProfParser
 			Integer id = Integer.valueOf(nextToken(tok, true));
 			stack.clear();
 			while ( ( line = nextLine(false) ) != null &&
+					!"".equals( line = line.trim() ) &&
 					!line.startsWith("TRACE") &&
 					!line.startsWith("CPU SAMPLES BEGIN") )
 			{

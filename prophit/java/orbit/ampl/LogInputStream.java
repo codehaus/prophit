@@ -21,4 +21,12 @@ public class LogInputStream
 			log.write(i);
 		return i;
 	}
+	
+	/* Implement the rest of InputStream */
+	public long skip(long l) throws IOException { return input.skip(l); }
+    public int available() throws IOException   { return input.available(); }
+    public void close() throws IOException      { input.close(); }
+    public synchronized void mark(int i)        { input.mark(i); }
+    public synchronized void reset() throws IOException { input.reset(); }
+    public boolean markSupported()                      { return input.markSupported(); }
 }

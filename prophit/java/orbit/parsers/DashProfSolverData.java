@@ -5,7 +5,10 @@ import orbit.ampl.StringDatum;
 import orbit.model.CallID;
 import orbit.model.RCC;
 import orbit.util.ConfigurationException;
+import orbit.util.Log;
 import orbit.util.Util;
+
+import org.apache.log4j.Category;
 
 import java.io.*;
 import java.util.HashSet;
@@ -17,12 +20,13 @@ import java.util.StringTokenizer;
 //   called something like 'qpsolver', then this class should go into a 'solver' package or perhaps into 'loader'
 public class DashProfSolverData
 {
+	public static Category LOG = Category.getInstance(DashProfSolverData.class);
+
 	private static final String modelResourceName = "/ampl/profile.mod";
 	private static final String commandsResourceName = "/ampl/profile.run";
 
 	private final List callIDs;
 	private final List proxyCallIDs;
-	private boolean debug = false;
 	
 	public DashProfSolverData(List callIDs)
 	{
@@ -116,7 +120,7 @@ public class DashProfSolverData
 		}
 		writer.print(";");writer.print('\n');
 
-		if ( debug )
+		if ( LOG.isDebugEnabled() )
 		{
 			writer.print("# rcc = ");
 			HashSet rccs2 = new HashSet();
@@ -144,7 +148,7 @@ public class DashProfSolverData
 		}
 		writer.print(";");writer.print('\n');
 
-		if ( debug )
+		if ( LOG.isDebugEnabled() )
 		{
 			writer.print("# I =");
 			for ( Iterator i = proxyCallIDs.iterator(); i.hasNext(); )

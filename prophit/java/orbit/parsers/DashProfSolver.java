@@ -5,6 +5,8 @@ import orbit.model.CallGraph;
 import orbit.ampl.SocketConnection;
 import orbit.util.Util;
 
+import org.apache.log4j.Category;
+
 import java.io.*;
 import java.util.List;
 import java.util.Properties;
@@ -13,6 +15,8 @@ import java.util.StringTokenizer;
 public class DashProfSolver
 	implements Solver
 {
+	public static Category LOG = Category.getInstance(DashProfSolver.class);
+
 	private final static String VERSION = "1.0.0";
 	
 	private final SocketConnection.Factory factory;
@@ -23,8 +27,6 @@ public class DashProfSolver
 		ConnectionProperties props = new ConnectionProperties();
 		
 		factory = new SocketConnection.Factory(props.getHostName(), props.getPort());
-		if ( props.getDebug() )
-			factory.setDebug(true, profileFile.getName());
 	}
 
 	// TODO: make protected & move test in test.Test into this package
@@ -41,7 +43,9 @@ public class DashProfSolver
 		long solveStart = System.currentTimeMillis();
 		String results = solver.execute(data.getUserName(), data.getModel(), data.getData(), data.getCommands());
 		long solveEnd = System.currentTimeMillis();
-		System.out.println("Solved in " + ( solveEnd - solveStart ) + " ms");
+
+		LOG.info("Solved in " + ( solveEnd - solveStart ) + " ms");
+		
 		fractions = data.parse(results);
 		
 		return new CallGraph(callIDs, fractions);
@@ -126,10 +130,7 @@ public class DashProfSolver
 		
 		public boolean getDebug()
 		{
-			if ( "true".equals(props.getProperty("debug")) )
-				return true;
-			else
-				return false;
+			return "true".equals(props.getProperty("debug"));
 		}
 	}
 }

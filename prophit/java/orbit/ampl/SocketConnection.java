@@ -1,6 +1,9 @@
 package orbit.ampl;
 
 import orbit.util.Util;
+import orbit.util.Log;
+
+import org.apache.log4j.Category;
 
 import java.io.*;
 import java.net.Socket;
@@ -8,22 +11,21 @@ import java.net.Socket;
 public class SocketConnection
 	implements Connection
 {
+	public static Category LOG = Category.getInstance(SocketConnection.class);
+
 	private static int COUNTER = 0;
+	private static String US_ASCII = "US-ASCII";
 	
 	private final Socket socket;
 	
-	private Writer         writer    = null;
-	private BufferedReader reader    = null;
-	private String         debugFile = null;
+	private Writer                writer   = null;
+	private Reader                reader   = null;
+	private ByteArrayOutputStream inputOS  = null;
+	private ByteArrayOutputStream outputOS = null;
 	
 	private SocketConnection(Socket socket)
 	{
 		this.socket = socket;
-	}
-
-	public void setDebugFile(String debugFile)
-	{
-		this.debugFile = debugFile;
 	}
 
 	public Writer getWriter()
@@ -32,7 +34,7 @@ public class SocketConnection
 		return writer;
 	}
 
-	public BufferedReader getReader()
+	public Reader getReader()
 	{
 		open();
 		return reader;
@@ -43,6 +45,16 @@ public class SocketConnection
 		try
 		{
 			socket.close();
+			if ( LOG.isDebugEnabled() )
+			{
+				String input = new String(inputOS.toByteArray(), US_ASCII);
+				String output = new String(outputOS.toByteArray(), US_ASCII);
+				int index = COUNTER++;
+				LOG.debug("Input [" + index + "]");
+				LOG.debug(input);
+				LOG.debug("Output [" + index + "]");
+				LOG.debug(output);
+			}
 		}
 		catch (IOException x)
 		{
@@ -50,23 +62,17 @@ public class SocketConnection
 		}
 	}
 
-	private void open()
+	private synchronized void open()
 	{
 		if ( writer != null && reader != null )
 			return;
 
 		try
 		{
-			if ( debugFile != null )
-			{
-				reader = new BufferedReader(new InputStreamReader(new LogInputStream(socket.getInputStream(), new FileOutputStream(debugFile + "." + ( COUNTER++ ) + ".input")), "US-ASCII"));
-				writer = new OutputStreamWriter(new TeeOutputStream(socket.getOutputStream(), new FileOutputStream(debugFile + "." + ( COUNTER++ ) + ".output")), "US-ASCII");
-			}
-			else
-			{
-				reader = new BufferedReader(new InputStreamReader(socket.getInputStream(), "US-ASCII"));
-				writer = new OutputStreamWriter(socket.getOutputStream(), "US-ASCII");
-			}
+			inputOS  = new ByteArrayOutputStream();
+			outputOS = new ByteArrayOutputStream();
+			reader = new InputStreamReader(new LogInputStream(socket.getInputStream(), inputOS), US_ASCII);
+			writer = new OutputStreamWriter(new TeeOutputStream(socket.getOutputStream(), outputOS), US_ASCII);
 		}
 		catch (IOException x)
 		{
@@ -79,7 +85,6 @@ public class SocketConnection
 	{
 		private final String host;
 		private final int port;
-		private boolean debug = false;
 		private String baseDebugFile = "solver";
 			
 		public Factory(String host, int port)
@@ -88,22 +93,11 @@ public class SocketConnection
 			this.port = port;
 		}
 
-		public void setDebug(boolean b, String baseFile)
-		{
-			this.debug = b;
-			if ( baseFile != null )
-				this.baseDebugFile = baseFile;
-		}
-		
 		public Connection newConnection()
 		{
 			try
 			{
 				SocketConnection c = new SocketConnection(new Socket(host, port));
-				if ( debug )
-				{
-					c.setDebugFile(baseDebugFile);
-				}
 				return c;
 			}
 			catch (Exception x)

@@ -19,4 +19,8 @@ public class TeeOutputStream
 		first.write(i);
 		second.write(i);
 	}
+
+	/* Implement the rest of OutputStream */
+    public void flush() throws IOException { first.flush(); second.flush(); }
+    public void close() throws IOException { first.close(); second.close(); }
 }

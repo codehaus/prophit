@@ -45,7 +45,7 @@ public class Test
 		Connection c = factory.newConnection();
 
 		VerifyCommand command = new VerifyCommand("joe");
-		command.execute(c.getWriter(), c.getReader());
+		command.execute(c.getWriter(), new BufferedReader(c.getReader()));
 
 		assertion("NEOS".equals(command.getServerID()), "Expected " + command.getServerID() + " = 'NEOS'");
 		

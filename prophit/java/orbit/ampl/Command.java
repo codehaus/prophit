@@ -111,11 +111,12 @@ public abstract class Command
 	{
 		try
 		{
-			char chars[] = new char[8192];
+			char[] chars = new char[8192];
 			StringBuffer sb = new StringBuffer();
 			int read = 0;
-			while ( ( read = reader.read(chars) ) != -1 )
+			while ( ( read = reader.read(chars, 0, chars.length) ) != -1 )
 			{
+				System.out.println("Read " + read);
 				sb.append(chars, 0, read);
 			}
 			return sb.toString();

@@ -26,6 +26,13 @@ public class Loader
 	 */
 	public static void main(String[] args) throws Exception
 	{
+		if ( args.length < 1 )
+		{
+			System.err.println("Usage : java orbit.parsers.Loader <file> [ <depth> ]");
+			System.err.println("  depth : depth of the CallGraph to print. Default is '6'");
+			System.exit(1);
+		}		   
+		
 		File profileFile = new File(args[0]);
 		int depth = 6;
 		if ( args.length > 1 )

@@ -66,7 +66,8 @@ public class DashProfParser
 		{
 			if ( !readHeader )
 				checkHeader();
-			while ( ( line = nextLine(false) ) != null )
+			while ( ( line = nextLine(false) ) != null &&
+					!"".equals( line = line.trim() ) )
 			{
 				tok = new StringTokenizer(line, " ");
 				int count = Integer.parseInt(nextToken(tok, true));
