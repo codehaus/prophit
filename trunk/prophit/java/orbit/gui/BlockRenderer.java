@@ -15,7 +15,7 @@ class BlockRenderer
 	public static final int RENDER_SOLID = 0;
 	public static final int RENDER_WIREFRAME = 1;
 
-	private static final double HEIGHT = 0.05;
+	public static final double HEIGHT = 0.05;
 
 	private static final double SIZE_THRESHOLD = 3.0;
 	// If a function makes up more than this amount of time of the parent call, its coloring tends towards red
@@ -125,7 +125,7 @@ class BlockRenderer
 		if ( renderMode == RENDER_SOLID )
 		{
 			int name = nextName++;
-			nameToCallMap.put(new Integer(name), call);
+			nameToCallMap.put(new Integer(name), call.getCall());
 			gl.glPushName(name);
 
 			renderAsQuads(call, rectangle, depth, color);

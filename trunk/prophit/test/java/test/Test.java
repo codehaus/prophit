@@ -20,7 +20,6 @@ public class Test
 	{
 		try
 		{
-			testIntStack();
 			testBasic();
 			testHProfParserHello();
 			testDashProfParserSimple();
@@ -227,84 +226,6 @@ public class Test
 		System.out.println("Solved hsqldb.prof in " + ( solveEnd - solveStart ) + " ms");
 	}
 	
-	public static void testIntStack()
-	{
-		IntIterator iterator;
-		IntStack stack = new IntStack();
-
-		// Test an empty stack
-		boolean exception = false;
-		try
-		{
-			stack.pop();
-		}
-		catch (EmptyStackException x)
-		{
-			exception = true;
-		}
-		assertion(exception, "Expected EmptyStackException");
-
-		// Test basic pushing, hashCode, size
-		stack.push(1);
-		stack.push(2);
-		stack.push(3);
-
-		assertion(stack.hashCode() == 6, "Expected hashCode = 6");
-		assertion(stack.size() == 3, "Expected size = 3");
-
-		// Test clone, pushing on a clone
-		IntStack copy = (IntStack)stack.clone();
-
-		assertion(copy.equals(stack), "Expected copy == stack");
-		assertion(copy.hashCode() == 6, "Expected hashCode = 6");
-		assertion(copy.size() == 3, "Expected size = 3");
-
-		copy.push(4);
-		assertion(!copy.equals(stack), "Expected copy != stack");
-		assertion(copy.hashCode() == 10, "Expected hashCode = 10");
-		assertion(copy.size() == 4, "Expected size = 4");
-
-		// Grow it
-		IntStack big = new IntStack();
-		for ( int i = 1; i <= 200; ++i )
-			big.push(i);
-		assertion(big.size() == 200, "Expected size = 200");
-		assertion(big.hashCode() == 10, "Expected hashCode = 10");
-
-		// Test clear
-		IntStack toClear = new IntStack();
-		toClear.push(1);
-		toClear.push(2);
-		toClear.push(3);
-
-		assertion(toClear.size() == 3, "Expected size = 3");
-		toClear.clear();
-		assertion(toClear.size() == 0, "Expected size = 0");
-		
-		toClear.push(1);
-		assertion(toClear.size() == 1, "Expected size = 1");
-		iterator = toClear.iterator();
-		assertion(iterator.next() == 1, "Expected iterator.next = 1");
-		assertion(!iterator.hasNext(), "Expected iterator.hasNext = 0");
-
-		// Test addAll
-		IntStack destination = new IntStack();
-		destination.push(1);
-		destination.push(2);
-		destination.push(3);
-
-		destination.addAll(big);
-
-		assertion(destination.size() == 203, "Expected size = 203, is " + destination.size());
-		iterator = destination.iterator();
-		assertion(iterator.next() == 1, "Expected iterator.next = 1");
-		assertion(iterator.next() == 2, "Expected iterator.next = 2");
-		assertion(iterator.next() == 3, "Expected iterator.next = 3");
-		assertion(iterator.next() == 1, "Expected iterator.next = 1");
-		assertion(iterator.next() == 2, "Expected iterator.next = 2");
-		assertion(iterator.next() == 3, "Expected iterator.next = 3");
-	}
-
 	public static void testBasic()
 	{
 		BasicTestCalls calls = new BasicTestCalls();
@@ -350,7 +271,7 @@ public class Test
 		assertRectangle(layout.getExtent(), new Rectangle2D.Double(0.8, 0.5, 0.2, 0.5));
 		assertRectangle(layout.getRemainderExtent(layout.getExtent()), new Rectangle2D.Double(0.8, 0, 0.2, 0.5));
 		// Rendered area should the same fraction of the Extent as the fractionOfParent / fractionOfChild
-		assertion(TestUtil.equal(area(layout.getRectangle(layout.getExtent())) / area(layout.getExtent()), 4 / 7.0 / 0.8), "Incorrect area ratio");
+		assertion(TestUtil.equal(TestUtil.area(layout.getRectangle(layout.getExtent())) / TestUtil.area(layout.getExtent()), 4 / 7.0 / 0.8), "Incorrect area ratio");
 		
 		System.out.println(layout.getRectangle(layout.getExtent()));
 	}
@@ -364,11 +285,6 @@ public class Test
 		{
 			assertion(false, "Expected " + first + " = " + second);
 		}
-	}
-
-	static double area(Rectangle2D.Double rectangle)
-	{
-		return rectangle.height * rectangle.width;
 	}
 
 	public static void assertion(boolean test, String message)
