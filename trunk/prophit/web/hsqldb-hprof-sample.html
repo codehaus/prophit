@@ -26,15 +26,19 @@
 <tr><td><img src="processDelete.png" /></td></tr>
 <tr><td align="center">Screenshot highlighting the <code>processDelete</code> function in the context of <code>Log.open</code>.
 </table>
-
+<font size="-1">
+      <p>Open this sample using the <i>File/Sample Profiles/hprof/hsqldb</i> menu 
+        item. </p>
+      <p></p>
 <p>This sample shows <code>java -Xrunhprof</code> output from the <a href="samples.html#hsqldb">HSQLDB 
-  demo</a>. </p>
+        demo</a>. </p>
 <ul>
 <li>The diagram shows that the time to execute <code>Log.open</code> is largely (45%) spent in <code>Log.runScript</code>, which is mostly (71%) spent in <code>Parser.processDelete</code>. <code>Log.open</code> is called primarily by <code>Database.&lt;init></code>, which suggests that database initialization time could be significantly optimized by speeding up the operation of <code>Parser.processDelete</code>.</li>
 <li>The diagram shows that the time to execute <code>Parser.processInsert</code> is primarily (61%) spent in <code>Parser.getValue</code></li>
 <li>Another important hot-spot is the invocation of <code>Log.saveProperties</code>, which is visible in the upper-right-hand corner of the diagram. This function spends a large amount of time in <code>Date.toString<code>, which could probably be optimized significantly.</code></code></li>
 </ul>
 
+</font>
 </td></tr>
 </table>
 
