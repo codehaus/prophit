@@ -72,6 +72,8 @@ public class LPSolver
 			list.add(callID);
 		}
 
+		Log.debug(LOG, "Solving LP for proxyCallIDs ", proxyCallIDs);
+		
 		fractions = null;
 		double maxTimeSum = 1.0;
 		while ( ( fractions = solveCallFractions(maxTimeSum) ) == null )
@@ -138,6 +140,9 @@ public class LPSolver
 
 			double[] row;
 
+			Log.debug(LOG, "Absolute value constraints for ", callID);
+			Log.debug(LOG, "\tcall ratio = ", ratio);
+			
 			row = new double[lp.getRowArraySize()];
 			lp.setXValue(callID, row, 1);
 			lp.setFValue(callID, row, -1);
@@ -179,19 +184,25 @@ public class LPSolver
 				if ( child.getParentRCC() == rcc )
 					lp.setFValue(child, row, child.getRCC().getTime());
 			}
+
+			Log.debug(LOG, "Sum of time constraints for ", rcc);
+			Log.debug(LOG, "\ttime = ", time);
+			
 			lpSolve.add_constraint(lpIn, row, constant.LE, time * maxTimeSum);
 		}
 
 		/* 
-		 * Add constraint sum of all fs = 1
+		 * Add constraint sum of all fs on each RCC = 1
 		 * f(store1) + f(store2) = 1
 		 */
-		int constraintCount;
+		int constraintCount = 0;
+		for ( Iterator i = proxyCallsByRCC.values().iterator(); i.hasNext(); )
 		{
+			List proxyCallIDs = (List)i.next();
 			double[] row = new double[lp.getRowArraySize()];
-			for ( CallIDIterator i = new CallIDIterator(proxyCallIDs); i.hasNext(); )
+			for ( CallIDIterator j = new CallIDIterator(proxyCallIDs); j.hasNext(); )
 			{
-				CallID callID = i.next();
+				CallID callID = j.next();
 				lp.setFValue(callID, row, 1);
 			}
 			constraintCount = lpSolve.add_constraint(lpIn, row, constant.EQ, 1);
