@@ -1,8 +1,48 @@
-	
-		@page { margin-left: 1.25in; margin-right: 1.25in; margin-top: 1in; margin-bottom: 1in }
-		H1 { margin-bottom: 0.08in; font-family: Arial, Helvetica, sans-serif; font-size: 16pt }
-		H4 { margin-bottom: 0.08in; font-family: Arial, Helvetica, sans-serif; font-size: 11pt; font-style: italic }
-		H2 { margin-bottom: 0.08in; font-family: Arial, Helvetica, sans-serif; font-size: 14pt; font-style: italic }
+<STYLE>
+		H1 { margin-bottom: 0.08in; font-family: Georgia, "Times New Roman", Times, serif; font-size: medium; color: #333333; font-variant: small-caps; font-weight: bold}
+		H4 { margin-bottom: 0.08in; font-family: Arial, Helvetica, sans-serif; font-size: small; font-style: italic ; color: #333333; font-variant: small-caps}
+		H2 { margin-bottom: 0.08in; font-family: Arial, Helvetica, sans-serif; font-size: small; font-style: italic ; color: #333333}
 .normal {  font-family: Arial, Helvetica, sans-serif; font-size: 12px}
 	
-	
+	.MenuHeader {  font-family: Verdana, Arial, Helvetica, sans-serif; font-size: small; font-style: normal; font-weight: bold; font-variant: small-caps; color: #333333}
+.MenuItem {  font-family: "Courier New", Courier, mono; font-size: x-small; font-weight: normal; font-variant: small-caps}
+.TopMenu {  font-family: Verdana, Arial, Helvetica, sans-serif; font-size: x-small; font-variant: small-caps}
+A:link
+{
+  COLOR: green
+}
+A:active
+{
+  COLOR: #f30! important
+{
+A:hover
+{
+  COLOR: #f30! important
+}
+A:visited
+{
+  COLOR: green
+}
+DIV
+{
+  BORDER-TOP: #fff 1px solid;
+  COLOR: #000;
+  BORDER-BOTTOM: #aaa 1px solid;
+  BACKGROUND-COLOR: #dddddd; border-color: #FFFFFF black #AAAAAA; border-top-width: 1px; border-bottom-width: 1px
+}
+#MenuItem A:hover
+{
+  COLOR: #f30! important
+}
+#topMenuLayer DIV
+{
+  BORDER-TOP: #fff 1px solid;
+  COLOR: #000;
+  BORDER-BOTTOM: #aaa 1px solid;
+  BACKGROUND-COLOR: #dddddd; border-color: #FFFFFF black #AAAAAA; border-top-width: 1px; border-bottom-width: 1px
+}
+#topMenuLayer A:hover
+{
+  COLOR: #f30! important
+}
+</STYLE>
