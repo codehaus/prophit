@@ -35,10 +35,9 @@ class BlockDiagramView
 {
 	public static Category LOG = Category.getInstance(BlockDiagramView.class);
 
-	private static double MOVE_INCREMENT = 0.5;
 	private static double DRAG_ROTATE_FACTOR = 5.0;
 	private static double LEGEND_SHIFT = 1 / 12.0;
-
+	private static double BLOCK_START_VERTICAL = -0.10;
 	
 	private static int TEXT_OFFSET_FROM_LEFT = 4;
 	private static int FONT_HEIGHT = 14;
@@ -269,23 +268,24 @@ class BlockDiagramView
 		// System.out.println(eyeLocation);
 
 		gl.glTranslated(LEGEND_SHIFT, LEGEND_SHIFT, 0);
+		gl.glTranslated(0, BLOCK_START_VERTICAL, 0);
 		gl.glTranslated(model.getShiftHorizontal(), model.getShiftVertical(), 0);
 		glu.gluLookAt(model.getEye().getX(), model.getEye().getY(), model.getEye().getZ(), 
 						  0, 0, 0, 0, 0, 1);
 		gl.glTranslated(-0.5, -0.5, -0.5);
 
-		wireFrameComponent.initialize(gl, glu);
+		wireFrameComponent.initialize(this, gl, glu);
 		wireFrameComponent.render();
 		if ( renderMode == Constants.RENDER_SOLID && !model.isWireframe() )
 		{
-			solidComponent.initialize(gl, glu);
+			solidComponent.initialize(this, gl, glu);
 			solidComponent.render();
 		}
 
-		selectedCallsComponent.initialize(gl, glu);
+		selectedCallsComponent.initialize(this, gl, glu);
 		selectedCallsComponent.render();
 
-		searchResultsComponent.initialize(gl, glu);
+		searchResultsComponent.initialize(this, gl, glu);
 		searchResultsComponent.render();
 		
 		drawDiagramRoot();
@@ -319,7 +319,7 @@ class BlockDiagramView
 							model.removeLevel();
 							break;
 						case 'r':
-							model.getRootRenderState().setRenderCall(model.getCallGraph());
+							model.getRootRenderState().setRenderCall(model.getRootCall());
 							break;
 						case 'p':
 							model.getRootRenderState().setRenderCallToParent();
@@ -495,14 +495,10 @@ class BlockDiagramView
 
 		gl.glDisable(GL_LIGHTING);
 		gl.glDisable(GL_DEPTH_TEST); 
-		
-		GLUtils.glColor(gl, colorModel.getTextColor());
-		gl.glRasterPos2i(0, 2);
-		printString(GLUTEnum.GLUT_BITMAP_HELVETICA_12, "Exclusive Time");
-		
+
+		GLUtils.drawText(gl, glut, 0, 2, "Exclusive Time", colorModel.getTextColor());
 		gl.glTranslatef(0, -( FONT_HEIGHT + TEXT_BORDER), 0);
-		gl.glRasterPos2i(0, 2);
-		printString(GLUTEnum.GLUT_BITMAP_HELVETICA_12, "(% of Inclusive Time)");
+		GLUtils.drawText(gl, glut, 0, 2, "(% of Inclusive Time)", colorModel.getTextColor());
 
 		gl.glTranslatef(0, -( TEXT_BORDER * 2 ), 0);
 
@@ -521,10 +517,9 @@ class BlockDiagramView
 			gl.glVertex2i(0, LEGEND_BLOCK_HEIGHT);
 			gl.glVertex2i(0, 0);
 			gl.glEnd();
-			
-			GLUtils.glColor(gl, colorModel.getTextColor());
-			gl.glRasterPos2i(LEGEND_BLOCK_WIDTH + TEXT_BORDER, TEXT_BORDER * 2);
-			printString(GLUTEnum.GLUT_BITMAP_HELVETICA_12, UIUtil.formatPercent(value));
+
+			GLUtils.drawText(gl, glut, LEGEND_BLOCK_WIDTH + TEXT_BORDER, TEXT_BORDER * 2,
+							 UIUtil.formatPercent(value), colorModel.getTextColor());
 		}
 		
 		gl.glEnable(GL_LIGHTING);
@@ -549,7 +544,7 @@ class BlockDiagramView
 		CallAdapter call = new CallAdapter(model.getRootRenderState().getRenderCall());
 		String text = "Diagram root : " + UIUtil.getShortName(call.getName()) + " [ time = " +
 			UIUtil.formatTime(call.getInclusiveTime(measure)) + ", " +
-			UIUtil.formatPercent( call.getInclusiveTime(measure) / model.getCallGraph().getTime() ) + " of total ]";
+			UIUtil.formatPercent( call.getInclusiveTime(measure) / model.getRootCall().getTime() ) + " of total ]";
 		
 		drawText(0, text);
 	}
@@ -562,7 +557,8 @@ class BlockDiagramView
 		textBegin();
 
 		gl.glTranslatef(0, y, 0);
-		
+
+		/*
 		// Make sure we can read the FPS section by first placing a 
 		// dark, opaque backdrop rectangle.
 		GLUtils.glColor(gl, colorModel.getBackgroundColor() );
@@ -576,11 +572,9 @@ class BlockDiagramView
 		gl.glVertex2i(0, FONT_HEIGHT);
 		gl.glVertex2i(0, 0);
 		gl.glEnd();
+		*/
 
-		GLUtils.glColor(gl, colorModel.getTextColor());
-		gl.glRasterPos2i(TEXT_OFFSET_FROM_LEFT, TEXT_BORDER);
-		
-		printString(GLUTEnum.GLUT_BITMAP_HELVETICA_12, text);
+		GLUtils.drawText(gl, glut, TEXT_OFFSET_FROM_LEFT, TEXT_BORDER, text, colorModel.getTextColor());
 
 		gl.glEnable(GL_LIGHTING);
 		gl.glEnable(GL_DEPTH_TEST);
@@ -625,7 +619,7 @@ class BlockDiagramView
 
 		createPerspectiveTransform(getSize().width, getSize().height);
 
-		solidComponent.initialize(gl, glu);
+		solidComponent.initialize(this, gl, glu);
 		solidComponent.render();
 		
 		int hits = gl.glRenderMode(GL_RENDER);
@@ -674,12 +668,5 @@ class BlockDiagramView
 				repaint();
 			}
 		}
-	}
-	
-	void printString(int font, String str)
-	{
-		//for ( int i = 0; i < str.length(); i++ )
-		//	glut.glutBitmapCharacter(font,str.charAt(i));
-		glut.glutBitmapString(font, str);
 	}
 }
