@@ -66,6 +66,7 @@ class ComputeCallLocation
 		
 		final HashSet callParents = new HashSet();
 
+		// callParents.add(call);
 		Call parent = call.getParent();
 		while ( parent != null )
 		{
