@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 
-<project name="orbit" default="jar">
+<project name="orbit" default="dist">
 
   <property name="build" value="build" />
   <property name="dist" value="${build}/dist" />

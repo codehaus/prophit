@@ -1,12 +1,16 @@
 package orbit.gui;
 
+import orbit.model.Call;
+
 import gl4java.GLFunc;
 import gl4java.GLEnum;
 
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.geom.Rectangle2D;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 class BlockRenderer
@@ -26,7 +30,8 @@ class BlockRenderer
 	private final int               renderMode;
 	private final int[]             viewport = new int[4];
 	// TODO: can use Call keys as GL names
-	private final HashMap nameToCallMap = new HashMap();
+	private final HashMap glNameToCallMap = new HashMap();
+	private final HashMap nameToCallListMap = new HashMap();
 
 	private int nextName = 0;
 	private double brightness = 1.3;
@@ -56,9 +61,17 @@ class BlockRenderer
 	 *
 	 * @see #RENDER_SOLID
 	 */
-	public Map getNameToCallMap()
+	public Map getGLNameToCallMap()
 	{
-		return nameToCallMap;
+		return glNameToCallMap;
+	}
+
+	/**
+	 * @return a Map in which the keys are call {@link Call#getName name}s, and the values are Lists of {@link Call}s.
+	 */
+	public Map getNameToCallListMap()
+	{
+		return nameToCallListMap;
 	}
 
 	/**
@@ -84,6 +97,14 @@ class BlockRenderer
 				return null;
 		}
 		*/
+
+		List list = (List)nameToCallListMap.get(call.getName());
+		if ( list == null )
+		{
+			list = new ArrayList(3);
+			nameToCallListMap.put(call.getName(), list);
+		}
+		list.add(call.getCall());
 
 		// Used to shade the block according to whether it is a 'hotspot'. This shading can be made configurable
 		//   in the future
@@ -125,7 +146,7 @@ class BlockRenderer
 		if ( renderMode == RENDER_SOLID )
 		{
 			int name = nextName++;
-			nameToCallMap.put(new Integer(name), call.getCall());
+			glNameToCallMap.put(new Integer(name), call.getCall());
 			gl.glPushName(name);
 
 			renderAsQuads(call, rectangle, depth, color);

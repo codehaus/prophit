@@ -44,8 +44,6 @@ class BlockDiagramView
 	
 	private TimeMeasure measure = TimeMeasure.TotalTime;
 
-	private Map nameToCallMap = null;
-
 	private int updateCount = 0;
 
 	private boolean repaint = false;
@@ -370,9 +368,24 @@ class BlockDiagramView
 	void drawSelected()
 	{
 		Call selectedCall = model.getSelectedCall();
+		Log.debug(LOG, "selectedCall is ", selectedCall);
 		if ( selectedCall == null )
 			return;
 
+		drawSelected(selectedCall, Color.white);
+
+		for ( Iterator i = model.getCallsByName(selectedCall.getName()).iterator(); i.hasNext(); )
+		{
+			Call call = (Call)i.next();
+			if ( !call.equals(selectedCall) )
+			{
+				drawSelected(call, Color.yellow);
+			}
+		}
+	}
+	
+	void drawSelected(Call selectedCall, Color color)
+	{
 		ComputeCallLocation computeLocation = new ComputeCallLocation(selectedCall, model.getRootRenderState().getRenderCall());
 		computeLocation.execute();
 
@@ -386,7 +399,7 @@ class BlockDiagramView
 
 		gl.glDisable(GL_LIGHTING);
 		
-		GLUtils.glColor(gl, Color.white);
+		GLUtils.glColor(gl, color);
 
 		// Wrap the selected rectangle up like a christmas present
 		gl.glBegin(GL_LINE_LOOP);
@@ -484,12 +497,6 @@ class BlockDiagramView
 	 */
 	Call pick(Point screenPoint)
 	{
-		// FIXME:
-		/*
-		if ( updateCount != -11 )
-			return null;
-		*/
-
 		/* Standard GL4Java Init */
 		if( glj == null || !glj.gljMakeCurrent() ) 
 		{
@@ -553,10 +560,7 @@ class BlockDiagramView
 		Call mouseOverCall = null;
 		if ( closestName != -1 )
 		{
-			if ( nameToCallMap != null )
-				mouseOverCall = (Call)nameToCallMap.get(new Integer(closestName));
-			else
-				System.out.println("No nameToCallMap in pick()");
+			mouseOverCall = model.getCallByGLName(closestName);
 		}
 		
 		glj.gljFree();
@@ -611,7 +615,8 @@ class BlockDiagramView
 				
 				gl.glEndList();
 
-				nameToCallMap = renderer.getNameToCallMap();
+				model.setGLNameToCallMap(renderer.getGLNameToCallMap());
+				model.setNameToCallListMap(renderer.getNameToCallListMap());
 			}
 		}
 	}

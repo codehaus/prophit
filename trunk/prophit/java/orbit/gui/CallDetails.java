@@ -6,7 +6,6 @@ import orbit.util.Log;
 import org.apache.log4j.Category;
 
 import java.util.Iterator;
-import java.text.NumberFormat;
 import javax.swing.table.TableModel;
 import javax.swing.table.AbstractTableModel;
 
@@ -23,18 +22,9 @@ class CallDetails
 {
 	public static Category LOG = Category.getInstance(CallDetails.class);
 
-	private static NumberFormat TIME_FORMAT;
-	private static NumberFormat TIME_PERCENT_FORMAT;
-
-	static
-	{
-		TIME_FORMAT = NumberFormat.getInstance();
-		TIME_FORMAT.setMaximumFractionDigits(2);
-		TIME_PERCENT_FORMAT = NumberFormat.getPercentInstance();
-		TIME_PERCENT_FORMAT.setMaximumFractionDigits(2);
-	}
-
+	private final Call   root;
 	private final String callName;
+
 	private double inclusiveTime = 0;
 	private double exclusiveTime = 0;
 	private int nCalls = 0;
@@ -48,6 +38,7 @@ class CallDetails
 	 */
 	public CallDetails(Call root, final Call selected)
 	{
+		this.root = root;
 		this.callName = selected.getName();
 
 		/*
@@ -95,6 +86,17 @@ class CallDetails
 		return callName;
 	}
 
+	/**
+	 * Get the total amount of time in the root call of the entire CallGraph.
+	 */
+	public double getRootTime()
+	{
+		Call root = this.root;
+		while ( root.getParent() != null )
+			root = root.getParent();
+		return root.getTime();
+	}
+
 	public double getInclusiveTime()
 	{
 		return inclusiveTime;
@@ -130,8 +132,15 @@ class CallDetails
 		return new CallList(Strings.getUILabel(CallDetails.class, "columnName.callees"), calleesRollup);
 	};
 
+	public interface CallTableModel
+	{
+		public String getCallName(int row);
+	}
+
+
 	private class CallList
 		extends AbstractTableModel
+		implements CallTableModel
 	{
 		private final String         name;
 		private final CallRollupList list;
@@ -140,6 +149,11 @@ class CallDetails
 		{
 			this.name = listName;
 			this.list = list;
+		}
+
+		public String getCallName(int row)
+		{
+			return list.getCallName(row);
 		}
 			
 		public String getColumnName(int column) 
@@ -170,7 +184,7 @@ class CallDetails
 			switch ( column )
 			{
 			case 0:
-				return list.getCallName(row);
+				return UIUtil.getShortName(list.getCallName(row));
 			case 1:
 				return getTimeString(row);
 			default:
@@ -182,7 +196,7 @@ class CallDetails
 		{
 			double time = list.getTime(index);
 			double totalTime = list.getTotalTime();
-			return TIME_FORMAT.format(time) + " (" + TIME_PERCENT_FORMAT.format(time / totalTime) + ")";
+			return UIUtil.formatTime(time) + " (" + UIUtil.formatPercent(time / totalTime)+  ")";
 		}
 	}
 }
