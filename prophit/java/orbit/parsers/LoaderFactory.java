@@ -17,7 +17,6 @@ public class LoaderFactory
 		Solver solver;
 		if ( parser instanceof DashProfParser )
 		{
-			// solver = new DashProfSolver(file);
 			solver = new LPSolver();
 		}
 		else

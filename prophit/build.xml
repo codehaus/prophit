@@ -230,17 +230,9 @@
 				<fileset dir="test/java">
 					<include name="**/Test*.java" />
 					<exclude name="util/**" />
-					<exclude name="test/Test.java" />
 				</fileset>
 			</batchtest>	
 		</junit>
-		<java fork="true" classpathref="test.class.path" classname="test.Test">
-			<sysproperty key="solver.user.name" value="JAVA_USER" />
-			<sysproperty key="basedir" value="${basedir}" />
-			<env key="PATH" path="${prophit.path}" />
-			<env key="Path" path="${prophit.path}" />
-			<arg line="${run.system}" />
-		</java>
 	</target>
 
 	<target name="run-test" depends="build,jar,compile-tests">
