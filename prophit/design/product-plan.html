@@ -37,13 +37,6 @@ Priorities range from 1 to 5, with 5 being the highest.
     <td width="13%">&nbsp;</td>
   </tr>
   <tr bgcolor="eeeeee"> 
-    <td width="52%">-prof parser may not handle recursive functions properly</td>
-    <td width="7%">5</td>
-    <td width="28%">See <a href="../data/db-example.prof">../data/db-example.prof</a>. 
-      3 levels of 'write' calls are showing up rather than the expected 2</td>
-    <td width="13%">&nbsp;</td>
-  </tr>
-  <tr bgcolor="eeeeee"> 
     <td width="52%">Need an 'About' box for the GUI</td>
     <td width="7%">4</td>
     <td width="28%">About Box should show app version and link back to the home 
@@ -115,11 +108,11 @@ Priorities range from 1 to 5, with 5 being the highest.
     <th width="16%" bgcolor="ccccff" height="10">Task Doc</th>
   </tr>
   <tr bgcolor="eeeeee"> 
-    <td width="43%">Occassional error in checkGL while loading the first profile 
-      into the UI</td>
-    <td width="6%">5</td>
-    <td width="35%">&nbsp;</td>
-    <td width="16%">&nbsp;</td>
+    <td width="52%">-prof parser may not handle recursive functions properly</td>
+    <td width="7%">5</td>
+    <td width="28%">See <a href="../data/db-example.prof">../data/db-example.prof</a>. 
+      3 levels of 'write' calls are showing up rather than the expected 2</td>
+    <td width="13%">&nbsp;</td>
   </tr>
   <tr bgcolor="eeeeee"> 
     <td width="43%">Orbit should give a good warning when an unsupported profile 
@@ -159,6 +152,14 @@ Priorities range from 1 to 5, with 5 being the highest.
     <td width="6%" bgcolor="ffeeff">3</td>
     <td width="35%" bgcolor="ffeeff">&nbsp;</td>
     <td width="16%" bgcolor="ffeeff">&nbsp;</td>
+  </tr>
+  <tr bgcolor="ffeeff"> 
+    <td width="43%">Occassional error in checkGL while loading the first profile 
+      into the UI</td>
+    <td width="6%">3</td>
+    <td width="35%">De-prioritizing because I haven't seen this very much and 
+      simply re-trying to load the profile seems to work</td>
+    <td width="16%">&nbsp;</td>
   </tr>
   <tr bgcolor="ffeeff"> 
     <td width="43%">Memory usage appears to grow over time as more profiles are 
