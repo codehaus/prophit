@@ -328,6 +328,16 @@ class BlockDiagramView
 						case 'p':
 							model.getRootRenderState().setRenderCallToParent();
 							break;
+						case 'f':
+							if ( model.getSelectedCall() != null )
+							{
+								// System.out.println("Focusing on " + model.getSelectedCall());
+								model.setFocusMethod(model.getSelectedCall().getName());
+							}
+							break;
+						case 'u':
+							model.setFocusMethod(null);
+							break;
 						default:
 							processedChar = false;
 						}

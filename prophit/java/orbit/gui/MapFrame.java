@@ -91,8 +91,11 @@ public class MapFrame
 	private Action forwardAction;
 	private Action parentAction;
 	private Action rootAction;
+	private Action wireframeAction;
+	private Action focusAction;
 	private JTextField txtSearch;
 	private JCheckBox  chkWireframe;
+	private JMenuItem  mnuWireframe;
 	
 	private String workingDirectory = null;
 
@@ -214,6 +217,11 @@ public class MapFrame
 						cbLOD.setSelectedIndex(LevelOfDetail.getIndex(lod));
 						enableControls();
 					}
+					else if ( BlockDiagramModel.SELECTED_CALL_PROPERTY.equals(evt.getPropertyName()) )
+					{
+						focusAction.setEnabled(blockModel.getFocusMethod() != null ||
+											   blockModel.getSelectedCall() != null);
+					}
 					else if ( BlockDiagramModel.NUM_LEVELS_PROPERTY.equals(evt.getPropertyName()) )
 					{
 						int levels = ((Integer)evt.getNewValue()).intValue();
@@ -225,6 +233,7 @@ public class MapFrame
 					{
 						Boolean wireframe = (Boolean)evt.getNewValue();
 						chkWireframe.setSelected(wireframe.booleanValue());
+						mnuWireframe.setSelected(wireframe.booleanValue());
 					}
 				}
 			});
@@ -403,6 +412,28 @@ public class MapFrame
 					blockModel.getRootRenderState().setRenderCall(blockModel.getRootCall());
 				}
 			};
+		wireframeAction = new AbstractAction(Strings.getUILabel(MapFrame.class, "wireframe.label"))
+			{
+				public void actionPerformed(ActionEvent e)
+				{
+					blockModel.setWireframe(!blockModel.isWireframe());
+				}
+			};
+		focusAction = new AbstractAction(Strings.getUILabel(MapFrame.class, "focus.label"))
+			{
+				public void actionPerformed(ActionEvent e)
+				{
+					if ( blockModel.getFocusMethod() == null )
+					{
+						Log.debug(LOG, "Focusing on ", blockModel.getSelectedCall());
+						blockModel.setFocusMethod(blockModel.getSelectedCall().getName());
+					}
+					else
+					{
+						blockModel.setFocusMethod(null);
+					}
+				}
+			};
 	}
 		
     private void addMenus()
@@ -490,6 +521,18 @@ public class MapFrame
 		}
 
 		{
+			// Add View menu
+			JMenu viewMenu = menuBar.add( new JMenu( Strings.getUILabel(MapFrame.class, "menu.view") ) );
+			viewMenu.setMnemonic( KeyEvent.VK_V );
+			
+			JMenuItem mnuFocus = addMenuItem(new JCheckBoxMenuItem( focusAction ), viewMenu, -1, null);
+			mnuFocus.setMnemonic( KeyEvent.VK_F );
+			
+			mnuWireframe = addMenuItem(new JCheckBoxMenuItem( wireframeAction ), viewMenu, -1, null);
+			mnuWireframe.setMnemonic( KeyEvent.VK_W );
+		}
+		
+		{
 			// Add Help menu
 			JMenu helpMenu = menuBar.add( new JMenu( Strings.getUILabel(MapFrame.class, "menu.help") ) );
 			helpMenu.setMnemonic( KeyEvent.VK_H );
@@ -536,19 +579,7 @@ public class MapFrame
 				}
 			});
 
-		chkWireframe = (JCheckBox)pnlSearch.add(new JCheckBox(Strings.getUILabel(MapFrame.class, "wireframe.label")));
-		chkWireframe.addActionListener(new ActionListener()
-			{
-				public void actionPerformed(ActionEvent evt)
-				{
-					boolean wireframe = chkWireframe.isSelected();
-					Log.debug(LOG, "Wireframe checkbox set to ", String.valueOf(wireframe));
-					if ( wireframe != blockModel.isWireframe() )
-					{
-						blockModel.setWireframe(wireframe);
-					}
-				}
-			});
+		chkWireframe = (JCheckBox)pnlSearch.add(new JCheckBox(wireframeAction));
 		
 		txtSearch.addActionListener(new ActionListener()
 			{
@@ -660,7 +691,12 @@ public class MapFrame
 	private JMenuItem addMenuItem(JMenu menu, String name, int menuEvent,
 								  int acceleratorEvent, ActionListener listener)
 	{
-		JMenuItem item = menu.add( new JMenuItem( name, menuEvent ) );
+		return addMenuItem( new JMenuItem( name, menuEvent ), menu, acceleratorEvent, listener );
+	}
+
+	private JMenuItem addMenuItem(JMenuItem menuItem, JMenu menu, int acceleratorEvent, ActionListener listener)
+	{
+		JMenuItem item = menu.add( menuItem );
 		if ( listener != null )
 			item.addActionListener(listener);
 		if ( acceleratorEvent != -1 )
@@ -696,8 +732,8 @@ public class MapFrame
 			forwardAction.setEnabled(false);
 			parentAction.setEnabled(false);
 			rootAction.setEnabled(false);
+			wireframeAction.setEnabled(false);
 			txtSearch.setEditable(false);
-			chkWireframe.setEnabled(false);
 			cbLOD.setEnabled(false);
 		}
 		else
@@ -706,8 +742,9 @@ public class MapFrame
 			forwardAction.setEnabled(blockModel.getRootRenderState().hasNextRenderCall());
 			parentAction.setEnabled(blockModel.getRootRenderState().hasParentRenderCall());
 			rootAction.setEnabled(blockModel.getRootRenderState().getRenderCall().getParent() != null);
+			wireframeAction.setEnabled(true);
+			focusAction.setEnabled(blockModel.getSelectedCall() != null);
 			txtSearch.setEditable(true);
-			chkWireframe.setEnabled(true);
 			cbLOD.setEnabled(true);
 		}
 	}
