@@ -103,6 +103,7 @@
     </jar>
 
 	<signjar jar="${build}/lib/orbit.jar" signedjar="${webdist}/lib/orbit.jar" verbose="true" alias="orbit" keystore="${keystore}" storepass="${keypass}" />
+
 	<signjar jar="${basedir}/lib/log4jME.jar" signedjar="${webdist}/lib/log4jME.jar" verbose="true" alias="orbit" keystore="${keystore}" storepass="${keypass}" />
 	<signjar jar="${basedir}/lib/png.jar" signedjar="${webdist}/lib/png.jar" verbose="true" alias="orbit" keystore="${keystore}" storepass="${keypass}" />
 	<signjar jar="${basedir}/lib/gl4java.jar" signedjar="${webdist}/lib/gl4java.jar" verbose="true" alias="orbit" keystore="${keystore}" storepass="${keypass}" />
