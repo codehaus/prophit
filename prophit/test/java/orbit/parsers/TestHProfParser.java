@@ -21,9 +21,10 @@ public class TestHProfParser
 		File file = new File(System.getProperty("basedir") + "/test/data/hello.hprof.txt");
 		
 		HProfParser parser = new HProfParser(new FileReader(file));
-		parser.execute();
+		ModelBuilder builder = ModelBuilderFactory.newModelBuilder();
+		parser.execute(builder);
 
-		List callIDs = parser.getCallIDs();
+		List callIDs = builder.getCallIDs();
 
 		// System.out.println(callIDs);
 		System.out.println("TestHProfParser needs more work");
@@ -37,7 +38,8 @@ public class TestHProfParser
 		File file = new File(System.getProperty("basedir") + "/data/hsqldb.hprof.txt");
 		
 		HProfParser parser = new HProfParser(new FileReader(file));
-		parser.execute();
+		ModelBuilder builder = ModelBuilderFactory.newModelBuilder();
+		parser.execute(builder);
 	}
 
 	public void testParseTimes() throws Exception
@@ -45,9 +47,10 @@ public class TestHProfParser
 		File file = new File(System.getProperty("basedir") + "/data/hello.times.txt");
 		
 		HProfParser parser = new HProfParser(new FileReader(file));
-		parser.execute();
+		ModelBuilder builder = ModelBuilderFactory.newModelBuilder();
+		parser.execute(builder);
 
-		List callIDs = parser.getCallIDs();
+		List callIDs = builder.getCallIDs();
 
 		// System.out.println(callIDs);
 		System.out.println("TestHProfParser needs more work");
@@ -67,9 +70,14 @@ public class TestHProfParser
 	{
 		File profileFile = new File(System.getProperty("basedir") + "/data/simple.prof");
 		DashProfParser parser = new DashProfParser(new FileReader(profileFile));
-		parser.execute();
+		ModelBuilder builder = ModelBuilderFactory.newModelBuilder();
+		// Lie to the builder and tell it the times are Exclusive even though
+		//   the parser will tell it they are inclusive
+		// It will print a warning when initialize() is invoked again by the parser
+		builder.initialize(TimeData.Exclusive);
+		parser.execute(builder);
 
-		List callIDs = parser.getCallIDs();
+		List callIDs = builder.getCallIDs();
 		assertEquals(14, callIDs.size());
 
 		HProfSolver solver = new HProfSolver();

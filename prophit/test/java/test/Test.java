@@ -51,8 +51,9 @@ public class Test
 	{
 		File file = new File(System.getProperty("basedir") + "/data/simple.prof");
 		DashProfParser parser = new DashProfParser(new FileReader(file));
-		parser.execute();
-		List callIDs = parser.getCallIDs();
+		ModelBuilder builder = ModelBuilderFactory.newModelBuilder();
+		parser.execute(builder);
+		List callIDs = builder.getCallIDs();
 		
 		DashProfSolverData data = new DashProfSolverData(callIDs);
 		assertion(data.getModel().toString().startsWith("[741]option solver kestrel;"),
@@ -89,12 +90,13 @@ public class Test
 
 		File file = new File(System.getProperty("basedir") + "/data/hsqldb.prof");
 		DashProfParser parser = new DashProfParser(new FileReader(file));
-		parser.execute();
+		ModelBuilder builder = ModelBuilderFactory.newModelBuilder();
+		parser.execute(builder);
 
 		long parseEnd = System.currentTimeMillis();
 		System.out.println("Parsed hsqldb.prof in " + ( parseEnd - parseStart ) + " ms");
 		
-		List callIDs = parser.getCallIDs();
+		List callIDs = builder.getCallIDs();
 
 		System.setProperty("solver.user.name", "JAVA_USER");
 		
