@@ -4,7 +4,7 @@
 
 # TARGTYPE "Win32 (x86) Dynamic-Link Library" 0x0102
 
-CFG=LPSolveJNI - Win32 Debug DLL
+CFG=LPSolveJNI - Win32 Debug
 !MESSAGE This is not a valid makefile. To build this project using NMAKE,
 !MESSAGE use the Export Makefile command and run
 !MESSAGE 
@@ -13,12 +13,12 @@ CFG=LPSolveJNI - Win32 Debug DLL
 !MESSAGE You can specify a configuration when running NMAKE
 !MESSAGE by defining the macro CFG on the command line. For example:
 !MESSAGE 
-!MESSAGE NMAKE /f "LPSolveJNI.mak" CFG="LPSolveJNI - Win32 Debug DLL"
+!MESSAGE NMAKE /f "LPSolveJNI.mak" CFG="LPSolveJNI - Win32 Debug"
 !MESSAGE 
 !MESSAGE Possible choices for configuration are:
 !MESSAGE 
-!MESSAGE "LPSolveJNI - Win32 Release DLL" (based on "Win32 (x86) Dynamic-Link Library")
-!MESSAGE "LPSolveJNI - Win32 Debug DLL" (based on "Win32 (x86) Dynamic-Link Library")
+!MESSAGE "LPSolveJNI - Win32 Release" (based on "Win32 (x86) Dynamic-Link Library")
+!MESSAGE "LPSolveJNI - Win32 Debug" (based on "Win32 (x86) Dynamic-Link Library")
 !MESSAGE 
 
 # Begin Project
@@ -29,18 +29,18 @@ CPP=cl.exe
 MTL=midl.exe
 RSC=rc.exe
 
-!IF  "$(CFG)" == "LPSolveJNI - Win32 Release DLL"
+!IF  "$(CFG)" == "LPSolveJNI - Win32 Release"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 0
-# PROP BASE Output_Dir "LPSolveJNI___Win32_Release_DLL"
-# PROP BASE Intermediate_Dir "LPSolveJNI___Win32_Release_DLL"
+# PROP BASE Output_Dir "LPSolveJNI___Win32_Release"
+# PROP BASE Intermediate_Dir "LPSolveJNI___Win32_Release"
 # PROP BASE Ignore_Export_Lib 0
 # PROP BASE Target_Dir ""
 # PROP Use_MFC 0
 # PROP Use_Debug_Libraries 0
-# PROP Output_Dir "ReleaseJNI"
-# PROP Intermediate_Dir "ReleaseJNI"
+# PROP Output_Dir "Release"
+# PROP Intermediate_Dir "Release"
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /MT /W3 /GX /O2 /I "build/srcgen" /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "LPSOLVEJNI_EXPORTS" /YX /FD /c
@@ -54,20 +54,20 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LINK32=link.exe
 # ADD BASE LINK32 ReleaseDLL/LPSolve.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /dll /machine:I386
-# ADD LINK32 ReleaseDLL/LPSolve.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /dll /machine:I386
+# ADD LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /dll /machine:I386
 
-!ELSEIF  "$(CFG)" == "LPSolveJNI - Win32 Debug DLL"
+!ELSEIF  "$(CFG)" == "LPSolveJNI - Win32 Debug"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 1
-# PROP BASE Output_Dir "LPSolveJNI___Win32_Debug_DLL"
-# PROP BASE Intermediate_Dir "LPSolveJNI___Win32_Debug_DLL"
+# PROP BASE Output_Dir "LPSolveJNI___Win32_Debug"
+# PROP BASE Intermediate_Dir "LPSolveJNI___Win32_Debug"
 # PROP BASE Ignore_Export_Lib 0
 # PROP BASE Target_Dir ""
 # PROP Use_MFC 0
 # PROP Use_Debug_Libraries 1
-# PROP Output_Dir "DebugJNI"
-# PROP Intermediate_Dir "DebugJNI"
+# PROP Output_Dir "Debug"
+# PROP Intermediate_Dir "Debug"
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /MTd /W3 /Gm /GX /ZI /Od /I "build/srcgen" /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "LPSOLVEJNI_EXPORTS" /FR /YX /FD /GZ /c
@@ -81,14 +81,14 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LINK32=link.exe
 # ADD BASE LINK32 DebugDLL/LPSolve.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /dll /debug /machine:I386 /pdbtype:sept
-# ADD LINK32 DebugDLL/LPSolve.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /dll /debug /machine:I386 /pdbtype:sept
+# ADD LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /dll /debug /machine:I386 /pdbtype:sept
 
 !ENDIF 
 
 # Begin Target
 
-# Name "LPSolveJNI - Win32 Release DLL"
-# Name "LPSolveJNI - Win32 Debug DLL"
+# Name "LPSolveJNI - Win32 Release"
+# Name "LPSolveJNI - Win32 Debug"
 # Begin Group "Source Files"
 
 # PROP Default_Filter "cpp;c;cxx;rc;def;r;odl;idl;hpj;bat"
