@@ -1,0 +1,24 @@
+# See dbCallTree.dat for call tree
+#
+# In this example, the times are skewed towards test->DBExec2
+
+data;
+
+param time :=
+	DBExec1	10
+	DBExec2	90
+	insert	20
+	update	20
+	token1	15
+	token2	15
+	getChars	20
+	;
+param nCalls :=
+	DBExec1	1
+	DBExec2	9
+	insert	10
+	update	20
+	token1	15
+	token2	15
+	getChars	100
+	;
