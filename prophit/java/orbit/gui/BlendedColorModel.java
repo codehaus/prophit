@@ -7,7 +7,7 @@ import org.apache.log4j.Category;
 import java.awt.Color;
 
 class BlendedColorModel
-	implements BlockDiagramView.ColorModel
+	implements ColorModel
 {
 	public static Category LOG = Category.getInstance(BlendedColorModel.class);
 

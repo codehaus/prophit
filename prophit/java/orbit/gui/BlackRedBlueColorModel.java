@@ -3,7 +3,7 @@ package orbit.gui;
 import java.awt.Color;
 
 class BlackRedBlueColorModel
-	implements BlockDiagramView.ColorModel
+	implements ColorModel
 {
 	private double brightness = 1.3;
 

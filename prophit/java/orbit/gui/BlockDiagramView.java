@@ -1,5 +1,9 @@
 package orbit.gui;
 
+import orbit.gui.tower.TowerImageComponent;
+import orbit.gui.tower.TowerDiagramSolid;
+import orbit.gui.tower.TowerDiagramWireFrame;
+
 import orbit.model.Call;
 import orbit.model.CallGraph;
 import orbit.util.Log;
@@ -17,7 +21,9 @@ import java.awt.event.*;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.lang.Math;
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
 class BlockDiagramView
@@ -25,8 +31,6 @@ class BlockDiagramView
 	extends GLCanvas
 {
 	public static Category LOG = Category.getInstance(BlockDiagramView.class);
-
-	private static double EXTENT = 1.0;
 
 	private static double MOVE_INCREMENT = 0.5;
 	private static double DRAG_ROTATE_FACTOR = 5.0;
@@ -62,16 +66,17 @@ class BlockDiagramView
 	/* All these variables are initialized in setModel */
 	private int updateCount;
 	private boolean repaint;
-	private boolean generateDiagramLists;
 	private boolean generateSelectedLists;
 	private Point mouseClickPoint;
 	private EyeLocation mouseClickLocation;
 	private int renderMode;
 	private BlockDiagramModel model;
 
+	private List towerImageComponents = new ArrayList();
+	private TowerImageComponent wireFrameComponent = new TowerDiagramWireFrame();
+	private TowerImageComponent solidComponent = new TowerDiagramSolid();
+	
 	/* These variables keep their values across calls to setModel */
-	private int linesList = -1;
-	private int quadsList = -1;
 	private int selectedCallsList = -1;
 	private GLUTFunc glut = null;
 
@@ -81,6 +86,14 @@ class BlockDiagramView
 
 		System.out.println("Constructing with dimensions (" + w + ", " + h + ")");
 
+		towerImageComponents.add(wireFrameComponent);
+		towerImageComponents.add(solidComponent);
+		for ( Iterator i = towerImageComponents.iterator(); i.hasNext(); )
+		{
+			TowerImageComponent c = (TowerImageComponent)i.next();
+			c.setColorModel(colorModel);
+		}
+		
 		addListeners();
 
 		setModel(blockModel);
@@ -91,26 +104,28 @@ class BlockDiagramView
 		this.updateCount = 0;
 
 		this.repaint = true;
-		this.generateDiagramLists = true;
 		this.generateSelectedLists = true;
 
 		this.mouseClickPoint = null;
 		this.mouseClickLocation = null;
 
-		this.renderMode = BlockRenderer.RENDER_SOLID;
+		this.renderMode = Constants.RENDER_SOLID;
 
 		this.model = blockModel;
+
+		for ( Iterator i = towerImageComponents.iterator(); i.hasNext(); )
+		{
+			TowerImageComponent c = (TowerImageComponent)i.next();
+			c.setModel(blockModel);
+		}
+		
 		this.model.addListener(new PropertyChangeListener()
 			{
 				public void propertyChange(PropertyChangeEvent evt)
 				{
 					if ( BlockDiagramModel.RENDER_CALL_PROPERTY.equals(evt.getPropertyName()) ||
-						 BlockDiagramModel.NUM_LEVELS_PROPERTY.equals(evt.getPropertyName()) )
-					{
-						generateDiagramLists = true;
-						generateSelectedLists = true;
-					}
-					if ( BlockDiagramModel.SELECTED_CALL_PROPERTY.equals(evt.getPropertyName()) ||
+						 BlockDiagramModel.NUM_LEVELS_PROPERTY.equals(evt.getPropertyName()) ||
+						 BlockDiagramModel.SELECTED_CALL_PROPERTY.equals(evt.getPropertyName()) ||
 						 BlockDiagramModel.NAME_SEARCH_STRING_PROPERTY.equals(evt.getPropertyName()) )
 					{
 						generateSelectedLists = true;
@@ -213,13 +228,25 @@ class BlockDiagramView
 		super.reshape(width, height);
 
 		gl.glMatrixMode(GL_PROJECTION);
-		// gl.glOrtho(-EXTENT * 0.1, EXTENT * 1.1, -EXTENT * 0.1, EXTENT * 1.1, -1.0, 100.0);
 		gl.glLoadIdentity();
 
 		createPerspectiveTransform(width, height);
 		
 		gl.glMatrixMode(GL_MODELVIEW);
 		glj.gljCheckGL();
+	}
+
+	public synchronized void beginUpdate()
+	{
+		++updateCount;
+	}
+	
+	public synchronized void endUpdate()
+	{
+		--updateCount;
+		if ( updateCount < 0 )
+			updateCount = 0;
+		checkUpdate();
 	}
 
 	public synchronized void display()
@@ -246,22 +273,17 @@ class BlockDiagramView
 						  0, 0, 0, 0, 0, 1);
 		gl.glTranslated(-0.5, -0.5, -0.5);
 
-		if ( renderMode == BlockRenderer.RENDER_WIREFRAME )
+		TowerImageComponent c = null;
+		if ( renderMode == Constants.RENDER_WIREFRAME || model.isWireframe() )
 		{
-			gl.glDisable(GL_DITHER);
-			gl.glDisable(GL_LIGHTING);
-			gl.glDisable(GL_CULL_FACE);
-			
-			gl.glCallList(linesList);
+			c = wireFrameComponent;
 		}
-		else if ( renderMode == BlockRenderer.RENDER_SOLID )
+		else // if ( renderMode == Constants.RENDER_SOLID )
 		{			
-			gl.glEnable(GL_DITHER);
-			gl.glEnable(GL_LIGHTING);
-			gl.glEnable(GL_CULL_FACE);
-			
-			gl.glCallList(quadsList);
+			c = solidComponent;
 		}
+		c.initialize(gl, glu);
+		c.render();
 
 		gl.glCallList(selectedCallsList);
 
@@ -366,13 +388,13 @@ class BlockDiagramView
 					{
 						mouseClickPoint = e.getPoint();
 						mouseClickLocation = (EyeLocation)model.getEye().clone();
-						renderMode = BlockRenderer.RENDER_WIREFRAME;
+						renderMode = Constants.RENDER_WIREFRAME;
 					}
 				}
 
 				public void mouseReleased(MouseEvent e)
 				{
-					renderMode = BlockRenderer.RENDER_SOLID;
+					renderMode = Constants.RENDER_SOLID;
 					mouseClickPoint = null;
 					BlockDiagramView.this.repaint();
 				}
@@ -489,8 +511,8 @@ class BlockDiagramView
 			gl.glTranslatef(0, -LEGEND_BLOCK_HEIGHT, 0);
 
 			// Scale value from FRACTION_THRESHOLD to 1
-			double value = BlockRenderer.FRACTION_THRESHOLD + ( i * ( ( 1 - BlockRenderer.FRACTION_THRESHOLD ) / (double)numBlocks ) );
-			GLUtils.glColor(gl, colorModel.getBlockColor(0, BlockRenderer.FRACTION_THRESHOLD, 1, value));
+			double value = Constants.FRACTION_THRESHOLD + ( i * ( ( 1 - Constants.FRACTION_THRESHOLD ) / (double)numBlocks ) );
+			GLUtils.glColor(gl, colorModel.getBlockColor(0, Constants.FRACTION_THRESHOLD, 1, value));
 														 
 			gl.glBegin(GL_QUADS);
 			gl.glVertex2i(LEGEND_BLOCK_WIDTH, 0);
@@ -564,9 +586,9 @@ class BlockDiagramView
 		}
 		
 		int depth = computeLocation.getRenderDepth();
-		double bottomZ = ( depth ) * BlockRenderer.HEIGHT;
-		double midZ = ( depth + 0.5 ) * BlockRenderer.HEIGHT;
-		double topZ = ( depth + 1.0 ) * BlockRenderer.HEIGHT;
+		double bottomZ = ( depth ) * Constants.BLOCK_HEIGHT;
+		double midZ = ( depth + 0.5 ) * Constants.BLOCK_HEIGHT;
+		double topZ = ( depth + 1.0 ) * Constants.BLOCK_HEIGHT;
 
 		Log.debug(LOG, "Rendering selectedCall ", selectedCall, " at ", rectangle);
 
@@ -668,8 +690,6 @@ class BlockDiagramView
 			return null;
 		}
 
-		compileDisplayLists();
-
 		int[] viewport = new int[4];
 		gl.glGetIntegerv(GL_VIEWPORT, viewport);
 
@@ -694,8 +714,9 @@ class BlockDiagramView
 		glu.gluPickMatrix(screenPoint.x, viewport[3] - screenPoint.y, 1, 1, viewport);
 
 		createPerspectiveTransform(getSize().width, getSize().height);
-		
-		gl.glCallList(quadsList);
+
+		solidComponent.initialize(gl, glu);
+		solidComponent.render();
 		
 		int hits = gl.glRenderMode(GL_RENDER);
 		// System.out.println("hits : " + hits);
@@ -735,56 +756,6 @@ class BlockDiagramView
 	
 	synchronized void compileDisplayLists()
 	{
-		if ( generateDiagramLists )
-		{
-			generateDiagramLists = false;
-
-			if ( linesList == -1 )
-			{
-				linesList = gl.glGenLists(2);
-				quadsList = linesList + 1;
-			}
-			else
-			{
-				gl.glDeleteLists(linesList, 2);
-			}
-			
-			Rectangle2D.Double rootRectangle = new Rectangle2D.Double(0, 0, EXTENT, EXTENT);
-			CallLayoutAlgorithm layout = new CallLayoutAlgorithm(new CallAdapter(model.getRootRenderState().getRenderCall()),
-																				  measure,
-																				  model.getLevels(),
-																				  rootRectangle);
-			
-			BlockRenderer renderer;
-
-			// Render as wire frame
-			{
-				renderer = new BlockRenderer(gl, BlockRenderer.RENDER_WIREFRAME, colorModel);
-				layout.setCallback(renderer);
-				
-				gl.glNewList(linesList, GL_COMPILE);
-				
-				layout.execute();
-			
-				gl.glEndList();
-			}
-
-			// Render as solid
-			{
-				renderer = new BlockRenderer(gl, BlockRenderer.RENDER_SOLID, colorModel);
-				layout.setCallback(renderer);
-				
-				gl.glNewList(quadsList, GL_COMPILE);
-				
-				layout.execute();
-				
-				gl.glEndList();
-
-				model.setGLNameToCallMap(renderer.getGLNameToCallMap());
-				model.setNameToCallListMap(renderer.getNameToCallListMap());
-			}
-		}
-
 		if ( generateSelectedLists )
 		{
 			generateSelectedLists = false;
@@ -807,19 +778,6 @@ class BlockDiagramView
 		}
 	}
 	
-	protected void beginUpdate()
-	{
-		++updateCount;
-	}
-	
-	protected void endUpdate()
-	{
-		--updateCount;
-		if ( updateCount < 0 )
-			updateCount = 0;
-		checkUpdate();
-	}
-
 	private void checkUpdate()
 	{
 		if ( updateCount == 0 )
@@ -837,25 +795,5 @@ class BlockDiagramView
 		//for ( int i = 0; i < str.length(); i++ )
 		//	glut.glutBitmapCharacter(font,str.charAt(i));
 		glut.glutBitmapString(font, str);
-	}
-
-	public interface ColorModel
-	{
-		public Color getLightColor();
-
-		public Color getBackgroundColor();
-
-		public Color getSearchMatchColor();
-
-		public Color getTextColor();
-
-		public Color getSelectedCallColor();
-
-		public Color getMatchingSelectedCallColor();
-
-		public Color getBlockColor(double minimumValue, double neutralValue, double maximumValue,
-								   double actualValue);
-		
-		public Color getBlockBorderColor();
 	}
 }
