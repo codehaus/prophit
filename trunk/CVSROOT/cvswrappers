@@ -25,5 +25,9 @@
 *.gif -k 'b'
 *.jpg -k 'b'
 *.jpeg -k 'b'
+*.doc -k 'b'
+*.xls -k 'b'
+*.tif -k 'b'
+*.png -k 'b'
 
 
