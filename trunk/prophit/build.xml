@@ -3,8 +3,8 @@
 <project name="orbit" default="dist">
 
   <property name="orbit.version" value="Developer Build 3" />
-  <property name="orbit.homepage" value="http://prophIt.westslopesoftware.com" />
-  <property name="orbit.docpage" value="http://prophIt.westslopesoftware.com/docs/index.html" />
+  <property name="orbit.homepage" value="http://prophit.westslopesoftware.com" />
+  <property name="orbit.docpage" value="http://prophit.westslopesoftware.com/docs/index.html" />
 
   <property name="build" value="build" />
   <property name="dist" value="${build}/dist" />
@@ -104,7 +104,7 @@
 
   <target name="web-copy">
 	<delete>
-	  <fileset dir="${webdist}" includes="prophIt*.jnlp" />
+	  <fileset dir="${webdist}" includes="prophit*.jnlp" />
 	</delete>
 
     <copy file="${basedir}/test/java/util/HelloList.java" tofile="${webdist}/java/util/HelloList.java.txt" />
@@ -146,22 +146,22 @@
   </target>
 
   <target name="web" depends="jar,web-copy">
-	<replace file="${webdist}/prophIt.jnlp" token="@@prophit.version@@" value="${orbit.version}" />
+	<replace file="${webdist}/prophit.jnlp" token="@@prophit.version@@" value="${orbit.version}" />
 
-    <copy file="${webdist}/prophIt.jnlp" tofile="${webdist}/prophIt-elrond.jnlp" />
-    <copy file="${webdist}/prophIt.jnlp" tofile="${webdist}/prophIt-arkanoid.jnlp" />
+    <copy file="${webdist}/prophit.jnlp" tofile="${webdist}/prophit-elrond.jnlp" />
+    <copy file="${webdist}/prophit.jnlp" tofile="${webdist}/prophit-arkanoid.jnlp" />
 
-	<replace file="${webdist}/prophIt.jnlp" token="@@host@@" value="${host}" />
-	<replace file="${webdist}/prophIt.jnlp" token="@@port@@" value="${port}" />
+	<replace file="${webdist}/prophit.jnlp" token="@@host@@" value="${host}" />
+	<replace file="${webdist}/prophit.jnlp" token="@@port@@" value="${port}" />
 
 	<!-- some stuff for kevin's private builds, i assume -->
-	<replace file="${webdist}/prophIt-elrond.jnlp" token="@@host@@" value="elrond" />
-	<replace file="${webdist}/prophIt-elrond.jnlp" token="@@port@@" value="85" />
-	<replace file="${webdist}/prophIt-elrond.jnlp" token="prophit.jnlp" value="prophit-elrond.jnlp" />
+	<replace file="${webdist}/prophit-elrond.jnlp" token="@@host@@" value="elrond" />
+	<replace file="${webdist}/prophit-elrond.jnlp" token="@@port@@" value="85" />
+	<replace file="${webdist}/prophit-elrond.jnlp" token="prophit.jnlp" value="prophit-elrond.jnlp" />
 
-	<replace file="${webdist}/prophIt-arkanoid.jnlp" token="@@host@@" value="arkanoid" />
-	<replace file="${webdist}/prophIt-arkanoid.jnlp" token="@@port@@" value="90" />
-	<replace file="${webdist}/prophIt-arkanoid.jnlp" token="prophit.jnlp" value="prophit-arkanoid.jnlp" />
+	<replace file="${webdist}/prophit-arkanoid.jnlp" token="@@host@@" value="arkanoid" />
+	<replace file="${webdist}/prophit-arkanoid.jnlp" token="@@port@@" value="90" />
+	<replace file="${webdist}/prophit-arkanoid.jnlp" token="prophit.jnlp" value="prophit-arkanoid.jnlp" />
 
 
   </target>
