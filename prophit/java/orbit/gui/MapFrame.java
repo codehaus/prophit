@@ -77,10 +77,11 @@ public class MapFrame
 	private Action forwardAction;
 	private Action parentAction;
 	private Action rootAction;
-	
-	private JSlider depthSlider;
+
+	private JPanel          dummy;
+	private JSlider         depthSlider;
 	private CallDetailsView callDetails;
-	private JSplitPane mainSplitter;
+	private JSplitPane      mainSplitter;
 	
 	public MapFrame()
 	{
@@ -110,12 +111,19 @@ public class MapFrame
 		}
 		else
 		{
-			mainSplitter.remove(mainSplitter.getTopComponent());
+			if ( dummy != null )
+			{
+				getContentPane().remove(dummy);
+				dummy = null;
+			}
 			if ( blockView != null )
 			{
+				getContentPane().remove(blockView);
+				
 				blockView.cvsDispose();
 				blockModel.dispose();
 				blockModel = null;
+				blockView = null;
 				System.gc();
 			}
 			
@@ -143,8 +151,11 @@ public class MapFrame
 				});
 			blockModel.setLevels(depthSlider.getValue());
 
-			blockView = new BlockDiagramView(800, 400, blockModel);
-			mainSplitter.setTopComponent(blockView);
+			int width = getSize().width - callDetails.getSize().width;
+			int height = getSize().height - callDetails.getSize().height;
+			blockView = new BlockDiagramView(width, height, blockModel);
+			// mainSplitter.setTopComponent(blockView);
+			getContentPane().add(blockView, BorderLayout.CENTER);
 			blockView.requestFocus();
 			pack();
 
@@ -224,18 +235,16 @@ public class MapFrame
 
 	private void addComponents()
 	{
-		JPanel dummy = new JPanel();
+		dummy = new JPanel();
 
 		JPanel bottomDummy = new JPanel()
 			{
-				public Dimension getMinimumSize() { return new Dimension(800, 200); }
+				public Dimension getMinimumSize() { return new Dimension(400, 300); }
 			};
 		callDetails = new CallDetailsView();
-		mainSplitter = new JSplitPane(JSplitPane.VERTICAL_SPLIT,
-												dummy,
-												callDetails);
 		
-		getContentPane().add(mainSplitter, BorderLayout.CENTER);
+		getContentPane().add(dummy, BorderLayout.CENTER);
+		getContentPane().add(callDetails, BorderLayout.EAST);
 	}
 
 

@@ -152,27 +152,27 @@ public class TestCallRollupList
 		details = new CallDetails(main, main);
 		assertEquals(details.getCallersModel().getRowCount(), 0);
 		
-		assertEquals(details.getCalleesModel().getRowCount(), 2);
-		assertEquals(details.getCalleesModel().getValueAt(0, 0), "test");
-		assertEquals(details.getCalleesModel().getValueAt(0, 1), new Double(180));
-		assertEquals(details.getCalleesModel().getValueAt(1, 0), "init");
-		assertEquals(details.getCalleesModel().getValueAt(1, 1), new Double(120));
-
+		assertEquals(2, details.getCalleesModel().getRowCount());
+		assertEquals("test", details.getCalleesModel().getValueAt(0, 0));
+		assertEquals("180 (60%)", details.getCalleesModel().getValueAt(0, 1));
+		assertEquals("init", details.getCalleesModel().getValueAt(1, 0));
+		assertEquals("120 (40%)", details.getCalleesModel().getValueAt(1, 1));
+					 
 		// Get details for the 'DBExec' method
 		// Should be 2 callers (init and test), and 2 callees (insert and update)
 		details = new CallDetails(main, DBExec1);
 		assertEquals(2, details.getCallersModel().getRowCount());
 		assertEquals("test", details.getCallersModel().getValueAt(0, 0));
-		assertEquals(new Double(180), details.getCallersModel().getValueAt(0, 1));
+		assertEquals("180 (60%)", details.getCallersModel().getValueAt(0, 1));
 		assertEquals("init", details.getCallersModel().getValueAt(1, 0));
-		assertEquals(new Double(120), details.getCallersModel().getValueAt(1, 1));
+		assertEquals("120 (40%)", details.getCallersModel().getValueAt(1, 1));
 
 		// 'update' should come first because it takes more time
 		assertEquals(2, details.getCalleesModel().getRowCount());
 		assertEquals("update", details.getCalleesModel().getValueAt(0, 0));
-		assert(TestUtil.equal(60, details.getCalleesModel().getValueAt(0, 1)));
+		assertEquals("60 (66.67%)", details.getCalleesModel().getValueAt(0, 1));
 		assertEquals("insert", details.getCalleesModel().getValueAt(1, 0));
-		assert(TestUtil.equal(30, details.getCalleesModel().getValueAt(1, 1)));
+		assertEquals("30 (33.33%)", details.getCalleesModel().getValueAt(1, 1));
 	}
 	
 	// Tests constructing a render-able CallDetails from the simple.prof model using
@@ -186,13 +186,13 @@ public class TestCallRollupList
 		details = new CallDetails(init, DBExec1);
 		assertEquals(1, details.getCallersModel().getRowCount());
 		assertEquals("init", details.getCallersModel().getValueAt(0, 0));
-		assertEquals(new Double(120), details.getCallersModel().getValueAt(0, 1));
+		assertEquals("120 (100%)", details.getCallersModel().getValueAt(0, 1));
 
 		// 'update' should come first because it takes more time
 		assertEquals(2, details.getCalleesModel().getRowCount());
 		assertEquals("update", details.getCalleesModel().getValueAt(0, 0));
-		assert(TestUtil.equal(20, details.getCalleesModel().getValueAt(0, 1)));
+		assertEquals("20 (66.67%)", details.getCalleesModel().getValueAt(0, 1));
 		assertEquals("insert", details.getCalleesModel().getValueAt(1, 0));
-		assert(TestUtil.equal(10, details.getCalleesModel().getValueAt(1, 1)));
+		assertEquals("10 (33.33%)", details.getCalleesModel().getValueAt(1, 1));
 	}
 }
