@@ -19,6 +19,39 @@ public class Loader
 	private boolean parsed = false;
 	private String error = null;
 	private String warning = null;
+
+	/**
+	 * Loads and prints out a CallGraph.
+	 * Usage : java Loader <file> [ <depth = 6> ]
+	 */
+	public static void main(String[] args) throws Exception
+	{
+		File profileFile = new File(args[0]);
+		int depth = 6;
+		if ( args.length > 1 )
+		{
+			depth = Integer.parseInt(args[1]);
+		}
+		
+		long startTime = System.currentTimeMillis();
+		System.out.println("Parsing " + profileFile);
+		
+		Loader loader = LoaderFactory.instance().createLoader(profileFile);
+		loader.parse();
+		
+		System.out.println("\tParsed in " + ( System.currentTimeMillis() - startTime ) + " ms");
+		
+		CallGraph cg = loader.solve();
+		String error = loader.getError();
+		if ( error != null )
+		{
+			System.err.println("Error : " + error);
+		}
+		else
+		{
+			System.out.println(cg.toString(depth));
+		}
+	}
 	
 	public Loader(Parser parser, Solver solver, File file)
 	{

@@ -17,10 +17,10 @@ class BlockRenderer
 
 	private static final double HEIGHT = 0.05;
 
-	private static final double SIZE_THRESHOLD = 2.0;
+	private static final double SIZE_THRESHOLD = 3.0;
 	// If a function makes up more than this amount of time of the parent call, its coloring tends towards red
 	// If less, it tends towards blue
-	private static final double FRACTION_THRESHOLD = 0.20;
+	private static final double FRACTION_THRESHOLD = 0.30;
 
 	private final GLFunc            gl;
 	private final int               renderMode;

@@ -50,30 +50,6 @@ public class HProfParser
 		return false;
 	}
 
-	/**
-	 * Applies the fractional times of each proxy CallID to the parent RCCs of that proxy CallID.
-	 * This step is necessary because the hprof data file does not contain inclusive
-	 * times (or counts) for methods.
-	 */
-	public void postProcess(double[] fractions)
-	{
-		/*
-		for ( Iterator i = callIDs.iterator(); i.hasNext(); )
-		{
-			CallID callID = (CallID)i.next();
-			if ( callID != null && callID.isProxy() )
-			{
-				while ( callID != null && callID.getParentRCC() != null )
-				{
-					double fraction = fractions[callID.getKey()];
-					callID.getParentRCC().adjustTime((int)( callID.getRCC().getTime() * fraction));
-					callID = (CallID)callIDs.get(callID.getParentRCC().getKey());
-				}
-			}
-		}
-		*/
-	}
-
 	public void execute() throws ParseException
 	{
 		try
@@ -150,7 +126,7 @@ public class HProfParser
 						RCC rcc = (RCC)i.next();
 						if ( rcc.getStack().size() == size )
 						{
-							stackTraceSet.add(rcc.getStack());
+							hashStack(stackTraceSet, rcc.getStack());
 						}
 					}
 					newRCCs.clear();
@@ -161,11 +137,12 @@ public class HProfParser
 						{
 							StackTrace parentStack = rcc.getParentStack(size);
 							if ( parentStack != null &&
-								  stackTraceSet.add(parentStack) )
+								 stackTraceSet.add(parentStack) )
 							{
 								RCC newRCC = new RCC(parentStack, rcc.getCallCount(), 0, nextKey++);
 								// System.out.println("Adding new rcc " + newRCC);
 								newRCCs.add(newRCC);
+								hashStack(stackTraceSet, parentStack);
 							}
 						}
 					}
@@ -191,7 +168,7 @@ public class HProfParser
 				{
 					// System.out.println("Size : " + size);
 					// System.out.println("Looking for " + rootRCCList);
-
+					
 					Map rccListByCallee = mapByCallee(rccList, size);
 
 					// System.out.println("Callee map " + rccListByCallee);
@@ -214,41 +191,6 @@ public class HProfParser
 						}
 					}
 				}
-
-				HashMap timeAdjustment = new HashMap();
-				for ( Iterator i = callIDs.iterator(); i.hasNext(); )
-				{
-					CallID callID = (CallID)i.next();
-					if ( callID != null )
-					{
-						long time = callID.getRCC().getTime();
-						while ( callID != null && callID.getParentRCC() != null )
-						{
-							Long adjustment = (Long)timeAdjustment.get(callID.getParentRCC());
-							if ( adjustment == null )
-							{
-								adjustment = new Long(time);
-							}
-							else
-							{
-								adjustment = new Long(adjustment.longValue() + time);
-							}
-							timeAdjustment.put(callID.getParentRCC(), adjustment);
-							callID = (CallID)callIDs.get(callID.getParentRCC().getKey());
-						}
-					}
-				}
-
-				for ( Iterator i = callIDs.iterator(); i.hasNext(); )
-				{
-					CallID callID = (CallID)i.next();
-					if ( callID != null )
-					{
-						Long adjustment = (Long)timeAdjustment.get(callID.getRCC());
-						if ( adjustment != null )
-							callID.getRCC().adjustTime(adjustment.longValue());
-					}
-				}
 			}
 		}
 		catch (IOException x)
@@ -257,6 +199,14 @@ public class HProfParser
 		}
 	}
 
+	private void hashStack(HashSet set, StackTrace st)
+	{
+		for ( int size = st.size(); size >= 1; --size )
+		{
+			set.add(st.getLeafStack(size));
+		}
+	}
+	
 	private Map mapByCallee(List rccList, int stackSize)
 	{
 		HashMap rccListByCallee = new HashMap();

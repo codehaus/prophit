@@ -61,13 +61,6 @@ public abstract class AbstractParser
 	
 	public abstract void execute() throws ParseException;
 
-	/**
-	 * Default implementation does nothing.
-	 */
-	public void postProcess(double[] fractions)
-	{
-	}
-
 	protected AbstractParser(LineNumberReader reader)
 	{
 		this.reader = reader;

@@ -354,20 +354,20 @@ public class Test
 		
 		RectangleLayout layout = new RectangleLayout(TimeMeasure.TotalTime);
 
-		layout.initialize(root, fullExtent, fullExtent);
+		layout.initialize(null, root, fullExtent, fullExtent);
 		assertRectangle(layout.getExtent(), new Rectangle2D.Double(0, 0, 1, 1));
 		
-		layout.initialize(main, fullExtent, fullExtent);
+		layout.initialize(new CallAdapter(main.getParent()), main, fullExtent, fullExtent);
 		assertRectangle(layout.getExtent(), new Rectangle2D.Double(0, 0, 0.7, 1));
 		assertRectangle(layout.getRemainderExtent(layout.getExtent()), new Rectangle2D.Double(0.7, 0, 0.3, 1));
 
-		layout.initialize(dbOpen, fullExtent, fullExtent);
+		layout.initialize(new CallAdapter(dbOpen.getParent()), dbOpen, fullExtent, fullExtent);
 		assertRectangle(layout.getExtent(), new Rectangle2D.Double(0, 0, 0.8, 1));
 		assertRectangle(layout.getRemainderExtent(layout.getExtent()), new Rectangle2D.Double(0.8, 0, 0.2, 1));
 
 		// Should occupy the top 50% of the remaining triangle
 		Rectangle2D.Double remainder = layout.getRemainderExtent(layout.getExtent());
-		layout.initialize(dbClose, fullExtent, remainder);
+		layout.initialize(new CallAdapter(dbClose.getParent()), dbClose, fullExtent, remainder);
 		assertRectangle(layout.getExtent(), new Rectangle2D.Double(0.8, 0.5, 0.2, 0.5));
 		assertRectangle(layout.getRemainderExtent(layout.getExtent()), new Rectangle2D.Double(0.8, 0, 0.2, 0.5));
 		// Rendered area should the same fraction of the Extent as the fractionOfParent / fractionOfChild

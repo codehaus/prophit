@@ -15,8 +15,9 @@ import java.io.Writer;
 public class HProfSolver
 	implements Solver
 {
+	private static int STACK_THRESHOLD = 6;
 	// When solving the call graph, skip times which are less than 0.1 unit in size
-	private static double GRAPH_THRESHOLD = 0.1;
+	private static double GRAPH_THRESHOLD = 0.01;
 
 	private List callIDs;
 	private List proxyCallIDs;
@@ -94,6 +95,8 @@ public class HProfSolver
 		{
 			public boolean visit(CallID callID, IntStack callStack)
 			{
+				// System.out.println("Visiting " + callID);
+				
 				// Store the RCC of the callID
 				rccs[callID.getRCC().getKey()] = callID.getRCC();
 				
@@ -112,7 +115,8 @@ public class HProfSolver
 					inclusiveTimeAdjustments[parentCall.getRCC().getKey()] += callID.getRCC().getTime() * fraction;
 					fraction *= fractions[parentID];
 				}
-				return fraction * callID.getRCC().getTime() > GRAPH_THRESHOLD;
+				// return callStack.size() > STACK_THRESHOLD && fraction * callID.getRCC().getTime() > GRAPH_THRESHOLD;
+				return true;
 			}
 		}
 
