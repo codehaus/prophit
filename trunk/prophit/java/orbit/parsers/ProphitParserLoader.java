@@ -155,7 +155,7 @@ public class ProphitParserLoader implements Parser, Loader
 			IXMLElement callgraph = (IXMLElement) xmlparser.parse();
 	    
 			Log.debug(LOG, "ELEMENT: ", callgraph.getFullName());
-			Log.debug(LOG, "User: ", callgraph.getFirstChildNamed(XMLConstants.USER).getContent());
+			//Log.debug(LOG, "User: ", callgraph.getFirstChildNamed(XMLConstants.USER).getContent());
 
 			this.callgraph = makeNewCallGraph( callgraph );
 
