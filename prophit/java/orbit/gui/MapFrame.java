@@ -8,6 +8,8 @@ import orbit.model.CallGraph;
 import gl4java.GLContext;
 import java.awt.*;
 import java.awt.event.*;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import javax.swing.*;
 import javax.swing.event.*;
 import java.applet.*;
@@ -76,6 +78,8 @@ public class MapFrame
 	private Action rootAction;
 	
 	private JSlider depthSlider;
+	private CallDetailsView callDetails;
+	private JSplitPane mainSplitter;
 	
 	public MapFrame()
 	{
@@ -84,6 +88,7 @@ public class MapFrame
 		createActions();
 		addMenus();
 		addToolbar();
+		addComponents();
 
 		enableControls();
 		
@@ -104,31 +109,41 @@ public class MapFrame
 		}
 		else
 		{
+			mainSplitter.remove(mainSplitter.getTopComponent());
 			if ( blockView != null )
 			{
 				blockView.cvsDispose();
-				getContentPane().remove(blockView);
 				blockModel.dispose();
 				blockModel = null;
 				System.gc();
 			}
 			
 			blockModel = new BlockDiagramModel(cg);
-			blockModel.addListener(new BlockDiagramModel.Listener()
+			blockModel.addListener(new PropertyChangeListener()
 				{
-					public void modelInvalidated(BlockDiagramModel model)
+					public void propertyChange(PropertyChangeEvent evt)
 					{
-						enableControls();
-					}
-					
-					public void requestRepaint(BlockDiagramModel model)
-					{
+						if ( BlockDiagramModel.RENDER_CALL_PROPERTY.equals(evt.getPropertyName()) )
+						{
+							enableControls();
+						}
+						else if ( BlockDiagramModel.SELECTED_CALL_PROPERTY.equals(evt.getPropertyName()) )
+						{
+							Call selectedCall = (Call)evt.getNewValue();
+							callDetails.selectedCallChanged(blockModel.getRootRenderState().getRenderCall(),
+																	  selectedCall);
+						}
+						else if ( BlockDiagramModel.NUM_LEVELS_PROPERTY.equals(evt.getPropertyName()) )
+						{
+							int levels = ((Integer)evt.getNewValue()).intValue();
+							depthSlider.setValue(levels);
+						}
 					}
 				});
 			blockModel.setLevels(depthSlider.getValue());
 
-			blockView = new BlockDiagramView(800, 600, blockModel);
-			getContentPane().add(blockView, BorderLayout.CENTER);
+			blockView = new BlockDiagramView(800, 500, blockModel);
+			mainSplitter.setTopComponent(blockView);
 			blockView.requestFocus();
 			pack();
 
@@ -205,6 +220,23 @@ public class MapFrame
 		
 		getContentPane().add(toolbar, BorderLayout.NORTH);
 	}
+
+	private void addComponents()
+	{
+		JPanel dummy = new JPanel();
+
+		JPanel bottomDummy = new JPanel()
+			{
+				public Dimension getMinimumSize() { return new Dimension(800, 200); }
+			};
+		callDetails = new CallDetailsView();
+		mainSplitter = new JSplitPane(JSplitPane.VERTICAL_SPLIT,
+												dummy,
+												callDetails);
+		
+		getContentPane().add(mainSplitter, BorderLayout.CENTER);
+	}
+
 
 	private JSlider createDepthSlider()
 	{

@@ -10,13 +10,13 @@ import java.util.ArrayList;
  */
 public class RootRenderState
 {
-	private final Client    client;
+	private final Listener  listener;
 	private final ArrayList calls = new ArrayList();
 	private int       index = -1;
 	
-	public RootRenderState(Client client, Call root)
+	public RootRenderState(Listener listener, Call root)
 	{
-		this.client = client;
+		this.listener = listener;
 
 		setRenderCall(root);
 	}
@@ -33,7 +33,10 @@ public class RootRenderState
 
 	public Call getRenderCall()
 	{
-		return (Call)calls.get(index);
+		if ( index >= 0 )
+			return (Call)calls.get(index);
+		else
+			return null;
 	}
 
 	public boolean hasParentRenderCall()
@@ -57,8 +60,9 @@ public class RootRenderState
 	{
 		if ( !hasNextRenderCall() )
 			return;
+		Call oldCall = getRenderCall();
 		++index;
-		invalidate();
+		callChanged(oldCall);
 	}
 
 	public boolean hasPreviousRenderCall()
@@ -70,17 +74,18 @@ public class RootRenderState
 	{
 		if ( !hasPreviousRenderCall() )
 			return;
+		Call oldCall = getRenderCall();
 		--index;
-		invalidate();
+		callChanged(oldCall);
 	}
 
-	protected void invalidate()
+	protected void callChanged(Call oldCall)
 	{
-		client.invalidate();
+		listener.renderCallChanged(oldCall, getRenderCall());
 	}
 
-	public interface Client
+	public interface Listener
 	{
-		public void invalidate();
+		public void renderCallChanged(Call oldCall, Call newCall);
 	}
 }

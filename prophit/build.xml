@@ -59,6 +59,7 @@
 	</copy>
     <copy todir="${dist}/lib">
 	  <fileset dir="${build}/lib" />
+	  <fileset dir="lib" includes="log4jME.jar" />
 	</copy>
 
 	<zip zipfile="${build}/orbit.zip">
