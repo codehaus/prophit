@@ -3,7 +3,7 @@
 <jnlp
       spec     = "1.0+"
       version  = "@@orbit.version@@"
-      codebase = "http://@@host@@:@@port@@/orbit"
+      codebase = "http://@@host@@:@@port@@"
       href     = "orbit.jnlp">
   
   <information>
