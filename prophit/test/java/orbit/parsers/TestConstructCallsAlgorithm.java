@@ -1,7 +1,7 @@
 package orbit.parsers;
 
 import orbit.model.*;
-import orbit.parsers.TestConstructCallsAlgorithm;
+import orbit.parsers.ConstructCallsAlgorithm;
 import java.util.*;
 import junit.framework.TestCase;
 

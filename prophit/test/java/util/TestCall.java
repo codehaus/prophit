@@ -37,12 +37,16 @@ public class TestCall
 	
 	public int getKey() { return key; }
 	public String getName() { return name; }
+	public int getMaxDepth() { throw new RuntimeException("getMaxDepth not implemented"); }
+	public Call filter(Filter filter) { throw new RuntimeException("filter not implemented"); }
+	public void depthFirstTraverse(Visitor visitor) { throw new RuntimeException("depthFirstTraverse not implemented"); }
 	public int getDepth() { return depth; }
 	public int getCallCount() { return count; }	
 	public double getTime() { return time; }
 	public Call getParent() { return parent; }	
 	public List getChildren() { return children; }
 	
+	public String toString(int depth) { throw new RuntimeException("toString(int) not implemented"); }
 	public String toString()
 	{
 		StringBuffer sb = new StringBuffer();
