@@ -20,11 +20,10 @@
   <path id="test.class.path">
 	 <pathelement path="${build}/classes" />
 	 <path refid="run.class.path" />
-	 <fileset dir="${basedir}/lib" />
   </path>
 
   <path id="compile.class.path">
-	 <fileset dir="${basedir}/lib" includes="jnlp.jar,log4jME.jar,gl4java.jar,gl4java-glutfonts.jar"/>
+	 <fileset dir="${basedir}/lib" includes="jnlp.jar,log4jME.jar,gl4java.jar,gl4java-glutfonts.jar,junit.jar"/>
   </path>
 
   <target name="init">
@@ -41,14 +40,14 @@
     </javac>
   </target>
 
-	<target name="jar" depends="compile">
-		<copy todir="${build}/resources">
-			<fileset dir="resources" />
-		</copy>
+  <target name="jar" depends="compile">
+    <copy todir="${build}/resources">
+	  <fileset dir="resources" />
+	</copy>
 
-		<replace file="${build}/resources/uitext.properties" token="@@orbit.version@@" value="${orbit.version}" />
-		<replace file="${build}/resources/uitext.properties" token="@@orbit.homepage@@" value="${orbit.homepage}" />
-		<replace file="${build}/resources/uitext.properties" token="@@orbit.docpage@@" value="${orbit.docpage}" />
+	<replace file="${build}/resources/uitext.properties" token="@@orbit.version@@" value="${orbit.version}" />
+	<replace file="${build}/resources/uitext.properties" token="@@orbit.homepage@@" value="${orbit.homepage}" />
+	<replace file="${build}/resources/uitext.properties" token="@@orbit.docpage@@" value="${orbit.docpage}" />
 
     <jar manifest="manifest.mf" jarfile="${build}/lib/orbit.jar">
 	  <fileset dir="${build}/classes" />

@@ -77,206 +77,123 @@ public class HProfParser
 				checkHeader();
 			seek("THREAD START (", true);
 			String line = seek(TRACE, true);
-			final HashMap stackTracesByID = new HashMap();
+			HashMap stackTracesByID = new HashMap();
 			line = parseTraces(line, stackTracesByID);
 			if ( line == null )
 			{
 				throw new ParseException("File does not contain any CPU profile data. Make sure you are using a 'cpu' option with hprof");
 			}
+
+			ParseTimingData parseTiming = null;
+				
+			if ( line.startsWith(CPU_SAMPLES_BEGIN) )
+			{
+				seek("rank", true);
+				parseTiming = new ParseSamples();
+			}
+			else if ( line.startsWith(CPU_TIME_BEGIN) )
+			{
+				String totalEquals = "total = ";
+				int totalBegin = line.indexOf(totalEquals);
+				if ( totalBegin == -1 )
+					throw new ParseException("ParseException at line " + lineNumber() + 
+											 ". Expected line to contain '(" + totalEquals + "'");
+				int totalEnd = line.indexOf(")", totalBegin);
+				if ( totalBegin == -1 )
+					throw new ParseException("ParseException at line " + lineNumber() + 
+											 ". Expected line to contain '(" + totalEquals + "<some number>)'");
+				long totalTime = Long.parseLong(line.substring(totalBegin + totalEquals.length(), totalEnd));
+
+				seek("rank", true);
+				parseTiming = new ParseTimes(totalTime);
+			}
 			else
 			{
-				final ArrayList rccList = new ArrayList();
+				throw new ParseException("Unexpected line " + line + " at line " + lineNumber());
+			}
+			
+			ArrayList rccList = new ArrayList();
 
-				ParseTimingData parseTiming = null;
-				
-				if ( line.startsWith(CPU_SAMPLES_BEGIN) )
+			parseTiming.initialize(stackTracesByID, rccList);
+			parseTiming.execute();
+			
+			/*
+			 * At each stack depth, if there is no existing stacktrace for a sub-stack of
+			 * a stack trace, make a new RCC for the sub-stack and add it to the list
+			 */
+			int nextKey = parseTiming.getKey();
+			HashSet stackTraceSet = new HashSet();
+			ArrayList newRCCs = new ArrayList();
+			for ( int size = maxStackSize; size > 0; --size )
+			{
+				// First add the 'natural' stacks at the current size
+				for ( Iterator i = rccList.iterator(); i.hasNext(); )
 				{
-					class ParseSamples
-						implements ParseTimingData
+					RCC rcc = (RCC)i.next();
+					if ( rcc.getStack().size() == size )
 					{
-						int key = 1;
-						HashMap rccsByStack = new HashMap();
-
-						public int getKey()
-						{
-							return key;
-						}
-
-						public void execute() throws ParseException, IOException
-						{
-							String line;
-							while ( !( line = nextLine(true) ).startsWith(CPU_SAMPLES_END) )
-							{
-								StringTokenizer tok = new StringTokenizer(line, " ");
-								String rank = nextToken(tok, true);
-								String self = nextToken(tok, true);
-								String accum = nextToken(tok, true);
-								int count = Integer.parseInt(nextToken(tok, true));
-								Integer traceID = Integer.valueOf(nextToken(tok, true));
-								String method = nextToken(tok, true);
-
-								StackTrace st = (StackTrace)stackTracesByID.get(traceID);
-								RCC rcc = (RCC)rccsByStack.get(st);
-								if ( rcc == null )
-								{
-									rcc = new RCC(st, count, count, key++);
-									rccsByStack.put(st, rcc);
-									rccList.add(rcc);
-								}
-								else
-								{
-									rcc.adjustTime(count);
-									rcc.adjustCalls(count);
-								}
-							}
-						}
-					}			
-
-					seek("rank", true);
-					parseTiming = new ParseSamples();
-				}
-				else if ( line.startsWith(CPU_TIME_BEGIN) )
-				{
-					String totalEquals = "total = ";
-					int totalBegin = line.indexOf(totalEquals);
-					if ( totalBegin == -1 )
-						throw new ParseException("ParseException at line " + lineNumber() + 
-														 ". Expected line to contain '(" + totalEquals + "'");
-					int totalEnd = line.indexOf(")", totalBegin);
-					if ( totalBegin == -1 )
-						throw new ParseException("ParseException at line " + lineNumber() + 
-														 ". Expected line to contain '(" + totalEquals + "<some number>)'");
-					final int totalTime = Integer.parseInt(line.substring(totalBegin + totalEquals.length(), totalEnd));
-
-					class ParseTimes
-						implements ParseTimingData
-					{
-						int key = 1;
-						HashMap rccsByStack = new HashMap();
-
-						public int getKey()
-						{
-							return key;
-						}
-
-						public void execute() throws ParseException, IOException
-						{
-							String line;
-							while ( !( line = nextLine(true) ).startsWith(CPU_TIME_END) )
-							{
-								StringTokenizer tok = new StringTokenizer(line, " ");
-								String rank = nextToken(tok, true);
-								String selfPercentStr = nextToken(tok, true);
-								// Strip off the '%' and divide by 100
-								double selfFraction = Double.parseDouble(selfPercentStr.substring(0, selfPercentStr.length() - 1)) / 100.0;
-								String accum = nextToken(tok, true);
-								int count = Integer.parseInt(nextToken(tok, true));
-								Integer traceID = Integer.valueOf(nextToken(tok, true));
-								String method = nextToken(tok, true);
-
-								double time = selfFraction * totalTime;
-
-								StackTrace st = (StackTrace)stackTracesByID.get(traceID);
-								RCC rcc = (RCC)rccsByStack.get(st);
-								if ( rcc == null )
-								{
-									rcc = new RCC(st, count, (long)time, key++);
-									rccsByStack.put(st, rcc);
-									rccList.add(rcc);
-								}
-								else
-								{
-									rcc.adjustTime(count);
-									rcc.adjustCalls(count);
-								}
-							}
-						}
-					}			
-
-					seek("rank", true);
-					parseTiming = new ParseTimes();
-				}
-
-				parseTiming.execute();
-				
-				/*
-				 * At each stack depth, if there is no existing stacktrace for a sub-stack of
-				 * a stack trace, make a new RCC for the sub-stack and add it to the list
-				 */
-				int nextKey = parseTiming.getKey();
-				HashSet stackTraceSet = new HashSet();
-				ArrayList newRCCs = new ArrayList();
-				for ( int size = maxStackSize; size > 0; --size )
-				{
-					// First add the 'natural' stacks at the current size
-					for ( Iterator i = rccList.iterator(); i.hasNext(); )
-					{
-						RCC rcc = (RCC)i.next();
-						if ( rcc.getStack().size() == size )
-						{
-							hashStack(stackTraceSet, rcc.getStack());
-						}
+						hashStack(stackTraceSet, rcc.getStack());
 					}
-					newRCCs.clear();
-					for ( Iterator i = rccList.iterator(); i.hasNext(); )
+				}
+				newRCCs.clear();
+				for ( Iterator i = rccList.iterator(); i.hasNext(); )
+				{
+					RCC rcc = (RCC)i.next();
+					if ( rcc.getStack().size() > size )
 					{
-						RCC rcc = (RCC)i.next();
-						if ( rcc.getStack().size() > size )
+						StackTrace parentStack = rcc.getParentStack(size);
+						if ( parentStack != null &&
+							 stackTraceSet.add(parentStack) )
 						{
-							StackTrace parentStack = rcc.getParentStack(size);
-							if ( parentStack != null &&
-								 stackTraceSet.add(parentStack) )
-							{
-								RCC newRCC = new RCC(parentStack, rcc.getCallCount(), 0, nextKey++);
+							RCC newRCC = new RCC(parentStack, rcc.getCallCount(), 0, nextKey++);
 								// System.out.println("Adding new rcc " + newRCC);
-								newRCCs.add(newRCC);
-								hashStack(stackTraceSet, parentStack);
-							}
+							newRCCs.add(newRCC);
+							hashStack(stackTraceSet, parentStack);
 						}
 					}
-					rccList.addAll(newRCCs);
 				}
-
-				/*
-				 * In general, the parent of a stack trace (the 'leaf') may only have a sub-set of the
-				 *   parent calls that are listed in the leaf.
-				 * This algorithm matches each stack trace up with its parent traces in a greedy manner,
-				 *   finding all parents which match 'n' calls in the leaf before moving to 'n - 1'.
-				 * Each time, the algorithm is only run on the RCCs which are still marked as being 'roots'
-				 * Some of these roots may get matched to a parent, the rest will be tried again during
-				 *   the next iteration
-				 */
-				ArrayList rootRCCList = new ArrayList(rccList.size());
-				rootRCCList.addAll(rccList);
-
-				ConstructCallsAlgorithm algorithm = new ConstructCallsAlgorithm(rccList.size());
-
-				int maxSize = maxStackSize - 1;
-				for ( int size = maxSize; size > 0; )
-				{
-					// System.out.println("Size : " + size);
-					// System.out.println("Looking for " + rootRCCList);
+				rccList.addAll(newRCCs);
+			}
+			
+			/*
+			 * In general, the parent of a stack trace (the 'leaf') may only have a sub-set of the
+			 *   parent calls that are listed in the leaf.
+			 * This algorithm matches each stack trace up with its parent traces in a greedy manner,
+			 *   finding all parents which match 'n' calls in the leaf before moving to 'n - 1'.
+			 * Each time, the algorithm is only run on the RCCs which are still marked as being 'roots'
+			 * Some of these roots may get matched to a parent, the rest will be tried again during
+			 *   the next iteration
+			 */
+			ArrayList rootRCCList = new ArrayList(rccList.size());
+			rootRCCList.addAll(rccList);
+			
+			ConstructCallsAlgorithm algorithm = new ConstructCallsAlgorithm(rccList.size());
+			
+			int maxSize = maxStackSize - 1;
+			for ( int size = maxSize; size > 0; )
+			{
+				// System.out.println("Size : " + size);
+				// System.out.println("Looking for " + rootRCCList);
 					
-					Map rccListByCallee = mapByCallee(rccList, size);
+				Map rccListByCallee = mapByCallee(rccList, size);
 
-					// System.out.println("Callee map " + rccListByCallee);
+				// System.out.println("Callee map " + rccListByCallee);
 
-					algorithm.execute(rootRCCList, rccListByCallee, size);
-					callIDs = algorithm.getCallIDs();
+				algorithm.execute(rootRCCList, rccListByCallee, size);
+				callIDs = algorithm.getCallIDs();
 
-					--size;
-					// Don't bother to re-build the root list on the last time through
-					if ( size > 0 )
+				--size;
+				// Don't bother to re-build the root list on the last time through
+				if ( size > 0 )
+				{
+					rootRCCList.clear();
+					for ( Iterator j = rccList.iterator(); j.hasNext(); )
 					{
-						rootRCCList.clear();
-						for ( Iterator j = rccList.iterator(); j.hasNext(); )
-						{
-							RCC rcc = (RCC)j.next();
-							int key = rcc.getKey();
-							CallID callID = (CallID)callIDs.get(key);
-							if ( callID != null && callID.getParentRCC() == null )
-								rootRCCList.add(callID.getRCC());
-						}
+						RCC rcc = (RCC)j.next();
+						int key = rcc.getKey();
+						CallID callID = (CallID)callIDs.get(key);
+						if ( callID != null && callID.getParentRCC() == null )
+							rootRCCList.add(callID.getRCC());
 					}
 				}
 			}
@@ -306,11 +223,6 @@ public class HProfParser
 			 * should be matched
 			 */
 			StackTrace calleeStack = rcc.getLeafStack(stackSize);
-			/*
-			if ( rcc.getStack().toString().startsWith("test.HelloList.buildAsStrings") ||
-				 rcc.getStack().toString().startsWith("test.HelloList.linkedAndString") )
-				System.out.println("Adding callee stack for " + rcc + " : " + calleeStack);
-			*/
 			if ( calleeStack != null )
 			{
 				ArrayList subList = (ArrayList)rccListByCallee.get(calleeStack);
@@ -380,8 +292,8 @@ public class HProfParser
 				maxStackSize = stack.size();
 		}
 		while ( line != null && 
-				  !line.startsWith(CPU_TIME_BEGIN) &&
-				  !line.startsWith(CPU_SAMPLES_BEGIN) );
+				!line.startsWith(CPU_TIME_BEGIN) &&
+				!line.startsWith(CPU_SAMPLES_BEGIN) );
 
 		// System.out.println("Found " + lineCache.size() + " unique lines among " + lineCount + " lines");
 
@@ -409,10 +321,97 @@ public class HProfParser
 		return line;
 	}
 
-	interface ParseTimingData
+	abstract class ParseTimingData
 	{
-		public int getKey();
+		private int  key             = 1;
+		private Map  rccsByStack     = new HashMap();
+		private Map  stackTracesByID = null;
+		private List rccList         = null;
+
+		public int getKey()
+		{
+			return key;
+		}
+
+		public void initialize(Map stackTracesByID, List rccList)
+		{
+			this.stackTracesByID = stackTracesByID;
+			this.rccList = rccList;
+		}
 		
-		public void execute() throws ParseException, IOException;
+		public abstract void execute() throws ParseException, IOException;
+
+		protected void addRCC(Integer traceID, int nCalls, long time) throws ParseException
+		{
+			StackTrace st = (StackTrace)stackTracesByID.get(traceID);
+			if ( st == null )
+				throw new ParseException("TRACE id " + traceID + " not found at line " + lineNumber());
+
+			RCC rcc = (RCC)rccsByStack.get(st);
+			if ( rcc == null )
+			{
+				rcc = new RCC(st, nCalls, time, key++);
+				rccsByStack.put(st, rcc);
+				rccList.add(rcc);
+			}
+			else
+			{
+				rcc.adjustTime(time);
+				rcc.adjustCalls(nCalls);
+			}
+		}
+	}
+
+	class ParseSamples
+		extends ParseTimingData
+	{
+		public void execute() throws ParseException, IOException
+		{
+			String line;
+			while ( !( line = nextLine(true) ).startsWith(CPU_SAMPLES_END) )
+			{
+				StringTokenizer tok = new StringTokenizer(line, " ");
+				String rank = nextToken(tok, true);
+				String self = nextToken(tok, true);
+				String accum = nextToken(tok, true);
+				int count = Integer.parseInt(nextToken(tok, true));
+				Integer traceID = Integer.valueOf(nextToken(tok, true));
+				String method = nextToken(tok, true);
+
+				addRCC(traceID, count, count);
+			}
+		}
+	}			
+
+	class ParseTimes
+		extends ParseTimingData
+	{
+		private final long totalTime;
+	
+		public ParseTimes(long totalTime)
+		{
+			this.totalTime = totalTime;
+		}
+
+		public void execute() throws ParseException, IOException
+		{
+			String line;
+			while ( !( line = nextLine(true) ).startsWith(CPU_TIME_END) )
+			{
+				StringTokenizer tok = new StringTokenizer(line, " ");
+				String rank = nextToken(tok, true);
+				String selfPercentStr = nextToken(tok, true);
+								// Strip off the '%' and divide by 100
+				double selfFraction = Double.parseDouble(selfPercentStr.substring(0, selfPercentStr.length() - 1)) / 100.0;
+				String accum = nextToken(tok, true);
+				int count = Integer.parseInt(nextToken(tok, true));
+				Integer traceID = Integer.valueOf(nextToken(tok, true));
+				String method = nextToken(tok, true);
+
+				double time = selfFraction * totalTime;
+
+				addRCC(traceID, count, (long)time);
+			}
+		}
 	}
 }
