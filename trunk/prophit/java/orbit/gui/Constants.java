@@ -8,6 +8,12 @@ public interface Constants
 	 */
 	public static double DIAGRAM_EXTENT = 1.0;
 
+	/**
+	 * Extent of the entire screen. This could be calculated from the projection matrix
+	 *   but this constant should work well enough for now.
+	 */
+	public static double SCREEN_EXTENT = 1.5;
+
 	public static final int    RENDER_SOLID     = 0;
 	public static final int    RENDER_WIREFRAME = 1;
 
@@ -19,7 +25,4 @@ public interface Constants
 	 * If less, it is rendered in the base block color
 	 */ 
 	public static final double FRACTION_THRESHOLD = 0.30;
-
-	/** Blocks smaller than this are not rendered at all */
-	public static final double MIN_BLOCK_SIZE_THRESHOLD = 3.0;
 }
