@@ -127,7 +127,11 @@ public class TestProphitParser
 			Loader loader = LoaderFactory.instance().createLoader(new File(System.getProperty("basedir") + "/data/simple.prof"));
 			loader.parse();
 			CallGraph simple = loader.solve();
-			
+			CallID[] calls = simple.getCallIDs();
+			for (int i = 0; i < calls.length; i++)
+			{
+				if (calls[i] != null) System.out.println(calls[i].toString());
+			}
 			System.out.println("finished loading simple");
 			
 			ProphitWriter writer = new ProphitWriter( simple, new File(System.getProperty("basedir") + "/data/testoutput.xml"));
@@ -173,6 +177,21 @@ public class TestProphitParser
 		{
 			x.printStackTrace();
 			throw new RuntimeException("Unable to load.");
+		}
+	}
+
+	public void testRoundTripSampleXML() throws Exception
+	{
+		try 
+		{
+			ProphitParserLoader p1 = new ProphitParserLoader(new FileReader(new File(System.getProperty("basedir") + "/test/data/simple-profile-std.xml")));
+			CallGraph cg = p1.solve();
+			ProphitWriter w = new ProphitWriter(cg, new File(System.getProperty("basedir") + "/test/data/simple-profile-std-copy.xml"));
+			w.write();
+		} catch (Exception x)
+		{
+			x.printStackTrace();
+			throw new RuntimeException("unable to load");
 		}
 	}
 }
