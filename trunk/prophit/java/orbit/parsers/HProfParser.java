@@ -209,6 +209,7 @@ public class HProfParser
 					}
 				}
 
+				/*
 				HashSet parents = new HashSet();
 				for ( Iterator i = callIDs.iterator(); i.hasNext(); )
 				{
@@ -218,10 +219,31 @@ public class HProfParser
 						parents.add(callID.getParentRCC());
 					}
 				}
+				*/
 
+				HashMap timeAdjustment = new HashMap();
 				for ( Iterator i = callIDs.iterator(); i.hasNext(); )
 				{
 					CallID callID = (CallID)i.next();
+					if ( callID != null )
+					{
+						long time = callID.getRCC().getTime();
+						while ( callID != null && callID.getParentRCC() != null )
+						{
+							Long adjustment = (Long)timeAdjustment.get(callID.getParentRCC());
+							if ( adjustment == null )
+							{
+								adjustment = new Long(time);
+							}
+							else
+							{
+								adjustment = new Long(adjustment.longValue() + time);
+							}
+							timeAdjustment.put(callID.getParentRCC(), adjustment);
+							callID = (CallID)callIDs.get(callID.getParentRCC().getKey());
+						}
+					}
+					/*
 					if ( callID != null && callID.getParentRCC() != null && !parents.contains(callID.getRCC()))
 					{
 						CallID parent = (CallID)callIDs.get(callID.getParentRCC().getKey());
@@ -233,6 +255,18 @@ public class HProfParser
 							else
 								parent = null;
 						}
+					}
+					*/
+				}
+
+				for ( Iterator i = callIDs.iterator(); i.hasNext(); )
+				{
+					CallID callID = (CallID)i.next();
+					if ( callID != null )
+					{
+						Long adjustment = (Long)timeAdjustment.get(callID.getRCC());
+						if ( adjustment != null )
+							callID.getRCC().adjustTime(adjustment.longValue());
 					}
 				}
 
