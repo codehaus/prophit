@@ -7,6 +7,7 @@ import org.apache.log4j.Category;
 import net.n3.nanoxml.*;
 
 import java.io.*;
+import java.net.MalformedURLException;
 import java.util.*;
 import java.util.zip.*;
 
@@ -147,7 +148,7 @@ public class ProphitParserLoader implements Parser, Loader
 		try {
 			// initialize the xml parser
 			IXMLParser xmlparser = (IXMLParser)XMLParserFactory.createDefaultXMLParser();
-			IXMLReader xmlreader = new StdXMLReader(this.reader);
+			IXMLReader xmlreader = new XMLReader(this.reader);
 			xmlparser.setReader(xmlreader);
 			// get the toplevel xml element from the profile data document.
 			IXMLElement callgraph = (IXMLElement) xmlparser.parse();
@@ -361,6 +362,29 @@ public class ProphitParserLoader implements Parser, Loader
 			Log.error(LOG, x);
 			return ( null );
 		}
+	}
+
+	/** Resolves the DTD 'profile-data.dtd' as a resource */
+	private class XMLReader
+		extends StdXMLReader
+	{
+		public XMLReader(Reader reader)
+		{
+			super(reader);
+		}
+
+		public Reader openStream(String publicID, String systemID)
+			throws MalformedURLException,
+					 FileNotFoundException,
+					 IOException
+		{
+			if ( systemID != null && systemID.endsWith("profile-data.dtd") )
+			{
+				Log.debug(LOG, "Loading profile-data.dtd as a resource");
+				return new InputStreamReader(getClass().getClassLoader().getResourceAsStream("profile-data.dtd"));
+			}
+			return super.openStream(publicID, systemID);
+		}		
 	}
 }
     

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<!DOCTYPE call-graph SYSTEM "test/data/profile-data.dtd" >
+<!DOCTYPE call-graph SYSTEM "profile-data.dtd" >
 
 <!--
 This file represents the parsed and solved profile in data/simple.prof (which is in -prof format)

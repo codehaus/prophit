@@ -42,7 +42,7 @@ if exist "%SCRIPT_HOME%\lib" goto setupClasspath
 
 echo %SCRIPT_HOME%
 
-set LOCALCLASSPATH="%SCRIPT_HOME%\lib\prophit.jar";"%SCRIPT_HOME%\lib\data.jar";"%SCRIPT_HOME%\lib\log4jME.jar";"%SCRIPT_HOME%\lib\gl4java-glutfonts.jar";"%SCRIPT_HOME%\lib\gl4java-win32.jar";"%SCRIPT_HOME%\lib\gl4java.jar";"%SCRIPT_HOME%\lib\png.jar";"%SCRIPT_HOME%\lib\jnlp.jar"
+set LOCALCLASSPATH="%SCRIPT_HOME%\lib\prophit.jar";"%SCRIPT_HOME%\lib\data.jar";"%SCRIPT_HOME%\lib\log4jME.jar";"%SCRIPT_HOME%\lib\gl4java-glutfonts.jar";"%SCRIPT_HOME%\lib\gl4java-win32.jar";"%SCRIPT_HOME%\lib\gl4java.jar";"%SCRIPT_HOME%\lib\png.jar";"%SCRIPT_HOME%\lib\jnlp.jar";"%SCRIPT_HOME%\lib\nanoxml-2.2.2.jar"
 
 if "%JAVA_HOME%" == "" goto noJavaHome
 if "%_JAVACMD%" == "" set _JAVACMD=%JAVA_HOME%\jre\bin\java

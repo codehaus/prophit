@@ -42,6 +42,7 @@
 		<mkdir dir="${dist}" />
 		<mkdir dir="${webdist}" />
 		<mkdir dir="${webdist}/lib" />
+		<copy  file="xml/profile-data.dtd" todir="test/data" />
 	</target>
 
 	<target name="compile" depends="init">
@@ -52,6 +53,7 @@
 	<target name="jar" depends="compile">
 		<copy todir="${build}/resources">
 			<fileset dir="resources" />
+			<fileset dir="xml" includes="profile-data.dtd" />
 		</copy>
 
 		<replace file="${build}/resources/uitext.properties" token="@@prophit.version@@" value="${prophit.version}" />
@@ -138,6 +140,7 @@
 
 	<target name="clean" depends="delete-cache">
 		<delete dir="${build}" />
+		<delete file="test/data/profile-data.dtd" />
 	</target>
 
 	<!-- Use this as a one-time target to build the OS-specific JARs for gl4java -->
