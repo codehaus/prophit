@@ -24,7 +24,7 @@
 	</path>
 
 	<path id="compile.class.path">
-		<fileset dir="${basedir}/lib" includes="jnlp.jar,log4jME.jar,gl4java.jar,gl4java-glutfonts.jar,junit.jar"/>
+		<fileset dir="${basedir}/lib" includes="jnlp.jar,log4jME.jar,gl4java.jar,gl4java-glutfonts.jar,junit.jar,nanoxml-2.2.2.jar"/>
 	</path>
 
 	<path id="prophit.path.path">
@@ -264,4 +264,6 @@
 	</target>
 
 </project>
+
+
 

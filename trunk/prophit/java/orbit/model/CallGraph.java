@@ -35,7 +35,7 @@ public class CallGraph
 
 	/**
 	 * Construct a CallGraph from the complete list of method calls of which it is composed.
-	 * @param callFractions As explained in the comments for {@link CallID}, an the recorded time for an
+	 * @param callFractions As explained in the comments for {@link CallID}, the recorded time for an
 	 * RCC may be split among more than one specific location in the call graph. Each of these locations
 	 * is represented by a CallID. For each callID, the value <code>callFractions[callID.getKey()]</code>
 	 * is the fraction of the RCC time which is allocated to that CallID. The sum of the callFractions across
