@@ -11,7 +11,7 @@
   <property file="orbit.properties" />
 
   <path id="run.class.path">
-	 <pathelement path="${build}/lib/orbit.jar" />
+	 <fileset dir="${build}/lib" />
 	 <fileset dir="${basedir}/lib" />
   </path>
 
@@ -22,7 +22,7 @@
   </path>
 
   <path id="compile.class.path">
-	 <pathelement path="${basedir}/lib/log4jME.jar" />
+	 <fileset dir="${basedir}/lib" includes="log4jME.jar,gl4java.jar,gl4java-glutfonts.jar"/>
   </path>
 
   <target name="init">
@@ -177,7 +177,7 @@
 	</java>
   </target>
 
-  <target name="run-test" depends="build">
+  <target name="run-test" depends="build,jar">
     <junit fork="true">
 	  <sysproperty key="solver.user.name" value="JAVA_USER" />
 	  <sysproperty key="basedir" value="${basedir}" />

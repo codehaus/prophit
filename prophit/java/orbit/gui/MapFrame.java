@@ -347,6 +347,50 @@ public class MapFrame
 			{
 				public void actionPerformed( ActionEvent e ) { controller.doOpen(); }
 			});
+
+		try
+		{
+			SampleProfiles samples = SampleProfiles.load("sampleProfiles.properties");
+
+			JMenuItem mnuSamples = (JMenu)fileMenu.add(new JMenu(Strings.getUILabel(MapFrame.class, "menu.file.samples")));
+			mnuSamples.setMnemonic(KeyEvent.VK_M);
+
+			final HashMap profilesByMenuItem = new HashMap();
+			for ( Iterator i = samples.getProfileTypes().iterator(); i.hasNext(); )
+			{
+				SampleProfileType type = (SampleProfileType)i.next();
+				JMenu mnuSampleType = (JMenu)mnuSamples.add(new JMenu(type.getName()));
+				for ( Iterator j = type.getProfiles().iterator(); j.hasNext(); )
+				{
+					SampleProfile profile = (SampleProfile)j.next();
+					JMenuItem mnuProfile = (JMenuItem)mnuSampleType.add( new JMenuItem( profile.getName() ) );
+					profilesByMenuItem.put(mnuProfile, profile);
+					mnuProfile.addActionListener(new ActionListener()
+						{
+							public void actionPerformed( ActionEvent e ) 
+							{
+								JMenuItem source = (JMenuItem)e.getSource();
+								SampleProfile profile = (SampleProfile)profilesByMenuItem.get(source);
+								if ( profile != null )
+								{
+									loadProfile(profile.getFile());
+								}
+								else
+								{
+									LOG.error("No SampleProfile found for menu item " + source);
+								}
+							}
+						});
+				}
+			}
+		}
+		catch (IOException x)
+		{
+			LOG.error("Unable to load sample profiles from sampleProfiles.properties");
+		}
+
+		fileMenu.addSeparator();
+
 		addMenuItem(fileMenu, Strings.getUILabel(MapFrame.class, "menu.file.exit"), KeyEvent.VK_X, KeyEvent.VK_X, new ActionListener()
 			{
 				public void actionPerformed( ActionEvent e ) { controller.doExit(); }
@@ -409,11 +453,10 @@ public class MapFrame
 								  int acceleratorEvent, ActionListener listener)
 	{
 		JMenuItem item = menu.add( new JMenuItem( name, menuEvent ) );
-		item.addActionListener(listener);
+		if ( listener != null )
+			item.addActionListener(listener);
 		if ( acceleratorEvent != -1 )
-		{
 			item.setAccelerator(KeyStroke.getKeyStroke(acceleratorEvent, Event.CTRL_MASK));
-		}
 		return item;
 	}
 
