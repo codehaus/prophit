@@ -3,6 +3,7 @@
 <jnlp
       spec     = "1.0+"
       version  = "@@orbit.version@@"
+      codebase = "http://@@host@@:@@port@@/orbit"
       href     = "orbit.jnlp">
   
   <information>
@@ -18,7 +19,7 @@
   </security>
   
   <resources>
-    <j2se version = "1.3" max-heap-size="128M" />
+    <j2se version = "1.3+" max-heap-size="128M" />
     
     <jar href = "lib/orbit.jar"/>
     <jar href = "lib/log4jME.jar"/>

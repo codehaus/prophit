@@ -18,6 +18,7 @@ import javax.swing.event.*;
 import java.applet.*;
 import java.io.*;
 import java.util.*;
+import java.util.List;
 
 public class MapFrame
 	extends JFrame
@@ -184,7 +185,7 @@ public class MapFrame
 	}
 
 	/**
-	 * When the caller of the current displayed selection is selected (in the CallDetailsView),
+	 * When a caller of the current displayed selection is selected (in the CallDetailsView),
 	 * select the caller of the current selection if its name matches the selected parent. Otherwise,
 	 * find the new name in the current block diagram.
 	 */
@@ -194,53 +195,77 @@ public class MapFrame
 		if ( name == null || selectedCall == null )
 			return;
 
-		if ( name.equals(selectedCall.getParent().getName()) )
+		/*
+		 * Add the caller of the selected call
+		 * Then add the callers of all the other Calls in the diagram that have the same name
+		 *   This will ensure that the selected call is preferred
+		 *   Don't consider the caller of the root call
+		 */
+		List candidates = new ArrayList();
+		Call root = blockModel.getRootRenderState().getRenderCall();
+		addCaller(candidates, selectedCall);
+		for ( Iterator i = blockModel.getCallsByName(selectedCall.getName()).iterator(); i.hasNext(); )
 		{
-			blockModel.setSelectedCall(selectedCall.getParent());
-		}
-		else
-		{
-			Call root = blockModel.getRootRenderState().getRenderCall();
-			if ( !selectCallByName(root, name, true) )
+			Call candidate = (Call)i.next();
+			if ( candidate != root )
 			{
-				LOG.error("Unable to find call " + name + " in rootRenderState " + root);
+				addCaller(candidates, candidate);
 			}
 		}
+		selectCallByName(candidates, name);
 	}
 
+	/**
+	 * When a callee of the current displayed selection is selected (in the CallDetailsView),
+	 * select a callee of the current selection if there is one whose name matches the selected callee. Otherwise,
+	 * find the new name in the current block diagram.
+	 */
 	private void selectSelectionCallee(String name)
 	{
 		Call selectedCall = blockModel.getSelectedCall();
 		if ( name == null || selectedCall == null )
 			return;
 
-		if ( !selectCallByName(selectedCall, name, false) )
+		// See comments for selectSelectionCaller
+		List candidates = new ArrayList();
+		addCallees(candidates, selectedCall);
+		for ( Iterator i = blockModel.getCallsByName(selectedCall.getName()).iterator(); i.hasNext(); )
 		{
-			Call root = blockModel.getRootRenderState().getRenderCall();
-			if ( !selectCallByName(root, name, true) )
-			{
-				LOG.error("Unable to find call " + name + " in rootRenderState " + root);
-			}
+			Call candidate = (Call)i.next();
+			addCallees(candidates, candidate);
 		}
+		selectCallByName(candidates, name);
 	}
 
-	private boolean selectCallByName(Call call, String name, boolean selectThis)
+	private void selectCallByName(List candidates, String name)
 	{
-		if ( selectThis && name.equals(call.getName()) )
+		for ( Iterator i = candidates.iterator(); i.hasNext(); )
 		{
-			blockModel.setSelectedCall(call);
-			return true;
+			Call candidate = (Call)i.next();
+			if ( name.equals(candidate.getName()) )
+			{
+				blockModel.setSelectedCall(candidate);
+				return;
+			}
 		}
+		LOG.info("Unable to find call " + name + " in diagram");
+	}
 
+	private void addCaller(List list, Call call)
+	{
+		Call parent = call.getParent();
+		if ( parent != null )
+			list.add(parent);
+	}
+	
+	private void addCallees(List list, Call call)
+	{
 		for ( Iterator i = call.getChildren().iterator(); i.hasNext(); )
 		{
 			Call child = (Call)i.next();
-			if ( selectCallByName(child, name, true) )
-				return true;
+			list.add(child);
 		}
-		return false;
 	}
-
 	
 	private void createActions()
 	{

@@ -47,10 +47,12 @@ class BlockDiagramView
 	private int updateCount = 0;
 
 	private boolean repaint = false;
-	private boolean generateLists = true;
+	private boolean generateDiagramLists = true;
+	private boolean generateSelectedLists = true;
 
 	private int linesList = -1;
 	private int quadsList = -1;
+	private int selectedCallsList = -1;
 
 	private Point mouseClickPoint = null;
 	private EyeLocation mouseClickLocation = null;
@@ -77,19 +79,15 @@ class BlockDiagramView
 					if ( BlockDiagramModel.RENDER_CALL_PROPERTY.equals(evt.getPropertyName()) ||
 						  BlockDiagramModel.NUM_LEVELS_PROPERTY.equals(evt.getPropertyName()) )
 					{
-						generateLists = true;
-						repaint = true;
-						checkUpdate();
+						generateDiagramLists = true;
+						generateSelectedLists = true;
 					}
-					else /* if ( BlockDiagramModel.SHIFT_HORIZONTAL_PROPERTY.equals(evt.getPropertyName()) ||
-								 BlockDiagramModel.SHIFT_VERTICAL_PROPERTY.equals(evt.getPropertyName()) ||
-								 BlockDiagramModel.EYE_POSITION_PROPERTY.equals(evt.getPropertyName()) ||
-								 BlockDiagramModel.MOUSEOVER_CALL_PROPERTY.equals(evt.getPropertyName()) ||
-								 BlockDiagramModel.SELECTED_CALL_PROPERTY.equals(evt.getPropertyName()) ) */
+					if ( BlockDiagramModel.SELECTED_CALL_PROPERTY.equals(evt.getPropertyName()) )
 					{
-						repaint = true;
-						checkUpdate();
+						generateSelectedLists = true;
 					}
+					repaint = true;
+					checkUpdate();
 				}
 			});
 		
@@ -321,7 +319,8 @@ class BlockDiagramView
 			gl.glCallList(quadsList);
 		}
 
-		drawSelected();
+		gl.glCallList(selectedCallsList);
+
 		drawStats();
 		drawName();
 		
@@ -580,9 +579,9 @@ class BlockDiagramView
 	
 	synchronized void compileDisplayLists()
 	{
-		if ( generateLists )
+		if ( generateDiagramLists )
 		{
-			generateLists = false;
+			generateDiagramLists = false;
 
 			if ( linesList == -1 )
 			{
@@ -628,6 +627,26 @@ class BlockDiagramView
 				model.setGLNameToCallMap(renderer.getGLNameToCallMap());
 				model.setNameToCallListMap(renderer.getNameToCallListMap());
 			}
+		}
+
+		if ( generateSelectedLists )
+		{
+			generateSelectedLists = false;
+			
+			if ( selectedCallsList == -1 )
+			{
+				selectedCallsList = gl.glGenLists(1);
+			}
+			else
+			{
+				gl.glDeleteLists(selectedCallsList, 1);
+			}
+
+			gl.glNewList(selectedCallsList, GL_COMPILE);
+			
+			drawSelected();
+			
+			gl.glEndList();
 		}
 	}
 	
