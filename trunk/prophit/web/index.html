@@ -71,12 +71,13 @@ MM_reloadPage(true);
             <span class="MenuItem"> - <a href="index.html">Home Page</a><br>
             - <a href="news.html">News and Status</a><br>
             - <a href="team.html">The Team</a><br>
-            - <a href="download.html">Get prophIt Now!</a></span><span class="MenuItem"><br>
+            - <a href="download.html">Download prophIt</a></span><span class="MenuItem"><br>
             </span></p>
           <p><span class="MenuHeader">Documentation</span><br>
             <span class="MenuItem">- <a href="docs/index.html">Overview</a><br>
             - <a href="quick-start.html">Getting Started</a><br>
-          </span> </p>
+            - <a href="docs/faq.html">FAQ</a><br>
+            </span> </p>
       </div>
 		</td>
 		<td>
@@ -95,50 +96,74 @@ MM_reloadPage(true);
           <td width="107" nowrap><a href="doc.html">Documentation</a></td>
         </tr>
       </table -->
-                  <div class="header">prophIt Overview</div>
-                  <blockquote><b>prophIt</b> is an innovative visualization tool 
-                    for working with Java profiles. prophIt does not generate 
-                    profile data itself. Rather it reads data files generated 
-                    by a <a href="docs/profiler-types.html">supported profiler</a> 
-                    and presents them in a powerful user interface. </blockquote>
-                  <img src="assets/hello-list.png" ><p>
-                  <div class="header"><a name="running_prophIt"> Running prophIt</a></div>
-                  <h4>Runtime Environment</h4>
-                  prophIt is implemented using the Java <a href="http://java.sun.com/products/jfc/" target=_blank>Swing</a> 
-                  GUI library, using the <a href="http://www.jausoft.com/gl4java/" target=_blank>GL4Java</a> 
-                  Java binding to <a href="http://www.opengl.org" target=_blank>OpenGL</a> 
-                  to render graphics-intensive parts of the UI. Windows is the 
-                  only currently supported platform, but OpenGL is available for 
-                  other platforms as well and prophIt will be supported on them 
-                  as well. 
-                  <h4>JavaWebStart</h4>
-                  prophIt uses <a href="http://java.sun.com/products/javawebstart/" target=_blank>JavaWebStart</a> 
-                  (version 1.0.1_02 or later) for installation and automatic upgrades. 
-                  To run prophIt, first you need to obtain JavaWebStart: 
-                  <ul>
-                    <li>If you already have the JDK 1.4, you already have JavaWebStart! 
-                      It is bundled with the J2SE 
-                    <li>Otherwise, you will need to download and install JavaWebStart 
-                      separately. Go to the <a href="http://java.sun.com/products/javawebstart/" target=_blank>JavaWebStart</a> 
-                      home page and follow the installation instructions there. 
-                  </ul>
-                  <h4>Java Version</h4>
-                  prophIt requires JDK 1.3 or higher. It will run and look better 
-                  with JDK 1.4.0 or higher. <br>
-                  <br>
-                  <div class="header">Other Resources</div>
-                  <ul>
-                    <li>Check out <code>java -prof</code> <a href="docs/dash-prof.html#resources">resources</a></li>
-                    <li>Check out <code>hprof</code> <a href="docs/hprof.html#resources">resources</a></li>
-                    <li>Read <a target=_blank href="http://www.amazon.com/exec/obidos/tg/detail/-/0961392142/qid=1032639151/sr=1-1/ref=sr_1_1/102-6857501-9780924?v=glance&s=books">The 
-                      Visual Display of Quantitative Information</a>. It's a very 
-                      thought-provoking read that will have you looking at diagrams, 
-                      maps, and all forms of graphical information display in 
-                      new ways.</li>
-                  </ul>
-                  <p> 
-                  <!-- #EndEditable --> </div>
-              </td>
+                    <div class="header">prophIt Overview</div>
+
+                      <blockquote><b>prophIt</b> is an innovative visualization tool for 
+                        working with Java profiles. Generate profile data using your standard java profiling options,
+						and watch the data come to life when you visualize your application's performance with prophIt. 
+						We believe that prophIt can help you quickly find the hotspots in your application and make 
+						sense of an otherwise laborious set of profile data.<br><br>
+                      
+                      </blockquote>
+
+				<div class="header"> <a name="motivation"></a>Motivation for prophIt</div>
+				<blockquote>
+					prophIt's life began when we realized that looking at profile data was really tedious.  
+					The applications we were using to examine our java applications' performance suffered from deficiencies:
+					<ul>
+						<li>Difficult to assess the performance of recursive methods/functions</li>
+						<li>Difficult to figure out which level of the call graph is really eating up all the time. </li>
+						<li>Complex programs tend to have complex call graphs and profile data which makes it difficult to really understand top-down.</li>
+						<li>A method or function might get called in several places within an application. In traditional profile data viewers, it is difficult to aggregate this performance information.</li>
+						<li>In a complex program, I have no good way to constrain the context to just the parts of the data that are interesting to me. </li>
+						<li>Most importantly, we have found that developers tend to draw incorrect conclusions based on their profile data -- often precisely because of the limitations of visualizing that data effectively. </li>
+						</ul>
+					
+					This is just a short list.  If you can think of even more compelling shortcomings in the profiling products you work with, 
+					we'd like to hear about them, so email us <a href="mailto:info@prophit.westslopesoftware.com">here.</a>
+				</blockquote>
+
+      			<div class="header"><a name="solution"></a>The Solution</div>
+				
+				<blockquote>
+				<a href="assets/hello-list.png" target=_blank><img src="assets/hello-list.png" align="right" width=50% ></a> 
+					We believe that prophIt begins to address these problems.  While it may not be the holy grail for profiling software, we think
+					you'll find it a valuable aid in identifying the hotspots in your Java applications.  The difference starts with the tower diagram,
+					which let's you visualize the time performance of functions as 3D colored blocks that build up to the sky.  
+					Just some of the features included are:
+					<ul>
+						<li>Recursive methods/functions are reported cumulatively</li>
+						<li>Color-coding of the call graph shows you visually which levels are consuming the greatest percentage of the time allocated to them.</li>
+						<li>Manage the complexity by cutting off the depth of the call-graph using the tower diagram.</li>
+						<li>Manage the complexity by establishing a context as your starting point for examining performance.</li>
+						<li>Increase or decrease the call graph and watch the story of your application's performance grow before your eyes.</li>
+						<li>Select a function that is called from multiple parent functions.  View the aggregate data, and observe physically where each is called in tower diagram. </li>
+						<li>Because you can examine the data from all angles, you are more likely to get the correct logical view of your application's performance, and more likely to solve your performance bottlenecks.</li>
+						
+						</ul>
+					We think if you try prophIt you'll find it a valuable tool.  Either way, let us know what you think by giving us 
+					<a href="mailto:info@prophit.westslopesoftware.com">feedback</a> on the site, the product, or the profiling problem in general. 
+					If prophIt doesn't meet your needs, tell us what would. 
+				</blockquote>
+
+                 <div class="header"><a name="other_resources"></a>Other Resources</div>
+                    Here are a few links that provide some more information on profiling Java applications.  The first two links show 
+					what is currently state of the art in terms of profile data for java applications.  The third link should help explain
+					why we think there is room for improvement in the visual display and understanding of profiling data. 
+					  <ul>
+                        <li>Check out <code>java -prof</code> <a href="docs/dash-prof.html#resources">resources</a></li>
+                        <li>Check out <code>hprof</code> <a href="docs/hprof.html#resources">resources</a></li>
+                        <li>Read <a target=_blank href="http://www.amazon.com/exec/obidos/tg/detail/-/0961392142/qid=1032639151/sr=1-1/ref=sr_1_1/102-6857501-9780924?v=glance&s=books">The 
+                          Visual Display of Quantitative Information</a>. It's 
+                          a very thought-provoking read that will have you looking 
+                          at diagrams, maps, and all forms of graphical information 
+                          display in new ways.</li>
+                      </ul>
+                      <p> 
+			  
+			  
+			  <!-- #EndEditable -->
+						</div></td>
 					</tr>
 				</table>
 				<table width="100%" border="0" cellspacing="0" cellpadding="0">

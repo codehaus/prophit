@@ -3,7 +3,7 @@
 <project name="prophit" default="dist">
 
   <property name="prophit.version" value="Developer Build 3" />
-  <property name="prophit.homepage" value="http://www.westslopesoftware.com/prophit" />
+  <property name="prophit.homepage" value="http://prophit.westslopesoftware.com/" />
   <property name="prophit.docpage" value="http://prophIt.westslopesoftware.com/docs/index.html" />
 
   <property name="build" value="build" />
@@ -122,6 +122,10 @@
 	<replace file="${webdist}/prophIt-arkanoid.jnlp" token="@@port@@" value="90" />
 	<replace file="${webdist}/prophIt-arkanoid.jnlp" token="@@directory@@" value="prophit" />
 	<replace file="${webdist}/prophIt-arkanoid.jnlp" token="prophIt.jnlp" value="prophIt-arkanoid.jnlp" />
+
+        <!-- slf some replaces for the website for the "last published" date for example -->
+        <!--     Also, i really need to know how to access the "date" for ant builds... hmmm. -->
+        <!--replace file="${webdist}/**.html" token="@@date" value="${date}"/-->
   </target>
 
   <target name="clean">
