@@ -2,6 +2,7 @@ package orbit.gui;
 
 import orbit.model.Call;
 import orbit.model.CallGraph;
+import orbit.model.InclusiveTimeFilter;
 import orbit.util.Log;
 
 import org.apache.log4j.Category;
@@ -14,26 +15,39 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 public class BlockDiagramModel
 {
-	public static Category LOG = Category.getInstance(BlockDiagramModel.class);
+	public static final Category LOG = Category.getInstance(BlockDiagramModel.class);
 
+	/** The call which is rendered at the base of the tower diagram */
 	public static final String RENDER_CALL_PROPERTY = "renderCall";
+	/** Maximum stack depth which will be rendered */
 	public static final String NUM_LEVELS_PROPERTY = "numLevels";
+	/** Whether the user has clicked the Wireframe checkbox */
 	public static final String WIREFRAME_PROPERTY = "wireFrame";
-
+	
+	/** The call which has been selected by the user */
 	public static final String SELECTED_CALL_PROPERTY = "selectedCall";
+	/** Search string entered in the search bar */
 	public static final String NAME_SEARCH_STRING_PROPERTY = "nameSearchString";
+	/** Call which the mouse is hovering over */
 	public static final String MOUSEOVER_CALL_PROPERTY = "mouseOverCall";
 
+	/** X-offset of the tower diagram */
 	public static final String SHIFT_HORIZONTAL_PROPERTY = "shiftHorizontal";
+	/** Y-offset of the tower diagram */
 	public static final String SHIFT_VERTICAL_PROPERTY = "shiftVertical";
+	/** Location of the 'eye' (viewpoint) in world coordinates */
 	public static final String EYE_POSITION_PROPERTY = "eyePosition";
 
+	/** Default stack depth to show when a profile is loaded */
 	public static int DEFAULT_LEVELS = 5;
-	
+
+	/** Starting location of EYE_POSITION_PROPERTY */
 	private static EyeLocation DEFAULT_EYE_LOCATION = new EyeLocation(2.5, -Math.PI / 4, Math.PI / 4);
+	/** Increment to move the SHIFT_HORIZONTAL_PROPERTY and SHIFT_VERTICAL_PROPERTY */
 	private static double SHIFT_STEP = 0.05;
 
 	private final CallGraph cg;
@@ -46,10 +60,12 @@ public class BlockDiagramModel
 	private Map nameToCallListMap = null;
 
 	private int levels = DEFAULT_LEVELS;
+	private LevelOfDetail lod = LevelOfDetail.Standard;
 	private boolean wireframe = false;
 	private double shiftVertical = 0;
 	private double shiftHorizontal = 0;
 	private EyeLocation eyeLocation;
+	private Call rootCall = null;
 	private Call mouseOverCall = null;
 	private Call selectedCall = null;
 	private String searchString = null;
@@ -69,7 +85,7 @@ public class BlockDiagramModel
 					changeSupport.firePropertyChange(RENDER_CALL_PROPERTY, oldCall, newCall);
 				}
 			}, 
-			cg);
+			getRootCall());
 	}
 
 	/**
@@ -93,9 +109,9 @@ public class BlockDiagramModel
 		changeSupport.removePropertyChangeListener(listener);
 	}
 
-	public CallGraph getCallGraph()
+	public Call getRootCall()
 	{
-		return cg;
+		return cg.getRoot().filter(createFilter());
 	}
 
 	public RootRenderState getRootRenderState()
@@ -113,9 +129,31 @@ public class BlockDiagramModel
 		}
 	}
 
+	/**
+	 * Get the selected call. Secondary selected calls may be obtained from {@link #getAllSelectedCalls}.
+	 */
 	public Call getSelectedCall()
 	{
 		return selectedCall;
+	}
+
+	/**
+	 * Get all selected calls. The user-selected call is first in the list. The secondary selected calls
+	 * make up the remainder of the list.
+	 */
+	public List getAllSelectedCalls()
+	{
+		ArrayList list = new ArrayList();
+		if ( selectedCall != null )
+		{
+			list.add(selectedCall);
+			for ( Iterator i = getCallsByName(selectedCall.getName()).iterator(); i.hasNext(); )
+			{
+				Call call = (Call)i.next();
+				list.add(call);
+			}
+		}
+		return list;
 	}
 
 	/**
@@ -130,13 +168,15 @@ public class BlockDiagramModel
 		if ( newSearchString == null )
 			newSearchString = "";
 		
-		if ( !newSearchString.equals(this.searchString) )
+		if ( !newSearchString.equals(searchString) )
 		{
-			String oldSearchString = this.searchString;
-			this.searchString = newSearchString;
+			String oldSearchString = searchString;
+			searchString = newSearchString;
 			WildcardMatchExpression expr = new WildcardMatchExpression(searchString);
 			nameSearchMatches.clear();
-			for ( Iterator i = nameToCallListMap.keySet().iterator(); i.hasNext(); )
+			Set keySet = nameToCallListMap.keySet();
+			Log.debug(LOG, "Searching for ", searchString, " in ", keySet);
+			for ( Iterator i = keySet.iterator(); i.hasNext(); )
 			{
 				String name = (String)i.next();
 				if ( expr.match(name) )
@@ -150,11 +190,22 @@ public class BlockDiagramModel
 	}
 
 	/**
-	 * @return a list of names which match the user's search string. Initially an empty list.
+	 * Get a list of all calls which matched the {@link #setNameSearchString search string}.
 	 */
-	public List getNameSearchNames()
+	public List getAllSearchResultCalls()
 	{
-		return Collections.unmodifiableList(nameSearchMatches);
+		List list = new ArrayList();
+
+		for ( Iterator i = getNameSearchNames().iterator(); i.hasNext(); )
+		{
+			String name = (String)i.next();
+			for ( Iterator j = getCallsByName(name).iterator(); j.hasNext(); )
+			{
+				Call call = (Call)j.next();
+				list.add(call);
+			}
+		}
+		return list;
 	}
 	
 	public void setMouseOverCall(Call call)
@@ -178,6 +229,7 @@ public class BlockDiagramModel
 	 */
 	public void setGLNameToCallMap(Map map)
 	{
+		Log.debug(LOG, "Set glNameToCallMap = ", map);
 		glNameToCallMap = map;
 	}
 
@@ -299,6 +351,35 @@ public class BlockDiagramModel
 			setLevels(levels - 1);
 	}
 
+	public LevelOfDetail getLevelOfDetail()
+	{
+		return lod;
+	}
+
+	public void setLevelOfDetail(LevelOfDetail newLOD)
+	{
+		LevelOfDetail old = lod;
+		if ( lod != newLOD )
+		{
+			lod = newLOD;
+			invalidateDiagram();
+			rootState.setRenderCall(rootState.getRenderCall().filter(createFilter()));
+		}
+	}
+
+	/**
+	 * @return a list of names which match the user's search string. Initially an empty list.
+	 */
+	private List getNameSearchNames()
+	{
+		return Collections.unmodifiableList(nameSearchMatches);
+	}
+
+	private Call.Filter createFilter()
+	{
+		return new InclusiveTimeFilter(lod.getThreshold());
+	}
+	
 	/**
 	 * Call this method when the set of blocks in the diagram has been changed.
 	 */
