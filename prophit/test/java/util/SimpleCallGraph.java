@@ -7,6 +7,10 @@ import orbit.parsers.LoaderFactory;
 
 import java.io.File;
 
+/**
+ * Loads the -prof profile data/simple.prof.
+ * This profile expands into a call graph consisting of 
+ */
 public class SimpleCallGraph
 {
 	public final CallGraph cg;
