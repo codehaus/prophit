@@ -300,7 +300,7 @@ public class ProphitParserLoader implements Parser, Loader
 			measurement = (IXMLElement)measurements.elementAt(i);
 			r = makeNewRCC(measurement);
 			if (r.getKey() < 0 || r.getKey() > rccArray.length)
-				Log.debug(LOG, "r.getKey() = ", r.getKey(), " and rccArray.length = ", rccArray.length);
+				LOG.warn("r.getKey() = " + r.getKey() + " and rccArray.length = " + rccArray.length);
 			rccArray[r.getKey()] = r;
 		}
 
