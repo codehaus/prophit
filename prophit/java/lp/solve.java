@@ -1,7 +1,9 @@
 /* $Header$ */
 /* $Log$
- * Revision 1.1  2002/11/21 19:56:01  sfrancis
- * Added LP solver from http://www.cs.wustl.edu/~javagrp/help/LinearProgramming.html
+ * Revision 1.2  2002/11/21 21:45:03  sfrancis
+ * indented the build file
+ * tweaked the lprec and lpsolve Linear Programming solvers
+ * made a function protected in BlockDiagramModel so that a test case can use it
  *
 	# Revision 1.6  1996/06/07  01:31:11  hma
 	# changed some member functions to be public
@@ -158,7 +160,7 @@ public class solve implements lp.constant{
 	{
 		if(lp.rows > lp.rows_alloc)
 		{
-			lp.rows_alloc=lp.rows+10;
+			lp.rows_alloc=(int)( lp.rows_alloc * 2 + 1 );
 			lp.sum_alloc=lp.rows_alloc+lp.columns_alloc;
 
 			double[] db_ptr = lp.orig_rh;
@@ -251,7 +253,7 @@ public class solve implements lp.constant{
 		if(lp.columns >= lp.columns_alloc)
 		{
 			int[] int_ptr;
-			lp.columns_alloc=lp.columns+10;
+			lp.columns_alloc=(int)( lp.columns_alloc * 2 + 1);
 			lp.sum_alloc=lp.rows_alloc+lp.columns_alloc;
 
 			short[] short_ptr = lp.must_be_int;
@@ -416,7 +418,7 @@ public class solve implements lp.constant{
 	}
 
 
-	public void add_constraint(lprec lp, double[] row, short constr_type, double rh)
+	public int add_constraint(lprec lp, double[] row, short constr_type, double rh)
 	{
 		matrec[] newmat;
 		int  i, j;
@@ -532,9 +534,11 @@ public class solve implements lp.constant{
 		if (lp.active != FALSE)
 			set_globals(lp);
 		lp.eta_valid=FALSE;
+
+		return lp.rows;
 	}
 
-	public void str_add_constraint(lprec lp, String row_string,
+	public int str_add_constraint(lprec lp, String row_string,
 											 short constr_type, double rh)
 	{
 		int  i = 0;
@@ -547,7 +551,7 @@ public class solve implements lp.constant{
 			i++;
 			aRow[i] = Double.valueOf(stk.nextToken()).doubleValue(); 
 		}       
-		add_constraint(lp, aRow, constr_type, rh);
+		return add_constraint(lp, aRow, constr_type, rh);
 	}
 
 	public void del_constraint(lprec lp, int del_row)
@@ -686,7 +690,7 @@ public class solve implements lp.constant{
 		add_lag_con(lp, a_row, con_type, rhs);
 	}
 
-	public void add_column(lprec lp, double[] column)
+	public int add_column(lprec lp, double[] column)
 	{
 		int i, elmnr;
 
@@ -732,9 +736,11 @@ public class solve implements lp.constant{
 			Columns=lp.columns;
 			Non_zeros=lp.non_zeros;
 		}
+
+		return lp.columns;
 	}
 
-	public void str_add_column(lprec lp, String col_string)
+	public int str_add_column(lprec lp, String col_string)
 	{
 		int  i = 0;
 		double[] aCol;
@@ -750,10 +756,10 @@ public class solve implements lp.constant{
 			System.err.println("Bad String in str_add_column");
 			System.exit(FAIL);
 		}
-		add_column(lp, aCol);
+		return add_column(lp, aCol);
 	}
 
-	public void del_column(lprec lp, int column)
+	public int del_column(lprec lp, int column)
 	{
 		int i, j, from_elm, to_elm, elm_in_col;
 		if(column > lp.columns || column < 1)
@@ -800,6 +806,8 @@ public class solve implements lp.constant{
 		lp.columns--;
 		if (lp.active != FALSE)
 			set_globals(lp);
+
+		return lp.columns;
 	}
 
 	public void set_upbo(lprec lp, int column, double value)
