@@ -1,4 +1,4 @@
-package test;
+package util;
 
 import orbit.solver.Connection;
 import orbit.solver.ConnectionFactory;

@@ -110,7 +110,8 @@
 	  <batchtest fork="yes">
 	    <fileset dir="test/java">
 		  <include name="**/Test*.java" />
-		  <exclude name="test/**" />
+		  <exclude name="util/**" />
+		  <exclude name="test/Test.java" />
 	    </fileset>
 	  </batchtest>	
     </junit>

@@ -1,4 +1,4 @@
-package test;
+package util;
 
 import orbit.model.CallGraph;
 import orbit.parsers.Loader;
