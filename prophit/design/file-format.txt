@@ -1,0 +1,77 @@
+
+Design a compact binary (or text?) file format for saving profile data
+
+CallGraph:
+	CallID[] callIDs
+	double[] callFractions
+
+CallID:
+	RCC rcc
+	int key
+
+RCC:
+	StackTrace st
+	int key
+	int nCalls
+	long time
+
+StackTrace:
+	String[] stack ( Strings should be shared among StackTrace instances)
+	int beginOffset
+	int endOffset
+
+basic types:
+	int
+	long
+	double
+	String
+
+ElementCodes:
+	END = 0
+	
+	byte = 1
+	int = 2
+	long = 3
+	float = 4
+	double = 5
+	boolean = 6
+	char = 7
+	short = 8
+	UTF = 9
+
+	CallGraph = 0x10
+	CallID = 0x11
+	RCC = 0x12
+	StackTrace = 0x13
+
+Parser:
+	int i
+	while ( ( i = dis.read() ) != -1 ):
+		byte code = (byte)i
+		if ( code < ElementCodes.CallGraph ):
+			switch ( code ):
+				case byte:
+					reader.newByte(dis.readByte())
+				case int:
+					reader.newInt(dis.readInt())
+				case long:
+					reader.newLong(dis.readLong())
+				case float:
+					reader.newFloat(dis.readFloat())
+				...
+		else:
+
+
+Parser:
+	begin(int code, DataInputStream dis):
+		switch ( code ):
+			case CallGraph:
+			case CallID:
+			case RCC:
+			case StackTrace:
+			case int:
+			case long:
+			case double:
+			case String:
+		
+

@@ -1,0 +1,129 @@
+
+Automatically adjust the amount of detail in the tower diagram so that it renders smoothly
+  regardless of the depth of the call graph
+
+Option 1 : true stack depth
+===========================
+The CallGraph should be able to return the maximum stack depth (maxDepth)
+This value can either be set by the Parser/Solver, if it happens to compute it, or the CallGraph can compute it itself
+
+When the call graph root is the diagram root, the maximum value of the depth slider should be set to maxDepth
+For other diagram roots, the maximum value of the depth slider should be adjusted to be maxDepth - depth(root)
+  Of course, the actual depth of the call graph may be much less
+
+Option 2 : LOD-adjusted stack depth
+===================================
+
+In this scenario, the StackDepthAlgorithm is run 
+whenever the diagram root is adjusted. This algorithm determines the maximum visible stack depth, taking the level
+of detail into account. This value is used to set the max value of the depth slider
+
+Option 3 : Manual
+=================
+
+The depth slider has a button or menu option which computes its maximum value for the diagram
+Pushing this button could also change the slider value to the newly computed maximum?
+
+A StackDepthAlgorithm could also be run in order to attempt to determine the max stack depth. If this algorithm does not
+terminate after some fixed amount of time or number of iterations (1/2 a second?) it is killed and the user-pressable
+button is shown
+
+Of course it is important to avoid having an expensive algorithm run whenever the diagram root is reset to the call graph root
+
+Need to figure out how to have the maxDepth reflect the actual blocks that will be drawn in the tower diagram. e.g. if small blocks are not rendered at all, they should not count towards the maxDepth
+
+Navigating to a callee function should not render the wireframe for that block if the block is not visible in the diagram because of level of detail
+
+General Solution
+================
+
+Add CallGraph#getMaxDepth, CallGraph#setMaxDepth
+
+class MapFrame:
+	createDepthSlider():
+		sliderModel = new DepthSliderModel()
+		sliderModel.addListener():
+			MAX_DEPTH_PROPERTY:
+				depthSlider.setMaximum(e.getValue())
+
+	setCallGraph(cg):
+		...
+		sliderModel.setModel(blockModel)
+
+class CallGraph:
+	  getMaxDepth : if #setMaxDepth has been invoked, return the computed value. Otherwise do a full traversal of the CallGraph and determine the maximum stack depth
+
+	  setMaxDepth : should be used by an external caller if they do a full traversal. check that it is not invoked multiple times with different numbers. 
+
+class DepthSliderModel:
+	public static final String MAX_DEPTH_PROPERTY = "maxDepth"
+
+	# spend 1/4 second looking for the maximum stack depth
+	private static final long MAX_COMPUTE_TIME = 250;
+	
+	setModel(BlockDiagramModel model):
+		this.model = model
+		model.addListener:
+			RENDER_CALL_PROPERTY:
+				computeMaxDepth(MAX_COMPUTE_TIME)
+
+		computeMaxDepth(MAX_COMPUTE_TIME)
+
+	# @param computeTime maximum amount of time to spend looking for the max depth.
+	# -1 to look forever
+	computeMaxDepth(long computeTime):
+		root = model.getRootRenderState().getRenderCall()
+		int newMaxDepth
+		# If we are rendering the root of the call graph, use CallGraph#getMaxDepth()
+		if root == model.getCallGraph():
+			newMaxDepth = model.getCallGraph().getMaxDepth()
+		# Otherwise, spend computeTime trying to compute the newMaxDepth
+		# If that fails, set the newMaxDepth to CallGraph#getMaxDepth - rootRenderCall.depth()
+		else:
+			visitor = MaxDepthVisitor(computeTime)
+			model.getCallGraph().depthFirstTraverse(visitor)
+			if visitor.getMaxDepth() != -1:
+				newMaxDepth = visitor.getMaxDepth()
+			else:
+				newMaxDepth = model.getCallGraph().getMaxDepth() - root.getDepth()
+		setMaxDepth(newMaxDepth)
+
+	def setMaxDepth(newMaxDepth):
+		if newMaxDepth != maxDepth:
+			oldMaxDepth = maxDepth
+			maxDepth = newMaxDepth
+			changeSupport.firePropertyChange(MAX_DEPTH_PROPERTY, oldMaxDepth, newMaxDepth)
+				
+			
+class MaxDepthVisitor(CallGraph.Visitor):
+	# Only check the time after this many calls have been visited, to avoid
+	#   spending lots of time in System.currentTimeMillis
+	int  CALLS_PER_CHECK = 100
+	int  maxCallDepth = 0
+	long callCounter = 0
+	boolean completed = true
+	final long maxTime
+
+	# @param maxTime maximum amount of time to spend looking for #getMaxCallDepth
+	# -1 to look forever
+	MaxDepthVisitor(maxTime):
+		this.maxTime = maxTime
+
+	# @return -1 if the traversal was not completed. Otherwise, the maxCallDepth
+	public int getMaxCallDepth() :
+		if completed:
+			return maxCallDepth
+		else:
+			return -1
+	
+	public boolean visit(CallID callID, IntStack callStack):
+		++callCounter
+		if ( maxTime != -1 && callCounter % CALLS_PER_CHECK == 0 ):
+			if ( System.currentTimeMillis() - startTime ) > maxTime:
+				completed = false
+				return false;
+	
+		if callStack.size() > maxCallDepth:
+			maxCallDepth = callStack.size()
+		return true
+
