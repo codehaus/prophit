@@ -30,7 +30,7 @@ public class TestStackTrace
 		StackTrace exec2 = st.getParentStack(3);
 		assertEquals("Expected exec1.size == 3", exec1.size(), 3);
 		assertEquals("Expected exec1 = exec2", exec1, exec2);
-		assert("Expected exec1 != stack", !exec1.equals(st));
+		assertTrue("Expected exec1 != stack", !exec1.equals(st));
 		assertEquals("Expected leafMethod = 'DBExec'", "DBExec", exec1.getLeafMethod());
 		assertEquals("Expected leafParentMethod = 'test'", "test", exec1.getLeafParentMethod());
 

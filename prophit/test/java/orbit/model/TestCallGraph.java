@@ -28,7 +28,7 @@ public class TestCallGraph
 		assertEquals(main, simpleCG.main);
 		assertEquals(test, simpleCG.test);
 		assertEquals(DBExec1, simpleCG.DBExec1);
-		assert(!DBExec1.equals(simpleCG.DBExec2));
+		assertTrue(!DBExec1.equals(simpleCG.DBExec2));
 
 		DBExec1 = (Call)simpleCG.test.getChildren().get(0);
 		assertEquals(DBExec1, simpleCG.DBExec1);

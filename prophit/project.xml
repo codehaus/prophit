@@ -114,6 +114,31 @@
 
   <dependencies>
 
+    <dependency>
+      <id>log4jME</id>
+      <version>1</version>
+    </dependency>
+
+    <dependency>
+      <id>gl4java-glutfonts</id>
+      <version>1</version>
+    </dependency>
+
+    <dependency>
+      <id>junit</id>
+      <version>3.7</version>
+    </dependency>
+
+    <dependency>
+      <id>gl4java</id>
+      <version>1</version>
+    </dependency>
+
+    <dependency>
+      <id>png</id>
+      <version>1</version>
+    </dependency>
+
      <!-- slf - this is way cool... but i don't have these documented yet. 
 
     <dependency>
