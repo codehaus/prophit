@@ -1,10 +1,14 @@
 package orbit.parsers;
 
+import orbit.model.Call;
 import orbit.model.CallID;
 import orbit.model.CallGraph;
 import orbit.model.RCC;
 import orbit.util.IntStack;
 import orbit.util.IntIterator;
+import orbit.util.Log;
+
+import org.apache.log4j.Category;
 
 import java.util.Iterator;
 import java.util.List;
@@ -15,6 +19,8 @@ import java.io.Writer;
 public class HProfSolver
 	implements Solver
 {
+	public static Category LOG = Category.getInstance(HProfSolver.class);
+
 	private static int STACK_THRESHOLD = 6;
 	// When solving the call graph, skip times which are less than 0.1 unit in size
 	private static double GRAPH_THRESHOLD = 0.01;
@@ -31,7 +37,7 @@ public class HProfSolver
 
 		CallGraph cg = new CallGraph(callIDs, fractions);
 
-		computeInclusiveTimes(cg, fractions);
+		computeInclusiveTimes(cg);
 
 		return cg;
 	}
@@ -84,23 +90,31 @@ public class HProfSolver
 	/**
 	 * The inclusive time of each RCC needs to be computed by summing the exclusive times of itself and all its children.
 	 */
-	private void computeInclusiveTimes(CallGraph cg, final double[] fractions)
+	private void computeInclusiveTimes(CallGraph cg)
 	{
+		final double[] fractions = cg.getFractions();
+		final CallID[] callIDs = cg.getCallIDs();
 		final IntStack traversalStack = new IntStack();
-		int numRCCs = callIDs.size() - proxyCallIDs.size();
-		final double[] inclusiveTimeAdjustments = new double[callIDs.size() - proxyCallIDs.size()];
-		final RCC[] rccs = new RCC[numRCCs];
+		final double[] inclusiveTimeAdjustments = new double[callIDs.length];
+		final RCC[] rccs = new RCC[callIDs.length];
 
 		class ComputeInclusiveTimeVisitor
-			implements CallGraph.Visitor
+			implements Call.Visitor
 		{
+			int maxDepth = 0;
+
+			public int getMaxDepth() { return maxDepth; }
+			
 			public boolean visit(CallID callID, IntStack callStack)
 			{
-				// System.out.println("Visiting " + callID);
-				
+				Log.debug(LOG, "Visiting ", callID);
+
 				// Store the RCC of the callID
 				rccs[callID.getRCC().getKey()] = callID.getRCC();
 
+				if ( callStack.size() > maxDepth )
+					maxDepth = callStack.size();
+				
 				// The RCCs which are generated from sub-stacks of the calls in the profile file
 				//   have time=0. There can be quite a few of these...
 				if ( callID.getRCC().getTime() > 0 )
@@ -120,7 +134,7 @@ public class HProfSolver
 					while ( !traversalStack.isEmpty() )
 					{
 						int parentID = traversalStack.pop();
-						CallID parentCall = (CallID)callIDs.get(parentID);
+						CallID parentCall = (CallID)callIDs[parentID];
 						double adjustment = callID.getRCC().getTime() * fraction;
 						// System.out.println("Adding " + adjustment + " to " + parentCall.getRCC());
 						inclusiveTimeAdjustments[parentCall.getRCC().getKey()] += adjustment;
@@ -132,7 +146,9 @@ public class HProfSolver
 			}
 		}
 
-		cg.depthFirstTraverse(new ComputeInclusiveTimeVisitor());
+		ComputeInclusiveTimeVisitor visitor = new ComputeInclusiveTimeVisitor();
+		cg.getRoot().depthFirstTraverse(visitor);
+		cg.setMaxDepth(visitor.getMaxDepth());
 
 		// Apply the time adjustments to the RCCs
 		for ( int i = 0; i < rccs.length; ++i )
