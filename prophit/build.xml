@@ -2,7 +2,7 @@
 
 <project name="orbit" default="dist">
 
-  <property name="orbit.version" value="Developer Build" />
+  <property name="orbit.version" value="Developer Build 2" />
   <property name="orbit.homepage" value="http://orbit.westslopesoftware.com" />
   <property name="orbit.docpage" value="http://orbit.westslopesoftware.com/doc.html" />
 
