@@ -1,0 +1,13 @@
+
+Want to separate Model/View/Controller for the BlockDiagram
+
+model attributes:
+  number of levels to show
+  shiftLeft/Right/Up/Down		  
+  eye location
+  zoom*
+  mouseOverCall
+  selectedCall
+  
+controller:
+  handle click, click-drag
