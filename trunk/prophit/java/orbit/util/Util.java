@@ -1,7 +1,20 @@
 package orbit.util;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Util
 {
+	public static List asList(double[] array)
+	{
+		ArrayList l = new ArrayList();
+		for ( int i = 0; i < array.length; ++i )
+		{
+			l.add(new Double(array[i]));
+		}
+		return l;
+	}
+
 	public static void handleTrace(Class origin, Throwable x)
 	{
 		x.printStackTrace();
