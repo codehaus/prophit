@@ -202,10 +202,10 @@ public class ProphitParserLoader implements Parser, Loader
 		Vector vMethods = st.getChildrenNamed(XMLConstants.METHOD);
 		String[] methods = new String[vMethods.size()];
 
-		for (int i = 0; i < vMethods.size(); i++)
+		for (int i = 0, j = vMethods.size()-1; i < vMethods.size(); j--, i++)
 		{
 			IXMLElement m = (IXMLElement)vMethods.elementAt(i);
-			methods[i] = m.getContent();
+			methods[j] = m.getContent();
 			Log.debug(LOG, "METHOD: ", m.getContent());
 		}    
 		StackTrace s = new StackTrace( methods );
@@ -222,12 +222,14 @@ public class ProphitParserLoader implements Parser, Loader
 	{
 		StackTrace st = makeNewStackTrace(measurement.getFirstChildNamed(XMLConstants.STACKTRACE));
 	
+		long t = Long.parseLong(measurement.getAttribute(XMLConstants.TIME));
 		RCC rcc = new RCC(st, 
 								Integer.parseInt(measurement.getAttribute(XMLConstants.NUMCALLS)), 
 								Long.parseLong(measurement.getAttribute(XMLConstants.TIME)), 
 								-1, 
 								Integer.parseInt(measurement.getAttribute(XMLConstants.ID)));
 		//LOG.info(rcc.toString());
+		if (t < 0) System.out.println("NEGATIVE time: " + rcc.toString());
 		return ( rcc );
 	}
 
@@ -316,7 +318,7 @@ public class ProphitParserLoader implements Parser, Loader
 			// we use getKey() to place the callID into the index. 
 			// quite simply, that is what the CallGraph constructor is expecting, that 
 			// a callID's key will match the parent RCC key, or else it will be a proxy call.
-			callFractions[c.getKey()] = fraction;
+			callFractions[c.getKey()] = (fraction != -1) ? fraction : 1;
 			calls[c.getKey()] = c;
 			//System.out.println("CALLID: " + calls[c.getKey()]);
 		}

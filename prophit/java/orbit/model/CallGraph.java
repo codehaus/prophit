@@ -115,7 +115,6 @@ public class CallGraph
 			{
 				int key = id.getKey();
 				int parentKey = id.getParentRCCKey();
-				//System.out.println("KEY: " + parentKey);
 				parentRCCKeys[id.getKey()] = parentKey;
 				if ( parentKey != -1 )
 				{
@@ -290,7 +289,6 @@ public class CallGraph
 		
 		public List getChildren()
 		{
-			// System.out.println("Children of " + id);
 			ArrayList children = new ArrayList();
 			IntStack childKeys = childRCCKeys[getRCCKey()];
 			if ( childKeys != null )
@@ -304,7 +302,6 @@ public class CallGraph
 						CallImpl child = createChild(callIDs[childKey]);
 						if ( addChild(child) )
 						{
-							// System.out.println("\tAdding child " + callIDs[childKey]);
 							children.add(child);
 						}
 					}
