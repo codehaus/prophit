@@ -1,17 +1,16 @@
 <?xml version="1.0"?>
 
-<project name="orbit" default="dist">
+<project name="prophit" default="dist">
 
-  <property name="orbit.version" value="Developer Build 3" />
-  <property name="orbit.homepage" value="http://prophit.westslopesoftware.com" />
-  <property name="orbit.docpage" value="http://prophit.westslopesoftware.com/docs/index.html" />
+  <property name="prophit.version" value="Developer Build 3" />
+  <property name="prophit.homepage" value="http://prophIt.westslopesoftware.com" />
+  <property name="prophit.docpage" value="http://prophIt.westslopesoftware.com/docs/index.html" />
 
   <property name="build" value="build" />
   <property name="dist" value="${build}/dist" />
   <property name="webdist" value="${build}/webdist" />
 
-  <property file="orbit.properties" />
-
+  <property file="prophit.properties" />
 
   <path id="run.class.path">
 	 <fileset dir="${build}/lib" />  <!-- somehow i'd like to fix this -->
@@ -42,17 +41,16 @@
     </javac>
   </target>
 
-
   <target name="jar" depends="compile">
     <copy todir="${build}/resources">
 	  <fileset dir="resources" />
 	</copy>
 
-	<replace file="${build}/resources/uitext.properties" token="@@prophit.version@@" value="${orbit.version}" />
-	<replace file="${build}/resources/uitext.properties" token="@@prophit.homepage@@" value="${orbit.homepage}" />
-	<replace file="${build}/resources/uitext.properties" token="@@prophit.docpage@@" value="${orbit.docpage}" />
+	<replace file="${build}/resources/uitext.properties" token="@@prophit.version@@" value="${prophit.version}" />
+	<replace file="${build}/resources/uitext.properties" token="@@prophit.homepage@@" value="${prophit.homepage}" />
+	<replace file="${build}/resources/uitext.properties" token="@@prophit.docpage@@" value="${prophit.docpage}" />
 
-    <jar manifest="manifest.mf" jarfile="${build}/lib/orbit.jar">
+    <jar manifest="manifest.mf" jarfile="${build}/lib/prophit.jar">
 	  <fileset dir="${build}/classes" />
 	  <fileset dir="${build}/resources" />
     </jar>
@@ -61,22 +59,19 @@
 	  <fileset dir="${basedir}/data" includes="hello.hprof.txt,hello.prof,hsqldb.hprof.txt"/>
     </jar>
 
-	<copy file="${build}/lib/orbit.jar" todir="${dist}/lib/" />
+	<copy file="${build}/lib/prophit.jar" todir="${dist}/lib/" />
   </target>
 
-  <target name="compile-no-gui" depends="init">
-    <javac classpathref="compile.class.path" srcdir="java" debug="yes" destdir="${build}/classes"
-			excludes="orbit/gui/**,test/**," />
-  </target>
-
-  <target name="jar-no-gui" depends="compile-no-gui">
-    <jar jarfile="${build}/lib/orbit.jar">
-	  <fileset dir="${build}/classes" excludes="${build}/classes/orbit/gui/**" />
-	  <fileset dir="resources" />
+  <target name="make-os-jars">
+    <jar jarfile="${basedir}/lib/gl4java-win32.jar">
+	  <fileset dir="${basedir}/lib/win32" includes="*.dll" />
+    </jar>
+    <jar jarfile="${basedir}/lib/gl4java-linux.jar">
+	  <fileset dir="${basedir}/lib/linux" includes="*.so" />
     </jar>
   </target>
 
-  <target name="dist" depends="jar">
+  <target name="dist" depends="jar,make-os-jars">
     <copy todir="${dist}">
 	  <fileset dir="bin" />
 	</copy>
@@ -90,14 +85,14 @@
     <copy todir="${dist}/bin">
 	  <fileset dir="lib/win32" includes="*.dll" />
 	</copy>
-	<zip zipfile="${build}/orbit.zip">
+	<zip zipfile="${build}/prophit.zip">
 	  <fileset dir="${dist}" />
 	</zip>
   </target>
 
-  <target name="webdist" depends="jar,signorbit,web">
+  <target name="webdist" depends="jar,signprophit,web">
 
-	<!--zip zipfile="${build}/orbit-web.zip">
+	<!--zip zipfile="${build}/prophit-web.zip">
 	  <fileset dir="${webdist}" />
 	</zip-->
   </target>
@@ -113,28 +108,37 @@
 	</copy>
 
     <copy todir="${webdist}/lib">
+      <fileset dir="${build}/lib" includes="*.jar" />
       <fileset dir="${basedir}/lib" includes="*.jar" excludes="**/CVS"/>
     </copy>
   </target>
 
-  <target name="signorbit" depends="jar">
-	<signjar jar="${build}/lib/orbit.jar" signedjar="${webdist}/lib/orbit.jar" verbose="true" alias="${alias}" keystore="${keystore}" storepass="${keypass}" />
+  <target name="signprophit" depends="jar">
+	<signjar jar="${build}/lib/prophit.jar" signedjar="${webdist}/lib/prophit.jar" verbose="true" alias="${alias}" keystore="${keystore}" storepass="${keypass}" />
 	<signjar jar="${build}/lib/data.jar" signedjar="${webdist}/lib/data.jar" verbose="true" alias="${alias}" keystore="${keystore}" storepass="${keypass}" />
-    
   </target>
 
-  <target name="make-os-jars">
-    <jar jarfile="${basedir}/lib/gl4java-win32.jar">
-	  <fileset dir="${basedir}/lib/win32" includes="*.dll" />
-    </jar>
-    <jar jarfile="${basedir}/lib/gl4java-linux.jar">
-	  <fileset dir="${basedir}/lib/linux" includes="*.so" />
-    </jar>
+  <target name="web" depends="dist,web-copy">
+	<replace file="${webdist}/prophIt.jnlp" token="@@prophit.version@@" value="${prophit.version}" />
+
+    <copy file="${webdist}/prophIt.jnlp" tofile="${webdist}/prophIt-arkanoid.jnlp" />
+
+	<replace file="${webdist}/prophIt.jnlp" token="@@host@@" value="${host}" />
+	<replace file="${webdist}/prophIt.jnlp" token="@@port@@" value="${port}" />
+	<replace file="${webdist}/prophIt.jnlp" token="@@directory@@" value="" />
+
+	<replace file="${webdist}/prophIt-arkanoid.jnlp" token="@@host@@" value="arkanoid" />
+	<replace file="${webdist}/prophIt-arkanoid.jnlp" token="@@port@@" value="90" />
+	<replace file="${webdist}/prophIt-arkanoid.jnlp" token="@@directory@@" value="prophit" />
+	<replace file="${webdist}/prophIt-arkanoid.jnlp" token="prophIt.jnlp" value="prophIt-arkanoid.jnlp" />
   </target>
 
+  <target name="clean">
+		<delete dir="${build}" />
+  </target>
 
-  <target name="signlibjars" depends="jar">
-   
+  <!-- Use this as a one-time target to sign the static JAR files -->
+  <target name="signlibjars" depends="jar,make-os-jars">
 	<signjar jar="${basedir}/lib/log4jME.jar" signedjar="${basedir}/lib/log4jME.jar" verbose="true" alias="${alias}" keystore="${keystore}" storepass="${keypass}" />
 	<signjar jar="${basedir}/lib/png.jar" signedjar="${basedir}/lib/png.jar" verbose="true" alias="${alias}" keystore="${keystore}" storepass="${keypass}" />
 	<signjar jar="${basedir}/lib/gl4java.jar" signedjar="${basedir}/lib/gl4java.jar" verbose="true" alias="${alias}" keystore="${keystore}" storepass="${keypass}" />
@@ -142,32 +146,18 @@
 
 	<signjar jar="${basedir}/lib/gl4java-linux.jar" verbose="true" alias="${alias}" keystore="${keystore}" storepass="${keypass}" />
 	<signjar jar="${basedir}/lib/gl4java-win32.jar" verbose="true" alias="${alias}" keystore="${keystore}" storepass="${keypass}" />
-
   </target>
 
-  <target name="web" depends="jar,web-copy">
-	<replace file="${webdist}/prophit.jnlp" token="@@prophit.version@@" value="${orbit.version}" />
-
-    <copy file="${webdist}/prophit.jnlp" tofile="${webdist}/prophit-elrond.jnlp" />
-    <copy file="${webdist}/prophit.jnlp" tofile="${webdist}/prophit-arkanoid.jnlp" />
-
-	<replace file="${webdist}/prophit.jnlp" token="@@host@@" value="${host}" />
-	<replace file="${webdist}/prophit.jnlp" token="@@port@@" value="${port}" />
-
-	<!-- some stuff for kevin's private builds, i assume -->
-	<replace file="${webdist}/prophit-elrond.jnlp" token="@@host@@" value="elrond" />
-	<replace file="${webdist}/prophit-elrond.jnlp" token="@@port@@" value="85" />
-	<replace file="${webdist}/prophit-elrond.jnlp" token="prophit.jnlp" value="prophit-elrond.jnlp" />
-
-	<replace file="${webdist}/prophit-arkanoid.jnlp" token="@@host@@" value="arkanoid" />
-	<replace file="${webdist}/prophit-arkanoid.jnlp" token="@@port@@" value="90" />
-	<replace file="${webdist}/prophit-arkanoid.jnlp" token="prophit.jnlp" value="prophit-arkanoid.jnlp" />
-
-
+  <target name="compile-no-gui" depends="init">
+    <javac classpathref="compile.class.path" srcdir="java" debug="yes" destdir="${build}/classes"
+			excludes="prophit/gui/**,test/**," />
   </target>
 
-  <target name="clean">
-		<delete dir="${build}" />
+  <target name="jar-no-gui" depends="compile-no-gui">
+    <jar jarfile="${build}/lib/prophit.jar">
+	  <fileset dir="${build}/classes" excludes="${build}/classes/prophit/gui/**" />
+	  <fileset dir="resources" />
+    </jar>
   </target>
 
   <property name="profile" value="" />
