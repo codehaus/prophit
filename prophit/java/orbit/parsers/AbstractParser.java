@@ -17,8 +17,7 @@ public abstract class AbstractParser
 
 	protected static void main(String[] args, AbstractParser parser) throws Exception
 	{
-		Collection callIDs = parser.getCallIDs();
-		Collection proxyCallIDs = parser.getProxyCallIDs();
+		List callIDs = parser.getCallIDs();
 		if ( "-debug".equals(args[1]) )
 		{
 			System.out.println(parser.getCallIDs());
@@ -26,7 +25,7 @@ public abstract class AbstractParser
 		else if ( "-solve".equals(args[1]) )
 		{
 			System.setProperty("solver.user.name", "JAVA_USER");
-			CallFractionSolverData data = new CallFractionSolverData(callIDs, proxyCallIDs);
+			CallFractionSolverData data = new CallFractionSolverData(callIDs);
 			CallFractionSolver solver = new CallFractionSolver(data);
 			SocketConnection.Factory factory = new SocketConnection.Factory("neos.mcs.anl.gov", 3333);
 			factory.setDebug(true, "solver");
@@ -44,7 +43,7 @@ public abstract class AbstractParser
 
 			CallID[] callIDArray = (CallID[])parser.getCallIDs().toArray(new CallID[0]);
 
-			CallFractionSolverData data = new CallFractionSolverData(callIDs, proxyCallIDs);
+			CallFractionSolverData data = new CallFractionSolverData(callIDs);
 			CallFractionSolver solver = new CallFractionSolver(data);
 			double[] fractions = solver.readFromFile(new FileReader(args[0] + ".graph"), callIDs.size());
 			
@@ -60,8 +59,6 @@ public abstract class AbstractParser
 
 	public abstract List getCallIDs();
 	
-	public abstract List getProxyCallIDs();
-
 	public abstract void execute() throws ParseException;
 
 	/**
@@ -71,18 +68,6 @@ public abstract class AbstractParser
 	{
 	}
 
-	protected List getProxyCallIDs(Collection callIDs)
-	{
-		ArrayList proxyCalls = new ArrayList(callIDs.size());
-		for ( Iterator i = callIDs.iterator(); i.hasNext(); )
-		{
-			CallID callID = (CallID)i.next();
-			if ( callID != null && callID.isProxy() )
-				proxyCalls.add(callID);
-		}
-		return proxyCalls;
-	}
-	
 	protected AbstractParser(LineNumberReader reader)
 	{
 		this.reader = reader;

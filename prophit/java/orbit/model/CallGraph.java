@@ -16,7 +16,12 @@ public class CallGraph
 	private final int[] parentRCCKeys;
 	private final IntStack[] childRCCKeys;
 	private final double[] callFractions;
-	
+
+	public CallGraph(List callIDs, double[] callFractions)
+	{
+		this((CallID[])callIDs.toArray(new CallID[0]), callFractions);
+	}
+
 	public CallGraph(CallID[] callIDs, double[] callFractions)
 	{
 		this.callIDs = callIDs;

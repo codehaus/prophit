@@ -8,8 +8,6 @@ public interface Parser
 
 	public List getCallIDs();
 	
-	public List getProxyCallIDs();
-
 	public void execute() throws ParseException;
 
 	public void postProcess(double[] fractions);

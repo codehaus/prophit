@@ -2,6 +2,11 @@ package orbit.util;
 
 public class Util
 {
+	public static void handleTrace(Class origin, Throwable x)
+	{
+		x.printStackTrace();
+	}
+
 	public static RuntimeException handle(Class origin, Throwable x)
 	{
 		x.printStackTrace();

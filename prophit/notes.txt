@@ -22,10 +22,59 @@ Ability to quickly find data that helps make the application faster
 Types of applications served
 Profile comparison
 
+---------
+
+LoaderFactory:
+  Loader createLoader(file):
+    Parser parser = ParserFactory.instance().createParser(file)
+    Solver solver;
+    if ( parser instanceof DashProfParser ):
+      solver = new DashProfSolver()
+    else if ( parser instanceof HProfParser ):
+      solver = new HProfSolver()
+    return new Loader(parser, solver)
+
+# Have CallFractionSolver already
+DashProfSolver:
+
+HProfSolver:
+  # Assign the call fractions based on the ratio of parent calls
+  # Add the child call times to the parent call times
+
+Loader:
+  responsible for parsing and solving
+  parser : reads the callIDs from the file and builds proxy calls
+  solver : post-processes the lists of callIDs and constructs a call-graph
+  loader : invokes first the solver and then the loader
+
+  Loader(parser, solver):
+
+  CallGraph load(File file):
+    parser.execute()
+    callIDs = parser.getCallIDs()
+    proxyCallIDs = parser.getProxyCallIDs()
+    CallGraph cg
+    if ( !solver.cacheFileExists(file) ):
+      cg = solver.solve()
+      solver.writeToFile(cg)
+    else:
+      cg = solver.readFromFile(file)
+
+Solver:
+  boolean cacheFileExists(File):
+  
+  CallGraph solve():
+
+  CallGraph readFromFile(File):
+
+  writeToFile(CallGraph):
 
 ---------
 
 parse java -Xrunhprof
+
+Method of adding child call times to parent times doesn't quite work for proxies. Need to figure
+  that out
 
 Will need to distinguish between the 2 file types
 Need to handle CPU TIME as well as CPU SAMPLES

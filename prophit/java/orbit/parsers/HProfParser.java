@@ -34,11 +34,6 @@ public class HProfParser
 		return callIDs;
 	}
 	
-	public List getProxyCallIDs()
-	{
-		return getProxyCallIDs(callIDs);
-	}
-
 	public boolean isFileFormatRecognized()
 	{
 		try
