@@ -2,7 +2,7 @@
 
 <project name="prophit" default="dist">
 
-	<property name="prophit.version" value="Beta-1" />
+	<property name="prophit.version" value="Beta-2" />
 	<property name="prophit.homepage" value="http://prophit.westslopesoftware.com/" />
 	<property name="prophit.docpage"  value="http://prophit.westslopesoftware.com/docs/index.html" />
 
@@ -165,6 +165,37 @@
 		<signjar jar="${basedir}/lib/native-win32.jar" verbose="true" alias="${alias}" keystore="${keystore}" storepass="${keypass}" />
 	</target>
 
+   <!-- VAMP integration. this makes it easier to compute and sign the war 
+        because otherwise there are a fair number of steps and things to keep 
+        track of. OPTIONALLY: put the classpath="/path/to/vamp.jar" argument in these taskdefs-->
+ <!--  <taskdef name="vampwar"       classname="venus.ant.taskdefs.VampWar" />
+   <taskdef name="vampinstaller" classname="venus.ant.taskdefs.VampInstaller" />
+-->
+   <!-- We're looking at the VAMP integration task here that can create a jnlp application 
+        Trivially... we'll see how it works -->
+ <!--  <vampwar dest="prophIt-war">
+     <jarsigner
+        keystore  = "${keystore}"
+        storetype = "JKS"
+        storepass = "${keypass}"
+        alias     = "${alias}"
+      />
+
+     <jnlp src="${webdist}/prophIt.jnlp">
+
+      <resources os="Linux"> 
+          <nativelib src="${basedir}/lib/native-linux.jar}"/>
+      </resources>
+      <resources>
+          <nativelib src="${basedir}/lib/native-win32.jar}"/>
+      </resources>
+      <resources>
+          <fileset dir="${basedir}/lib">
+              <include name="*.jar"/>
+          </fileset>
+      </resources>
+   </vampwar>
+-->
 	<target name="compile-no-gui" depends="init">
 		<javac classpathref="compile.class.path" srcdir="java" debug="yes" destdir="${build}/classes"
 			excludes="prophit/gui/**,test/**," />
