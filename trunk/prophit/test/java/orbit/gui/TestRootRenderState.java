@@ -3,6 +3,8 @@ package orbit.gui;
 import util.BasicTestCalls;
 import util.TestCall;
 
+import orbit.model.Call;
+
 import junit.framework.*;
 
 public class TestRootRenderState
@@ -18,11 +20,12 @@ public class TestRootRenderState
 		BasicTestCalls calls = new BasicTestCalls();
 
 		class RootClient
-			implements RootRenderState.Client
+			implements RootRenderState.Listener
 		{
 			boolean invalid = false;
 
-			public void invalidate() { invalid = true; }
+			public void renderCallChanged(Call oldCall, Call newCall)
+			{ invalid = true; }
 		}
 
 		RootClient client = new RootClient();

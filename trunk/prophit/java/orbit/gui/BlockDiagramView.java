@@ -4,6 +4,7 @@ import orbit.model.Call;
 import orbit.model.CallGraph;
 
 import gl4java.awt.GLCanvas;
+import gl4java.swing.GLJPanel;
 import gl4java.utils.glut.GLUTEnum;
 import gl4java.utils.glut.GLUTFunc;
 import gl4java.utils.glut.fonts.GLUTFuncLightImplWithFonts;
@@ -17,6 +18,7 @@ import java.util.Iterator;
 import java.util.Map;
 
 class BlockDiagramView
+	// extends GLJPanel
 	extends GLCanvas
 {
 	private static double EXTENT = 1.0;
@@ -58,6 +60,9 @@ class BlockDiagramView
 	public BlockDiagramView(int w, int h, BlockDiagramModel blockModel)
 	{
 		super(w, h, null, null);
+		// super(true);
+
+		setSize(w, h);
 
 		this.model = blockModel;
 		this.model.addListener(new PropertyChangeListener()

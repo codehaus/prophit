@@ -24,7 +24,7 @@ class CallDetailsView
 		addComponents();
 	}
 
-	public Dimension getMinimumSize() { return new Dimension(400, 100); }
+	public Dimension getMinimumSize() { return new Dimension(100, 300); }
 
 	public void selectedCallChanged(Call rootCall, Call selectedCall)
 	{
@@ -45,24 +45,24 @@ class CallDetailsView
 		tblCallers = new JTable();
 		tblCallees = new JTable();
 		
-		JSplitPane rightSplitter = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT,
+		JSplitPane bottomSplitter = new JSplitPane(JSplitPane.VERTICAL_SPLIT,
 															  new JScrollPane(tblCallers),
 															  new JScrollPane(tblCallees))
 			{
-				public Dimension getMinimumSize() { return new Dimension(400, 200); }
+				public Dimension getMinimumSize() { return new Dimension(100, 200); }
 			};
 
-		JSplitPane leftSplitter = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT,
+		JSplitPane topSplitter = new JSplitPane(JSplitPane.VERTICAL_SPLIT,
 															  new JScrollPane(tblCallInfo),
-															  rightSplitter)
+															  bottomSplitter)
 			{
-				public Dimension getMinimumSize() { return new Dimension(200, 200); }
+				public Dimension getMinimumSize() { return new Dimension(100, 300); }
 			};
 
-		leftSplitter.setDividerLocation(0.333);
-		rightSplitter.setDividerLocation(0.5);
+		topSplitter.setDividerLocation(0.333);
+		bottomSplitter.setDividerLocation(0.5);
 
-		add(leftSplitter, BorderLayout.CENTER);
+		add(topSplitter, BorderLayout.CENTER);
 	}
 
 	private class CallInfoModel
