@@ -11,6 +11,7 @@
 	<property name="webdist" value="${build}/webdist" />
 
 	<property file="prophit.properties" />
+	<property environment="env" />
 
 	<path id="run.class.path">
 		<fileset dir="${build}/lib" />  <!-- somehow i'd like to fix this -->
@@ -26,6 +27,13 @@
 		<fileset dir="${basedir}/lib" includes="jnlp.jar,log4jME.jar,gl4java.jar,gl4java-glutfonts.jar,junit.jar"/>
 	</path>
 
+	<path id="prophit.path.path">
+		<pathelement location="${basedir}/lib/win32"/>
+		<pathelement location="${env.PATH}"/>
+		<pathelement location="${env.Path}"/>
+	</path>
+
+	<property name="prophit.path" refid="prophit.path.path" />
 
 	<target name="init">
 		<mkdir dir="${build}" />
@@ -214,6 +222,8 @@
 		<junit fork="true" printsummary="yes">
 			<sysproperty key="solver.user.name" value="JAVA_USER" />
 			<sysproperty key="basedir" value="${basedir}" />
+			<env key="PATH" path="${prophit.path}" />
+			<env key="Path" path="${prophit.path}" />
 			<classpath refid="test.class.path" />
 			<formatter type="plain" usefile="false" />
 			<batchtest>
@@ -227,6 +237,8 @@
 		<java fork="true" classpathref="test.class.path" classname="test.Test">
 			<sysproperty key="solver.user.name" value="JAVA_USER" />
 			<sysproperty key="basedir" value="${basedir}" />
+			<env key="PATH" path="${prophit.path}" />
+			<env key="Path" path="${prophit.path}" />
 			<arg line="${run.system}" />
 		</java>
 	</target>
@@ -235,6 +247,8 @@
 		<junit fork="true">
 			<sysproperty key="solver.user.name" value="JAVA_USER" />
 			<sysproperty key="basedir" value="${basedir}" />
+			<env key="PATH" path="${prophit.path}" />
+			<env key="Path" path="${prophit.path}" />
 			<classpath refid="test.class.path" />
 			<formatter type="brief" usefile="false" />
 			<test name="${test.name}" />
