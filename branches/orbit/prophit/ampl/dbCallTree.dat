@@ -1,0 +1,40 @@
+# Call stack looks like this:
+#
+# main
+#   init
+#     DBExec1
+#       insert
+#         token1
+#           getChars
+#       update
+#         token2
+#           getChars
+#   test
+#     DBExec2
+#       insert
+#         token1
+#           getChars
+#       update
+#         token2
+#           getChars
+
+data;
+
+set rcc = DBExec1 DBExec2 insert update token1 token2 getChars;
+set I = insert1 insert2 update1 update2 getChars1 getChars2;
+param parent :=
+	insert1	DBExec1
+	insert2	DBExec2
+	update1	DBExec1
+	update2	DBExec2
+	getChars1	token1
+	getChars2	token2
+	;
+param rccOf :=
+	insert1	insert
+	insert2	insert
+	update1	update
+	update2	update
+	getChars1	getChars
+	getChars2	getChars
+	;
