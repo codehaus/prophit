@@ -38,7 +38,7 @@ public class ProphitParserLoader implements Parser, Loader
     protected final Solver solver;
     protected final File file;
     protected final Parser parser;
-    protected boolean parsed = true;
+    protected boolean parsed = false;
     protected CallGraph callgraph = null;
 
     /** 
@@ -48,9 +48,9 @@ public class ProphitParserLoader implements Parser, Loader
     {
 	// we need to convert this to zip format at some point soon...
 	this.reader = (new LineNumberReader(reader)); // not sure if we want to do this.
-	this.parser = this;
-	this.solver = null;
-	this.file = null;
+	this.parser = this;  // we are our own parser. (and we are also a loader)
+	this.solver = null; // we don't need this, as our solve step is essentially empty
+	this.file = null;  // this was throw away info anyway - we really just needed the reader
     }
 
     /**
@@ -58,7 +58,7 @@ public class ProphitParserLoader implements Parser, Loader
      */
     public ProphitParserLoader(Parser parser, Solver solver, File file)
     {
-	this.reader = null;
+	this.reader = null;    // if we're passed the parser, it will take care of all the "reading" aspects anyway. 
 	this.parser = parser;
 	this.solver = solver; 
 	this.file = file;
@@ -96,6 +96,20 @@ public class ProphitParserLoader implements Parser, Loader
 	return ( this.callgraph );
     }
 
+    private void verifyFile() throws ParseException, IOException
+    {
+	/* might call a DTD validator here, or just check for the 
+	 * existence of a few elements from the xml file that we are expecting. 
+	 */
+	String match = new String("<?xml");
+	String firstline = ((LineNumberReader)this.reader).readLine().trim();
+
+	if ( !(firstline.startsWith(match)))
+	{
+	     throw new ParseException("File Type does not match");
+	}
+	
+    }
 
     public boolean isFileFormatRecognized()
     {
@@ -176,7 +190,7 @@ public class ProphitParserLoader implements Parser, Loader
 
 	finally
 	    {
-		builder.end();
+		if (builder != null) builder.end();
 	    }
 
     }
@@ -349,12 +363,5 @@ public class ProphitParserLoader implements Parser, Loader
 	}
     }
 
-    private void verifyFile() throws ParseException, IOException
-    {
-	/* might call a DTD validator here, or just check for the 
-	 * existence of a few elements from the xml file that we are expecting. 
-	 */
-	System.out.println("verified.");
-    }
 }
     

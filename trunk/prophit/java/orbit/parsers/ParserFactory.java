@@ -34,6 +34,12 @@ public class ParserFactory
 			return parser;
 		closeReader(reader);
 
+		reader = openReader(file);
+		parser = tryParser(new ProphitParserLoader(reader));
+		if (parser != null )
+		    return parser;
+		closeReader(reader);
+
 		throw new ParseException("File " + file + " is not in a recognized format");
 	}
 

@@ -14,12 +14,12 @@ public class LoaderFactory
 	public Loader createLoader(File file) throws ParseException
 	{
 		Parser parser = ParserFactory.instance().createParser(file);
-		Solver solver;
+		Solver solver = null;
 		if ( parser instanceof DashProfParser )
 		{
 			solver = new LPSolver();
 		}
-		else
+		else if (parser instanceof HProfParser )
 		{
 			solver = new HProfSolver();
 		}
