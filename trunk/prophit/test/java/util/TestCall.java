@@ -1,4 +1,4 @@
-package test;
+package util;
 
 import orbit.model.*;
 import orbit.gui.*;

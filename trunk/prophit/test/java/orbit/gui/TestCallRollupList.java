@@ -1,7 +1,7 @@
 package orbit.gui;
 
-import test.SimpleCallGraph;
-import test.TestUtil;
+import util.SimpleCallGraph;
+import util.TestUtil;
 
 import orbit.model.*;
 import orbit.gui.CallRollupList;

@@ -1,7 +1,7 @@
 package orbit.gui;
 
-import test.BasicTestCalls;
-import test.TestCall;
+import util.BasicTestCalls;
+import util.TestCall;
 
 import junit.framework.*;
 
