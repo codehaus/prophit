@@ -4,7 +4,7 @@
 
   <property name="prophit.version" value="Developer Build 3" />
   <property name="prophit.homepage" value="http://prophit.westslopesoftware.com/" />
-  <property name="prophit.docpage" value="http://prophIt.westslopesoftware.com/docs/index.html" />
+  <property name="prophit.docpage"  value="http://prophit.westslopesoftware.com/docs/index.html" />
 
   <property name="build" value="build" />
   <property name="dist" value="${build}/dist" />
