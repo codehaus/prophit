@@ -114,7 +114,7 @@ public class TestDashProfParser
 		CallGraph cg = new CallGraph(callIDArray, fractions);
 
 		class SimpleVisitor
-			implements CallGraph.Visitor
+			implements Call.Visitor
 		{
 			int count = 0;
 
@@ -128,7 +128,7 @@ public class TestDashProfParser
 		}
 
 		SimpleVisitor visitor = new SimpleVisitor();
-		cg.depthFirstTraverse(visitor);
+		cg.getRoot().depthFirstTraverse(visitor);
 		assertTrue("Expected to be visited 13 times",
 				   visitor.getCount() == 13);
 	}		
