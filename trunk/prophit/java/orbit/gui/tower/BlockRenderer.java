@@ -1,5 +1,11 @@
-package orbit.gui;
+package orbit.gui.tower;
 
+import orbit.gui.CallAdapter;
+import orbit.gui.CallLayoutAlgorithm;
+import orbit.gui.ColorModel;
+import orbit.gui.Constants;
+import orbit.gui.GLUtils;
+import orbit.gui.TimeMeasure;
 import orbit.model.Call;
 
 import gl4java.GLFunc;
@@ -18,25 +24,14 @@ import java.util.Map;
  * It can draw the diagram either as solid shaded quads, or as a wire frame.
  */
 class BlockRenderer
-	implements CallLayoutAlgorithm.Callback, GLEnum
+	implements CallLayoutAlgorithm.Callback, GLEnum, Constants
 {
-	public static final int    RENDER_SOLID     = 0;
-	public static final int    RENDER_WIREFRAME = 1;
-
-	/** The height of each block */
-	public static final double HEIGHT           = 0.05;
-
 	/** Blocks smaller than this are not rendered at all */
 	private static final double SIZE_THRESHOLD = 3.0;
-	/**
-	 * If a function makes up more than this amount of time of the parent call, its coloring is shaded.
-	 * If less, it is rendered in the base block color
-	 */ 
-	protected static final double FRACTION_THRESHOLD = 0.30;
 
 	private final GLFunc                      gl;
 	private final int                         renderMode;
-	private final BlockDiagramView.ColorModel colorModel;
+	private final ColorModel                  colorModel;
 	private final int[]                       viewport = new int[4];
 	// TODO: can use Call keys as GL names
 	private final HashMap glNameToCallMap = new HashMap();
@@ -49,7 +44,7 @@ class BlockRenderer
 	 * @param gl the interface to OpenGL
 	 * @param renderMode one of RENDER_SOLID or RENDER_WIREFRAME
 	 */
-	public BlockRenderer(GLFunc gl, int renderMode, BlockDiagramView.ColorModel colorModel)
+	public BlockRenderer(GLFunc gl, int renderMode, ColorModel colorModel)
 	{
 		this.gl = gl;
 		this.renderMode = renderMode;
@@ -132,8 +127,8 @@ class BlockRenderer
 
 	protected void renderAsQuads(CallAdapter call, Rectangle2D.Double rectangle, int depth, Color color)
 	{
-		double bottomZ = depth * HEIGHT;
-		double topZ = ( depth + 1 ) * HEIGHT;
+		double bottomZ = depth * BLOCK_HEIGHT;
+		double topZ = ( depth + 1 ) * BLOCK_HEIGHT;
 
 		// Pushes the polygons back a little in the z-buffer so that the hi-lite lines
 		//   will stand out
@@ -227,14 +222,14 @@ class BlockRenderer
 
 	protected void renderAsLines(CallAdapter call, Rectangle2D.Double rectangle, int depth, Color color)
 	{
-		double bottomZ = depth * HEIGHT;
-		double topZ = ( depth + 1 ) * HEIGHT;
+		double bottomZ = depth * BLOCK_HEIGHT;
+		double topZ = ( depth + 1 ) * BLOCK_HEIGHT;
 
 		// Coordinate frame is OpenGL coordinates, with the X-axis heading East, the
 		//   Y-axis heading North, and the Z-axis heading towards the observer
 		gl.glBegin(GL_LINE_LOOP);
 		GLUtils.glColor(gl, color);
-		double z = depth * HEIGHT;
+		double z = depth * BLOCK_HEIGHT;
 		gl.glVertex3d(rectangle.x, rectangle.y, topZ);
 		gl.glVertex3d(rectangle.x, rectangle.y + rectangle.height, topZ);
 		gl.glVertex3d(rectangle.x + rectangle.width, rectangle.y + rectangle.height, topZ);

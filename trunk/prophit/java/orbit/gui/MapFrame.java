@@ -91,7 +91,9 @@ public class MapFrame
 	private Action forwardAction;
 	private Action parentAction;
 	private Action rootAction;
-
+	private JTextField txtSearch;
+	private JCheckBox  chkWireframe;
+	
 	private String workingDirectory = null;
 	
 	private BlockDiagramModel blockModel = null;
@@ -502,24 +504,46 @@ public class MapFrame
 		JPanel pnlSearch = new JPanel();
 		pnlSearch.setLayout(new FlowLayout(FlowLayout.LEFT));
 		pnlSearch.add(new JLabel(Strings.getUILabel(MapFrame.class, "search.label")));
-		final JTextField txtSearch = (JTextField)pnlSearch.add(new JTextField(30)
+		txtSearch = (JTextField)pnlSearch.add(new JTextField(30)
 			{
 				public Dimension getMaximumSize()
 				{
 					return new Dimension(super.getMaximumSize().width, getPreferredSize().height);
 				}
 			});
+
+		chkWireframe = (JCheckBox)pnlSearch.add(new JCheckBox(Strings.getUILabel(MapFrame.class, "wireframe.label")));
+		chkWireframe.addActionListener(new ActionListener()
+			{
+				public void actionPerformed(ActionEvent evt)
+				{
+					boolean wireframe = chkWireframe.isSelected();
+					Log.debug(LOG, "Wireframe checkbox set to ", String.valueOf(wireframe));
+					if ( wireframe != blockModel.isWireframe() )
+					{
+						blockModel.setWireframe(wireframe);
+					}
+				}
+			});
+		
 		txtSearch.addActionListener(new ActionListener()
 			{
 				public void actionPerformed(ActionEvent evt)
 				{
 					String searchText = txtSearch.getText();
 					Log.debug(LOG, "Name search text set to ", searchText);
-					if ( blockModel != null )
+					if ( !"".equals(searchText) )
+						searchText = "*" + txtSearch.getText() + "*";
+					blockView.beginUpdate();
+					try
 					{
-						if ( !"".equals(searchText) )
-							searchText = "*" + txtSearch.getText() + "*";
 						blockModel.setNameSearchString(searchText);
+						chkWireframe.setSelected(true);
+						blockModel.setWireframe(true);
+					}
+					finally
+					{
+						blockView.endUpdate();
 					}
 				}
 			});
@@ -624,6 +648,8 @@ public class MapFrame
 			forwardAction.setEnabled(false);
 			parentAction.setEnabled(false);
 			rootAction.setEnabled(false);
+			txtSearch.setEditable(false);
+			chkWireframe.setEnabled(false);
 		}
 		else
 		{
@@ -631,6 +657,8 @@ public class MapFrame
 			forwardAction.setEnabled(blockModel.getRootRenderState().hasNextRenderCall());
 			parentAction.setEnabled(blockModel.getRootRenderState().hasParentRenderCall());
 			rootAction.setEnabled(blockModel.getRootRenderState().getRenderCall().getParent() != null);
+			txtSearch.setEditable(true);
+			chkWireframe.setEnabled(true);
 		}
 	}
 	

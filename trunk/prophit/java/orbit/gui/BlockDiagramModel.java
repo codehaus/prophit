@@ -21,6 +21,7 @@ public class BlockDiagramModel
 
 	public static final String RENDER_CALL_PROPERTY = "renderCall";
 	public static final String NUM_LEVELS_PROPERTY = "numLevels";
+	public static final String WIREFRAME_PROPERTY = "wireFrame";
 
 	public static final String SELECTED_CALL_PROPERTY = "selectedCall";
 	public static final String NAME_SEARCH_STRING_PROPERTY = "nameSearchString";
@@ -45,6 +46,7 @@ public class BlockDiagramModel
 	private Map nameToCallListMap = null;
 
 	private int levels = DEFAULT_LEVELS;
+	private boolean wireframe = false;
 	private double shiftVertical = 0;
 	private double shiftHorizontal = 0;
 	private EyeLocation eyeLocation;
@@ -255,6 +257,21 @@ public class BlockDiagramModel
 		return shiftHorizontal;
 	}
 
+	public void setWireframe(boolean b)
+	{
+		boolean old = this.wireframe;
+		if ( b != old )
+		{
+			this.wireframe = b;
+			changeSupport.firePropertyChange(WIREFRAME_PROPERTY, old, b);
+		}
+	}
+
+	public boolean isWireframe()
+	{
+		return wireframe;
+	}
+	
 	public void setLevels(int levels)
 	{
 		int old = this.levels;
