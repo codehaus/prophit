@@ -5,6 +5,9 @@ import orbit.model.*;
 import java.io.*;
 import java.util.*;
 
+/**
+ * Parses text output of 'java -Xrunhprof'.
+ */
 public class HProfParser
 	extends AbstractParser
 {

@@ -2,8 +2,6 @@ package orbit.parsers;
 
 import orbit.model.CallGraph;
 import orbit.model.CallID;
-import orbit.model.CallFractionSolver;
-import orbit.model.CallFractionSolverData;
 import orbit.solver.SocketConnection;
 
 import java.io.*;
@@ -21,34 +19,6 @@ public abstract class AbstractParser
 		if ( "-debug".equals(args[1]) )
 		{
 			System.out.println(parser.getCallIDs());
-		}
-		else if ( "-solve".equals(args[1]) )
-		{
-			System.setProperty("solver.user.name", "JAVA_USER");
-			CallFractionSolverData data = new CallFractionSolverData(callIDs);
-			CallFractionSolver solver = new CallFractionSolver(data);
-			SocketConnection.Factory factory = new SocketConnection.Factory("neos.mcs.anl.gov", 3333);
-			factory.setDebug(true, "solver");
-			double[] fractions = solver.execute(factory);
-
-			solver.writeToFile(new FileWriter(args[0] + ".fractions"), fractions);
-		}
-		else if ( "-print".equals(args[1]) )
-		{
-			int depth = 6;
-			if ( args.length > 2 )
-			{
-				depth = Integer.parseInt(args[2]);
-			}
-
-			CallID[] callIDArray = (CallID[])parser.getCallIDs().toArray(new CallID[0]);
-
-			CallFractionSolverData data = new CallFractionSolverData(callIDs);
-			CallFractionSolver solver = new CallFractionSolver(data);
-			double[] fractions = solver.readFromFile(new FileReader(args[0] + ".graph"), callIDs.size());
-			
-			CallGraph cg = new CallGraph(callIDArray, fractions);
-			System.out.println(cg.toString(depth));
 		}
 	}
 	

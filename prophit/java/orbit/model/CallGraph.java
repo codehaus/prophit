@@ -7,6 +7,9 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+/**
+ * The CallGraph implements the discovery and enumeration of the function calls in the program.
+ */
 public class CallGraph
 	implements Call
 {
