@@ -129,7 +129,6 @@ public class TestDashProfParser
 
 		SimpleVisitor visitor = new SimpleVisitor();
 		cg.getRoot().depthFirstTraverse(visitor);
-		assertTrue("Expected to be visited 13 times",
-				   visitor.getCount() == 13);
+		assertTrue("Expected to be visited 13 times", visitor.getCount() == 13);
 	}		
 }
