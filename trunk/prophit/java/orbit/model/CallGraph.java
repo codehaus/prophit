@@ -8,7 +8,8 @@ import java.util.Iterator;
 import java.util.List;
 
 /**
- * The CallGraph implements the discovery and enumeration of the function calls in the program.
+ * The CallGraph implements the hierarchy of function calls in a profile. The CallGraph and all the calls
+ * in the CallGraph implement the {@link Call} interface, which is a simple but complete representation.
  */
 public class CallGraph
 	implements Call
@@ -20,11 +21,22 @@ public class CallGraph
 	private final IntStack[] childRCCKeys;
 	private final double[] callFractions;
 
+	/**
+	 * @see #CallGraph(CallID[], double[])
+	 */
 	public CallGraph(List callIDs, double[] callFractions)
 	{
 		this((CallID[])callIDs.toArray(new CallID[0]), callFractions);
 	}
 
+	/**
+	 * Construct a CallGraph from the complete list of method calls of which it is composed.
+	 * @param callFractions As explained in the comments for {@link CallID}, an the recorded time for an
+	 * RCC may be split among more than one specific location in the call graph. Each of these locations
+	 * is represented by a CallID. For each callID, the value <code>callFractions[callID.getKey()]</code>
+	 * is the fraction of the RCC time which is allocated to that CallID. The sum of the callFractions across
+	 * all CallIDs for a given RCC should equal to 1.
+	 */
 	public CallGraph(CallID[] callIDs, double[] callFractions)
 	{
 		this.callIDs = callIDs;
@@ -57,6 +69,7 @@ public class CallGraph
 
 	/** @return a key which is greater than the maximum key of any Call in the CallGraph. */
 	public int getKey() { return callIDs.length; }
+	/** @return "<root>" */
 	public String getName() { return "<root>"; }
 	public int getDepth() { return 0; }
 	public int getCallCount() { return 1; }

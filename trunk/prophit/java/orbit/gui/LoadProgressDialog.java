@@ -35,7 +35,7 @@ public class LoadProgressDialog
 		
 		addComponents();
 
-		new LoadThread().start();
+		// new LoadThread().start();
 	}
 
 	public Dimension getPreferrefSize()
@@ -53,10 +53,10 @@ public class LoadProgressDialog
 		GridBagLayout layout = new GridBagLayout();
 		getContentPane().setLayout(layout);
 
-		cbParsed = new JCheckBox("Parsing file " + profileFile.getName());
-		cbSolved = new JCheckBox("Reconstructing graph");
+		cbParsed = new JCheckBox(Strings.getMessage(LoadProgressDialog.class, "parsingFile", profileFile.getName()));
+		cbSolved = new JCheckBox(Strings.getUILabel(LoadProgressDialog.class, "reconstructingGraph"));
 		lblError = new JLabel("           ");
-		btnOK = new JButton("OK");
+		btnOK = new JButton(Strings.getUILabel(LoadProgressDialog.class, "OK"));
 		btnOK.addActionListener(new ActionListener()
 			{
 				public void actionPerformed(ActionEvent e)
@@ -84,47 +84,4 @@ public class LoadProgressDialog
 		getRootPane().setDefaultButton(btnOK);
 		pack();
 	}	
-
-	private class LoadThread
-		extends Thread
-	{
-		public void run()
-		{
-			long startTime = System.currentTimeMillis();
-			System.out.println("Parsing " + profileFile);
-
-			String error = null;
-			try
-			{
-				Loader loader = LoaderFactory.instance().createLoader(profileFile);
-				loader.parse();
-				cbParsed.setSelected(true);
-			
-				System.gc();
-				System.out.println("\tParsed in " + ( System.currentTimeMillis() - startTime ) + " ms");
-				
-				startTime = System.currentTimeMillis();
-				cg = loader.solve();
-				error = loader.getError();
-
-				System.gc();
-				System.out.println("\tSolved in " + ( System.currentTimeMillis() - startTime ) + " ms");
-
-				cbSolved.setSelected(true);
-			}
-			catch (Exception x)
-			{
-				Util.handleTrace(getClass(), x);
-				error = "Error parsing profile from file '" + profileFile + "' : " + x.getMessage();
-			}
-
-			if ( error != null )
-			{
-				lblError.setText(error);
-				cg = null;
-			}
-			btnOK.setEnabled(true);
-			btnOK.requestFocus();
-		}
-	}		
 }

@@ -58,17 +58,14 @@ public class MapFrame
 		
 		MapFrame map = new MapFrame();
 
-		if ( profileFileName != null )
-		{
-			if ( !map.loadProfile(new File(profileFileName)) )
-			{
-				System.err.println("Unable to load " + profileFileName);
-				System.exit(1);
-			}
-		}
-		
 		map.setSize(800, 600);
 		UIUtil.centerWindow(map);
+
+		if ( profileFileName != null )
+		{
+			map.loadProfile(new File(profileFileName));
+		}
+
 		map.show();
 	}
 
@@ -89,6 +86,7 @@ public class MapFrame
 	private JPanel           pnlContent;
 	private CallDetailsView  callDetails;
 	private JSlider          depthSlider;
+	private JLabel           lblStatus;
 	
 	public MapFrame()
 	{
@@ -104,88 +102,118 @@ public class MapFrame
 		setDefaultCloseOperation( EXIT_ON_CLOSE );
 	}
 
-	public boolean loadProfile(File profileFile)
+	public void loadProfile(final File profileFile)
 	{
 		workingDirectory = profileFile.getParent();
-		
-		LoadProgressDialog dlgLoad = new LoadProgressDialog(null, profileFile);
-		UIUtil.centerWindow(dlgLoad);
-		dlgLoad.setVisible(true);
-		
-		CallGraph cg = dlgLoad.getCallGraph();
-		if ( cg == null )
+
+		ProfileLoaderThread loader =
+			new ProfileLoaderThread(profileFile,
+									new ProfileLoaderThread.Callback()
+										{
+											public void parsed()
+											{
+												lblStatus.setText(Strings.getUILabel(MapFrame.class, "status.reconstructingGraph"));
+											}
+																	 
+											public void solved()
+											{
+												lblStatus.setText(Strings.getMessage(MapFrame.class, "status.loaded", profileFile));
+											}
+																	 
+											public void loadComplete(CallGraph cg, String errorText)
+											{
+												MapFrame.this.setCursor(Cursor.DEFAULT_CURSOR);
+												if ( cg != null )
+												{
+													setCallGraph(cg);												
+												}
+												else
+												{
+													if ( errorText == null )
+														errorText = "<unknown error>";
+													String errorMsg = Strings.getMessage(MapFrame.class, "errorParsing.message",
+																						 new Object[]{ profileFile.getName(),
+																									   errorText });
+													LOG.warn(errorMsg);
+													lblStatus.setText(errorMsg);
+													JOptionPane.showMessageDialog(MapFrame.this,
+																				  errorMsg,
+																				  Strings.getUILabel(MapFrame.class, "errorParsing.title"),
+																				  JOptionPane.ERROR_MESSAGE);
+												}
+											}
+										});
+		lblStatus.setText(Strings.getMessage(MapFrame.class, "status.parsingFile",
+											 profileFile.getName()));
+		setCursor(Cursor.WAIT_CURSOR);
+		loader.start();
+	}
+
+	private void setCallGraph(CallGraph cg)
+	{
+		if ( pnlContent != null )
 		{
-			System.err.println("Unable to load " + profileFile);
-			return false;
-		}
-		else
-		{
-			if ( pnlContent != null )
-			{
-				getContentPane().remove(pnlContent);
+			getContentPane().remove(pnlContent);
 				
-				blockView.cvsDispose();
-				blockModel.dispose();
-				blockModel = null;
-				blockView = null;
-				pnlContent = null;
-				System.gc();
-			}
-			
-			blockModel = new BlockDiagramModel(cg);
-			blockModel.addListener(new PropertyChangeListener()
-				{
-					public void propertyChange(PropertyChangeEvent evt)
-					{
-						if ( BlockDiagramModel.RENDER_CALL_PROPERTY.equals(evt.getPropertyName()) )
-						{
-							enableControls();
-							callDetails.selectedCallChanged(blockModel.getRootRenderState().getRenderCall(),
-															blockModel.getSelectedCall());
-						}
-						else if ( BlockDiagramModel.SELECTED_CALL_PROPERTY.equals(evt.getPropertyName()) )
-						{
-							Call selectedCall = (Call)evt.getNewValue();
-							callDetails.selectedCallChanged(blockModel.getRootRenderState().getRenderCall(),
-																	  selectedCall);
-						}
-						else if ( BlockDiagramModel.NUM_LEVELS_PROPERTY.equals(evt.getPropertyName()) )
-						{
-							int levels = ((Integer)evt.getNewValue()).intValue();
-							if ( levels > depthSlider.getMaximum() )
-								depthSlider.setMaximum(depthSlider.getMaximum() + 5);
-							depthSlider.setValue(levels);
-						}
-					}
-				});
-			blockModel.setLevels(depthSlider.getValue());
-
-			System.out.println("size = " + getSize());
-			blockView = new BlockDiagramView((int)( getSize().width * 2.0 / 3.0 ), getSize().height, blockModel);
-			callDetails = new CallDetailsView()
-				{
-					public void callerSelected(String callerName)
-					{
-						selectSelectionCaller(callerName);
-					}
-
-					public void calleeSelected(String calleeName)
-					{
-						selectSelectionCallee(calleeName);
-					}
-				};
-
-			pnlContent = new ContentPanel(blockView, callDetails);
-			getContentPane().add(pnlContent, BorderLayout.CENTER);
-
-			pack();
-
-			blockView.requestFocus();
-
-			enableControls();
-			
-			return true;
+			blockView.cvsDispose();
+			blockModel.dispose();
+			blockModel = null;
+			blockView = null;
+			pnlContent = null;
+			System.gc();
 		}
+			
+		blockModel = new BlockDiagramModel(cg);
+		blockModel.addListener(new PropertyChangeListener()
+			{
+				public void propertyChange(PropertyChangeEvent evt)
+				{
+					if ( BlockDiagramModel.RENDER_CALL_PROPERTY.equals(evt.getPropertyName()) )
+					{
+						enableControls();
+						callDetails.selectedCallChanged(blockModel.getRootRenderState().getRenderCall(),
+														blockModel.getSelectedCall());
+					}
+					else if ( BlockDiagramModel.SELECTED_CALL_PROPERTY.equals(evt.getPropertyName()) )
+					{
+						Call selectedCall = (Call)evt.getNewValue();
+						callDetails.selectedCallChanged(blockModel.getRootRenderState().getRenderCall(),
+														selectedCall);
+					}
+					else if ( BlockDiagramModel.NUM_LEVELS_PROPERTY.equals(evt.getPropertyName()) )
+					{
+						int levels = ((Integer)evt.getNewValue()).intValue();
+						if ( levels > depthSlider.getMaximum() )
+							depthSlider.setMaximum(depthSlider.getMaximum() + 5);
+						depthSlider.setValue(levels);
+					}
+				}
+			});
+		blockModel.setLevels(depthSlider.getValue());
+
+		System.out.println("size = " + getSize());
+		blockView = new BlockDiagramView((int)( getSize().width * 2.0 / 3.0 ), getSize().height, blockModel);
+		callDetails = new CallDetailsView()
+			{
+				public void callerSelected(String callerName)
+				{
+					selectSelectionCaller(callerName);
+				}
+
+				public void calleeSelected(String calleeName)
+				{
+					selectSelectionCallee(calleeName);
+				}
+			};
+
+		pnlContent = new ContentPanel(blockView, callDetails);
+		getContentPane().add(pnlContent, BorderLayout.CENTER);
+
+		pack();
+
+		blockView.requestFocus();
+
+		enableControls();
 	}
 
 	/**
@@ -341,6 +369,14 @@ public class MapFrame
 
 	private void addComponents()
 	{
+		/*
+		 * Add the 'Status' bar to the bottom of the application
+		 */
+		JPanel pnlStatus = new JPanel(new FlowLayout(FlowLayout.LEFT));
+		pnlStatus.add(new JLabel(Strings.getUILabel(MapFrame.class, "status.label")));
+		lblStatus = new JLabel("              ");
+		pnlStatus.add(lblStatus);
+		getContentPane().add(pnlStatus, BorderLayout.SOUTH);
 	}
 
 	private JSlider createDepthSlider()

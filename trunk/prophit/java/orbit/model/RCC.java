@@ -6,10 +6,8 @@ package orbit.model;
  * the time spent in a particular {@link StackTrace} constitutes an RCC.
  * <p>
  * Each line in a profile data file is converted into exactly one RCC. However, a single RCC may
- * actually represent several different locations in the call graph. For instance, if a function X calls
- * a function Y, and X is called by A and B, then the RCC represented by {X, Y} is present in at least two places
- * in the call graph : once as a child of A, and once as a child of B. If A and B are themselves called from multiple
- * places, then {X, Y} has yet more instantiations in the call graph.
+ * actually be instantiated multiple times in the call graph. Each of these instantiations is represented
+ * by a {@link CallID}.
  */
 public class RCC
 {
@@ -19,6 +17,12 @@ public class RCC
 	private int    nCalls;
 	private long   time;
 
+	/**
+	 * @param st the stack trace of the RCC as recorded in the data file
+	 * @param nCalls number of times that this RCC was invoked.
+	 * @param time total time spent in this RCC
+	 * @param key a number which is unique to this RCC across all the RCCs
+	 */
 	public RCC(StackTrace st, int nCalls, long time, int key)
 	{
 		this.st = st;
@@ -28,10 +32,29 @@ public class RCC
 	}
 
 	public StackTrace getStack() { return st; }
+
+	/**
+	 * The StackTrace of the <code>size</code>th parent call of this RCC. This stack trace is constructed by removing
+	 * <code>size</code> leaf calls from the StackTrace of this RCC.
+	 */
 	public StackTrace getParentStack(int size) { return st.getParentStack(size); }
+
+	/**
+	 * @return the StackTrace constructed by removing the top <code>size</code> calls from the StackTrace of this RCC.
+	 */
 	public StackTrace getLeafStack(int size) { return st.getLeafStack(size); }
+
+	/**
+	 * @return the name of the method which is the parent of the leaf method in the RCC.
+	 * @see #getLeafMethodName
+	 */
 	public String getLeafParentMethodName() { return st.getLeafParentMethod(); }
+
+	/**
+	 * @return the name of the leaf (bottom of the call stack) method in the RCC.
+	 */
 	public String getLeafMethodName() { return st.getLeafMethod(); }
+	
 	public int    getCallCount() { return nCalls; }
 	public long   getTime() { return time; }
 	public int    getKey() { return key; }
