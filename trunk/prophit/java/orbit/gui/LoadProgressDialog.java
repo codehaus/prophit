@@ -124,6 +124,7 @@ public class LoadProgressDialog
 				cg = null;
 			}
 			btnOK.setEnabled(true);
+			btnOK.requestFocus();
 		}
 	}		
 }

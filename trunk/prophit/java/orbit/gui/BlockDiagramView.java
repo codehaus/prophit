@@ -372,7 +372,8 @@ class BlockDiagramView
 		if ( selectedCall == null )
 			return;
 
-		drawSelected(selectedCall, Color.white);
+		if ( !drawSelected(selectedCall, Color.white) )
+			return;
 
 		for ( Iterator i = model.getCallsByName(selectedCall.getName()).iterator(); i.hasNext(); )
 		{
@@ -384,12 +385,19 @@ class BlockDiagramView
 		}
 	}
 	
-	void drawSelected(Call selectedCall, Color color)
+	boolean drawSelected(Call selectedCall, Color color)
 	{
 		ComputeCallLocation computeLocation = new ComputeCallLocation(selectedCall, model.getRootRenderState().getRenderCall());
 		computeLocation.execute();
 
 		Rectangle2D.Double rectangle = computeLocation.getRectangle();
+
+		if ( rectangle == null )
+		{
+			model.setSelectedCall(null);
+			return false;
+		}
+		
 		int depth = computeLocation.getRenderDepth();
 		double bottomZ = ( depth ) * BlockRenderer.HEIGHT;
 		double midZ = ( depth + 0.5 ) * BlockRenderer.HEIGHT;
@@ -424,6 +432,8 @@ class BlockDiagramView
 		gl.glEnd();
 		
 		gl.glEnable(GL_LIGHTING);
+
+		return true;
 	}
 	
 	void drawName()
@@ -485,7 +495,7 @@ class BlockDiagramView
 		gl.glColor3d(1.0, 1.0, 1.0);
 		gl.glRasterPos2i(6, 2);
 		CallAdapter call = new CallAdapter(model.getRootRenderState().getRenderCall());
-		printString(GLUTEnum.GLUT_BITMAP_HELVETICA_12, "Root = " + call.getName() + ", time = " + call.getInclusiveTime(measure) + ", " + ( call.getInclusiveTime(measure) / model.getCallGraph().getTime() * 100.0 ) + "% of total");
+		printString(GLUTEnum.GLUT_BITMAP_HELVETICA_12, "Root = " + UIUtil.getShortName(call.getName()) + ", time = " + UIUtil.formatTime(call.getInclusiveTime(measure)) + ", " + UIUtil.formatPercent( call.getInclusiveTime(measure) / model.getCallGraph().getTime() ) + " of total");
 		gl.glEnable(GL_LIGHTING);
 		gl.glEnable(GL_DEPTH_TEST); 
 		textEnd();
