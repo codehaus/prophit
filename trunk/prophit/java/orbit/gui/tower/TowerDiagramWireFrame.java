@@ -66,21 +66,9 @@ public class TowerDiagramWireFrame
 		 */
 		if ( model.isWireframe() )
 		{
-			for ( Iterator i = model.getNameSearchNames().iterator(); i.hasNext(); )
-			{
-				String name = (String)i.next();
-				renderer.addSolidBlocks(model.getCallsByName(name));
-			}
-			if ( model.getSelectedCall() != null )
-			{
-				renderer.addSolidBlock(model.getSelectedCall());
-				renderer.addSolidBlocks(model.getCallsByName(model.getSelectedCall().getName()));
-			}
+			renderer.addSolidBlocks(model.getAllSelectedCalls());
+			renderer.addSolidBlocks(model.getAllSearchResultCalls());
 		}
-
-		gl.glDisable(GL_DITHER);
-		gl.glDisable(GL_LIGHTING);
-		gl.glDisable(GL_CULL_FACE);
 
 		layout.execute();
 	}
