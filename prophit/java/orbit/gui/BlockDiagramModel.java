@@ -35,7 +35,6 @@ public class BlockDiagramModel
 	private static EyeLocation DEFAULT_EYE_LOCATION = new EyeLocation(2.5, -Math.PI / 4, Math.PI / 4);
 	private static double SHIFT_STEP = 0.05;
 
-	private final ArrayList listeners = new ArrayList();
 	private final CallGraph cg;
 
 	private RootRenderState rootState;
@@ -76,7 +75,6 @@ public class BlockDiagramModel
 	 */
 	public void dispose()
 	{
-		listeners.clear();
 		rootState = null;
 		eyeLocation = null;
 		mouseOverCall = null;
@@ -85,18 +83,12 @@ public class BlockDiagramModel
 	
 	public synchronized void addListener(PropertyChangeListener listener)
 	{
-		synchronized ( listeners )
-		{
-			changeSupport.addPropertyChangeListener(listener);
-		}
+		changeSupport.addPropertyChangeListener(listener);
 	}
 	
 	public synchronized void removeListener(PropertyChangeListener listener)
 	{
-		synchronized ( listeners )
-		{
-			changeSupport.removePropertyChangeListener(listener);
-		}
+		changeSupport.removePropertyChangeListener(listener);
 	}
 
 	public CallGraph getCallGraph()
