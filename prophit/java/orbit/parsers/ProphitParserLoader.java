@@ -14,6 +14,15 @@ import java.util.zip.*;
 
 public class ProphitParserLoader implements Parser, Loader
 {
+	/*
+	 * Notes:
+	 * Can maybe extend AbstractParser?
+	 * makeNewStackTrace should store the Strings in a set to save memory
+	 * makeNewCallID : doesn't always need to have the key as an argument. Only for proxy callIDs
+	 * processMeasurements : why not return the RCC[]?
+	 * Why in ModelBuilderImpl is the CallIds array constructed up to numRCCs + 1?
+	 */
+	
 	public static void main(String[] args) throws Exception
 	{
 		ProphitParserLoader parser;
@@ -35,7 +44,7 @@ public class ProphitParserLoader implements Parser, Loader
 	public static Category LOG = Category.getInstance(ProphitParserLoader.class);
     
 	private boolean readHeader = false;
-	protected final Reader reader;
+	protected final LineNumberReader reader;
 	protected final Solver solver;
 	protected final File file;
 	protected final Parser parser;
@@ -48,7 +57,7 @@ public class ProphitParserLoader implements Parser, Loader
 	public ProphitParserLoader(Reader reader)
 	{
 		// we need to convert this to zip format at some point soon...
-		this.reader = (new LineNumberReader(reader)); // not sure if we want to do this.
+		this.reader = new LineNumberReader(reader); // not sure if we want to do this.
 		this.parser = this;  // we are our own parser. (and we are also a loader)
 		this.solver = null; // we don't need this, as our solve step is essentially empty
 		this.file = null;  // this was throw away info anyway - we really just needed the reader
@@ -87,11 +96,15 @@ public class ProphitParserLoader implements Parser, Loader
 
 	public synchronized CallGraph solve()
 	{
-		if (!parsed) {
-			try {
+		if ( !parsed )
+		{
+			try
+			{
 				this.parse();
-			} catch (ParseException p) {
-				System.out.println(p.getMessage());
+			}
+			catch (ParseException p)
+			{
+				throw new RuntimeException(p.toString());
 			}
 		}
 		return ( this.callgraph );
@@ -103,13 +116,12 @@ public class ProphitParserLoader implements Parser, Loader
 		 * existence of a few elements from the xml file that we are expecting. 
 		 */
 		String match = new String(XMLConstants.FILEMATCH);
-		String firstline = ((LineNumberReader)this.reader).readLine().trim();
+		String firstline = reader.readLine();
 
-		if ( !(firstline.startsWith(match)))
+		if ( firstline == null || !(firstline.trim().startsWith(match)))
 		{
-			throw new ParseException("File Type does not match");
+			throw new ParseException("Not an XML file. Should start with " + XMLConstants.FILEMATCH);
 		}
-	
 	}
 
 	public boolean isFileFormatRecognized()
@@ -192,7 +204,7 @@ public class ProphitParserLoader implements Parser, Loader
 	}
 
 	/**
-	 * given an xml element for a stacktrace member, create a stack trace object. this requires
+	 * Given an xml element for a stacktrace member, create a stack trace object. this requires
 	 * examining the child elements (methods) and putting them in a string array. 
 	 * @param st    stacktrace xml element structure. 
 	 * @return      the StackTrace instance which corresponds to the XML Element passed in.
@@ -213,7 +225,7 @@ public class ProphitParserLoader implements Parser, Loader
 	}
 
 	/**
-	 * given a measurement xml element, generate an RCC instance, which represents that measurement. 
+	 * Given a measurement xml element, generate an RCC instance, which represents that measurement. 
 	 * this also calls makeNewStackTrace. 
 	 * @param measurement    The measured time and number of calls for a particular measurement. 
 	 * @return               An RCC instance with all the relevant data. 
@@ -224,13 +236,13 @@ public class ProphitParserLoader implements Parser, Loader
 	
 		long t = Long.parseLong(measurement.getAttribute(XMLConstants.TIME));
 		RCC rcc = new RCC(st, 
-								Integer.parseInt(measurement.getAttribute(XMLConstants.NUMCALLS)), 
-								Long.parseLong(measurement.getAttribute(XMLConstants.TIME)), 
-								-1, 
-								Integer.parseInt(measurement.getAttribute(XMLConstants.ID)));
+						  Integer.parseInt(measurement.getAttribute(XMLConstants.NUMCALLS)), 
+						  Long.parseLong(measurement.getAttribute(XMLConstants.TIME)), 
+						  Integer.parseInt(measurement.getAttribute(XMLConstants.ID)));
 		//LOG.info(rcc.toString());
-		if (t < 0) System.out.println("NEGATIVE time: " + rcc.toString());
-		return ( rcc );
+		if ( t < 0 )
+			LOG.warn("NEGATIVE time: " + rcc.toString());
+		return rcc;
 	}
 
 	/**
@@ -256,7 +268,7 @@ public class ProphitParserLoader implements Parser, Loader
 		CallID cid = null;
 	
 		cid = new CallID( rccArray[rccID], ((parentID != -1) ?  rccArray[parentID] : null), key );
-		LOG.info( "New CallID : " + cid.toString());
+		Log.debug(LOG, "New CallID : ", cid.toString());
 		return (cid);
 	}
 
@@ -288,7 +300,7 @@ public class ProphitParserLoader implements Parser, Loader
 			measurement = (IXMLElement)measurements.elementAt(i);
 			r = makeNewRCC(measurement);
 			if (r.getKey() < 0 || r.getKey() > rccArray.length)
-				LOG.info("r.getKey() = " + r.getKey() + " and rccArray.length = " + rccArray.length);
+				Log.debug(LOG, "r.getKey() = ", r.getKey(), " and rccArray.length = ", rccArray.length);
 			rccArray[r.getKey()] = r;
 		}
 
@@ -316,10 +328,10 @@ public class ProphitParserLoader implements Parser, Loader
 			fraction = makeNewCallFraction(invocation);
 			// if fraction != -1 then we have a callfraction to process as well (not a proxy call)
 			c = makeNewCallID(invocation, rccArray, (fraction != -1) ? callkey++ : -1);
-	      LOG.info("callkey is : " + callkey);
+			Log.debug(LOG, "callkey is : ", callkey);
 			// we use getKey() to place the callID into the index. 
 			// quite simply, that is what the CallGraph constructor is expecting, that 
-			// a callID's key will match the parent RCC key, or else it will be a proxy call.
+			// a callID's key will match the RCC key, or else it will be a proxy call.
 			callFractions[c.getKey()] = (fraction != -1) ? fraction : 1;
 			calls[c.getKey()] = c;
 			//System.out.println("CALLID: " + calls[c.getKey()]);
@@ -341,7 +353,7 @@ public class ProphitParserLoader implements Parser, Loader
 		RCC[] rccArray = new RCC[vMeasurements.size()+1];	    
 		processMeasurements( vMeasurements, rccArray );
 
-		LOG.info("Finished Measurements.");	
+		LOG.debug("Finished Measurements.");	
 
 		// we need to guarantee the array is long enough... 
 		CallID[] calls = new CallID[vInvocations.size() + rccArray.length]; 
@@ -349,13 +361,13 @@ public class ProphitParserLoader implements Parser, Loader
 
 		processInvocations( vInvocations, rccArray, calls, callFractions );
 
-		LOG.info("Finished Invocations. " + calls.length);
-		LOG.info("ACTUAL ITEMS: " + (vInvocations.size()));
+		Log.debug(LOG, "Finished Invocations. numCalls = ", calls.length);
+		Log.debug(LOG, "ACTUAL ITEMS: ", vInvocations.size());
 		CallGraph cg;
 		try 
 		{
 			cg = new CallGraph(calls, callFractions);
-			LOG.info("ProphitParserLoader completed successfully");
+			LOG.debug("ProphitParserLoader completed successfully");
 			return (cg);
 		}
 		catch (Exception x) 
@@ -382,7 +394,7 @@ public class ProphitParserLoader implements Parser, Loader
 		{
 			if ( systemID != null && systemID.endsWith("profile-data.dtd") )
 			{
-				Log.debug(LOG, "Loading profile-data.dtd as a resource");
+				LOG.debug("Loading profile-data.dtd as a resource");
 				return new InputStreamReader(getClass().getClassLoader().getResourceAsStream("profile-data.dtd"));
 			}
 			return super.openStream(publicID, systemID);
