@@ -65,18 +65,6 @@ class DepthSliderModel
 		Call root = model.getRootRenderState().getRenderCall();
 		Log.debug(LOG, "Computing maxDepth for root ", root, ", computeTime = ", computeTime);
 		int newMaxDepth;
-		// If we are rendering the root of the call graph, use CallGraph#getMaxDepth()
-		/*
-		if ( model.getRootCall().equals(root)  )
-		{
-			newMaxDepth = model.getRootCall().getMaxDepth();
-			Log.debug(LOG, "\tUsing root depth ", newMaxDepth);
-		}
-		// Otherwise, spend computeTime trying to compute the newMaxDepth
-		// If that fails, set the newMaxDepth to CallGraph#getMaxDepth - rootRenderCall.depth()
-		else
-		{
-		*/
 		MaxDepthVisitor visitor = new MaxDepthVisitor(computeTime);
 		root.depthFirstTraverse(visitor);
 		if ( visitor.getMaxDepth() != -1 )
@@ -89,12 +77,12 @@ class DepthSliderModel
 			newMaxDepth = model.getRootCall().getMaxDepth() - root.getDepth();
 			Log.debug(LOG, "\tTimed out. Using depth estimate ", newMaxDepth);
 		}
-		// }
 		setMaxDepth(newMaxDepth);
 	}
 
 	private void setMaxDepth(int newMaxDepth)
 	{
+		Log.debug(LOG, "maxDepth = ", newMaxDepth);
 		if ( newMaxDepth != maxDepth )
 		{
 			int oldMaxDepth = maxDepth;
