@@ -94,8 +94,9 @@ public class TestDashProfParser
 	public void testDashProfParserSimple() throws Exception
 	{
 		Parser parser = ParserFactory.instance().createParser(new File(System.getProperty("basedir") + "/data/simple.prof"));
-		parser.execute();
-		List callIDs = parser.getCallIDs();
+		ModelBuilder builder = ModelBuilderFactory.newModelBuilder();
+		parser.execute(builder);
+		List callIDs = builder.getCallIDs();
 		List proxyCallIDs = CallID.getProxyCallIDs(callIDs);
 
 		assertTrue(callIDs + ".size should be 14",
@@ -130,5 +131,15 @@ public class TestDashProfParser
 		SimpleVisitor visitor = new SimpleVisitor();
 		cg.getRoot().depthFirstTraverse(visitor);
 		assertTrue("Expected to be visited 13 times", visitor.getCount() == 13);
-	}		
+	}
+	
+	/**
+	 * Tests the -prof parser for data/hello.prof
+	 */
+	public void testDashProfParserHello() throws Exception
+	{
+		Loader loader = LoaderFactory.instance().createLoader(new File(System.getProperty("basedir") + "/data/hello.prof"));
+		loader.parse();
+		CallGraph cg = loader.solve();
+	}
 }
