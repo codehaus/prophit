@@ -24,9 +24,10 @@ import java.util.List;
 public class CallID
 {
 	private final RCC rcc;
-	private final RCC parent;
 	private final int key;
-	
+
+	private RCC parent = null;
+
 	public CallID(RCC rcc, RCC parent)
 	{
 		this(rcc, parent, -1);
@@ -93,5 +94,12 @@ public class CallID
 				proxyCalls.add(callID);
 		}
 		return proxyCalls;
+	}
+
+	void setParent(RCC rcc)
+	{
+		if ( parent != null )
+			throw new IllegalArgumentException("parent is non-null in CallID.setParent");
+		this.parent = rcc;
 	}
 }
