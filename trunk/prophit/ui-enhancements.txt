@@ -1,0 +1,47 @@
+
+Want to be able to go back/forward/up/home using toolbar buttons
+
+up is easy : 'p'
+home is easy : 'r'
+back/forward : need to store a history of rootRenderCalls, and have the ability to move backward and forward through the list
+
+List rootRenderCalls
+int  rootRenderIndex = -1
+
+BlockDiagramModel(cg)
+  setRenderCall(cg)
+
+void setRenderCall(Call call):
+	for ( int i = rootRenderCalls.size() - 1; i > rootRenderIndex; --i ):
+		rootRenderCalls.remove(i)
+	rootRenderCalls.add(call)
+	nextRenderCall()
+
+void getRenderCall(Call call):
+
+boolean hasParentRenderCall():
+	return getRenderCall().getParent() != null
+
+void setRenderCallToParent():
+	Call parent = getRenderCall().getParent()
+	if ( parent != null ):
+		setRenderCall(parent)
+
+boolean hasNextRenderCall():
+	return rootRenderCalls.size() - 1 > rootRenderIndex
+
+void previousRenderCall():
+	if ( !hasNextRenderCall() ):
+		return
+	++rootRenderIndex
+	invalidate()
+
+boolean hasPreviousRenderCall():
+	return rootRenderIndex > 0
+
+void previousRenderCall():
+	if ( !hasPreviousRenderCall() ):
+		return
+	--rootRenderIndex
+	invalidate()
+		  
