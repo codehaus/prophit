@@ -1,0 +1,177 @@
+<html>
+
+<head>
+<title>Orbit Concepts</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link rel="stylesheet" href="default.css" type="text/css">
+</head>
+
+<body class="normal" bgcolor="#FFFFFF" text="#000000">
+<h1 align="center">Orbit Concepts</h1>
+<table border="0" cellspacing="0" cellpadding="0" bgcolor="eeeeee">
+  <tr> 
+    <td width="160" nowrap>Previous : <a href="quick-start.html">Quick Start</a></td>
+    <td width="20" bgcolor="ffffff" nowrap>&nbsp;</td>
+    <td width="160" nowrap>Up : <a href="quick-start.html">Quick Start</a></td>
+    <td width="20" bgcolor="ffffff" nowrap>&nbsp;</td>
+    <td width="160" nowrap>Next : </td>
+  </tr>
+</table>
+<h1>Call Graphs</h1>
+<p>The operation of all computer programs can be represented as a call graph. 
+  Consider a simple database test program which has the following methods: </p>
+<ul>
+  <li><code>main</code> : the entry point of the program</li>
+  <li><code>init</code> : initializes the database with some standard template 
+    data</li>
+  <li><code>test</code> : function which implements the tests</li>
+  <li><code>DBExec</code> : function which parses and executes a SQL statement</li>
+  <li><code>insert</code> : inserts a table row</li>
+  <li><code>update</code> : updates the data in a table row</li>
+  <li><code>write</code> : writes the data to the data store (memory or hard disk)</li>
+</ul>
+Suppose that the call graph for this program looks like the following:	
+<p>
+<img src="call-graph.gif">
+</p>
+<p>The numbers in parentheses are used to identify different invocations of the 
+  same function. For instance, <code>DBExec</code> is invoked from <code>init</code> 
+  and from <code>test</code>.</p>
+<p>Each of these function invocations takes a certain amount of CPU time. This 
+  CPU time is what profilers typically measure, one way or another. (See <a href="<a href="http://www.tarma.com/articles/index.htm#1997nov">here</a> 
+  for an quick read on different profiling techniques). <!-- TODO: add the call times to the diagram --></p>
+<h1>Traditional Profile Visualization</h1>
+<p>Most profiler user interfaces look very similar. The primary display is a tree 
+  view that looks a lot like the diagram above. Each function call is represented 
+  as a node in the tree, and the amount of time spent in each function is typically 
+  written next to the name of the function. The number of invocations of that 
+  function may also be shown. There is also often a secondary display which shows 
+  'hotspots'. A hot spot is a function in which the program spent a lot of time. 
+  In our database example, <code>write</code> is probably a hotspot. The hotspot 
+  display is typically a listing of the program hotspots, as best the profile 
+  visualizer can determine them, with the callers of each hotspot drawn in a tree 
+  that is essentially an inverted view of the call graph. 
+</p>
+<h2>Problems With The 'Tree View' Approach</h2>
+<p>What's wrong with the tree view approach to profile visualization? </p>
+<ol>
+  <li>Display density. A typical profile consists of hundreds or even thousands 
+    of functions, each of which may be called from many different places in the 
+    program, and each of which has its own associated CPU time and number of invocations. 
+    Yet, in the tree view approach, most of the screen real estate is occupied 
+    by text (the function names and times) and empty space. Only a small fraction 
+    of the program can be seen at once, and the most interesting data (the CPU 
+    times) are represented as text rather than as a diagram. The human eye and 
+    brain are very good at assimilating large amounts of information presented 
+    visually, if it is presented in a powerful way. The information density of 
+    the 'tree view' GUI is very low.</li>
+  <li>Inflexbility. The simple top-down call graph and bottom-up hotspot views 
+    of the data are all that is available. Many performance problems do not normally 
+    show up in these 2 views. Yet there is no mechanism for mining the data for 
+    other, more subtle problems.</li>
+</ol>
+<h1>Profile Visualization Using Orbit</h1>
+<p>Orbit re-invents the visual display of profiler data using innovative and powerful 
+  new views of profiler data. By focusing on the data, rather than text, Orbit 
+  is able to present much more information to the user than a tree view display 
+  does. </p>
+<a name="tower_diagram">
+<h2>The Tower Diagram</h2>
+</a> 
+<p>The goal of the Orbit user interface is to present as much data about the program's 
+  profile. The Tower Diagram, shown below in the context of the Orbit application, 
+  replaces the tree view as the fundamental display paradigm.</p>
+<img src="deep-profile.png">
+<p>The Tower Diagram has the following characteristics:</p>
+<ul>
+  <li>Each block represents a function call in the context of its <a href="glossary.html#caller">caller</a>. 
+    The area of the block is proportional to its <a href="glossary.html#inclusive">inclusive 
+    time</a>.</li>
+  <li>The block with the white highlight is the 'selected function'. Blocks with 
+    yellow highlights are other invocations of the same function.</li>
+  <ul>
+    <li>The selected function is selected by single-clicking on it with the mouse</li>
+    <li>The tables on the right hand side of Orbit show detailed information about 
+      the selected function.</li>
+  </ul>
+  <li>All the <a href="glossary.html#callee">callee</a> functions of the selected function are rendered as blocks stacked on top of it. Since the area of each 
+    block is proportional to its inclusive time, and the sum of the inclusive 
+    times of all a functions callees cannot be greater than the inclusive time 
+    of the function itself, the callee blocks always fit within the area of their 
+    caller.</li>
+  <li>The entire diagram can be rotated by clicking-and-dragging on the diagram.</li>
+  <li>The slider bar at the top of Orbit shows the maximum call depth which is 
+    displayed in the diagram. In the example above, functions up to 14 calls deep 
+    are being displayed.</li>
+  <ul>
+    <li>The call depth can be expanded beyond 15 by clicking on the diagram and 
+      using the + and - keys</li>
+  </ul>
+  <li>The text at the bottom shows information about the function which is at 
+    the base of the diagram</li>
+    <ul>
+	  <li>To re-draw the diagram with a different function as the base, double-click on that function's block in the diagram.</li>
+	</ul>
+</ul>
+
+<h2><a name="navigation">Navigation Buttons</a></h2>
+<p>The buttons at the top of the application are all used to change the root of 
+  the block diagram. Suppose that the </p>
+<dl> 
+  <dt>Back</dt>
+  <dd>Similar to a Back button in a web browser. Changes the root of tower diagram 
+    back to its previous function</dd>
+  <dt>Forward</dt>
+  <dd>Similar to a Forward button in a web browser. Un-does the effect of using 
+    the Back button. </dd>
+  <dt>Parent</dt>
+  <dd>Sets the root of the tower diagram to the <a href="glossary.html#caller">caller</a> 
+    of the current diagram root</dd>
+  <dt>Root</dt>
+  <dd>Sets the root of the tower diagram to the root of the entire profile</dd>
+</dl>
+<p></p>
+
+<a name="call_tables"> 
+<h2>Call Tables</h2>
+</a> 
+<p>To the right of the Tower Diagram are the Call Tables. </p>
+<p>The top table shows detailed information about the selected function. Specifically:</p>
+<ul>
+  <li>The name of the function and its Java class. Pause the mouse over the function 
+    name text to see the fully-qualified name.</li>
+  <li>The <a href="glossary.html#inclusive">inclusive time</a> of <i>all occurrances 
+    </i> of the function in the current tower diagram.</li>
+  <li>The <a href="glossary.html#exclusive">exclusive time</a> of <i>all occurrances 
+    </i> of the function in the current tower diagram.</li>
+  <li>The sum of the number of invocations of <i>all occurrances</i> of the function 
+    in the current tower diagram</li>
+</ul>
+<p>The caller table shows:</p>
+<ul>
+  <li>The name of each caller of the selected function which is visible in the 
+    current tower diagram. Pause the mouse over the function name text to see 
+    the fully-qualified name.</li>
+  <li>The percentage of inclusive time that was spent as a callee of the caller</li>
+</ul>
+<p>The callee table shows:</p>
+<ul>
+  <li>The name of each callee of the selected function which is visible in the 
+    current tower diagram. Pause the mouse over the function name text to see 
+    the fully-qualified name.</li>
+  <li>For each callee, the percentage of the total inclusive time for all callees 
+    that was spent in that callee.</li>
+</ul>
+<table border="0" cellspacing="0" cellpadding="0" bgcolor="eeeeee">
+  <tr> 
+    <td width="160" nowrap>Previous : <a href="quick-start.html">Quick Start</a></td>
+    <td width="20" bgcolor="ffffff" nowrap>&nbsp;</td>
+    <td width="160" nowrap>Up : <a href="quick-start.html">Quick Start</a></td>
+    <td width="20" bgcolor="ffffff" nowrap>&nbsp;</td>
+    <td width="160" nowrap>Next : </td>
+  </tr>
+</table>
+<h1>&nbsp;</h1>
+
+</body>
+</html>
