@@ -161,9 +161,10 @@ public class Test
 
 			int getCount() { return count; }
 			
-			public void visit(CallID callID, IntStack callStack)
+			public boolean visit(CallID callID, IntStack callStack)
 			{
 				++count;
+				return true;
 			}			
 		}
 
