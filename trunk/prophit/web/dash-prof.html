@@ -36,7 +36,9 @@
   <li> Does not work with multi-threaded programs. Profile data for all the threads 
     is all mixed up together</li>
   <li>Has a significant performance impact. You can expect your program to take 
-    several times longer to run than without the <code>-prof</code> option</li>
+    several times longer to run than without the <code>-prof</code> option. The 
+    HelloList program takes 2:31 to profile with <code>-prof</code> and 0:28 to 
+    profile with <code>hprof</code>, both running JDK 1.3.</li>
   <li>Only captures 2 levels of stack depth. If function A calls function X which 
     calls function Y, and function B calls function X which calls function Y, 
     <code>-prof</code> does not provide any way to tell how much time in function 
