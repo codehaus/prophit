@@ -1,0 +1,45 @@
+package orbit.parsers;
+
+import util.*;
+
+//import orbit.gui.CallAdapter;
+//import orbit.gui.TimeMeasure;
+//import orbit.gui.RectangleLayout;
+import orbit.model.*;
+import orbit.parsers.*;
+import orbit.util.*;
+
+import junit.framework.TestCase;
+
+import java.awt.geom.Rectangle2D;
+import java.util.*;
+import java.io.*;
+
+public class TestProphitParser
+	extends TestCase
+{
+    public TestProphitParser(String name)
+    {
+	super(name);
+    }
+
+    public void testExampleXML() throws Exception
+    {
+	try {
+	    //System.out.println("HEY");
+
+	    Parser parser = new ProphitParser(new FileReader(System.getProperty("basedir") + "/test/data/simple-profile-std.xml")); 
+
+	    assertTrue("File Format is recognized.", parser.isFileFormatRecognized());
+	    ModelBuilder builder = ModelBuilderFactory.newModelBuilder();
+	    parser.execute(builder);
+	}
+	catch (Exception x)
+	    {
+		System.out.println(x.getMessage());
+		throw new Exception(x.getMessage());
+	    }
+
+    }
+
+}

@@ -55,6 +55,8 @@ public class CallGraph
 		for ( int i = 0; i < callIDs.length; ++i )
 		{
 			CallID id = callIDs[i];
+			//System.out.println("index: " + i);
+			//if (id != null) System.out.println("Parent: " + String.valueOf(id.getParentRCCKey()));
 			if ( id != null && id.getParentRCCKey() == -1 )
 			{
 				rootIDs.add(id);
@@ -111,6 +113,7 @@ public class CallGraph
 			{
 				int key = id.getKey();
 				int parentKey = id.getParentRCCKey();
+				//System.out.println("KEY: " + parentKey);
 				parentRCCKeys[id.getKey()] = parentKey;
 				if ( parentKey != -1 )
 				{
