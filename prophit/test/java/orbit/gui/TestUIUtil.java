@@ -43,5 +43,11 @@ public class TestUIUtil
 
 		name = "UIUtil.getShortName(UIUtil.java)";
 		assertEquals("UIUtil.getShortName(UIUtil.java)", UIUtil.getShortName(name));
+
+		name = "test.HelloList.buildAsBuffer(I)Ljava/lang/String;";
+		assertEquals("HelloList.buildAsBuffer", UIUtil.getShortName(name));
+
+		name = "HelloList.buildAsBuffer();";
+		assertEquals("HelloList.buildAsBuffer", UIUtil.getShortName(name));
 	}
 }

@@ -28,11 +28,35 @@ class UIUtil
 	}
 
 	/**
-	 * Given a String that looks like 'some.package.Class(Class.java)' return
-	 * 'Class(Class.java)'.
+	 * Format function call descriptions into a short format.
+	 * <table>
+	 * <tr><th>Input</th><th>Output</th></tr>
+	 * <tr><td>some.package.Class.method</td><td>Class.method</td></tr>
+	 * <tr><td>some.package.Class.method(Class.java)</td><td>Class.method(Class.java)</td></tr>
+	 * <tr><td>some.package.Class.method(I)Ljava/lang/String;</td><td>Class.method</td></tr>
+	 * </table>
 	 */
 	public static String getShortName(String name)
 	{
+		/*
+		 * See if the method String contains the type signature, e.g.
+		 * <code>(ILjava/lang/String;)</code>. The type signature is detected by looking
+		 * at the contents of the last parenthesized region. If there is no occurance of
+		 * a '.', a '&lt;', or a ':', then it is assumed to be a type signature.
+		 */
+		int lastParenCloseIndex = name.lastIndexOf(')');
+		if ( lastParenCloseIndex != -1 )
+		{
+			int lastParenOpenIndex = name.lastIndexOf('(');
+			String parenContents = name.substring(lastParenOpenIndex, lastParenCloseIndex);
+			if ( parenContents.indexOf('.') == -1 &&
+				 parenContents.indexOf('<') == -1 &&
+				 parenContents.indexOf(':') == -1 )
+			{
+				name = name.substring(0, lastParenOpenIndex);
+			}
+		}
+		
 		int parens = 0;
 		int dotCount = 0;
 		StringBuffer sb = new StringBuffer();

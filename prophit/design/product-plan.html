@@ -10,7 +10,7 @@
 <div align="center">
   <h1>Orbit Development Plan</h1>
   <br>
-  September 11, 2002<br>
+  September 14, 2002<br>
 </div>
 
 
@@ -31,9 +31,32 @@ Priorities are ranked from 1 to 5, with 5 being the highest.
     <td width="20%">&nbsp;</td>
   </tr>
   <tr bgcolor="eeeeee"> 
-    <td width="70%">'Getting Started' guide (cookbook), including how to use hprof 
-      and links to other sites with more info</td>
+    <td width="70%">'Getting Started' guide (cookbook)</td>
     <td width="10%">5</td>
+    <td width="20%">&nbsp;</td>
+    <td width="20%">&nbsp;</td>
+  </tr>
+  <tr bgcolor="eeeeee"> 
+    <td width="70%">Document the hsqldb hprof sample</td>
+    <td width="10%">5</td>
+    <td width="20%">&nbsp;</td>
+    <td width="20%">&nbsp;</td>
+  </tr>
+  <tr bgcolor="eeeeee"> 
+    <td width="70%">Document the HelloList hprof sample</td>
+    <td width="10%">5</td>
+    <td width="20%">&nbsp;</td>
+    <td width="20%">&nbsp;</td>
+  </tr>
+  <tr bgcolor="eeeeee"> 
+    <td width="70%">Link from the app to the doc page</td>
+    <td width="10%">5</td>
+    <td width="20%">&nbsp;</td>
+    <td width="20%">&nbsp;</td>
+  </tr>
+  <tr bgcolor="eeeeee">
+    <td width="70%">Need an 'About' box for the GUI</td>
+    <td width="10%">4</td>
     <td width="20%">&nbsp;</td>
     <td width="20%">&nbsp;</td>
   </tr>
@@ -60,7 +83,7 @@ Priorities are ranked from 1 to 5, with 5 being the highest.
   <tr bgcolor="eeeeee"> 
     <td width="70%">Parsed profile caching implementation should be made more 
       complete, general, and robust</td>
-    <td width="10%">4</td>
+    <td width="10%">3</td>
     <td width="20%">&nbsp;</td>
     <td width="20%">&nbsp;</td>
   </tr>
@@ -73,7 +96,7 @@ Priorities are ranked from 1 to 5, with 5 being the highest.
     <td width="20%">&nbsp;</td>
     <td width="20%">&nbsp;</td>
   </tr>
-  <tr bgcolor="eeeeee">
+  <tr bgcolor="eeeeee"> 
     <td width="70%">GUI should show a splash screen while it is initializing</td>
     <td width="10%">2</td>
     <td width="20%">&nbsp;</td>
@@ -154,61 +177,75 @@ Priorities are ranked from 1 to 5, with 5 being the highest.
 <h2> Features Implemented</h2>
 <table width="90%" border="0" cellspacing="1">
   <tr> 
-    <th width="70%" bgcolor="ccccff">Description</th>
-    <th width="10%" bgcolor="ccccff">Priority</th>
+    <th width="49%" bgcolor="ccccff">Description</th>
+    <th width="6%" bgcolor="ccccff">Priority</th>
     <th width="20%" bgcolor="ccccff">Details</th>
-    <th width="20%" bgcolor="ccccff">Date Closed</th>
-    <th width="20%" bgcolor="ccccff">Task Doc</th>
+    <th width="10%" bgcolor="ccccff">Date Closed</th>
+    <th width="15%" bgcolor="ccccff">Task Doc</th>
   </tr>
   <tr bgcolor="eeeeee"> 
-    <td width="70%" height="2">File menu option to open a sample profile</td>
-    <td width="10%" height="2">4</td>
-    <td width="20%" height="2">&nbsp;</td>
-    <td width="20%" height="2">2002/09/11</td>
-    <td width="20%" height="2">&nbsp;</td>
+    <td width="49%" height="2">Document the HelloList -prof sample</td>
+    <td width="6%" height="2">5</td>
+    <td width="20%" height="2">see web/hello-list-prof-sample.html</td>
+    <td width="10%" height="2">2002/09/14</td>
+    <td width="15%" height="2">&nbsp;</td>
   </tr>
   <tr bgcolor="eeeeee"> 
-    <td width="70%">Double-clicking on a cell in the caller/callee table should 
+    <td width="49%" height="2">Describe the -prof and hprof profilers</td>
+    <td width="6%" height="2">5</td>
+    <td width="20%" height="2">see web/hprof.html and web/dash-prof.html</td>
+    <td width="10%" height="2">2002/09/14</td>
+    <td width="15%" height="2">&nbsp;</td>
+  </tr>
+  <tr bgcolor="eeeeee"> 
+    <td width="49%" height="2">File menu option to open a sample profile</td>
+    <td width="6%" height="2">4</td>
+    <td width="20%" height="2">&nbsp;</td>
+    <td width="10%" height="2">2002/09/11</td>
+    <td width="15%" height="2">&nbsp;</td>
+  </tr>
+  <tr bgcolor="eeeeee"> 
+    <td width="49%">Double-clicking on a cell in the caller/callee table should 
       focus<br>
       the application on the method associated with that cell, and hi-lite<br>
       the calls of that method</td>
-    <td width="10%">5</td>
+    <td width="6%">5</td>
     <td width="20%"><a href="ui-enhancements.txt">ui-enhancements.txt</a></td>
-    <td width="20%">2002/08/12</td>
-    <td width="20%">&nbsp;</td>
+    <td width="10%">2002/08/12</td>
+    <td width="15%">&nbsp;</td>
   </tr>
   <tr bgcolor="eeeeee"> 
-    <td width="70%" height="2">Change the behavior of block selection so that 
+    <td width="49%" height="2">Change the behavior of block selection so that 
       the other blocks which have the same RCC as the selected block are also 
       high-lighted, in a different color</td>
-    <td width="10%" height="2">5</td>
+    <td width="6%" height="2">5</td>
     <td width="20%" height="2"><a href="ui-enhancements.txt">ui-enhancements.txt</a></td>
-    <td width="20%" height="2">2002/08/12</td>
-    <td width="20%" height="2">&nbsp;</td>
+    <td width="10%" height="2">2002/08/12</td>
+    <td width="15%" height="2">&nbsp;</td>
   </tr>
   <tr bgcolor="eeeeee"> 
-    <td width="70%" height="2">Want to be able to go back/forward/up/home using 
+    <td width="49%" height="2">Want to be able to go back/forward/up/home using 
       toolbar buttons</td>
-    <td width="10%" height="2">5</td>
+    <td width="6%" height="2">5</td>
     <td width="20%" height="2"><a href="ui-enhancements.txt">ui-enhancements.txt</a></td>
-    <td width="20%" height="2">2002/08/12</td>
-    <td width="20%" height="2">&nbsp;</td>
+    <td width="10%" height="2">2002/08/12</td>
+    <td width="15%" height="2">&nbsp;</td>
   </tr>
   <tr bgcolor="eeeeee"> 
-    <td width="70%" height="2">Implement a JavaWebStart installer for Orbit</td>
-    <td width="10%" height="2">5</td>
+    <td width="49%" height="2">Implement a JavaWebStart installer for Orbit</td>
+    <td width="6%" height="2">5</td>
     <td width="20%" height="2">&nbsp;</td>
-    <td width="20%" height="2">2002/08/14</td>
-    <td width="20%" height="2">&nbsp;</td>
+    <td width="10%" height="2">2002/08/14</td>
+    <td width="15%" height="2">&nbsp;</td>
   </tr>
   <tr bgcolor="eeeeee"> 
-    <td width="70%" height="2">&nbsp;</td>
-    <td width="10%" height="2"> 
+    <td width="49%" height="2">&nbsp;</td>
+    <td width="6%" height="2"> 
       <div align="left"></div>
     </td>
     <td width="20%" height="2">&nbsp;</td>
-    <td width="20%" height="2">&nbsp;</td>
-    <td width="20%" height="2">&nbsp;</td>
+    <td width="10%" height="2">&nbsp;</td>
+    <td width="15%" height="2">&nbsp;</td>
   </tr>
 </table>
 <h2>Bugs Fixed</h2>
@@ -221,6 +258,14 @@ Priorities are ranked from 1 to 5, with 5 being the highest.
     <th width="5%" bgcolor="ccccff" height="23">Task Doc</th>
   </tr>
   <tr bgcolor="eeeeee">
+    <td width="26%">-prof method names not displaying correctly</td>
+    <td width="5%">4</td>
+    <td width="55%">Updated the UIUtil class to correctly implement getShortName() 
+      for -prof output</td>
+    <td width="9%">2002/09/14</td>
+    <td width="5%">&nbsp;</td>
+  </tr>
+  <tr bgcolor="eeeeee"> 
     <td width="26%">In some cases, the children of a block with very little exclusive 
       time do not take up most of the area of their parent.</td>
     <td width="5%"> 

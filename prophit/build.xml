@@ -79,13 +79,19 @@
 	</zip>
   </target>
 
-  <target name="web" depends="jar">
+  <target name="web-copy">
+    <copy file="${basedir}/test/java/util/HelloList.java" tofile="${webdist}/java/util/HelloList.java.txt" />
+    <copy todir="${webdist}">
+ 	  <fileset dir="${basedir}/web" includes="**" excludes="**/CVS"/>
+	</copy>
+  </target>
+
+  <target name="web" depends="jar,web-copy">
 	<delete file="${webdist}/orbit.jnlp" />
 	<delete file="${webdist}/orbit-elrond.jnlp" />
-    <copy todir="${webdist}">
- 	  <fileset dir="${basedir}/web" includes="**" />
-	</copy>
+
 	<replace file="${webdist}/orbit.jnlp" token="@@orbit.version@@" value="${orbit.version}" />
+
     <copy file="${webdist}/orbit.jnlp" tofile="${webdist}/orbit-elrond.jnlp" />
     <copy file="${webdist}/orbit.jnlp" tofile="${webdist}/orbit-arkanoid.jnlp" />
 
