@@ -33,7 +33,7 @@
   </target>
 
   <target name="jar" depends="compile">
-    <jar jarfile="${build}/lib/orbit.jar">
+    <jar manifest="manifest.mf" jarfile="${build}/lib/orbit.jar">
 	  <fileset dir="${build}/classes" />
 	  <fileset dir="resources" />
     </jar>
