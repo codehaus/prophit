@@ -13,23 +13,31 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * The BlockRenderer uses the model to understand how the diagram should be drawn.
+ * It can draw the diagram either as solid shaded quads, or as a wire frame.
+ */
 class BlockRenderer
 	implements CallLayoutAlgorithm.Callback, GLEnum
 {
-	public static final int RENDER_SOLID = 0;
-	public static final int RENDER_WIREFRAME = 1;
+	public static final int    RENDER_SOLID     = 0;
+	public static final int    RENDER_WIREFRAME = 1;
 
-	public static final double HEIGHT = 0.05;
+	/** The height of each block */
+	public static final double HEIGHT           = 0.05;
 
+	/** Blocks smaller than this are not rendered at all */
 	private static final double SIZE_THRESHOLD = 3.0;
-	// If a function makes up more than this amount of time of the parent call, its coloring is shaded
-	// If less, it is rendered in the base block color
+	/**
+	 * If a function makes up more than this amount of time of the parent call, its coloring is shaded.
+	 * If less, it is rendered in the base block color
+	 */ 
 	protected static final double FRACTION_THRESHOLD = 0.30;
 
-	private final GLFunc            gl;
-	private final int               renderMode;
+	private final GLFunc                      gl;
+	private final int                         renderMode;
 	private final BlockDiagramView.ColorModel colorModel;
-	private final int[]             viewport = new int[4];
+	private final int[]                       viewport = new int[4];
 	// TODO: can use Call keys as GL names
 	private final HashMap glNameToCallMap = new HashMap();
 	private final HashMap nameToCallListMap = new HashMap();
@@ -38,9 +46,6 @@ class BlockRenderer
 	private TimeMeasure measure = TimeMeasure.TotalTime;
 
 	/**
-	 * The BlockRenderer uses the model to understand how the diagram should be drawn.
-	 * It can draw the diagram either as solid shaded quads, or as a wire frame.
-	 *
 	 * @param gl the interface to OpenGL
 	 * @param renderMode one of RENDER_SOLID or RENDER_WIREFRAME
 	 */
@@ -89,15 +94,6 @@ class BlockRenderer
 		{
 			return false;
 		}
-
-		/*
-		if ( renderMode == RENDER_WIREFRAME )
-		{
-			double fractionOfRoot = call.getInclusiveTime(measure) / new CallAdapter(rootRenderCall).getInclusiveTime(measure);
-			if ( fractionOfRoot < LINES_MINIMUM_TIME_FRACTION )
-				return null;
-		}
-		*/
 
 		List list = (List)nameToCallListMap.get(call.getName());
 		if ( list == null )
@@ -200,6 +196,7 @@ class BlockRenderer
 
 		gl.glDisable(GL_POLYGON_OFFSET_FILL);
 
+		// Draw the hi-lite lines
 		gl.glDisable(GL_DITHER);
 		gl.glDisable(GL_LIGHTING);
 
