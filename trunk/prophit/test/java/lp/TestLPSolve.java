@@ -19,23 +19,23 @@ public class TestLPSolve
 	 */
 	public void testSolveProfile()
 	{
-		int numVariables = 6;
+		int numVariables = 4;
 		int numRows = 6;
 
 		LP lpSolve = new LP(numRows, numVariables);
-		double[] objective = { 0, 0, 1, 1, 0, 0 };
+		double[] objective = { 0, 1, 1, 0, 0 };
 		lpSolve.setObjectiveFunction(objective);
 		lpSolve.setMinimize(true);
 		double[] rhs  = { -1/3.0, 1/3.0, -2/3.0, 2/3.0, 1.0, 3.0 };
 		short[]  test = { LP.CONSTRAINT_TYPE_GE, LP.CONSTRAINT_TYPE_GE, LP.CONSTRAINT_TYPE_GE, 
 								LP.CONSTRAINT_TYPE_GE, LP.CONSTRAINT_TYPE_EQ, LP.CONSTRAINT_TYPE_LE };
 		double[][] constraints  = {
-			{ 0,			 0,				1,		0,	  -1,		 0 },
-			{ 0,			 0,				1,		0,	  1,		 0 },
-			{ 0,			 0,				0,		1,	  0,		 -1 },
-			{ 0,			 0,				0,		1,	  0,		 1 },
-			{ 0,			 0,				0,		0,	  1,		 1 },
-			{ 0,			 0,				0,		0,	  3,       3 },
+			{ 0, 1,		0,	  -1,		 0 },
+			{ 0, 1,		0,	  1,		 0 },
+			{ 0, 0,		1,	  0,		 -1 },
+			{ 0, 0,		1,	  0,		 1 },
+			{ 0, 0,		0,	  1,		 1 },
+			{ 0, 0,		0,	  3,       3 },
 		};
     
 		for (int i = 0; i < rhs.length; i++ ) 
@@ -50,7 +50,7 @@ public class TestLPSolve
 
 		lpSolve.printSolution();
 
-		double[] expectedSolution = { 0, 0, 0, 0, 1/3.0, 2/3.0 };
+		double[] expectedSolution = { 0, 0, 1/3.0, 2/3.0 };
 		for ( int i = 0; i < expectedSolution.length; ++i )
 		{
 			assertEquals(expectedSolution[i], lpSolve.getSolutionValue(i + 1), 0.001);
