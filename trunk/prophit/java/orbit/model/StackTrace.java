@@ -97,6 +97,17 @@ public class StackTrace
 	}
 
 	/**
+	 * @param i an index between 0 and {@link #size} - 1. The leaf method is returned if <code>i = 0</code>.
+	 * The root-most method is returned if <code>i = size() - 1</code>. 
+	 */
+	public String getMethod(int i)
+	{
+		if ( i < 0 || i > size() )
+			throw new ArrayIndexOutOfBoundsException("Argument to StackTrace.getMethod must be in the range [0..." + size() + ")");
+		return stack[i + beginOffset];  // if we want to protect the array we could return a copy. 
+	}
+
+	/**
 	 * @return name of the leaf-most method (0th index).
 	 */
 	public String getLeafMethod()
@@ -116,11 +127,6 @@ public class StackTrace
 			return stack[beginOffset + 1];
 		else
 			return null;
-	}
-
-	public String[] getMethods()
-	{
-		return stack;  // if we want to protect the array we could return a copy. 
 	}
 
 	public String toString()
