@@ -16,6 +16,7 @@
   </path>
 
   <path id="compile.class.path">
+	 <pathelement path="${basedir}/lib/log4jME.jar" />
   </path>
 
   <target name="init">
@@ -99,6 +100,20 @@
   <target name="build" depends="compile,compile-tests" />
 
   <target name="test" depends="jar,compile,compile-tests">
+    <delete dir="${build}/report" />
+	<mkdir dir="${build}/report" />
+    <junit fork="true">
+	  <sysproperty key="solver.user.name" value="JAVA_USER" />
+	  <sysproperty key="basedir" value="${basedir}" />
+	  <classpath refid="test.class.path" />
+	  <formatter type="brief" usefile="false" />
+	  <batchtest fork="yes">
+	    <fileset dir="test/java">
+		  <include name="**/Test*.java" />
+		  <exclude name="test/**" />
+	    </fileset>
+	  </batchtest>	
+    </junit>
     <java fork="true" classpathref="test.class.path" classname="test.Test">
 		<sysproperty key="solver.user.name" value="JAVA_USER" />
 		<sysproperty key="basedir" value="${basedir}" />

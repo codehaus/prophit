@@ -25,7 +25,8 @@ public class TestHProfParser
 
 		List callIDs = parser.getCallIDs();
 
-		System.out.println(callIDs);
+		// System.out.println(callIDs);
+		System.out.println("TestHProfParser needs more work");
 	}
 
 	static CallID callID(List callIDs, int index)

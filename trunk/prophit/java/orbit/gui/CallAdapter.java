@@ -15,6 +15,10 @@ public class CallAdapter
 	private double rawTotalTimeInChildren = -1;
 	private double rawAverageTimeInChildren = -1;
 
+	/**
+	 * If this constructor is used, the {@link #initialize} method must be called
+	 * before this object can be used.
+	 */
 	public CallAdapter()
 	{
 	}
@@ -28,7 +32,11 @@ public class CallAdapter
 	{
 		return call;
 	}
-	
+
+	/**
+	 * Re-sets all the internal state of the CallAdapter to reflect the new Call. CallAdapters
+	 * are meant to be used in this way to avoid constructing lots of wrapper objects.
+	 */
 	public void initialize(Call call)
 	{
 		this.call = call;
