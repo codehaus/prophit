@@ -29,12 +29,12 @@ public class HProfParser
 		super(new LineNumberReader(reader));
 	}
 
-	public Collection getCallIDs()
+	public List getCallIDs()
 	{
 		return callIDs;
 	}
 	
-	public Collection getProxyCallIDs()
+	public List getProxyCallIDs()
 	{
 		return getProxyCallIDs(callIDs);
 	}
@@ -53,6 +53,30 @@ public class HProfParser
 		{
 		}
 		return false;
+	}
+
+	/**
+	 * Applies the fractional times of each proxy CallID to the parent RCCs of that proxy CallID.
+	 * This step is necessary because the hprof data file does not contain inclusive
+	 * times (or counts) for methods.
+	 */
+	public void postProcess(double[] fractions)
+	{
+		/*
+		for ( Iterator i = callIDs.iterator(); i.hasNext(); )
+		{
+			CallID callID = (CallID)i.next();
+			if ( callID != null && callID.isProxy() )
+			{
+				while ( callID != null && callID.getParentRCC() != null )
+				{
+					double fraction = fractions[callID.getKey()];
+					callID.getParentRCC().adjustTime((int)( callID.getRCC().getTime() * fraction));
+					callID = (CallID)callIDs.get(callID.getParentRCC().getKey());
+				}
+			}
+		}
+		*/
 	}
 
 	public void execute() throws ParseException
@@ -77,6 +101,11 @@ public class HProfParser
 				{
 					int key = 1;
 
+					public int getKey()
+					{
+						return key;
+					}
+
 					public void execute() throws ParseException, IOException
 					{
 						String line;
@@ -97,7 +126,45 @@ public class HProfParser
 					}
 				}			
 
-				new ParseSamples().execute();
+				ParseSamples ps = new ParseSamples();
+				ps.execute();
+				
+				/*
+				 * At each stack depth, if there is no existing stacktrace for a sub-stack of
+				 * a stack trace, make a new RCC for the sub-stack and add it to the list
+				 */
+				int nextKey = ps.getKey();
+				HashSet stackTraceSet = new HashSet();
+				ArrayList newRCCs = new ArrayList();
+				for ( int size = maxStackSize; size > 0; --size )
+				{
+					// First add the 'natural' stacks at the current size
+					for ( Iterator i = rccList.iterator(); i.hasNext(); )
+					{
+						RCC rcc = (RCC)i.next();
+						if ( rcc.getStack().size() == size )
+						{
+							stackTraceSet.add(rcc.getStack());
+						}
+					}
+					newRCCs.clear();
+					for ( Iterator i = rccList.iterator(); i.hasNext(); )
+					{
+						RCC rcc = (RCC)i.next();
+						if ( rcc.getStack().size() > size )
+						{
+							StackTrace parentStack = rcc.getParentStack(size);
+							if ( parentStack != null &&
+								  stackTraceSet.add(parentStack) )
+							{
+								RCC newRCC = new RCC(parentStack, rcc.getCallCount(), 0, nextKey++);
+								// System.out.println("Adding new rcc " + newRCC);
+								newRCCs.add(newRCC);
+							}
+						}
+					}
+					rccList.addAll(newRCCs);
+				}
 
 				/*
 				 * In general, the parent of a stack trace (the 'leaf') may only have a sub-set of the
@@ -142,16 +209,33 @@ public class HProfParser
 					}
 				}
 
+				HashSet parents = new HashSet();
 				for ( Iterator i = callIDs.iterator(); i.hasNext(); )
 				{
 					CallID callID = (CallID)i.next();
-					while ( callID != null && callID.getParentRCC() != null )
+					if ( callID != null && callID.getParentRCC() != null )
 					{
-						callID.getParentRCC().adjustTime(callID.getRCC().getTime());
-						callID = (CallID)callIDs.get(callID.getParentRCC().getKey());
+						parents.add(callID.getParentRCC());
 					}
 				}
-				
+
+				for ( Iterator i = callIDs.iterator(); i.hasNext(); )
+				{
+					CallID callID = (CallID)i.next();
+					if ( callID != null && callID.getParentRCC() != null && !parents.contains(callID.getRCC()))
+					{
+						CallID parent = (CallID)callIDs.get(callID.getParentRCC().getKey());
+						while ( parent != null )
+						{
+							parent.getRCC().adjustTime(callID.getRCC().getTime());
+							if ( parent.getParentRCC() != null )
+								parent = (CallID)callIDs.get(parent.getParentRCC().getKey());
+							else
+								parent = null;
+						}
+					}
+				}
+
 				/*
 				System.out.println(callIDs);
 				for ( Iterator i = callIDs.iterator(); i.hasNext(); )

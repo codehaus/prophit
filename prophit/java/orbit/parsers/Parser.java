@@ -1,14 +1,16 @@
 package orbit.parsers;
 
-import java.util.Collection;
+import java.util.List;
 
 public interface Parser
 {
 	public boolean isFileFormatRecognized();
 
-	public Collection getCallIDs();
+	public List getCallIDs();
 	
-	public Collection getProxyCallIDs();
+	public List getProxyCallIDs();
 
 	public void execute() throws ParseException;
+
+	public void postProcess(double[] fractions);
 }

@@ -28,12 +28,12 @@ public class DashProfParser
 		super(new LineNumberReader(reader));
 	}
 
-	public Collection getCallIDs()
+	public List getCallIDs()
 	{
 		return callIDs;
 	}
 	
-	public Collection getProxyCallIDs()
+	public List getProxyCallIDs()
 	{
 		return getProxyCallIDs(callIDs);
 	}

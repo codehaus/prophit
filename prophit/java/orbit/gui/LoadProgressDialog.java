@@ -104,7 +104,6 @@ public class LoadProgressDialog
 			
 				Collection callIDs = parser.getCallIDs();
 				Collection proxyCallIDs = parser.getProxyCallIDs();
-				CallID[] callIDArray = (CallID[])parser.getCallIDs().toArray(new CallID[0]);
 				double[] fractions;
 			
 				cbParsed.setSelected(true);
@@ -129,7 +128,10 @@ public class LoadProgressDialog
 				{
 					fractions = solver.readFromFile(new FileReader(fractionsFile), callIDs.size());
 				}
-			
+
+				parser.postProcess(fractions);
+
+				CallID[] callIDArray = (CallID[])parser.getCallIDs().toArray(new CallID[0]);
 				cg = new CallGraph(callIDArray, fractions);
 			
 				cbSolved.setSelected(true);

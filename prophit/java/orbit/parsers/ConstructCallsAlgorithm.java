@@ -18,7 +18,7 @@ class ConstructCallsAlgorithm
 			
 	public ConstructCallsAlgorithm(int numRCCs)
 	{
-		this.callIDs = new ArrayList(numRCCs);
+		this.callIDs = new ArrayList(numRCCs + 1);
 		for ( int i = 0; i < numRCCs + 1; ++i )
 		{
 			callIDs.add(i, null);
@@ -60,7 +60,6 @@ class ConstructCallsAlgorithm
 		for ( Iterator i = rccList.iterator(); i.hasNext(); )
 		{
 			RCC rcc = (RCC)i.next();
-
 			List callers = getCallersList(rccListByCallee, rcc, stackSize);
 			if ( callers != null && callers.size() > 1 )
 			{

@@ -15,6 +15,9 @@ public class TestConstructCallsAlgorithm
 	RCC exec;
 	// Child of exec
 	RCC insert;
+	RCC update;
+	RCC concat1;
+	RCC concat2;
 	// Deep child of insert
 	RCC bufferAppend;
 	ArrayList rccList;
@@ -53,6 +56,24 @@ public class TestConstructCallsAlgorithm
 		setupBasicGraph();
 
 		bufferAppend = new RCC(new StackTrace(new String[]{ "bufferAppend", "concat", "insert", }), 100, 25, key++);
+		rccList.add(bufferAppend);
+	}
+
+	private void setupGraphWithAmbiguity()
+	{
+		setupBasicGraph();
+
+		// Child of 'exec'
+		update = new RCC(new StackTrace(new String[]{ "update", "exec", "test" }), 10, 10, key++);
+
+		concat1 = new RCC(new StackTrace(new String[]{ "concat", "insert", "exec" }), 100, 30, key++);
+		concat2 = new RCC(new StackTrace(new String[]{ "concat", "update", "exec" }), 25, 5, key++);
+
+		bufferAppend = new RCC(new StackTrace(new String[]{ "bufferAppend", "modify", "concat", }), 100, 25, key++);
+
+		rccList.add(update);
+		rccList.add(concat1);
+		rccList.add(concat2);
 		rccList.add(bufferAppend);
 	}
 
@@ -130,6 +151,55 @@ public class TestConstructCallsAlgorithm
 		callIDs = algorithm.getCallIDs();
 
 		assertEquals(insert, ((CallID)callIDs.get(bufferAppend.getKey())).getParentRCC());
+	}
+
+	public void testAmbiguity()
+	{
+		setupGraphWithAmbiguity();
+
+		ConstructCallsAlgorithm algorithm = new ConstructCallsAlgorithm(rccList.size());
+
+		HashMap rccListByCallee = new HashMap();
+
+		// Depth of 2
+		mapRCCLeaves(rccListByCallee, rccList, 2);
+
+		ArrayList rootRCCList = new ArrayList();
+		rootRCCList.addAll(rccList);
+		
+		algorithm.execute(rootRCCList, rccListByCallee, 2);
+		List callIDs = algorithm.getCallIDs();
+
+		assertEquals(callIDs.size(), rccList.size() + 1);
+		assertEquals(insert, ((CallID)callIDs.get(concat1.getKey())).getParentRCC());
+		assertEquals(update, ((CallID)callIDs.get(concat2.getKey())).getParentRCC());
+		assertNull(bufferAppend + " should have no parent", ((CallID)callIDs.get(bufferAppend.getKey())).getParentRCC());
+
+		rootRCCList.clear();
+		rootRCCList.add(bufferAppend);
+		rccListByCallee.clear();
+		// Depth of 1
+		mapRCCLeaves(rccListByCallee, rccList, 1);
+
+		algorithm.execute(rootRCCList, rccListByCallee, 1);
+		callIDs = algorithm.getCallIDs();
+
+		// System.out.println("testAmbiguity CallIDs : " + callIDs);
+		
+		assertEquals(rccList.size() + 3, callIDs.size());
+		// Should have 2 proxy CallIDs, thus the callIDs[bufferAppend.key] should be null
+		assertNull(callIDs.get(bufferAppend.getKey()));
+		assertEquals(insert, ((CallID)callIDs.get(concat1.getKey())).getParentRCC());
+		assertEquals(update, ((CallID)callIDs.get(concat2.getKey())).getParentRCC());
+		assertNotNull(callIDs.get(rccList.size() + 1));
+		assertNotNull(callIDs.get(rccList.size() + 2));
+		assertEquals("modify -> bufferAppend [ 8 -> p11 ]", ((CallID)callIDs.get(rccList.size() + 1)).toString());
+		assertEquals("modify -> bufferAppend [ 9 -> p12 ]", ((CallID)callIDs.get(rccList.size() + 2)).toString());
+	}
+
+	private void mapRCCLeaves(Map rccListByCallee, ArrayList rccList, int depth)
+	{
+		mapRCCLeaves(rccListByCallee, (RCC[])rccList.toArray(new RCC[0]), depth);
 	}
 
 	private void mapRCCLeaves(Map rccListByCallee, RCC[] rccs, int depth)
