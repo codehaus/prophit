@@ -16,9 +16,22 @@ public class TestHProfParser
 		super(name);
 	}
 
-	public void testParse() throws Exception
+	public void testParseSamples() throws Exception
 	{
 		File file = new File(System.getProperty("basedir") + "/test/data/hello.hprof.txt");
+		
+		HProfParser parser = new HProfParser(new FileReader(file));
+		parser.execute();
+
+		List callIDs = parser.getCallIDs();
+
+		// System.out.println(callIDs);
+		System.out.println("TestHProfParser needs more work");
+	}
+
+	public void testParseTimes() throws Exception
+	{
+		File file = new File(System.getProperty("basedir") + "/test/data/hello.times.txt");
 		
 		HProfParser parser = new HProfParser(new FileReader(file));
 		parser.execute();
