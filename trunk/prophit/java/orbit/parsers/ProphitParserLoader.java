@@ -8,12 +8,14 @@ import net.n3.nanoxml.*;
 
 import java.io.*;
 import java.util.*;
+import java.util.zip.*;
 
-public class ProphitParser extends AbstractParser
+public class ProphitParserLoader implements Parser, Loader
 {
     public static void main(String[] args) throws Exception
     {
-	ProphitParser parser;
+	ProphitParserLoader parser;
+	ProphitParserLoader loader;
 	ModelBuilder builder = ModelBuilderFactory.newModelBuilder();
 	{
 	    /** At some point, I'll make this File Reader read a zipped
@@ -21,21 +23,79 @@ public class ProphitParser extends AbstractParser
 	     *  Or we can make it a subclass/commandline flag, etc. 
 	     */ 
 	    FileReader reader = new FileReader(args[0]);
-	    parser = new ProphitParser(reader);
+	    parser = new ProphitParserLoader(reader);
 	    parser.execute(builder);
+	    loader = new ProphitParserLoader(parser, null, new File(args[0]));
 	}
-	AbstractParser.main(args, parser, builder);
+	
     }
 
-    public static Category LOG = Category.getInstance(ProphitParser.class);
+    public static Category LOG = Category.getInstance(ProphitParserLoader.class);
     
     private boolean readHeader = false;
     private ModelBuilder builder = null;
-    
-    public ProphitParser(Reader reader)
+    protected final Reader reader;
+    protected final Solver solver;
+    protected final File file;
+    protected final Parser parser;
+    protected boolean parsed = true;
+    protected CallGraph callgraph = null;
+
+    /** 
+     * if we're being instantiated as a parser, use this constructor.
+     */
+    public ProphitParserLoader(Reader reader)
     {
-	super(new LineNumberReader(reader)); // not sure if we want to do this.
+	// we need to convert this to zip format at some point soon...
+	this.reader = (new LineNumberReader(reader)); // not sure if we want to do this.
+	this.parser = this;
+	this.solver = null;
+	this.file = null;
     }
+
+    /**
+     * if we're being constructed as a loader, use this constructor.
+     */
+    public ProphitParserLoader(Parser parser, Solver solver, File file)
+    {
+	this.reader = null;
+	this.parser = parser;
+	this.solver = solver; 
+	this.file = file;
+    }
+
+    /**
+     * If the {@link #execute} method returns null, this method may return an error message which
+     * describes why the profile could not be loaded.
+     */
+    public String getError()
+    {
+	return ("");
+    }
+
+    public String getWarning()
+    {
+	return ("");
+    }
+
+    public synchronized void parse() throws ParseException
+    {
+	this.parser.execute(builder);
+	parsed = true;
+    }
+
+    public synchronized CallGraph solve()
+    {
+	if (!parsed) {
+	    try {
+		this.parse();
+	    } catch (ParseException p) {
+		System.out.println(p.getMessage());
+	    }
+	}
+	return ( this.callgraph );
+    }
+
 
     public boolean isFileFormatRecognized()
     {
@@ -84,7 +144,7 @@ public class ProphitParser extends AbstractParser
 	    System.out.println("ELEMENT: " + callgraph.getFullName());
 	    System.out.println("User: " + callgraph.getFirstChildNamed("user").getContent());
 
-	    CallGraph cg = makeNewCallGraph( callgraph );
+	    this.callgraph = makeNewCallGraph( callgraph );
 
 	    //XMLWriter writer = new XMLWriter(System.out);
 	    //writer.write(callgraph);

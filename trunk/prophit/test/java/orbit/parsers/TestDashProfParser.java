@@ -141,5 +141,5 @@ public class TestDashProfParser
 		Loader loader = LoaderFactory.instance().createLoader(new File(System.getProperty("basedir") + "/data/hello.prof"));
 		loader.parse();
 		CallGraph cg = loader.solve();
-	}
+	} 
 }
