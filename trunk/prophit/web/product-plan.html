@@ -54,7 +54,7 @@ MM_reloadPage(true);
   <table cellspacing="0" cellpadding="4" width="100%">
     <tr>
 			
-      <td class="TopMenu"> Last Published: 10/18/2002 </td>
+      <td class="TopMenu"> Last Published: 10/27/2002 </td>
 			<td>
 				
         <div align="right"> <span class="TopMenu"><a href="index.html">prophIt</a> 
@@ -74,6 +74,7 @@ MM_reloadPage(true);
           <p><span class="MenuHeader">prophIt</span><br>
             <span class="MenuItem"> - <a href="index.html">Home Page</a><br>
             - <a href="news.html">News and Status</a><br>
+            - <a href="product-plan.html">Product Plan</a><br>
             - <a href="team.html">The Team</a><br>
             - <a href="download.html">Download</a></span><span class="MenuItem"><br>
             </span></p>
@@ -96,9 +97,14 @@ MM_reloadPage(true);
 						<td><div id="mainContentLayer">
 						<!-- #BeginEditable "Main%20Content%20Region" -->
                   <div class="header"><font size="4">New Feature Proposals</font></div>
+				  <blockquote>
+				  	This is a summary of our thoughts on product plan and direction.  As with any aspect of our site, please  
+					<a href="mailto:info@prophit.westslopesoftware.com">send email</a> to us with your thoughts and opinions.
+				  </blockquote>
 				  <p>
                   <div class="header">Contents</div>
-                  <ul>
+                  <blockquote>
+				  <ul>
                     <li><a href="#intelligent_labeling">Intelligent labeling</a></li>
                     <li><a href="#wire_frame">Wire-frame mode</a></li>
                     <li><a href="#selection_feedback">Enhanced selection feedback</a></li>
@@ -111,9 +117,12 @@ MM_reloadPage(true);
                   	<li><a href="#perl_loader">Perl profile loader</a></li>
                   	<li><a href="#haskell_loader">Haskell profile loader</a></li>
                   </ul>
-                  <a name="intelligent_labeling"><div class="header">Intelligent labeling of the 
+                  </blockquote>
+				  <a name="intelligent_labeling"><div class="header">Intelligent labeling of the 
                     tower diagram</div>
-                  </a> The typical capacity of person's short-term memory is 7 
+                  </a> 
+				  <blockquote>
+				  The typical capacity of person's short-term memory is 7 
                   items. Without labels, keeping track of which blocks in the 
                   tower diagram correspond to which functions can become unmanagable. 
                   The tower diagram UI can help solve this problem by intelligently 
@@ -141,9 +150,9 @@ MM_reloadPage(true);
                   Expanding the canvas by maximizing the ProphIt application creates 
                   a large amount of label space. If the ProphIt application window 
                   is small, very few labels will fit on the canvas. 
-				  
-				  <p/>
+				  </blockquote>
                   <a name="wire_frame"><div class="header">Wire-frame mode</div></a>
+				  <blockquote>
                   When it is being rotated, the tower diagram currently renders 
                   as a wire frame (with highlights for selected and search-result 
                   blocks). This wire-frame mode is useful for being able to see 
@@ -192,10 +201,12 @@ MM_reloadPage(true);
 				  
 				  <p>If intelligent labeling is implemented, all of the blocks 
                     which render as solid in wire-frame mode can be labeled. </p>
-                  <a name="selection_feedback">
+                  </blockquote>
+				  <a name="selection_feedback">
                   <div class="header">Enhanced selection feedback</div>
                   </a> 
-                  <p>When a block is selected by a mouse-click (a 'selected' block) 
+                  <blockquote>
+				  <p>When a block is selected by a mouse-click (a 'selected' block) 
                     or identified by a search (a 'search-result' block), thin 
                     lines similar to the ribbons on a present are drawn around 
                     the block to hilight it. This hilighting is not particularly 
@@ -213,9 +224,10 @@ MM_reloadPage(true);
                       around the blocks with dotted lines that slowly progress 
                       around the block's edges.</li>
                   </ol>
+				  </blockquote>
                   <a name="new_coloring"> 
                   <div class="header">New coloring options</div>
-                  </a> 
+                  </a> <blockquote>
                   <p>The coloring on the call graph currently shows the exclusive 
                     time of each block. New coloring algorithms could be used 
                     to present other information about the profile. For example:</p>
@@ -237,9 +249,10 @@ MM_reloadPage(true);
                       identical to, a coloring based on total exclusive or inclusive 
                       time. </li>
                   </ol>
+				  </blockquote>
                   <a name="enhanced_searching"> 
                   <div class="header">Enhanced searching</div>
-                  </a> 
+                  </a> <blockquote>
                   <p>The prophIt search bar currently only searches by function 
                     call name. The ability to search based on additional fields 
                     such as inclusive time or exclusive time (as percentages of 
@@ -251,26 +264,32 @@ MM_reloadPage(true);
                   <p>It is common for profilers to show a bar chart that goes 
                     along with this hot-spot view. prophIt could show the search 
                     data with this enhancement as well.</p>
+					</blockquote>
                   <a name="compact_data_format"> 
                   <div class="header">Compact call graph data format</div>
-                  </a> prophIt should have its own compact call graph data format 
+                  </a> 
+				  <blockquote>
+				  prophIt should have its own compact call graph data format 
                   which it can use to distribute profile data in a lightweight 
                   fashion. This format can be used for distributing additional 
                   samples, for storing interesting call graphs on the server, 
                   and for caching call graphs on the users' client machines. 
                   <p> 
-                  <a name="recursion_collapse"> 
+                  </blockquote>
+				  <a name="recursion_collapse"> 
                   <div class="header">Collapse recursive functions</div>
-                  </a> Recursive functions can be hard to profile, because each 
+                  </a>
+				  <blockquote> Recursive functions can be hard to profile, because each 
                   instance of the function call has its own caller and callee 
                   time breakdown. Frequently it would be more useful to be able 
                   to combine the callers and callees for all the recursive call 
                   instances into one call. This gives a more accurate picture 
                   of the time taken by the recursive function and its callees. 
-                  <p> 
+                  <p> </blockquote>
                   <a name="profile_comparison"> 
                   <div class="header">Profile Comparison</div>
-                  </a> Profiling is part of an iterative process in which a program 
+                  </a> 
+				  <blockquote>Profiling is part of an iterative process in which a program 
                   is analyzed, then improved, then analyzed again. It would be 
                   very useful to be able to compare profile data gathered on a 
                   program before and after a set of changes have been made. prophIt 
@@ -283,10 +302,9 @@ MM_reloadPage(true);
                   substantially speed up or slowed down can be quickly identified. 
                   Functions which are added to or dropped from the old profile 
                   can also be highlighted using distinctive colors. 
-				  
-				  <p>
+				  </blockquote>
  				  <a name="python_loader"><div class="header">Python profile loader</div></a>
-				  
+				  <blockquote>
 				  Python has a built-in <a href="http://www.python.org/doc/current/lib/profile.html">profiler</a>
 				  which capture statistics as a Python program runs and saves them to an in-memory data structure.
 				  This profile data can be dumped to a file using <code>profile.Profile.dump_stats()</code> and re-loaded using
@@ -302,22 +320,25 @@ MM_reloadPage(true);
                     is theoretically possible but the procedure is not well documented.
 
 				  <p/>
+				  </blockquote>
  				  <a name="perl_loader"><div class="header">Perl profile loader</div></a>
+				  <blockquote>
 				  Perl has a built-in profiler called <a href="http://www.perldoc.com/perl5.6/lib/Devel/DProf.html">Devel::DProf</a>.
 				  This profiler dumps out profiling data to yet another text file format which prophIt could be adapted to read.
 
 				  <p>
+				  </blockquote>
  				  <a name="haskell_loader"><div class="header">Haskell profile loader</div></a>
-                  <p><a name="haskell_loader"> </a> The functional language Haskell 
+                  <blockquote>The functional language Haskell 
                     also has a <a href="http://www.haskell.org/ghc/docs/latest/html/users_guide/profiling.html">built-in 
                     profiler</a> for which a prophIt profile loader could potentially 
-                    be implemented.</p>
+                    be implemented.
                   <p>The file format looks quite simple, rather similar to the 
                     <code>java -prof</code> output. While the execption model 
                     of Haskell is very different than any imperitive language, 
-                    the profile data still breaks down to the form of a call stack.</p>
-                  <!-- #EndEditable --> </div>
-              </td>
+                    the profile data still breaks down to the form of a call stack.</p></blockquote>
+                  <!-- #EndEditable -->
+						</div></td>
 					</tr>
 				</table>
 				<table width="100%" border="0" cellspacing="0" cellpadding="0">
