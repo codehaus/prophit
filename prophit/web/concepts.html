@@ -12,11 +12,26 @@
   <tr> 
     <td width="160" nowrap>Previous : <a href="quick-start.html">Quick Start</a></td>
     <td width="20" bgcolor="ffffff" nowrap>&nbsp;</td>
-    <td width="160" nowrap>Up : <a href="quick-start.html">Quick Start</a></td>
+    <td width="200" nowrap>Up : <a href="doc.html">Orbit Documentation</a></td>
     <td width="20" bgcolor="ffffff" nowrap>&nbsp;</td>
-    <td width="160" nowrap>Next : </td>
+    <td width="234" nowrap>Next : <a href="profiler-types.html">Supported Profilers</a></td>
   </tr>
 </table>
+<h1>Overview</h1>
+<p>Orbit is an innovative new way to visualize and understand profiler data. The 
+  primary visual paradigm used by most profiler user interfaces (UIs) is the tree 
+  view. A tree view is used to display the program's call graph, with child nodes 
+  in the tree view representing <a href="glossary.html#callee">callee</a> functions. 
+  Most of the screen real estate is taken up by text and whitespace; very little 
+  data is presented to the user and it is very hard to mine the potentially rich 
+  profiler data for useful nuggets of information. </p>
+<p>To improve on the tree view, Orbit makes the data primary, and the text and 
+  labels secondary. <!-- #BeginLibraryItem "/Library/quick-description.lbi" -->The Orbit user interface uses a dense, color-coded, 3-dimensional <a href="concepts.html#screenshot">tower 
+diagram</a> to present much more information on the screen than the traditional 
+tree view. Instead of cluttering the screen, labels and numbers are placed out 
+of the way of the data and are made available on demand. Orbit enables you to 
+use your powers of visual observation and image analysis to find important features 
+of your profile, then provides you with the data you need to improve your programs.<!-- #EndLibraryItem --></p>
 <h1>Call Graphs</h1>
 <p>The operation of all computer programs can be represented as a call graph. 
   Consider a simple database test program which has the following methods: </p>
@@ -38,20 +53,21 @@ Suppose that the call graph for this program looks like the following:
   same function. For instance, <code>DBExec</code> is invoked from <code>init</code> 
   and from <code>test</code>.</p>
 <p>Each of these function invocations takes a certain amount of CPU time. This 
-  CPU time is what profilers typically measure, one way or another. (See <a href="<a href="http://www.tarma.com/articles/index.htm#1997nov">here</a> 
-  for an quick read on different profiling techniques). <!-- TODO: add the call times to the diagram --></p>
-<h1>Traditional Profile Visualization</h1>
+  CPU time is what profilers typically measure, one way or another. (See <a href="http://www.tarma.com/articles/index.htm#1997nov">here</a> 
+  for an quick read on different profiling techniques). 
+  <!-- TODO: add the call times to the diagram -->
+</p>
+<h1>Tree View Profilers</h1>
 <p>Most profiler user interfaces look very similar. The primary display is a tree 
   view that looks a lot like the diagram above. Each function call is represented 
   as a node in the tree, and the amount of time spent in each function is typically 
   written next to the name of the function. The number of invocations of that 
-  function may also be shown. There is also often a secondary display which shows 
-  'hotspots'. A hot spot is a function in which the program spent a lot of time. 
-  In our database example, <code>write</code> is probably a hotspot. The hotspot 
-  display is typically a listing of the program hotspots, as best the profile 
-  visualizer can determine them, with the callers of each hotspot drawn in a tree 
-  that is essentially an inverted view of the call graph. 
-</p>
+  function may also be shown. There is also often a secondary tree view which 
+  shows 'hotspots'. A hot spot is a function in which the program spent a lot 
+  of time. In our database example, <code>write</code> is probably a hotspot. 
+  The hotspot display is typically a listing of the program hotspots, as best 
+  the profile visualizer can determine them, with the callers of each hotspot 
+  drawn in a tree that is essentially an inverted view of the call graph. </p>
 <h2>Problems With The 'Tree View' Approach</h2>
 <p>What's wrong with the tree view approach to profile visualization? </p>
 <ol>
@@ -65,6 +81,10 @@ Suppose that the call graph for this program looks like the following:
     brain are very good at assimilating large amounts of information presented 
     visually, if it is presented in a powerful way. The information density of 
     the 'tree view' GUI is very low.</li>
+  <li>Cluttering of the data by labels. For the purposes of optimizing a program, 
+    the names of the functions are not important until the performance-critical 
+    aspects of the program have been identified. Yet in a tree view profiler, 
+    the timing data is obscured by copious amounts of text.</li>
   <li>Inflexbility. The simple top-down call graph and bottom-up hotspot views 
     of the data are all that is available. Many performance problems do not normally 
     show up in these 2 views. Yet there is no mechanism for mining the data for 
@@ -78,11 +98,12 @@ Suppose that the call graph for this program looks like the following:
 <a name="tower_diagram">
 <h2>The Tower Diagram</h2>
 </a> 
-<p>The goal of the Orbit user interface is to present as much data about the program's 
-  profile. The Tower Diagram, shown below in the context of the Orbit application, 
-  replaces the tree view as the fundamental display paradigm.</p>
-<img src="deep-profile.png">
-<p>The Tower Diagram has the following characteristics:</p>
+<p>The goal of the Orbit user interface is to present as much relevant data as 
+  possible, while displaying labels and numbers on demand. The 'tower diagram', 
+  shown below in the context of the Orbit application, replaces the tree view 
+  as the fundamental display paradigm.</p>
+<img src="deep-profile.png"><a name="screenshot"></a> 
+<p>The tower diagram has the following characteristics:</p>
 <ul>
   <li>Each block represents a function call in the context of its <a href="glossary.html#caller">caller</a>. 
     The area of the block is proportional to its <a href="glossary.html#inclusive">inclusive 
@@ -94,7 +115,8 @@ Suppose that the call graph for this program looks like the following:
     <li>The tables on the right hand side of Orbit show detailed information about 
       the selected function.</li>
   </ul>
-  <li>All the <a href="glossary.html#callee">callee</a> functions of the selected function are rendered as blocks stacked on top of it. Since the area of each 
+  <li>All the <a href="glossary.html#callee">callee</a> functions of the selected 
+    function are rendered as blocks stacked on top of it. Since the area of each 
     block is proportional to its inclusive time, and the sum of the inclusive 
     times of all a functions callees cannot be greater than the inclusive time 
     of the function itself, the callee blocks always fit within the area of their 
@@ -109,69 +131,84 @@ Suppose that the call graph for this program looks like the following:
   </ul>
   <li>The text at the bottom shows information about the function which is at 
     the base of the diagram</li>
-    <ul>
-	  <li>To re-draw the diagram with a different function as the base, double-click on that function's block in the diagram.</li>
-	</ul>
+  <ul>
+    <li>To re-draw the diagram with a different function as the base, double-click 
+      on that function's block in the diagram.</li>
+  </ul>
 </ul>
 
 <h2><a name="navigation">Navigation Buttons</a></h2>
-<p>The buttons at the top of the application are all used to change the root of 
-  the block diagram. Suppose that the </p>
+<p>The buttons at the top of the application are all used to change the <a href="glossary.html#diagram_root">diagram 
+  root </a>of the tower diagram. When a new profile is opened in Orbit, the diagram 
+  root is always a function which has no callers. The <code>main</code> function 
+  of the program is always either the diagram root, or a callee of the diagram 
+  root. Other callees of the diagram root represent other threads.</p>
 <dl> 
   <dt>Back</dt>
-  <dd>Similar to a Back button in a web browser. Changes the root of tower diagram 
-    back to its previous function</dd>
+  <dd>Similar to a Back button in a web browser. Changes the diagram root back 
+    to its previous value.</dd>
   <dt>Forward</dt>
   <dd>Similar to a Forward button in a web browser. Un-does the effect of using 
     the Back button. </dd>
   <dt>Parent</dt>
-  <dd>Sets the root of the tower diagram to the <a href="glossary.html#caller">caller</a> 
-    of the current diagram root</dd>
+  <dd>Sets the diagram root to the <a href="glossary.html#caller">caller</a> of 
+    the current diagram root.</dd>
   <dt>Root</dt>
-  <dd>Sets the root of the tower diagram to the root of the entire profile</dd>
+  <dd>Sets the diagram root to the root of the entire profile. This is the same 
+    view that appeared when the profile was first opened in Orbit.</dd>
 </dl>
 <p></p>
 
 <a name="call_tables"> 
 <h2>Call Tables</h2>
 </a> 
-<p>To the right of the Tower Diagram are the Call Tables. </p>
-<p>The top table shows detailed information about the selected function. Specifically:</p>
+<p>To the right of the Tower Diagram are the Call Tables. The call tables are 
+  used to show a detailed view of the <a href="glossary.html#selected_call">selected 
+  call</a>. Pause the mouse over any function name text to see a tool tip with 
+  the complete function name.</p>
+<p>The top table shows detailed information about the selected call itself. Specifically:</p>
 <ul>
-  <li>The name of the function and its Java class. Pause the mouse over the function 
-    name text to see the fully-qualified name.</li>
-  <li>The <a href="glossary.html#inclusive">inclusive time</a> of <i>all occurrances 
-    </i> of the function in the current tower diagram.</li>
-  <li>The <a href="glossary.html#exclusive">exclusive time</a> of <i>all occurrances 
-    </i> of the function in the current tower diagram.</li>
+  <li>The name of the function and its Java class.</li>
+  <li>The <a href="glossary.html#inclusive">inclusive time</a> of <i>all </i>occurrances 
+    of the function in the current tower diagram.</li>
+  <ul>
+    <li>A function has multiple <i>occurances </i>when it is called in more than 
+      one place in the program</li>
+  </ul>
+  <li>The <a href="glossary.html#exclusive">exclusive time</a> of <i>all </i>occurrances 
+    of the function in the current tower diagram.</li>
   <li>The sum of the number of invocations of <i>all occurrances</i> of the function 
     in the current tower diagram</li>
 </ul>
 <p>The caller table shows:</p>
 <ul>
-  <li>The name of each caller of the selected function which is visible in the 
-    current tower diagram. Pause the mouse over the function name text to see 
-    the fully-qualified name.</li>
-  <li>The percentage of inclusive time that was spent as a callee of the caller</li>
+  <li>The name of each <a href="glossary.html#caller">caller</a> of the selected 
+    function which is visible in the current tower diagram.</li>
+  <li>The percentage of <a href="glossary.html#inclusive">inclusive time </a>that 
+    was spent as a callee of the caller.</li>
 </ul>
 <p>The callee table shows:</p>
 <ul>
-  <li>The name of each callee of the selected function which is visible in the 
-    current tower diagram. Pause the mouse over the function name text to see 
-    the fully-qualified name.</li>
-  <li>For each callee, the percentage of the total inclusive time for all callees 
-    that was spent in that callee.</li>
+  <li>The name of each <a href="glossary.html#callee">callee</a> of the selected 
+    function which is visible in the current tower diagram.</li>
+  <li>For each callee, the percentage of the total <a href="glossary.html#inclusive">inclusive 
+    time </a>for all callees that was spent in that callee. For example, suppose 
+    a function <code>main</code> takes 100 seconds. 30 seconds are spent in <code>init</code>, 
+    and 20 seconds are spent in <code>test</code>. The remaining 50 seconds are 
+    spent in <code>main</code> itself. The inclusive time of <code>main </code>is 
+    100 seconds, the exclusive time is 50 seconds. 60% (30 / ( 20 + 30 )) of the 
+    total inclusive time of all callees was spent in <code>init</code>. The remaining 
+    40% was spent in <code>test</code>.</li>
 </ul>
 <table border="0" cellspacing="0" cellpadding="0" bgcolor="eeeeee">
   <tr> 
     <td width="160" nowrap>Previous : <a href="quick-start.html">Quick Start</a></td>
     <td width="20" bgcolor="ffffff" nowrap>&nbsp;</td>
-    <td width="160" nowrap>Up : <a href="quick-start.html">Quick Start</a></td>
+    <td width="200" nowrap>Up : <a href="doc.html">Orbit Documentation</a></td>
     <td width="20" bgcolor="ffffff" nowrap>&nbsp;</td>
-    <td width="160" nowrap>Next : </td>
+    <td width="234" nowrap>Next : <a href="profiler-types.html">Supported Profilers</a></td>
   </tr>
 </table>
-<h1>&nbsp;</h1>
 
 </body>
 </html>

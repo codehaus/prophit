@@ -30,13 +30,25 @@
     diagram. The sum of the <a href="#inclusive">inclusive times</a> of the callees 
     of a function is always less than or equal to the inclusive time of that function. 
   </dd>
-  <dt><a name="inclusive">inclusive time</a></dt>
-  <dd>Amount of time spent in a function, including the time spent in its <a href="#callee">callees</a>.</dd>
+  <dt><a name="diagram_root"></a>diagram root</dt>
+  <dd>The function which is rendered as the base of the tower diagram</dd>
   <dt><a name="exclusive">exclusive time</a></dt>
   <dd>Amount of time spent in a function, not counting the time spent in its <a href="#callee">callees</a>. 
     The exclusive time is the sum of the time spent in all the statements and 
     instructions of the function itself. A function with a large exclusive time 
     is commonly referred to as a 'hotspot'.</dd>
+  <dt>&nbsp; </dt>
+  <dt><a name="inclusive">inclusive time</a></dt>
+  <dd>Amount of time spent in a function, including the time spent in its <a href="#callee">callees</a>.</dd>
+  <dt>tower diagram<a name="tower_diagram"></a></dt>
+  <dd>Refers to the visualization technique invented for and used by Orbit. See 
+    this <a href="concepts.html#screenshot">screenshot</a>.</dd>
+  <dt><a name="selected_call"></a>selected call</dt>
+  <dd>The block (function) in the tower diagram which has been selected by the 
+    user. The selected call may be set by single-clicking on a block in the tower 
+    diagram with the mouse, or by double-clicking on a row in a <a href="concepts.html#call_tables">call 
+    table</a>.</dd>
+  <dt>&nbsp;</dt>
 </dl>
 <table border="0" cellspacing="0" cellpadding="0" bgcolor="eeeeee">
   <tr> 
