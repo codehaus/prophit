@@ -35,10 +35,27 @@ public class SelfCallerHierarchy
 		middle2.add(new SimpleSum());
 		middle2.add(new SimpleSum());
 
+		firstLoop(root, count);
+
+		secondLoop(root, count / 3);
+	}
+
+	static void firstLoop(SumContainer container, int count)
+	{
 		int total = 0;
 		for ( int i = 0; i < count; ++i )
 		{
-			total += root.add(i, i + 1);
+			total += container.add(i, i + 1);
+		}
+		System.out.println(total);
+	}
+
+	static void secondLoop(SumContainer container, int count)
+	{
+		int total = 0;
+		for ( int i = 0; i < count; ++i )
+		{
+			total += container.add(i, i + 1);
 		}
 		System.out.println(total);
 	}

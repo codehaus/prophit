@@ -1,0 +1,30 @@
+
+Bug : If a call graph contains recursive calls to a method, the inclusive time and caller/callee rollup for that method is not correct
+
+reproduction:
+test/java/bugs/SelfCallerHierarchy.java
+
+CallDetails view should display:
+
+For the selected method:
+  Sum of the inclusive time of each call that is not a recursive call
+  Sum of the exclusive time of each call
+
+Table of callers:
+  Each method which is a caller of the selected call somewhere in the call graph
+  display : 
+    p.caller.name
+    p.callee.inclusiveTime
+    p.callee.inclusiveTime / sum
+  where :
+    p = root-most instance of each unique caller-callee pair
+    sum = Sum of the inclusive time of p
+
+Table of callees:
+  Each method which is a callee of the selected call (root-most instances only)
+  display :
+    p.callee.name
+    p.callee.inclusiveTime
+    p.callee.inclusiveTime / sum
+    
+  

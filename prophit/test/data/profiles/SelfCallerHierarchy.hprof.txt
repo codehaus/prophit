@@ -1,0 +1,346 @@
+JAVA PROFILE 1.0.1, created Tue Mar 18 14:59:27 2003
+
+Header for -Xhprof ASCII Output
+
+Copyright 1998 Sun Microsystems, Inc. 901 San Antonio Road, Palo Alto,
+California, 94303, U.S.A.  All Rights Reserved.
+
+WARNING!  This file format is under development, and is subject to
+change without notice.
+
+This file contains the following types of records:
+
+THREAD START
+THREAD END      mark the lifetime of Java threads
+
+TRACE           represents a Java stack trace.  Each trace consists
+                of a series of stack frames.  Other records refer to
+                TRACEs to identify (1) where object allocations have
+                taken place, (2) the frames in which GC roots were
+                found, and (3) frequently executed methods.
+
+HEAP DUMP       is a complete snapshot of all live objects in the Java
+                heap.  Following distinctions are made:
+
+                ROOT    root set as determined by GC
+                CLS     classes 
+                OBJ     instances
+                ARR     arrays
+
+SITES           is a sorted list of allocation sites.  This identifies
+                the most heavily allocated object types, and the TRACE
+                at which those allocations occurred.
+
+CPU SAMPLES     is a statistical profile of program execution.  The VM
+                periodically samples all running threads, and assigns
+                a quantum to active TRACEs in those threads.  Entries
+                in this record are TRACEs ranked by the percentage of
+                total quanta they consumed; top-ranked TRACEs are
+                typically hot spots in the program.
+
+CPU TIME	is a profile of program execution obtained by measuring
+                the time spent in individual methods (excluding the time
+                spent in callees), as well as by counting the number of
+                times each method is called. Entries in this record are
+                TRACEs ranked by the percentage of total CPU time. The
+                "count" field indicates the number of times each TRACE 
+                is invoked.
+
+MONITOR TIME    is a profile of monitor contention obtained by measuring
+		the time spent by a thread waiting to enter a monitor.
+		Entries in this record are TRACEs ranked by the percentage
+		of total monitor contention time and a brief description
+		of the monitor.  The "count" field indicates the number of 
+		times the monitor was contended at that TRACE.
+
+MONITOR DUMP	is a complete snapshot of all the monitors and threads in 
+		the System.
+
+HEAP DUMP, SITES, CPU SAMPLES|TIME and MONITOR DUMP|TIME records are generated 
+at program exit.  They can also be obtained during program execution by typing 
+Ctrl-\ (on Solaris) or by typing Ctrl-Break (on Win32).
+
+--------
+
+THREAD START (obj=7e4a90, id = 1, name="Finalizer", group="system")
+THREAD START (obj=7e4930, id = 2, name="Reference Handler", group="system")
+THREAD START (obj=7e4840, id = 3, name="main", group="main")
+THREAD START (obj=7e5100, id = 4, name="HPROF CPU profiler", group="system")
+THREAD START (obj=7e70f0, id = 5, name="Signal Dispatcher", group="system")
+THREAD START (obj=7e8f20, id = 6, name="CompileThread0", group="system")
+THREAD END (id = 3)
+THREAD START (obj=804f80, id = 7, name="Thread-1", group="main")
+THREAD END (id = 5)
+TRACE 5:
+	<empty>
+TRACE 34:
+	bugs.SumContainer.addChildren(SelfCallerHierarchy.java:76)
+	bugs.SumContainer.add(SelfCallerHierarchy.java:85)
+	bugs.SumContainer.addChildren(SelfCallerHierarchy.java:78)
+	bugs.SumContainer.add(SelfCallerHierarchy.java:85)
+	bugs.SelfCallerHierarchy.secondLoop(SelfCallerHierarchy.java:58)
+	bugs.SelfCallerHierarchy.main(SelfCallerHierarchy.java:40)
+TRACE 33:
+	java.util.ArrayList.get(ArrayList.java:322)
+	bugs.SumContainer.addChildren(SelfCallerHierarchy.java:78)
+	bugs.SumContainer.add(SelfCallerHierarchy.java:85)
+	bugs.SelfCallerHierarchy.secondLoop(SelfCallerHierarchy.java:58)
+	bugs.SelfCallerHierarchy.main(SelfCallerHierarchy.java:40)
+TRACE 40:
+	bugs.SumContainer.add(SelfCallerHierarchy.java:85)
+	bugs.SumContainer.addChildren(SelfCallerHierarchy.java:78)
+	bugs.SumContainer.add(SelfCallerHierarchy.java:85)
+	bugs.SelfCallerHierarchy.secondLoop(SelfCallerHierarchy.java:58)
+	bugs.SelfCallerHierarchy.main(SelfCallerHierarchy.java:40)
+TRACE 17:
+	bugs.SumContainer.addChildren(SelfCallerHierarchy.java:78)
+	bugs.SumContainer.add(SelfCallerHierarchy.java:85)
+	bugs.SelfCallerHierarchy.firstLoop(SelfCallerHierarchy.java:48)
+	bugs.SelfCallerHierarchy.main(SelfCallerHierarchy.java:38)
+TRACE 27:
+	java.util.ArrayList.RangeCheck(ArrayList.java:510)
+	java.util.ArrayList.get(ArrayList.java:320)
+	bugs.SumContainer.addChildren(SelfCallerHierarchy.java:78)
+	bugs.SumContainer.add(SelfCallerHierarchy.java:85)
+	bugs.SumContainer.addChildren(SelfCallerHierarchy.java:78)
+	bugs.SumContainer.add(SelfCallerHierarchy.java:85)
+TRACE 37:
+	bugs.SumContainer.add(SelfCallerHierarchy.java:85)
+	bugs.SumContainer.addChildren(SelfCallerHierarchy.java:78)
+	bugs.SumContainer.add(SelfCallerHierarchy.java:85)
+	bugs.SumContainer.addChildren(SelfCallerHierarchy.java:78)
+	bugs.SumContainer.add(SelfCallerHierarchy.java:85)
+	bugs.SelfCallerHierarchy.secondLoop(SelfCallerHierarchy.java:58)
+TRACE 30:
+	bugs.SelfCallerHierarchy.secondLoop(SelfCallerHierarchy.java:58)
+	bugs.SelfCallerHierarchy.main(SelfCallerHierarchy.java:40)
+TRACE 15:
+	bugs.SumContainer.addChildren(SelfCallerHierarchy.java:78)
+	bugs.SumContainer.add(SelfCallerHierarchy.java:85)
+	bugs.SumContainer.addChildren(SelfCallerHierarchy.java:78)
+	bugs.SumContainer.add(SelfCallerHierarchy.java:85)
+	bugs.SumContainer.addChildren(SelfCallerHierarchy.java:78)
+	bugs.SumContainer.add(SelfCallerHierarchy.java:85)
+TRACE 21:
+	java.util.ArrayList.RangeCheck(ArrayList.java:507)
+	java.util.ArrayList.get(ArrayList.java:320)
+	bugs.SumContainer.addChildren(SelfCallerHierarchy.java:78)
+	bugs.SumContainer.add(SelfCallerHierarchy.java:85)
+	bugs.SumContainer.addChildren(SelfCallerHierarchy.java:78)
+	bugs.SumContainer.add(SelfCallerHierarchy.java:85)
+TRACE 8:
+	bugs.SelfCallerHierarchy.main(SelfCallerHierarchy.java:26)
+TRACE 7:
+	bugs.SelfCallerHierarchy.main(SelfCallerHierarchy.java:20)
+TRACE 38:
+	bugs.SimpleSum.add(SelfCallerHierarchy.java:94)
+	bugs.SumContainer.addChildren(SelfCallerHierarchy.java:78)
+	bugs.SumContainer.add(SelfCallerHierarchy.java:85)
+	bugs.SumContainer.addChildren(SelfCallerHierarchy.java:78)
+	bugs.SumContainer.add(SelfCallerHierarchy.java:85)
+	bugs.SelfCallerHierarchy.secondLoop(SelfCallerHierarchy.java:58)
+TRACE 31:
+	bugs.SumContainer.addChildren(SelfCallerHierarchy.java:78)
+	bugs.SumContainer.add(SelfCallerHierarchy.java:85)
+	bugs.SelfCallerHierarchy.secondLoop(SelfCallerHierarchy.java:58)
+	bugs.SelfCallerHierarchy.main(SelfCallerHierarchy.java:40)
+TRACE 13:
+	bugs.SumContainer.addChildren(SelfCallerHierarchy.java:76)
+	bugs.SumContainer.add(SelfCallerHierarchy.java:85)
+	bugs.SumContainer.addChildren(SelfCallerHierarchy.java:78)
+	bugs.SumContainer.add(SelfCallerHierarchy.java:85)
+	bugs.SumContainer.addChildren(SelfCallerHierarchy.java:78)
+	bugs.SumContainer.add(SelfCallerHierarchy.java:85)
+TRACE 1:
+	java.lang.String.charAt(String.java:457)
+	java.io.Win32FileSystem.normalize(Win32FileSystem.java:168)
+	java.io.File.<init>(File.java:270)
+	sun.misc.URLClassPath$FileLoader.getResource(URLClassPath.java:780)
+	sun.misc.URLClassPath.getResource(URLClassPath.java:135)
+	java.net.URLClassLoader$1.run(URLClassLoader.java:190)
+TRACE 12:
+	bugs.SumContainer.addChildren(SelfCallerHierarchy.java:76)
+	bugs.SumContainer.add(SelfCallerHierarchy.java:85)
+	bugs.SelfCallerHierarchy.firstLoop(SelfCallerHierarchy.java:48)
+	bugs.SelfCallerHierarchy.main(SelfCallerHierarchy.java:38)
+TRACE 35:
+	bugs.SelfCallerHierarchy.secondLoop(SelfCallerHierarchy.java:56)
+	bugs.SelfCallerHierarchy.main(SelfCallerHierarchy.java:40)
+TRACE 6:
+	java.lang.StringCoding.decode(StringCoding.java:209)
+	java.lang.StringCoding.decode(StringCoding.java:226)
+	java.lang.String.<init>(String.java:380)
+	java.lang.String.<init>(String.java:399)
+TRACE 25:
+	bugs.SimpleSum.add(SelfCallerHierarchy.java:94)
+	bugs.SumContainer.addChildren(SelfCallerHierarchy.java:78)
+	bugs.SumContainer.add(SelfCallerHierarchy.java:85)
+	bugs.SelfCallerHierarchy.firstLoop(SelfCallerHierarchy.java:48)
+	bugs.SelfCallerHierarchy.main(SelfCallerHierarchy.java:38)
+TRACE 32:
+	bugs.SumContainer.addChildren(SelfCallerHierarchy.java:76)
+	bugs.SumContainer.add(SelfCallerHierarchy.java:85)
+	bugs.SelfCallerHierarchy.secondLoop(SelfCallerHierarchy.java:58)
+	bugs.SelfCallerHierarchy.main(SelfCallerHierarchy.java:40)
+TRACE 16:
+	java.util.ArrayList.get(ArrayList.java:322)
+	bugs.SumContainer.addChildren(SelfCallerHierarchy.java:78)
+	bugs.SumContainer.add(SelfCallerHierarchy.java:85)
+	bugs.SumContainer.addChildren(SelfCallerHierarchy.java:78)
+	bugs.SumContainer.add(SelfCallerHierarchy.java:85)
+	bugs.SelfCallerHierarchy.firstLoop(SelfCallerHierarchy.java:48)
+TRACE 20:
+	java.util.ArrayList.get(ArrayList.java:322)
+	bugs.SumContainer.addChildren(SelfCallerHierarchy.java:78)
+	bugs.SumContainer.add(SelfCallerHierarchy.java:85)
+	bugs.SumContainer.addChildren(SelfCallerHierarchy.java:78)
+	bugs.SumContainer.add(SelfCallerHierarchy.java:85)
+	bugs.SumContainer.addChildren(SelfCallerHierarchy.java:78)
+TRACE 14:
+	java.util.ArrayList.size(ArrayList.java:176)
+	bugs.SumContainer.addChildren(SelfCallerHierarchy.java:76)
+	bugs.SumContainer.add(SelfCallerHierarchy.java:85)
+	bugs.SumContainer.addChildren(SelfCallerHierarchy.java:78)
+	bugs.SumContainer.add(SelfCallerHierarchy.java:85)
+	bugs.SelfCallerHierarchy.firstLoop(SelfCallerHierarchy.java:48)
+TRACE 4:
+	java.util.HashMap.addEntry(HashMap.java:707)
+	java.util.HashMap.put(HashMap.java:376)
+	java.util.jar.Attributes.put(Attributes.java:124)
+	java.util.jar.Attributes.putValue(Attributes.java:144)
+	java.util.jar.Attributes.read(Attributes.java:362)
+	java.util.jar.Manifest.read(Manifest.java:203)
+TRACE 11:
+	bugs.SumContainer.addChildren(SelfCallerHierarchy.java:78)
+	bugs.SumContainer.add(SelfCallerHierarchy.java:85)
+	bugs.SumContainer.addChildren(SelfCallerHierarchy.java:78)
+	bugs.SumContainer.add(SelfCallerHierarchy.java:85)
+	bugs.SelfCallerHierarchy.firstLoop(SelfCallerHierarchy.java:48)
+	bugs.SelfCallerHierarchy.main(SelfCallerHierarchy.java:38)
+TRACE 18:
+	java.util.ArrayList.RangeCheck(ArrayList.java:507)
+	java.util.ArrayList.get(ArrayList.java:320)
+	bugs.SumContainer.addChildren(SelfCallerHierarchy.java:78)
+	bugs.SumContainer.add(SelfCallerHierarchy.java:85)
+	bugs.SelfCallerHierarchy.firstLoop(SelfCallerHierarchy.java:48)
+	bugs.SelfCallerHierarchy.main(SelfCallerHierarchy.java:38)
+TRACE 2:
+	java.util.jar.JarFile.getManifest(JarFile.java:147)
+	sun.misc.URLClassPath$JarLoader.getClassPath(URLClassPath.java:712)
+	sun.misc.URLClassPath.getLoader(URLClassPath.java:224)
+	sun.misc.URLClassPath.getResource(URLClassPath.java:134)
+	java.net.URLClassLoader$1.run(URLClassLoader.java:190)
+	java.security.AccessController.doPrivileged(AccessController.java:Native method)
+TRACE 36:
+	bugs.SimpleSum.add(SelfCallerHierarchy.java:94)
+	bugs.SumContainer.addChildren(SelfCallerHierarchy.java:78)
+	bugs.SumContainer.add(SelfCallerHierarchy.java:85)
+	bugs.SelfCallerHierarchy.secondLoop(SelfCallerHierarchy.java:58)
+	bugs.SelfCallerHierarchy.main(SelfCallerHierarchy.java:40)
+TRACE 3:
+	java.util.jar.Manifest.read(Manifest.java:209)
+	java.util.jar.Manifest.<init>(Manifest.java:52)
+	java.util.jar.JarFile.getManifest(JarFile.java:147)
+	sun.misc.URLClassPath$JarLoader.getClassPath(URLClassPath.java:712)
+	sun.misc.URLClassPath.getLoader(URLClassPath.java:224)
+	sun.misc.URLClassPath.getResource(URLClassPath.java:134)
+TRACE 9:
+	bugs.SumContainer.addChildren(SelfCallerHierarchy.java:76)
+	bugs.SumContainer.add(SelfCallerHierarchy.java:85)
+	bugs.SumContainer.addChildren(SelfCallerHierarchy.java:78)
+	bugs.SumContainer.add(SelfCallerHierarchy.java:85)
+	bugs.SelfCallerHierarchy.firstLoop(SelfCallerHierarchy.java:48)
+	bugs.SelfCallerHierarchy.main(SelfCallerHierarchy.java:38)
+TRACE 10:
+	java.util.ArrayList.get(ArrayList.java:322)
+	bugs.SumContainer.addChildren(SelfCallerHierarchy.java:78)
+	bugs.SumContainer.add(SelfCallerHierarchy.java:85)
+	bugs.SelfCallerHierarchy.firstLoop(SelfCallerHierarchy.java:48)
+	bugs.SelfCallerHierarchy.main(SelfCallerHierarchy.java:38)
+TRACE 23:
+	bugs.SumContainer.add(SelfCallerHierarchy.java:85)
+	bugs.SumContainer.addChildren(SelfCallerHierarchy.java:78)
+	bugs.SumContainer.add(SelfCallerHierarchy.java:85)
+	bugs.SelfCallerHierarchy.firstLoop(SelfCallerHierarchy.java:48)
+	bugs.SelfCallerHierarchy.main(SelfCallerHierarchy.java:38)
+TRACE 22:
+	bugs.SelfCallerHierarchy.firstLoop(SelfCallerHierarchy.java:46)
+	bugs.SelfCallerHierarchy.main(SelfCallerHierarchy.java:38)
+TRACE 29:
+	bugs.SumContainer.addChildren(SelfCallerHierarchy.java:78)
+	bugs.SumContainer.add(SelfCallerHierarchy.java:85)
+	bugs.SumContainer.addChildren(SelfCallerHierarchy.java:78)
+	bugs.SumContainer.add(SelfCallerHierarchy.java:85)
+	bugs.SelfCallerHierarchy.secondLoop(SelfCallerHierarchy.java:58)
+	bugs.SelfCallerHierarchy.main(SelfCallerHierarchy.java:40)
+TRACE 28:
+	java.util.ArrayList.RangeCheck(ArrayList.java:507)
+	java.util.ArrayList.get(ArrayList.java:320)
+	bugs.SumContainer.addChildren(SelfCallerHierarchy.java:78)
+	bugs.SumContainer.add(SelfCallerHierarchy.java:85)
+	bugs.SelfCallerHierarchy.secondLoop(SelfCallerHierarchy.java:58)
+	bugs.SelfCallerHierarchy.main(SelfCallerHierarchy.java:40)
+TRACE 19:
+	bugs.SimpleSum.add(SelfCallerHierarchy.java:94)
+	bugs.SumContainer.addChildren(SelfCallerHierarchy.java:78)
+	bugs.SumContainer.add(SelfCallerHierarchy.java:85)
+	bugs.SumContainer.addChildren(SelfCallerHierarchy.java:78)
+	bugs.SumContainer.add(SelfCallerHierarchy.java:85)
+	bugs.SelfCallerHierarchy.firstLoop(SelfCallerHierarchy.java:48)
+TRACE 26:
+	bugs.SimpleSum.add(SelfCallerHierarchy.java:94)
+	bugs.SumContainer.addChildren(SelfCallerHierarchy.java:78)
+	bugs.SumContainer.add(SelfCallerHierarchy.java:85)
+	bugs.SumContainer.addChildren(SelfCallerHierarchy.java:78)
+	bugs.SumContainer.add(SelfCallerHierarchy.java:85)
+	bugs.SumContainer.addChildren(SelfCallerHierarchy.java:78)
+TRACE 24:
+	bugs.SelfCallerHierarchy.firstLoop(SelfCallerHierarchy.java:48)
+	bugs.SelfCallerHierarchy.main(SelfCallerHierarchy.java:38)
+TRACE 39:
+	java.util.ArrayList.get(ArrayList.java:322)
+	bugs.SumContainer.addChildren(SelfCallerHierarchy.java:78)
+	bugs.SumContainer.add(SelfCallerHierarchy.java:85)
+	bugs.SumContainer.addChildren(SelfCallerHierarchy.java:78)
+	bugs.SumContainer.add(SelfCallerHierarchy.java:85)
+	bugs.SelfCallerHierarchy.secondLoop(SelfCallerHierarchy.java:58)
+CPU SAMPLES BEGIN (total = 222) Tue Mar 18 14:59:49 2003
+rank   self  accum   count trace method
+   1 13.06% 13.06%      29    21 java.util.ArrayList.RangeCheck
+   2  9.91% 22.97%      22    11 bugs.SumContainer.addChildren
+   3  9.91% 32.88%      22    15 bugs.SumContainer.addChildren
+   4  8.56% 41.44%      19    17 bugs.SumContainer.addChildren
+   5  5.86% 47.30%      13    10 java.util.ArrayList.get
+   6  4.95% 52.25%      11    29 bugs.SumContainer.addChildren
+   7  4.50% 56.76%      10     9 bugs.SumContainer.addChildren
+   8  4.05% 60.81%       9    12 bugs.SumContainer.addChildren
+   9  4.05% 64.86%       9    18 java.util.ArrayList.RangeCheck
+  10  3.60% 68.47%       8    31 bugs.SumContainer.addChildren
+  11  3.15% 71.62%       7    22 bugs.SelfCallerHierarchy.firstLoop
+  12  3.15% 74.77%       7    16 java.util.ArrayList.get
+  13  3.15% 77.93%       7    13 bugs.SumContainer.addChildren
+  14  2.25% 80.18%       5    39 java.util.ArrayList.get
+  15  2.25% 82.43%       5    24 bugs.SelfCallerHierarchy.firstLoop
+  16  2.25% 84.68%       5    23 bugs.SumContainer.add
+  17  1.80% 86.49%       4    28 java.util.ArrayList.RangeCheck
+  18  1.80% 88.29%       4    34 bugs.SumContainer.addChildren
+  19  1.35% 89.64%       3    32 bugs.SumContainer.addChildren
+  20  1.35% 90.99%       3    20 java.util.ArrayList.get
+  21  0.90% 91.89%       2    26 bugs.SimpleSum.add
+  22  0.90% 92.79%       2    35 bugs.SelfCallerHierarchy.secondLoop
+  23  0.90% 93.69%       2    19 bugs.SimpleSum.add
+  24  0.45% 94.14%       1     4 java.util.HashMap.addEntry
+  25  0.45% 94.59%       1    14 java.util.ArrayList.size
+  26  0.45% 95.05%       1     1 java.lang.String.charAt
+  27  0.45% 95.50%       1     6 java.lang.StringCoding.decode
+  28  0.45% 95.95%       1     2 java.util.jar.JarFile.getManifest
+  29  0.45% 96.40%       1    36 bugs.SimpleSum.add
+  30  0.45% 96.85%       1    25 bugs.SimpleSum.add
+  31  0.45% 97.30%       1    38 bugs.SimpleSum.add
+  32  0.45% 97.75%       1     3 java.util.jar.Manifest.read
+  33  0.45% 98.20%       1    30 bugs.SelfCallerHierarchy.secondLoop
+  34  0.45% 98.65%       1    37 bugs.SumContainer.add
+  35  0.45% 99.10%       1    27 java.util.ArrayList.RangeCheck
+  36  0.45% 99.55%       1    40 bugs.SumContainer.add
+  37  0.45% 100.00%       1    33 java.util.ArrayList.get
+CPU SAMPLES END

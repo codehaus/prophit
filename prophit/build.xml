@@ -25,6 +25,7 @@
 
 	<path id="compile.class.path">
 		<fileset dir="${basedir}/lib" includes="jnlp.jar,log4jME.jar,gl4java.jar,gl4java-glutfonts.jar,junit.jar,nanoxml-2.2.2.jar"/>
+		<fileset dir="${ant.home}/lib" includes="ant.jar" />
 	</path>
 
 	<path id="prophit.path.path">
@@ -223,16 +224,8 @@
 	</target>
 
 	<target name="parse" depends="jar">
-		<java classpathref="run.class.path" fork="true" maxmemory="256M" classname="orbit.parsers.DashProfInvocationParser">
-			<!--      <jvmarg value="-Xrunhprof:cpu=samples"/>  
-			<arg line="${basedir}/simple.prof" />
-			<arg line="${basedir}/self.prof" />
-			<arg line="d:/java/hsqldb_v.1.61/demo/java.prof" />
-			<jvmarg value="-Xrunhprof:cpu=samples"/>  
-			<jvmarg value="-prof"/>   
-			<arg line="${basedir}/simple.prof -solve" />
-			-->
-			<arg line="weblogic-system.prof -solve" />
+		<java classpathref="run.class.path" fork="true" maxmemory="256M" classname="orbit.parsers.ParseAndSolveLoader">
+			<arg line="java.hprof.txt -1" />
 		</java>
 	</target>
 
@@ -295,6 +288,20 @@
 			<jvmarg value="-classic"/>
 			<!--	  <jvmarg value="-Xrunhprof:cpu=samples,depth=6"/> -->
 			<jvmarg value="-prof"/>
+		</java>
+	</target>
+
+	<target name="containerbug" depends="compile-tests">
+		<java classpathref="test.class.path" fork="true" classname="bugs.SelfCallerHierarchy">
+			<jvmarg value="-Xint" />
+			<jvmarg value="-Xrunhprof:cpu=samples,depth=6"/>
+			<arg line="1000000" />
+		</java>
+	</target>
+
+	<target name="ant-test" depends="jar">
+		<java classpathref="run.class.path" fork="true" maxmemory="256M" classname="orbit.gui.ant.LoadAnt">
+			<arg line="d:/java/jakarta-ant-1.4.1/lib/" />
 		</java>
 	</target>
 

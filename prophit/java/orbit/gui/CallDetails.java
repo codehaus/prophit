@@ -2,10 +2,13 @@ package orbit.gui;
 
 import orbit.model.Call;
 import orbit.util.Log;
+import orbit.util.Pair;
 
 import org.apache.log4j.Category;
 
+import java.util.HashSet;
 import java.util.Iterator;
+import java.util.Set;
 import javax.swing.table.TableModel;
 import javax.swing.table.AbstractTableModel;
 
@@ -42,40 +45,81 @@ class CallDetails
 		this.callName = selected.getName();
 
 		/*
-		 * This class recurses through the call graph, computing aggregated data on the selected call.
+		 * This class recurses through the call graph, computing aggregated statistics on the selected call.
+		 *
+		 * The inclusive time of a matching call is added to the total inclusive time only if it is not a recursive
+		 * invocation of the selected method.
+		 *
+		 * Similarly, callers and callees are only added to the corresponding CallRollupLists if they are the root-most
+		 * instances of their caller/callee pair. This prevents time from being counted multiple times when there is recursion
+		 * in the call graph.
 		 */
 		class SearchFor
 		{
 			private CallAdapter adapter = new CallAdapter();
 			
-			public void search(Call parent, Call call)
+			public void search(Call parent, Call call, boolean isRecursive, Set callerSet, Set calleeSet)
 			{
-				boolean match = false;
+				Pair callerPair = null;
+				Pair calleePair = null;
+				boolean isMatch = false;
+
 				if ( call.getName().equals(selected.getName()) )
 				{
-					Log.debug(LOG, "Call ", call, " matches selected call ", selected);
-					match = true;
+					isMatch = true;
+
+					Log.debug(LOG, "Call ", call, " matches selected call ", selected.getName());
 					adapter.initialize(call);
-					inclusiveTime += adapter.getInclusiveTime(TimeMeasure.TotalTime);
-					exclusiveTime += adapter.getExclusiveTime(TimeMeasure.TotalTime);
+
+					double callExclusiveTime = adapter.getExclusiveTime(TimeMeasure.TotalTime);
+
+					Log.debug(LOG, "\tAdding exclusive time : ", callExclusiveTime);
+
+					exclusiveTime += callExclusiveTime;
 					nCalls += adapter.getCallCount();
+
+					if ( !isRecursive )
+					{
+						inclusiveTime += adapter.getInclusiveTime(TimeMeasure.TotalTime);
+					}
+
 					if ( parent != null )
 					{
-						callersRollup.addCaller(parent, call);
+						callerPair = new Pair(parent.getName(), call.getName());
+						if ( callerSet.add(callerPair) )
+							callersRollup.addCaller(parent, call);
+						else
+							callerPair = null;
 					}
 				}
+
+				isRecursive |= isMatch;
+
 				for ( Iterator i = call.getChildren().iterator(); i.hasNext(); )
 				{
 					Call child = (Call)i.next();
-					if ( match )
-						calleesRollup.addCallee(child);
-					search(call, child);
+					if ( isMatch )
+					{
+						calleePair = new Pair(call.getName(), child.getName());
+						if ( calleeSet.add(calleePair) )
+							calleesRollup.addCallee(child);
+						else
+							calleePair = null;
+					}
+
+					search(call, child, isRecursive, callerSet, calleeSet);
+
+					if ( calleePair != null )
+						calleeSet.remove(calleePair);
 				}
+				
+				if ( callerPair != null )
+					callerSet.remove(callerPair);
 			}
 		}
 
 		SearchFor search = new SearchFor();
-		search.search(null, root);
+		search.search(null, root, false, new HashSet(), new HashSet());
 
 		callersRollup.sort();
 		calleesRollup.sort();
@@ -137,6 +181,9 @@ class CallDetails
 		public String getCallName(int row);
 	}
 
+	/* Used for testing */
+	CallRollupList getCallersRollupList() { return callersRollup; }
+	CallRollupList getCalleesRollupList() { return calleesRollup; }
 
 	private class CallList
 		extends AbstractTableModel
