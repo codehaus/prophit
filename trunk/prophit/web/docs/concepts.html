@@ -85,8 +85,8 @@ MM_reloadPage(true);
 			
 			    <table name="MainTable" width="100%" bordercolor="#999999"  cellspacing="0" cellpadding="8" border="0">
 					<tr>
-						<td><div id="mainContentLayer">
-						<!-- #BeginEditable "Main%20Content%20Region" --> 
+						<td>
+                <div id="mainContentLayer"> <!-- #BeginEditable "Main%20Content%20Region" --> 
                   <div class="header"><font size=4>prophIt Concepts</font></div>
                   <!--table border="0" cellspacing="0" cellpadding="0" bgcolor="eeeeee">
                     <tr> 
@@ -98,7 +98,8 @@ MM_reloadPage(true);
                       <td width="234" nowrap>Next : <a href="profiler-types.html">Supported 
                         Profilers</a></td>
                     </tr>
-                  </table--><br>
+                  </table-->
+                  <br>
                   <div class="header">Overview</div>
                   <p>prophIt is an innovative new way to visualize and understand 
                     profiler data. The primary visual paradigm used by most profiler 
@@ -116,6 +117,14 @@ tree view. Instead of cluttering the screen, labels and numbers are placed out
 of the way of the data and are made available on demand. prophIt enables you to 
 use your powers of visual observation and image analysis to find important features 
 of your profile, then provides you with the data you need to improve your programs.<!-- #EndLibraryItem --></p>
+                  <div class="header">Subsections</div>
+    			  <ul>
+                    <li><a href="#tower_diagram">The Tower Diagram</a></li>
+                    <li><a href="#navigation">Navigation Buttons</a></li>
+                    <li><a href="#search">Searching</a></li>
+                    <li><a href="#call_tables">Call Tables</a></li>
+                  </ul>
+				  
                   <div class="header">Call Graphs</div>
                   <p>The operation of all computer programs can be represented 
                     as a call graph. Consider a simple database test program which 
@@ -189,9 +198,9 @@ of your profile, then provides you with the data you need to improve your progra
                   <div class="header">Profile Visualization Using prophIt</div>
                   <p>prophIt re-invents the visual display of profiler data using 
                     innovative and powerful new views of profiler data. By focusing 
-                    on the data, rather than text, prophIt is able to present much 
-                    more information to the user than a tree view display does. 
-                  </p>
+                    on the data, rather than text, prophIt is able to present 
+                    much more information to the user than a tree view display 
+                    does. </p>
                   <a name="tower_diagram"> 
                   <h2>The Tower Diagram</h2>
                   </a> 
@@ -263,6 +272,47 @@ of your profile, then provides you with the data you need to improve your progra
                       This is the same view that appeared when the profile was 
                       first opened in prophIt.</dd>
                   </dl>
+                  <h2><a name="search">Searching</a></h2>
+                  <p>The Search bar, located above the tower diagram, provides 
+                    a fast and flexible way to locate function calls.</p>
+                  <p>The Search bar can be used to search for partial or complete 
+                    function names. It accepts the characters:</p>
+                  <table width="97%" border="1" cellspacing="0" cellpadding="0">
+                    <tr> 
+                      <th width="19%" align="center">Character</th>
+                      <th width="35%">Behavior</th>
+                      <th width="46%">Examples</th>
+                    </tr>
+                    <tr>
+                      <td width="19%" align="center">Java package and function 
+                        name characters</td>
+                      <td width="35%">Matches the specific string of characters 
+                        occuring anywhere in a function name</td>
+                      <td width="46%">
+                        <p><i>toString</i> matches any <code>toString</code> function 
+                          on any class</p>
+                        <p><i>String.&lt;init&gt;</i> matches <code>java.lang.String.&lt;init&gt;<i> 
+                          </i></code>and <code>mypackage.String.&lt;init&gt;</code></p>
+                      </td>
+                    </tr>
+                    <tr> 
+                      <td width="19%" align="center">*</td>
+                      <td width="35%">Matches any number of characters in the 
+                        function name</td>
+                      <td width="46%"><i>String*.&lt;init&gt;</i> matches <code>String.&lt;init&gt;</code> 
+                        and <code>StringBuffer.&lt;init&gt;</code></td>
+                    </tr>
+                    <tr> 
+                      <td width="19%" align="center">?</td>
+                      <td width="35%">Matches any one character in the function 
+                        name </td>
+                      <td width="46%"><i>MyClass.?et</i> matches <code>MyClass.set 
+                        </code>and <code>MyClass.get</code></td>
+                    </tr>
+                  </table>
+                  <p>Functions which match the Search text are highlighted in 
+                    the tower diagram. Rotate the diagram by clicking and dragging 
+                    in order to see all the Search matches.</p>
                   <p></p>
                   <a name="call_tables"> 
                   <h2>Call Tables</h2>
@@ -312,15 +362,10 @@ of your profile, then provides you with the data you need to improve your progra
                       inclusive time of all callees was spent in <code>init</code>. 
                       The remaining 40% was spent in <code>test</code>.</li>
                   </ul>
-  				  <div class="docnav" align="center">
-				  
-				  	Previous : <a href="../quick-start.html">Quick Start</a>  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-					Up : <a href="index.html">Documentation</a> 		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-					Next : <a href="profiler-types.html">Supported Profilers</a>  &nbsp;&nbsp;
-					
-				  
-				  </div>
-
+                  <div class="docnav" align="center"> Previous : <a href="../quick-start.html">Quick 
+                    Start</a> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Up : <a href="index.html">Documentation</a> 
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Next : <a href="profiler-types.html">Supported 
+                    Profilers</a> &nbsp;&nbsp; </div>
                   <!--table border="0" cellspacing="0" cellpadding="0" bgcolor="eeeeee">
                     <tr> 
                       <td width="160" nowrap>Previous : <a href="../quick-start.html">Quick 
@@ -332,8 +377,8 @@ of your profile, then provides you with the data you need to improve your progra
                         Profilers</a></td>
                     </tr>
                   </table-->
-                  <!-- #EndEditable -->
-						</div></td>
+                  <!-- #EndEditable --> </div>
+              </td>
 					</tr>
 				</table>
 				<table width="100%" border="0" cellspacing="0" cellpadding="0">

@@ -10,7 +10,7 @@
 <div align="center">
   <h1>Orbit Development Plan</h1>
   <br>
-  October 13, 2002<br>
+  October 14, 2002<br>
 </div>
 
 
@@ -90,20 +90,6 @@ Priorities range from 1 to 5, with 5 being the highest.
     <th width="35%" bgcolor="ccccff" height="10">Details</th>
     <th width="10%" bgcolor="ccccff" height="10">Beta 1</th>
   </tr>
-  <tr bgcolor="eeeeee"> 
-    <td width="43%">Rename everything from 'Orbit' to ProphIt.</td>
-    <td width="6%">5</td>
-    <td width="35%">All website doc will be updated. All application strings should 
-      be updated as well. This issue does not include re-naming packages.</td>
-    <td width="10%">Y</td>
-  </tr>
-  <tr bgcolor="eeeeee"> 
-    <td width="43%">The Search feature is not documented</td>
-    <td width="6%">4</td>
-    <td width="35%">This is important enough that it should be included in the 
-      documentation </td>
-    <td width="10%">Y</td>
-  </tr>
   <tr bgcolor="ffeeff"> 
     <td width="52%">Text in docs\hsqldb-hprof-sample.html is too small</td>
     <td width="7%">3</td>
@@ -139,7 +125,8 @@ Priorities range from 1 to 5, with 5 being the highest.
       is rotated. </td>
     <td width="6%">3</td>
     <td width="35%">The cells don't match the legend properly as the diagram is 
-      rotated </td>
+      rotated. And it some positions the left-hand side of the diagram is too 
+      dark </td>
     <td width="10%">N</td>
   </tr>
   <tr bgcolor="ffeeff"> 
@@ -315,66 +302,81 @@ Priorities range from 1 to 5, with 5 being the highest.
 <h2>Bugs Exterminated</h2>
 <table width="90%" border="0" cellspacing="1">
   <tr> 
-    <th width="30%" bgcolor="ccccff" height="23">Description</th>
-    <th width="0%" bgcolor="ccccff" height="23">Priority</th>
-    <th width="54%" bgcolor="ccccff" height="23">Details</th>
-    <th width="8%" bgcolor="ccccff" height="23">Date Closed</th>
+    <th width="29%" bgcolor="ccccff" height="23">Description</th>
+    <th width="6%" bgcolor="ccccff" height="23">Priority</th>
+    <th width="53%" bgcolor="ccccff" height="23">Details</th>
+    <th width="12%" bgcolor="ccccff" height="23">Date Closed</th>
   </tr>
   <tr bgcolor="eeeeee"> 
-    <td width="43%">Update screenshots for new color scheme</td>
+    <td width="43%">Rename everything from 'Orbit' to ProphIt.</td>
+    <td width="6%">5</td>
+    <td width="35%">All website doc will be updated. All application strings should 
+      be updated as well. This issue does not include re-naming packages.</td>
+    <td width="10%">2002/10/14</td>
+  </tr>
+  <tr bgcolor="eeeeee"> 
+    <td width="29%">The Search feature is not documented</td>
     <td width="6%">4</td>
-    <td width="35%">Replace Orbit screenshots w/ prophIt screenshots in the assets 
-      directory.</td>
-    <td width="10%">2002/10/13</td>
+    <td width="53%"> 
+      <p>Now documented in <a href="../web/docs/concepts.html">docs/concepts.html</a></p>
+    </td>
+    <td width="12%">2002/10/14</td>
   </tr>
   <tr bgcolor="eeeeee"> 
-    <td width="43%" height="69">Double-clicking on the root block makes block 
+    <td width="29%">Update screenshots for new color scheme</td>
+    <td width="6%">4</td>
+    <td width="53%">Replace Orbit screenshots w/ prophIt screenshots in the assets 
+      directory.</td>
+    <td width="12%">2002/10/13</td>
+  </tr>
+  <tr bgcolor="eeeeee"> 
+    <td width="29%" height="69">Double-clicking on the root block makes block 
       selection stop working </td>
     <td width="6%" height="69">4</td>
-    <td width="35%" height="69"> 
+    <td width="53%" height="69"> 
       <p>After double-clicking the root block, selecting other blocks with the 
         mouse does not take effect.</p>
       <p>Since the root block is already the root render block, no change event 
         needs to be fired by the RootRenderState</p>
     </td>
-    <td width="10%" height="69">2002/10/12</td>
+    <td width="12%" height="69">2002/10/12</td>
   </tr>
   <tr bgcolor="eeeeee"> 
-    <td width="43%" bgcolor="eeeeee">Search label does not show up until the application 
+    <td width="29%" bgcolor="eeeeee">Search label does not show up until the application 
       is re-sized</td>
     <td width="6%" bgcolor="eeeeee">5</td>
-    <td width="35%" bgcolor="eeeeee">Added a little hack to adjust the frame size 
+    <td width="53%" bgcolor="eeeeee">Added a little hack to adjust the frame size 
       before it is shown. This causes the layout routine to run which shows the 
       Search label. This should not be necessary...</td>
-    <td width="16%" bgcolor="eeeeee">2002/10/09</td>
+    <td width="12%" bgcolor="eeeeee">2002/10/09</td>
   </tr>
   <tr bgcolor="eeeeee"> 
-    <td width="43%" bgcolor="eeeeee">Diagram is shifted too far over to the right</td>
+    <td width="29%" bgcolor="eeeeee">Diagram is shifted too far over to the right</td>
     <td width="6%" bgcolor="eeeeee">2</td>
-    <td width="35%" bgcolor="eeeeee">The diagram needs to be moved over to the 
+    <td width="53%" bgcolor="eeeeee">The diagram needs to be moved over to the 
       right a little bit to make room for the legend. But not too far...</td>
-    <td width="16%" bgcolor="eeeeee">2002/10/09</td>
+    <td width="12%" bgcolor="eeeeee">2002/10/09</td>
   </tr>
   <tr bgcolor="eeeeee"> 
-    <td width="43%" bgcolor="eeeeee">CallDetails does not seem to invalidate cleanly</td>
+    <td width="29%" bgcolor="eeeeee">CallDetails does not seem to invalidate cleanly</td>
     <td width="6%" bgcolor="eeeeee">4</td>
-    <td width="35%" bgcolor="eeeeee">Caused by the initial content JPanel which 
+    <td width="53%" bgcolor="eeeeee">Caused by the initial content JPanel which 
       was not being removed when loading a profile</td>
-    <td width="16%" bgcolor="eeeeee">2002/10/09</td>
+    <td width="12%" bgcolor="eeeeee">2002/10/09</td>
   </tr>
   <tr bgcolor="eeeeee"> 
-    <td width="43%" bgcolor="eeeeee">Diagram loader should not modify the UI outside 
+    <td width="29%" bgcolor="eeeeee">Diagram loader should not modify the UI outside 
       of the event processing thread</td>
     <td width="6%" bgcolor="eeeeee">3</td>
-    <td width="35%" bgcolor="eeeeee">This is against the rules for Swing. Use 
+    <td width="53%" bgcolor="eeeeee">This is against the rules for Swing. Use 
       <a href="http://java.sun.com/j2se/1.3/docs/api/javax/swing/SwingUtilities.html#invokeLater(java.lang.Runnable)">SwingUtilities.invokeLater</a></td>
-    <td width="16%" bgcolor="eeeeee">2002/10/08</td>
+    <td width="12%" bgcolor="eeeeee">2002/10/08</td>
   </tr>
   <tr bgcolor="eeeeee"> 
-    <td width="43%" bgcolor="eeeeee">Memory usage appears to grow over time as 
+    <td width="29%" bgcolor="eeeeee">Memory usage appears to grow over time as 
       more profiles are opened and the previous ones (presumably) closed. </td>
     <td width="6%" bgcolor="eeeeee">2</td>
-    <td width="35%" bgcolor="eeeeee"> 
+    <td width="53%" bgcolor="eeeeee"> 
       <p>This problem has been mitigated by making sure that the CallGraph data 
         is cleaned up when the profile is closed. Though there may still be a 
         moderate-sized leak resulting from the GL4Java JNI implementation holding 
@@ -382,124 +384,124 @@ Priorities range from 1 to 5, with 5 being the highest.
       <p>Fixed this by only ever constructing one GL Canvas and just changing 
         what it renders.</p>
     </td>
-    <td width="16%" bgcolor="eeeeee">2002/10/07</td>
+    <td width="12%" bgcolor="eeeeee">2002/10/07</td>
   </tr>
   <tr bgcolor="eeeeee"> 
-    <td width="43%">If the window is maximized, the bottom part of the block diagram 
+    <td width="29%">If the window is maximized, the bottom part of the block diagram 
       does not render properly</td>
     <td width="6%"> 
       <div align="left">3</div>
     </td>
-    <td width="35%">Seems to have been corrected. The problem was probably the 
+    <td width="53%">Seems to have been corrected. The problem was probably the 
       'blank-out' rectangle which was drawn under the text</td>
-    <td width="16%">2002/10/06</td>
+    <td width="12%">2002/10/06</td>
   </tr>
   <tr bgcolor="eeeeee"> 
-    <td width="43%">Orbit should give a good warning when an unsupported profile 
+    <td width="29%">Orbit should give a good warning when an unsupported profile 
       is loaded (e.g. binary hprof)</td>
     <td width="6%">4</td>
-    <td width="35%">Dialog gives an error when the file fails to parse</td>
-    <td width="16%">2002/09/29</td>
+    <td width="53%">Dialog gives an error when the file fails to parse</td>
+    <td width="12%">2002/09/29</td>
   </tr>
   <tr bgcolor="eeeeee"> 
-    <td width="30%">Need an 'About' box for the GUI</td>
-    <td width="0%">4</td>
-    <td width="54%">Help/About menu item added. Will need to add an icon or logo 
+    <td width="29%">Need an 'About' box for the GUI</td>
+    <td width="6%">4</td>
+    <td width="53%">Help/About menu item added. Will need to add an icon or logo 
       once it is available. Would also be nice to have the home page URL be a 
       hyperlink, at least in the JavaWebStart version</td>
-    <td width="8%">2002/09/23</td>
+    <td width="12%">2002/09/23</td>
   </tr>
   <tr bgcolor="eeeeee"> 
-    <td width="30%">Deadlock opening a profile on top of another profile</td>
-    <td width="0%">5</td>
-    <td width="54%">pick() and cvsDispose() were deadlocked. Fixed by synchronizing 
+    <td width="29%">Deadlock opening a profile on top of another profile</td>
+    <td width="6%">5</td>
+    <td width="53%">pick() and cvsDispose() were deadlocked. Fixed by synchronizing 
       access to the BlockDiagramView</td>
-    <td width="8%">2002/09/23</td>
+    <td width="12%">2002/09/23</td>
   </tr>
   <tr bgcolor="eeeeee"> 
-    <td width="30%">-prof profiles do not load correctly when 'debug' is turned 
+    <td width="29%">-prof profiles do not load correctly when 'debug' is turned 
       off in the connection.properties</td>
-    <td width="0%">5</td>
-    <td width="54%">Original cause not determined. Fixed by having the ConnectionFactory 
+    <td width="6%">5</td>
+    <td width="53%">Original cause not determined. Fixed by having the ConnectionFactory 
       log out to ByteArrayOutputStreams which are then conditionally written to 
       the log4j log using the standard configuration mechanism (log.properties)</td>
-    <td width="8%">2002/09/22</td>
+    <td width="12%">2002/09/22</td>
   </tr>
   <tr bgcolor="eeeeee"> 
-    <td width="30%">New Orbit builds should not require the user to re-download 
+    <td width="29%">New Orbit builds should not require the user to re-download 
       the supporting libraries (log4jme, gl4java). These JARs are regenerated 
       during the build and then re-signed</td>
-    <td width="0%">4</td>
-    <td width="54%">Addressed by checking in the signed JAR files and changing 
+    <td width="6%">4</td>
+    <td width="53%">Addressed by checking in the signed JAR files and changing 
       build.xml to not re-sign them.</td>
-    <td width="8%">2002/09/19</td>
+    <td width="12%">2002/09/19</td>
   </tr>
   <tr bgcolor="eeeeee"> 
-    <td width="30%">Document the hsqldb hprof sample</td>
-    <td width="0%">5</td>
-    <td width="54%"><a href="../web/hsqldb-hprof-sample.html">hsqldb-hprof-sample.html</a></td>
-    <td width="8%">2002/09/15</td>
+    <td width="29%">Document the hsqldb hprof sample</td>
+    <td width="6%">5</td>
+    <td width="53%"><a href="../web/hsqldb-hprof-sample.html">hsqldb-hprof-sample.html</a></td>
+    <td width="12%">2002/09/15</td>
   </tr>
   <tr bgcolor="eeeeee"> 
-    <td width="30%">Document the HelloList hprof sample</td>
-    <td width="0%">5</td>
-    <td width="54%"><a href="../web/hello-list-hprof-sample.html">hello-list-hprof-sample.html</a></td>
-    <td width="8%">2002/09/15</td>
+    <td width="29%">Document the HelloList hprof sample</td>
+    <td width="6%">5</td>
+    <td width="53%"><a href="../web/hello-list-hprof-sample.html">hello-list-hprof-sample.html</a></td>
+    <td width="12%">2002/09/15</td>
   </tr>
   <tr bgcolor="eeeeee"> 
-    <td width="30%">As new profiles are opened, the Orbit frame grows bigger with 
+    <td width="29%">As new profiles are opened, the Orbit frame grows bigger with 
       each one</td>
-    <td width="0%">3</td>
-    <td width="54%">Changed the diagram-sizing code to construct the diagram with 
+    <td width="6%">3</td>
+    <td width="53%">Changed the diagram-sizing code to construct the diagram with 
       the size of the existing content panel, minus the preferred size of the 
       call details view (caller/callee tables)</td>
-    <td width="8%">2002/09/15</td>
+    <td width="12%">2002/09/15</td>
   </tr>
   <tr bgcolor="eeeeee"> 
-    <td width="30%">-prof method names not displaying correctly</td>
-    <td width="0%">4</td>
-    <td width="54%">Updated the UIUtil class to correctly implement getShortName() 
+    <td width="29%">-prof method names not displaying correctly</td>
+    <td width="6%">4</td>
+    <td width="53%">Updated the UIUtil class to correctly implement getShortName() 
       for -prof output</td>
-    <td width="8%">2002/09/14</td>
+    <td width="12%">2002/09/14</td>
   </tr>
   <tr bgcolor="eeeeee"> 
-    <td width="30%">In some cases, the children of a block with very little exclusive 
+    <td width="29%">In some cases, the children of a block with very little exclusive 
       time do not take up most of the area of their parent.</td>
-    <td width="0%"> 
+    <td width="6%"> 
       <div align="left">5</div>
     </td>
-    <td width="54%">A calculation error in the calculation of inclusive times 
+    <td width="53%">A calculation error in the calculation of inclusive times 
       from exclusive times was causing inflated inclusive times to be displayed</td>
-    <td width="8%">2002/09/11</td>
+    <td width="12%">2002/09/11</td>
   </tr>
   <tr bgcolor="eeeeee"> 
-    <td width="30%">Parse error messages are not visible in the Load dialog</td>
-    <td width="0%"> 
+    <td width="29%">Parse error messages are not visible in the Load dialog</td>
+    <td width="6%"> 
       <div align="left">4</div>
     </td>
-    <td width="54%">Load dialog replaced by status messages</td>
-    <td width="8%">2002/09/08</td>
+    <td width="53%">Load dialog replaced by status messages</td>
+    <td width="12%">2002/09/08</td>
   </tr>
   <tr bgcolor="eeeeee"> 
-    <td width="30%">HProf profile loader crashes if there is no CPU data</td>
-    <td width="0%">5</td>
-    <td width="54%">&nbsp;</td>
-    <td width="8%">2002/09/08</td>
+    <td width="29%">HProf profile loader crashes if there is no CPU data</td>
+    <td width="6%">5</td>
+    <td width="53%">&nbsp;</td>
+    <td width="12%">2002/09/08</td>
   </tr>
   <tr bgcolor="eeeeee"> 
-    <td width="30%">After launching the app with JavaWebStart and selecting File/Open, 
+    <td width="29%">After launching the app with JavaWebStart and selecting File/Open, 
       an error dialog shows up with a message 'No disk in Drive A'. Choosing 'Continue' 
       contiues the file open process without further issues.</td>
-    <td width="0%">4</td>
-    <td width="54%">Implemented System.setSecurityManager workaround, described 
+    <td width="6%">4</td>
+    <td width="53%">Implemented System.setSecurityManager workaround, described 
       at http://developer.java.sun.com/developer/bugParade/bugs/4387437.html</td>
-    <td width="8%">2002/09/08</td>
+    <td width="12%">2002/09/08</td>
   </tr>
   <tr bgcolor="eeeeee"> 
-    <td width="30%">&nbsp;</td>
-    <td width="0%">&nbsp;</td>
-    <td width="54%">&nbsp;</td>
-    <td width="8%">&nbsp;</td>
+    <td width="29%">&nbsp;</td>
+    <td width="6%">&nbsp;</td>
+    <td width="53%">&nbsp;</td>
+    <td width="12%">&nbsp;</td>
   </tr>
 </table>
 <h2>&nbsp;</h2>
