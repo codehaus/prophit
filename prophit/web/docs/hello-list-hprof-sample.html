@@ -1,7 +1,7 @@
 <html><!-- #BeginTemplate "/Templates/prophit-general.dwt" -->
 <head>
 <!-- #BeginEditable "doctitle" --> 
-<title>prophIt: HelloList -prof sample</title>
+<title>prophIt: HelloList -hprof sample</title>
 <!-- #EndEditable --> 
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 <script language="JavaScript">
@@ -14,7 +14,7 @@ function MM_reloadPage(init) {  //reloads the window if Nav4 resized
 MM_reloadPage(true);
 // -->
 </script>
-<link rel="stylesheet" href="default.css" type="text/css">
+<link rel="stylesheet" href="../default.css" type="text/css">
 <STYLE>
 	#topMenuLayer {border: solid; background-color: #dddddd; border-bottom-width: 1px; border-top-width: 1px; border-left-width: 1px; border-right-width: 1px; border-color: #FFFFFF #AAAAAA #AAAAAA #AAAAAA}
 	#HeadingLayer {border: solid; border-bottom-width: 1px; border-top-width: 1px; border-left-width: 1px; border-right-width: 1px; border-color: #AAAAAA #AAAAAA #AAAAAA #AAAAAA}
@@ -35,7 +35,7 @@ MM_reloadPage(true);
 <table id="HeaderTable" width="100%" border="0" cellpadding="8" cellspacing="0">
     <tr>
   	  <td bgcolor="#EBDEA9" width="100%" > 
-        <p><font size="6" face="Georgia, Times New Roman, Times, serif" color="#000000"><b><a href="index.html" style="text-decoration: none"><font color="222222">proph<font face="Courier New, Courier, mono">It</font></font></a></b></font> 
+        <p><font size="6" face="Georgia, Times New Roman, Times, serif" color="#000000"><b><a href="../index.html" style="text-decoration: none"><font color="222222">proph<font face="Courier New, Courier, mono">It</font></font></a></b></font> 
           <br>
           <a href="http://prophit.westslopesoftware.com"><font color="#333333"> 
           prophIt.westslopesoftware.com<br>
@@ -53,8 +53,8 @@ MM_reloadPage(true);
 			<td>
 				
         <div align="right"> 
-		<span class="TopMenu"><a href="http://prophit.westslopesoftware.com">prophIt</a> 
-          | <a href="docs/index.html">Documentation</a> | <a href="download.html">Download</a> 
+		<span class="TopMenu"><a href="../index.html">prophIt</a> 
+          | <a href="index.html">Documentation</a> | <a href="../download.html">Download</a> 
         </span>
 		</div>
 			
@@ -69,14 +69,14 @@ MM_reloadPage(true);
     <td id="leftcol" width="20%"> 
         <div id="LeftMenuLayer"> 
           <p><span class="MenuHeader">prophIt</span><br>
-            <span class="MenuItem"> - <a href="index.html">Home Page</a><br>
-            - <a href="news.html">News and Status</a><br>
-            - <a href="team.html">The Team</a><br>
-            - <a href="download.html">Get prophIt Now!</a></span><span class="MenuItem"><br>
+            <span class="MenuItem"> - <a href="../index.html">Home Page</a><br>
+            - <a href="../news.html">News and Status</a><br>
+            - <a href="../team.html">The Team</a><br>
+            - <a href="../download.html">Get prophIt Now!</a></span><span class="MenuItem"><br>
             </span></p>
           <p><span class="MenuHeader">Documentation</span><br>
-            <span class="MenuItem">- <a href="docs/index.html">Overview</a><br>
-            - <a href="quick-start.html">Getting Started</a><br>
+            <span class="MenuItem">- <a href="index.html">Overview</a><br>
+            - <a href="../quick-start.html">Getting Started</a><br>
           </span> </p>
       </div>
 		</td>
@@ -87,39 +87,43 @@ MM_reloadPage(true);
 					<tr>
 						<td><div id="mainContentLayer">
 						<!-- #BeginEditable "Main%20Content%20Region" --> 
-                  <h1 align="center">HelloList <code>java -prof</code> Profile</h1>
+                  <h1 align="center">HelloList <code>hprof</code> Profile</h1>
                   <table border="0" cellspacing="0" cellpadding="0" bgcolor="eeeeee">
                     <tr> 
-                      <td width="138" nowrap>Previous : <a href="docs/samples.html">Samples</a></td>
+                      <td width="232" nowrap>Previous : <a href="samples.html">Samples</a></td>
                       <td width="20" bgcolor="ffffff" nowrap>&nbsp;</td>
-                      <td width="145" nowrap>Up : <a href="docs/samples.html">Samples</a></td>
+                      <td width="167" nowrap>Up : <a href="samples.html">Samples</a></td>
                       <td width="20" bgcolor="ffffff" nowrap>&nbsp;</td>
-                      <td width="269" nowrap>Next : <a href="hello-list-hprof-sample.html">HelloList 
+                      <td width="293" nowrap>Next : <a href="hsqldb-hprof-sample.html">HSQLDB 
                         <code>hprof</code> Profile</a></td>
                     </tr>
                   </table>
-                  <p>Open this sample using the <i>File/Sample Profiles/prof/HelloList</i> 
+                  <p>Open this sample using the <i>File/Sample Profiles/hprof/HelloList</i> 
                     menu item. </p>
-                  <p>This sample shows <code><a href="docs/dash-prof.html">java 
-                    -prof</a></code> output from the sample program <a href="java/util/HelloList.java.txt">HelloList.java</a>. 
-                    This sample profile was generated by running the following 
-                    command on JDK 1.3.1_02 for Windows:</p>
-                  <pre>	java -classic -prof util.HelloList</pre>
+                  <p>This sample shows <code><a href="hprof.html">hprof</a></code> 
+                    output from the sample program <a href="../java/util/HelloList.java.txt">HelloList.java</a>. 
+                    This profile is similar to the <code><a href="hello-list-prof-sample.html">-prof 
+                    Profile</a></code> of HelloList.java, but it was created using 
+                    the <code>hprof</code> profiler rather than <code>java -prof</code>. 
+                    See the documentation on <a href="profiler-types.html">Profiler 
+                    Types</a> for more information on the difference between the 
+                    two. This profile was generated by running the following command 
+                    on JDK 1.3.1_02 for Windows:</p>
+                  <pre>	java -classic -Xrunprof:cpu=samples,depth=6 util.HelloList</pre>
                   <ol>
-                    <li>Click on the <a href="docs/glossary.html#diagram_root">diagram 
+                    <li>Click on the <a href="glossary.html#diagram_root">diagram 
                       root</a> (the bottom-most block in the tower diagram) to 
                       select the <code>&lt;root&gt;</code> function. The base 
                       of every diagram is the <code>&lt;root&gt;</code> function. 
-                      All the program's top-level threads are displayed as <a href="docs/glossary.html#callee">callees</a> 
+                      All the program's top-level threads are displayed as <a href="glossary.html#callee">callees</a> 
                       of <code>&lt;root&gt;</code>. 
                       <p> By selecting the <code>&lt;root&gt;</code> function, 
                         and reading the Callee table, you can determine that the 
                         program time consists primarily of the <code>HelloList.main</code> 
                         function (over 99%), though it also spends a little time 
-                        running <code>java.lang.ClassLoader.loadClassInternal</code> 
-                        and a few other setup-related functions. 
+                        running a few setup-related functions. 
                     </li>
-                    <li>Adjust the <a href="docs/glossary.html#depth_slider">depth 
+                    <li>Adjust the <a href="glossary.html#depth_slider">depth 
                       slider </a>down to '1', to show only 1 level of callees. 
                       <p> If you look closely at the diagram, you can see that 
                         the <code>&lt;root&gt;</code> function has only one callee 
@@ -157,7 +161,7 @@ MM_reloadPage(true);
                       </ol>
                     </li>
                     <li>Double-click the <code>linkedAndString</code> block. Double-clicking 
-                      makes the selected block into the <a href="docs/glossary.html#diagram_root">diagram 
+                      makes the selected block into the <a href="glossary.html#diagram_root">diagram 
                       root</a>, so <code>linkedAndString</code> is now the bottom 
                       block in the diagram. You can use the 'Back' and 'Forward' 
                       buttons to move back and forth between diagrams. 
@@ -172,14 +176,14 @@ MM_reloadPage(true);
                       function calls. 
                       <p> There are now several different colors of blocks in 
                         the diagram. What do the colors represent? All the blocks 
-                        in the diagram are shaded between blue and red according 
+                        in the diagram are shaded from light to dark according 
                         to how much of the time was spent in the function itself 
-                        ('<a href="docs/glossary.html#exclusive">exclusive time</a>'). 
+                        ('<a href="glossary.html#exclusive">exclusive time</a>'). 
                       <p> The diagram shows that there are 3 important hot spots 
                         in the <code>buildAsStrings</code> function: 
                       <ol>
-                        <li><code>StringBuffer.toString</code></li>
                         <li><code>StringBuffer.append</code></li>
+                        <li><code>StringBuffer.toString</code></li>
                         <li><code>StringBuffer.&lt;init&gt;</code></li>
                       </ol>
                     </li>
@@ -199,17 +203,47 @@ MM_reloadPage(true);
                       selected (by clicking or double-clicking on it). The yellow 
                       highlights mark other places in the program where the selected 
                       function was invoked.</li>
+					  <li>
+					  <p>One of the benefits of <code>hprof</code> is that it 
+                        can capture more stack levels (in this case, 6, as specified 
+                        by <code>depth=6</code>) than <code>-prof</code>. Use 
+                        the 'Root' button to show the entire program in the diagram, 
+                        then set the number of displayed levels in the call graph 
+                        to '4' using the slider. 
+                      <P>Double-click one of the <code>buildAsStrings</code> functions. 
+                        Make note of the times and percentages listed for its 
+                        callees (<code>StringBuffer.append</code>, <code>StringBuffer.toString</code>, 
+                        etc). Then go 'Back' and double-click on the other <code>buildAsStrings</code> 
+                        function (it will be highlighted in yellow). Note that 
+                        this invocation of <code>buildAsStrings</code> has the 
+                        same callees, but the times are slighly different. <code>-prof</code> 
+                        profiles do not show such distinctions, because it only 
+                        captures 2 levels of stack depth. <code>-prof</code> lumps 
+                        all the time spent in the callees of <code>buildAsStrings</code> 
+                        into one set of data. It does not differentiate based 
+                        on the caller of <code>buildAsStrings</code>. 
+                      <P> Therefore, the capability to show different data for 
+                        different invocations of the same function is not available 
+                        with <code>-prof</code>you have to use <code>hprof</code> 
+                        to get it. And you have to set the <code>depth</code> 
+                        option to a large enough number to ensure that the different 
+                        invocations will have different call stacks. In this case, 
+                        <code>depth=3</code> would have been sufficient. <code>depth=6</code> 
+                        seems to be enough for most cases, but you can experiment 
+                        with this parameter. </li>
                   </ol>
-                  <table border="0" cellspacing="0" cellpadding="0" bgcolor="eeeeee">
+                                   <table border="0" cellspacing="0" cellpadding="0" bgcolor="eeeeee">
                     <tr> 
-                      <td width="138" nowrap>Previous : <a href="docs/samples.html">Samples</a></td>
+                      <td width="232" nowrap>Previous : <a href="samples.html">Samples</a></td>
                       <td width="20" bgcolor="ffffff" nowrap>&nbsp;</td>
-                      <td width="145" nowrap>Up : <a href="docs/samples.html">Samples</a></td>
+                      <td width="167" nowrap>Up : <a href="samples.html">Samples</a></td>
                       <td width="20" bgcolor="ffffff" nowrap>&nbsp;</td>
-                      <td width="269" nowrap>Next : <a href="hello-list-hprof-sample.html">HelloList 
+                      <td width="293" nowrap>Next : <a href="hsqldb-hprof-sample.html">HSQLDB 
                         <code>hprof</code> Profile</a></td>
                     </tr>
                   </table>
+                  <p>&nbsp;</p>
+                  <p>&nbsp;</p>
                   <!-- #EndEditable -->
 						</div></td>
 					</tr>
@@ -217,7 +251,7 @@ MM_reloadPage(true);
 				<table width="100%" border="0" cellspacing="0" cellpadding="0">
 				  <tr>
 					
-              <td><a href="http://www.westslopesoftware.com"><img src="assets/wsswLogo.jpg" width="673" height="99" border="0"></a></td>
+              <td><a href="http://www.westslopesoftware.com"><img src="../assets/wsswLogo.jpg" width="673" height="99" border="0"></a></td>
 				  </tr>
 				</table>
 			</div>

@@ -62,15 +62,6 @@
 	<copy file="${build}/lib/prophit.jar" todir="${dist}/lib/" />
   </target>
 
-  <target name="make-os-jars">
-    <jar jarfile="${basedir}/lib/gl4java-win32.jar">
-	  <fileset dir="${basedir}/lib/win32" includes="*.dll" />
-    </jar>
-    <jar jarfile="${basedir}/lib/gl4java-linux.jar">
-	  <fileset dir="${basedir}/lib/linux" includes="*.so" />
-    </jar>
-  </target>
-
   <target name="dist" depends="jar">
     <copy todir="${dist}">
 	  <fileset dir="bin" />
@@ -135,6 +126,16 @@
 
   <target name="clean">
 		<delete dir="${build}" />
+  </target>
+
+  <!-- Use this as a one-time target to build the OS-specific JARs for gl4java -->
+  <target name="make-os-jars">
+    <jar jarfile="${basedir}/lib/gl4java-win32.jar">
+	  <fileset dir="${basedir}/lib/win32" includes="*.dll" />
+    </jar>
+    <jar jarfile="${basedir}/lib/gl4java-linux.jar">
+	  <fileset dir="${basedir}/lib/linux" includes="*.so" />
+    </jar>
   </target>
 
   <!-- Use this as a one-time target to sign the static JAR files -->

@@ -1,7 +1,7 @@
 <html><!-- #BeginTemplate "/Templates/prophit-general.dwt" -->
 <head>
 <!-- #BeginEditable "doctitle" --> 
-<title>prophIt: Glossary</title>
+<title>prophIt: HelloList -prof sample</title>
 <!-- #EndEditable --> 
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 <script language="JavaScript">
@@ -87,71 +87,54 @@ MM_reloadPage(true);
 					<tr>
 						<td><div id="mainContentLayer">
 						<!-- #BeginEditable "Main%20Content%20Region" --> 
-                  <div class="header">Glossary</div><br>
-                  <!--table border="0" cellspacing="0" cellpadding="0" bgcolor="eeeeee">
-                    <tr> 
-                      <td width="200" nowrap>Previous : <a href="samples.html">Sample 
-                        Profiles</a></td>
-                      <td width="20" bgcolor="ffffff" nowrap>&nbsp;</td>
-                      <td width="157" nowrap>Up : <a href="index.html">Documentation</a></td>
-                      <td width="20" bgcolor="ffffff" nowrap>&nbsp;</td>
-                      <td width="234" nowrap>Next : </td>
-                    </tr>
-                  </table-->
-				  <p>This is a glossary of profiling terms for your convenience...</p>
-                  <dl> 
-                    <dt><a name="caller">caller</a></dt>
-                    <dd>A function which has invoked the current function. The 
-                      caller function is displayed as the block underneath the 
-                      current block in the tower diagram. The <a href="#inclusive">inclusive 
-                      time</a> of a function is always less than or equal to the 
-                      inclusive time of its caller.</dd>
-                    <dt><a name="callee">callee</a></dt>
-                    <dd>A function which has been invoked by the current function. 
-                      Callee functions are displayed as the blocks stacked on 
-                      top of the current block in the tower diagram. The sum of 
-                      the <a href="#inclusive">inclusive times</a> of the callees 
-                      of a function is always less than or equal to the inclusive 
-                      time of that function. </dd>
-                    <dt><a name="depth_slider"></a>depth slider</dt>
-                    <dd>The slider control at the top of the prophIt window. The 
-                      depth slider controls how many levels of the call graph 
-                      below the <a href="#diagram_root">diagram root</a> are shown 
-                      in the <a href="#tower_diagram">tower diagram</a>.</dd>
-                    <dt><a name="diagram_root"></a>diagram root</dt>
-                    <dd>The function which is rendered as the base of the tower 
-                      diagram</dd>
-                    <dt><a name="exclusive">exclusive time</a></dt>
-                    <dd>Amount of time spent in a function, not counting the time 
-                      spent in its <a href="#callee">callees</a>. The exclusive 
-                      time is the sum of the time spent in all the statements 
-                      and instructions of the function itself. A function with 
-                      a large exclusive time is commonly referred to as a 'hotspot'.</dd>
-                    <dt>&nbsp; </dt>
-                    <dt><a name="inclusive">inclusive time</a></dt>
-                    <dd>Amount of time spent in a function, including the time 
-                      spent in its <a href="#callee">callees</a>.</dd>
-                    <dt>tower diagram<a name="tower_diagram"></a></dt>
-                    <dd>Refers to the visualization technique invented for and 
-                      used by prophIt. See this <a href="concepts.html#screenshot">screenshot</a>.</dd>
-                    <dt><a name="selected_call"></a>selected call</dt>
-                    <dd>The block (function) in the tower diagram which has been 
-                      selected by the user. The selected call may be set by single-clicking 
-                      on a block in the tower diagram with the mouse, or by double-clicking 
-                      on a row in a <a href="concepts.html#call_tables">call table</a>.</dd>
-                    <dt>&nbsp;</dt>
-                  </dl>
+                  <h1 align="center">HelloList <code>java -prof</code> Profile</h1>
                   <table border="0" cellspacing="0" cellpadding="0" bgcolor="eeeeee">
                     <tr> 
-                      <td width="200" nowrap>Previous : <a href="samples.html">Sample 
-                        Profiles</a></td>
+                      <td width="224" nowrap>Previous : <a href="hsqldb-hprof-sample.html">HSQLDB 
+                        <code>hprof</code> Profile</a></td>
                       <td width="20" bgcolor="ffffff" nowrap>&nbsp;</td>
-                      <td width="157" nowrap>Up : <a href="index.html">Documentation</a></td>
+                      <td width="82" nowrap>Up : <a href="samples.html">Samples</a></td>
                       <td width="20" bgcolor="ffffff" nowrap>&nbsp;</td>
-                      <td width="234" nowrap>Next : </td>
+                      <td width="180" nowrap>Next :</td>
                     </tr>
                   </table>
-                  <h1>&nbsp;</h1>
+                  <p>Open this sample using the <i>File/Sample Profiles/prof/HelloList</i> 
+                    menu item. </p>
+                  <p>This sample shows <code><a href="dash-prof.html">java -prof</a></code> 
+                    output from the sample program <a href="../java/util/HelloList.java.txt">HelloList.java</a>. 
+                    This sample profile was generated by running the following 
+                    command on JDK 1.3.1_02 for Windows:</p>
+                  <pre>	java -classic -prof util.HelloList</pre>
+                  Explore the <a href="hello-list-hprof-sample.html">HelloList 
+                  <code>hprof</code> Profile</a> before moving on to this one. 
+                  <ol>
+                    <li>The first thing you may notice about this profile is that 
+                      the 'time' numbers are all larger. For example, the inclusive 
+                      time of <code>&lt;root&gt;</code> is 87,027 in this profile, 
+                      where as it was 9,671 for the <code>hprof</code> profile. 
+                      The <code>-prof</code> profile also took a lot longer to 
+                      generate! The <code>cpu=samples</code> mode of <code>hprof</code> 
+                      is faster, but gathers less data, than <code>cpu=times</code> 
+                      or <code>-prof</code>.</li>
+                    <li>The <code>hprof</code> data agrees very well with the 
+                      <code>-prof</code> data. <code>arrayAndString</code> and 
+                      <code>linkedAndString</code> take about 40% of the time 
+                      spent in <code>HelloList.main</code> each, whereas <code>arrayAndBuffer</code> 
+                      and <code>linkedAndBuffer</code> only take about 10% of 
+                      the time each. The functions which use <code>ArrayList</code> 
+                      are slightly faster than the ones which use <code>LinkedList</code>. 
+                    </li>
+                  </ol>
+                  <table border="0" cellspacing="0" cellpadding="0" bgcolor="eeeeee">
+                    <tr> 
+                      <td width="224" nowrap>Previous : <a href="hsqldb-hprof-sample.html">HSQLDB 
+                        <code>hprof</code> Profile</a></td>
+                      <td width="20" bgcolor="ffffff" nowrap>&nbsp;</td>
+                      <td width="82" nowrap>Up : <a href="samples.html">Samples</a></td>
+                      <td width="20" bgcolor="ffffff" nowrap>&nbsp;</td>
+                      <td width="180" nowrap>Next :</td>
+                    </tr>
+                  </table>
                   <!-- #EndEditable -->
 						</div></td>
 					</tr>
