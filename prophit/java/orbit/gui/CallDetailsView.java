@@ -4,6 +4,7 @@ import orbit.model.Call;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.event.MouseEvent;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
@@ -45,28 +46,56 @@ class CallDetailsView
 
 	private void addComponents()
 	{
-		tblCallInfo = new JTable();
-		tblCallers = new JTable();
-		tblCallees = new JTable();
+		tblCallInfo = new JTable()
+			{
+				public String getToolTipText(MouseEvent event)
+				{
+					/*
+					 * Get the row index
+					 * Get the call name of the row & return it
+					 */
+					int row = rowAtPoint( event.getPoint() );
+					int column = columnAtPoint( event.getPoint() );
+					if ( row == 0 && column == 1 )
+					{
+						return ((CallInfoModel)getModel()).getDetails().getCallName();
+					}
+					else
+					{
+						return null;
+					}
+				}			
+			};
+		tblCallers = new CallListTable();
+		tblCallees = new CallListTable();
+		/*
+		tblCallInfo.setPreferredSize(new Dimension(100, 100));
+		tblCallers.setPreferredSize(new Dimension(100, 100));
+		tblCallees.setPreferredSize(new Dimension(100, 100));
+		*/
 		
 		JSplitPane bottomSplitter = new JSplitPane(JSplitPane.VERTICAL_SPLIT,
 															  new JScrollPane(tblCallers),
 															  new JScrollPane(tblCallees))
 			{
-				public Dimension getMinimumSize() { return new Dimension(100, 200); }
+				public Dimension getPreferredSize() { return new Dimension(300, 250); }
 			};
 
 		JSplitPane topSplitter = new JSplitPane(JSplitPane.VERTICAL_SPLIT,
 															  new JScrollPane(tblCallInfo),
 															  bottomSplitter)
 			{
-				public Dimension getMinimumSize() { return new Dimension(100, 300); }
+				public Dimension getPreferredSize() { return new Dimension(300, 500); }
 			};
 
+		add(topSplitter, BorderLayout.CENTER);
+
+		bottomSplitter.resetToPreferredSizes();
+		topSplitter.resetToPreferredSizes();
+		/*
 		topSplitter.setDividerLocation(0.333);
 		bottomSplitter.setDividerLocation(0.5);
-
-		add(topSplitter, BorderLayout.CENTER);
+		*/
 	}
 
 	private class CallInfoModel
@@ -78,6 +107,8 @@ class CallDetailsView
 		{
 			this.details = details;
 		}
+
+		public CallDetails getDetails() { return details; }
 		
 		public String getColumnName(int column) 
 		{
@@ -104,7 +135,7 @@ class CallDetailsView
 				case 0:
 					return Strings.getUILabel(CallDetailsView.class, "columnName.name");
 				case 1:
-					return details.getCallName();
+					return UIUtil.getShortName(details.getCallName());
 				}
 			case 1:
 				switch ( column )
@@ -112,7 +143,9 @@ class CallDetailsView
 				case 0:
 					return Strings.getUILabel(CallDetailsView.class, "columnName.inclusive");
 				case 1:
-					return new Double(details.getInclusiveTime());
+					return UIUtil.formatTime(details.getInclusiveTime()) +
+						" (" + UIUtil.formatPercent(details.getInclusiveTime() / details.getRootTime()) +
+						" " + Strings.getUILabel(CallDetailsView.class, "ofProgram") + ")";;
 				}
 			case 2:
 				switch ( column )
@@ -120,7 +153,9 @@ class CallDetailsView
 				case 0:
 					return Strings.getUILabel(CallDetailsView.class, "columnName.exclusive");
 				case 1:
-					return new Double(details.getExclusiveTime());
+					return UIUtil.formatTime(details.getExclusiveTime()) +
+						" (" + UIUtil.formatPercent(details.getExclusiveTime() / details.getRootTime()) +
+						" " + Strings.getUILabel(CallDetailsView.class, "ofProgram") + ")";;
 				}
 			case 3:
 				switch ( column )
@@ -133,5 +168,23 @@ class CallDetailsView
 			}
 			return "<unexpected row, column " + row + ", " + column + ">";
 		}
+	}
+
+	private static class CallListTable
+		extends JTable
+	{
+		public String getToolTipText(MouseEvent event)
+		{
+			/*
+			 * Get the row index
+			 * Get the call name of the row & return it
+			 */
+			int row = rowAtPoint( event.getPoint() );
+			if (row == -1)
+				return null;
+
+			CallDetails.CallTableModel model = (CallDetails.CallTableModel)getModel();
+			return model.getCallName(row);
+		}			
 	}
 }
