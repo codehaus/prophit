@@ -8,15 +8,9 @@ import orbit.util.Log;
 
 import org.apache.log4j.Category;
 
-import java.beans.PropertyChangeSupport;
-import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.beans.PropertyChangeSupport;
+import java.util.*;
 
 public class BlockDiagramModel
 {
@@ -174,19 +168,9 @@ public class BlockDiagramModel
 		{
 			String oldSearchString = searchString;
 			searchString = newSearchString;
-			WildcardMatchExpression expr = new WildcardMatchExpression(searchString);
-			nameSearchMatches.clear();
-			Set keySet = nameToCallListMap.keySet();
-			Log.debug(LOG, "Searching for ", searchString, " in ", keySet);
-			for ( Iterator i = keySet.iterator(); i.hasNext(); )
-			{
-				String name = (String)i.next();
-				if ( expr.match(name) )
-				{
-					Log.debug(LOG, "Search matches ", name);
-					nameSearchMatches.add(name);
-				}
-			}
+
+			invalidateSearch();
+
 			changeSupport.firePropertyChange(NAME_SEARCH_STRING_PROPERTY, oldSearchString, searchString);
 		}
 	}
@@ -251,6 +235,7 @@ public class BlockDiagramModel
 	public void setNameToCallListMap(Map map)
 	{
 		nameToCallListMap = map;
+		invalidateSearch();
 	}
 
 	public List getCallsByName(String name)
@@ -393,7 +378,33 @@ public class BlockDiagramModel
 	// protected so that the test case TestBlockDiagramModel can use it
 	protected List getNameSearchNames()
 	{
+		if ( nameSearchMatches == null )
+			doSearch();
 		return Collections.unmodifiableList(nameSearchMatches);
+	}
+
+	private void doSearch()
+	{
+		if ( nameSearchMatches != null )
+			nameSearchMatches.clear();
+		else
+			nameSearchMatches = new ArrayList();
+
+		if ( searchString == null || "".equals(searchString) || nameToCallListMap == null )
+			return;
+
+		WildcardMatchExpression expr = new WildcardMatchExpression(searchString);
+		Set keySet = nameToCallListMap.keySet();
+		Log.debug(LOG, "Searching for ", searchString, " in ", keySet);
+		for ( Iterator i = keySet.iterator(); i.hasNext(); )
+		{
+			String name = (String)i.next();
+			if ( expr.match(name) )
+			{
+				Log.debug(LOG, "Search matches ", name);
+				nameSearchMatches.add(name);
+			}
+		}
 	}
 
 	private void updateFilter()
@@ -424,5 +435,11 @@ public class BlockDiagramModel
 	{
 		glNameToCallMap = null;
 		nameToCallListMap = null;
+		invalidateSearch();
+	}
+
+	private void invalidateSearch()
+	{
+		nameSearchMatches = null;
 	}
 }
