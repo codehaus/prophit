@@ -168,8 +168,11 @@ public class MapFrame
 
 		if ( blockView != null )
 		{
-			blockView.cvsDispose();
-			blockView = null;
+			synchronized ( blockView )
+			{
+				blockView.cvsDispose();
+				blockView = null;
+			}
 		}
 
 		if ( blockModel != null )

@@ -293,7 +293,7 @@ class BlockDiagramView
 		glj.gljCheckGL();
 	}
 
-	public void display()
+	public synchronized void display()
 	{
 		/* Standard GL4Java Init */
 		if( !glj.gljMakeCurrent() ) 
@@ -518,7 +518,7 @@ class BlockDiagramView
 	 * Find the Call which is rendered <code>screenPoint</code> and set the mouseOverCall
 	 * variable to that Call (or to null).
 	 */
-	Call pick(Point screenPoint)
+	synchronized Call pick(Point screenPoint)
 	{
 		/* Standard GL4Java Init */
 		if( glj == null || !glj.gljMakeCurrent() ) 
