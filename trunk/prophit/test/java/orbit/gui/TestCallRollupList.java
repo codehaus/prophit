@@ -40,11 +40,11 @@ public class TestCallRollupList
 		assertEquals(simpleCG.append11.getName(), "append");
 		assertEquals(simpleCG.append12.getName(), "append");
 
-		assert(TestUtil.equal(simpleCG.append11.getTime(), 10));
-		assert(TestUtil.equal(simpleCG.append12.getTime(), 20));
+		assertTrue(TestUtil.equal(simpleCG.append11.getTime(), 10));
+		assertTrue(TestUtil.equal(simpleCG.append12.getTime(), 20));
 
-		assert(TestUtil.equal(simpleCG.append21.getTime(), 5));
-		assert(TestUtil.equal(simpleCG.append22.getTime(), 10));
+		assertTrue(TestUtil.equal(simpleCG.append21.getTime(), 5));
+		assertTrue(TestUtil.equal(simpleCG.append22.getTime(), 10));
 	}
 
 	// Tests basic rollup of distinctly named calls
@@ -59,7 +59,7 @@ public class TestCallRollupList
 		catch (NullPointerException x) {
 			exception = true;
 		}
-		assert(exception);
+		assertTrue(exception);
 
 		// Simulate adding some of the unique calls to the CallRollupList
 		rollup.addCallee(simpleCG.main);
@@ -73,9 +73,9 @@ public class TestCallRollupList
 		assertEquals(rollup.getCallName(1), "test");
 		assertEquals(rollup.getCallName(2), "init");
 
-		assert(TestUtil.equal(rollup.getTime(0), 300));
-		assert(TestUtil.equal(rollup.getTime(1), 180));
-		assert(TestUtil.equal(rollup.getTime(2), 120));
+		assertTrue(TestUtil.equal(rollup.getTime(0), 300));
+		assertTrue(TestUtil.equal(rollup.getTime(1), 180));
+		assertTrue(TestUtil.equal(rollup.getTime(2), 120));
 	}
 
 	// Tests rolling up the times from multiple calls with the same name
@@ -99,10 +99,10 @@ public class TestCallRollupList
 		assertEquals(rollup.getCallName(2), "update");
 		assertEquals(rollup.getCallName(3), "insert");
 
-		assert(TestUtil.equal(rollup.getTime(0), 300));
-		assert(TestUtil.equal(rollup.getTime(1), 180));
-		assert(TestUtil.equal(rollup.getTime(2), 60));
-		assert(TestUtil.equal(rollup.getTime(3), 30));
+		assertTrue(TestUtil.equal(rollup.getTime(0), 300));
+		assertTrue(TestUtil.equal(rollup.getTime(1), 180));
+		assertTrue(TestUtil.equal(rollup.getTime(2), 60));
+		assertTrue(TestUtil.equal(rollup.getTime(3), 30));
 	}
 
 	// Tests constructing a render-able CallDetails from the simple.prof model using

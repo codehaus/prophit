@@ -32,43 +32,43 @@ public class TestRootRenderState
 		RootRenderState state = new RootRenderState(client, calls.root);
 
 		assertEquals(state.getRenderCall(), calls.root);
-		assert(!state.hasNextRenderCall());
-		assert(!state.hasPreviousRenderCall());
+		assertTrue(!state.hasNextRenderCall());
+		assertTrue(!state.hasPreviousRenderCall());
 
 		// Test parentRenderCall if there is no parent
-		assert(!state.hasParentRenderCall());
+		assertTrue(!state.hasParentRenderCall());
 		state.setRenderCallToParent();
 		assertEquals(state.getRenderCall(), calls.root);
-		assert(!state.hasNextRenderCall());
-		assert(!state.hasPreviousRenderCall());
+		assertTrue(!state.hasNextRenderCall());
+		assertTrue(!state.hasPreviousRenderCall());
 
 		// Navigate down to the call 'root.main'
 		// previousRenderCall and setRenderCallToParent should both work now
 		state.setRenderCall(calls.main);
 		assertEquals(state.getRenderCall(), calls.main);
-		assert(!state.hasNextRenderCall());
-		assert(state.hasParentRenderCall());
-		assert(state.hasPreviousRenderCall());
+		assertTrue(!state.hasNextRenderCall());
+		assertTrue(state.hasParentRenderCall());
+		assertTrue(state.hasPreviousRenderCall());
 
 		// Move up to the parent
 		state.setRenderCallToParent();
 		assertEquals(state.getRenderCall(), calls.root);
-		assert(!state.hasNextRenderCall());
-		assert(state.hasPreviousRenderCall());
-		assert(!state.hasParentRenderCall());
+		assertTrue(!state.hasNextRenderCall());
+		assertTrue(state.hasPreviousRenderCall());
+		assertTrue(!state.hasParentRenderCall());
 		
 		// Move to the previous call (main)
 		state.previousRenderCall();
 		assertEquals(state.getRenderCall(), calls.main);
-		assert(state.hasNextRenderCall());
-		assert(state.hasParentRenderCall());
-		assert(state.hasPreviousRenderCall());
+		assertTrue(state.hasNextRenderCall());
+		assertTrue(state.hasParentRenderCall());
+		assertTrue(state.hasPreviousRenderCall());
 
 		// Move to the next call (root)
 		state.nextRenderCall();
-		assert(!state.hasNextRenderCall());
-		assert(!state.hasParentRenderCall());
-		assert(state.hasPreviousRenderCall());
+		assertTrue(!state.hasNextRenderCall());
+		assertTrue(!state.hasParentRenderCall());
+		assertTrue(state.hasPreviousRenderCall());
 
 		// Move back to the previous, then set the call state to dbOpen
 		// Should not be a 'next' any more
@@ -76,9 +76,9 @@ public class TestRootRenderState
 		state.previousRenderCall();
 		state.setRenderCall(calls.dbOpen);
 		assertEquals(state.getRenderCall(), calls.dbOpen);
-		assert(!state.hasNextRenderCall());
-		assert(state.hasParentRenderCall());
-		assert(state.hasPreviousRenderCall());
+		assertTrue(!state.hasNextRenderCall());
+		assertTrue(state.hasParentRenderCall());
+		assertTrue(state.hasPreviousRenderCall());
 
 		// Underflow the previousRenderCall
 		state.previousRenderCall();

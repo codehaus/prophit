@@ -40,7 +40,7 @@ public class TestComputeCallLocation
 		assertEquals(computeLocation.getRenderDepth(), 2);
 		double expectedArea = 0.4;
 		double actualArea = TestUtil.area(computeLocation.getRectangle());
-		assert("expectedArea " + expectedArea + " != actualArea " + actualArea, TestUtil.equal(expectedArea, actualArea));
+		assertTrue("expectedArea " + expectedArea + " != actualArea " + actualArea, TestUtil.equal(expectedArea, actualArea));
 	}	
 
 	public void testComputeMainLocation()
@@ -53,7 +53,7 @@ public class TestComputeCallLocation
 		assertEquals(computeLocation.getRenderDepth(), 0);
 		double expectedArea = 1.0;
 		double actualArea = TestUtil.area(computeLocation.getRectangle());
-		assert("expectedArea " + expectedArea + " != actualArea " + actualArea, TestUtil.equal(expectedArea, actualArea));
+		assertTrue("expectedArea " + expectedArea + " != actualArea " + actualArea, TestUtil.equal(expectedArea, actualArea));
 	}	
 
 	public void testDBExec1Location()
@@ -66,6 +66,6 @@ public class TestComputeCallLocation
 		assertEquals(computeLocation.getRenderDepth(), 2);
 		double expectedArea = 120 / 300.0;
 		double actualArea = TestUtil.area(computeLocation.getRectangle());
-		assert("expectedArea " + expectedArea + " != actualArea " + actualArea, TestUtil.equal(expectedArea, actualArea));
+		assertTrue("expectedArea " + expectedArea + " != actualArea " + actualArea, TestUtil.equal(expectedArea, actualArea));
 	}	
 }

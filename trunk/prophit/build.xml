@@ -120,16 +120,16 @@
 	  <fileset dir="${basedir}/lib/linux" includes="*.so" />
     </jar>
 
-	<signjar jar="${build}/lib/orbit.jar" signedjar="${webdist}/lib/orbit.jar" verbose="true" alias="orbit" keystore="${keystore}" storepass="${keypass}" />
-	<signjar jar="${build}/lib/data.jar" signedjar="${webdist}/lib/data.jar" verbose="true" alias="orbit" keystore="${keystore}" storepass="${keypass}" />
+	<signjar jar="${build}/lib/orbit.jar" signedjar="${webdist}/lib/orbit.jar" verbose="true" alias="${alias}" keystore="${keystore}" storepass="${keypass}" />
+	<signjar jar="${build}/lib/data.jar" signedjar="${webdist}/lib/data.jar" verbose="true" alias="${alias}" keystore="${keystore}" storepass="${keypass}" />
 
-	<signjar jar="${basedir}/lib/log4jME.jar" signedjar="${webdist}/lib/log4jME.jar" verbose="true" alias="orbit" keystore="${keystore}" storepass="${keypass}" />
-	<signjar jar="${basedir}/lib/png.jar" signedjar="${webdist}/lib/png.jar" verbose="true" alias="orbit" keystore="${keystore}" storepass="${keypass}" />
-	<signjar jar="${basedir}/lib/gl4java.jar" signedjar="${webdist}/lib/gl4java.jar" verbose="true" alias="orbit" keystore="${keystore}" storepass="${keypass}" />
-	<signjar jar="${basedir}/lib/gl4java-glutfonts.jar" signedjar="${webdist}/lib/gl4java-glutfonts.jar" verbose="true" alias="orbit" keystore="${keystore}" storepass="${keypass}" />
+	<signjar jar="${basedir}/lib/log4jME.jar" signedjar="${webdist}/lib/log4jME.jar" verbose="true" alias="${alias}" keystore="${keystore}" storepass="${keypass}" />
+	<signjar jar="${basedir}/lib/png.jar" signedjar="${webdist}/lib/png.jar" verbose="true" alias="${alias}" keystore="${keystore}" storepass="${keypass}" />
+	<signjar jar="${basedir}/lib/gl4java.jar" signedjar="${webdist}/lib/gl4java.jar" verbose="true" alias="${alias}" keystore="${keystore}" storepass="${keypass}" />
+	<signjar jar="${basedir}/lib/gl4java-glutfonts.jar" signedjar="${webdist}/lib/gl4java-glutfonts.jar" verbose="true" alias="${alias}" keystore="${keystore}" storepass="${keypass}" />
 
-	<signjar jar="${webdist}/lib/gl4java-linux.jar" verbose="true" alias="orbit" keystore="${keystore}" storepass="${keypass}" />
-	<signjar jar="${webdist}/lib/gl4java-win32.jar" verbose="true" alias="orbit" keystore="${keystore}" storepass="${keypass}" />
+	<signjar jar="${webdist}/lib/gl4java-linux.jar" verbose="true" alias="${alias}" keystore="${keystore}" storepass="${keypass}" />
+	<signjar jar="${webdist}/lib/gl4java-win32.jar" verbose="true" alias="${alias}" keystore="${keystore}" storepass="${keypass}" />
 
   </target>
 
