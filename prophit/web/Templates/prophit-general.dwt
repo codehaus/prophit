@@ -39,7 +39,7 @@ MM_reloadPage(true);
 
 <body bgcolor="#FFFFFF" text="#333333">
 <div id="HeadingLayer">
-  <table id="HeaderTable" width="100%" border="0" cellpadding="8" cellspacing="0">
+  <table id="HeaderTable" width="100%" border="0" cellpadding="8" cellspacing="0"> 
     <tr>
   	  <td bgcolor="#EBDEA9" width="100%" > 
         <p><font size="6" face="Georgia, Times New Roman, Times, serif" color="#000000"><b><a href="../index.html" style="text-decoration: none"><font color="222222">proph<font face="Courier New, Courier, mono">It: 
@@ -81,6 +81,7 @@ MM_reloadPage(true);
             - <a href="../product-plan.html">Future Releases </a><br>
             - <a href="../team.html">The Team</a><br>
             - <a href="../download.html">Download</a></span><span class="MenuItem"><br>
+			- <a href="http://www.westslopesoftware.com/prophitbb" target="discussion">Discussion</a><br>
             </span></p>
           <p><span class="MenuHeader">Documentation</span><br>
             <span class="MenuItem">- <a href="../docs/index.html">Overview</a><br>
