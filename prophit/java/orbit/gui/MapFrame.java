@@ -366,82 +366,100 @@ public class MapFrame
 		JMenuBar menuBar = new JMenuBar();
 		setJMenuBar( menuBar );
 
-		// Add File menu
-		JMenu fileMenu = menuBar.add( new JMenu( Strings.getUILabel(MapFrame.class, "menu.file") ) );
-		fileMenu.setMnemonic( KeyEvent.VK_F );
-		
-		addMenuItem(fileMenu, Strings.getUILabel(MapFrame.class, "menu.file.open"), KeyEvent.VK_O, KeyEvent.VK_O, new ActionListener()
-			{
-				public void actionPerformed( ActionEvent e ) { controller.doOpen(); }
-			});
-
-		try
 		{
-			SampleProfiles samples = SampleProfiles.load("sampleProfiles.properties");
-
-			JMenuItem mnuSamples = (JMenu)fileMenu.add(new JMenu(Strings.getUILabel(MapFrame.class, "menu.file.samples")));
-			mnuSamples.setMnemonic(KeyEvent.VK_M);
-
-			final HashMap profilesByMenuItem = new HashMap();
-			for ( Iterator i = samples.getProfileTypes().iterator(); i.hasNext(); )
-			{
-				SampleProfileType type = (SampleProfileType)i.next();
-				JMenu mnuSampleType = (JMenu)mnuSamples.add(new JMenu(type.getName()));
-				for ( Iterator j = type.getProfiles().iterator(); j.hasNext(); )
+			// Add File menu
+			JMenu fileMenu = menuBar.add( new JMenu( Strings.getUILabel(MapFrame.class, "menu.file") ) );
+			fileMenu.setMnemonic( KeyEvent.VK_F );
+		
+			addMenuItem(fileMenu, Strings.getUILabel(MapFrame.class, "menu.file.open"), KeyEvent.VK_O, KeyEvent.VK_O, new ActionListener()
 				{
-					SampleProfile profile = (SampleProfile)j.next();
-					JMenuItem mnuProfile = (JMenuItem)mnuSampleType.add( new JMenuItem( profile.getName() ) );
-					profilesByMenuItem.put(mnuProfile, profile);
-					mnuProfile.addActionListener(new ActionListener()
-						{
-							public void actionPerformed( ActionEvent e ) 
+					public void actionPerformed( ActionEvent e ) { controller.doOpen(); }
+				});
+
+			try
+			{
+				SampleProfiles samples = SampleProfiles.load("sampleProfiles.properties");
+
+				JMenuItem mnuSamples = (JMenu)fileMenu.add(new JMenu(Strings.getUILabel(MapFrame.class, "menu.file.samples")));
+				mnuSamples.setMnemonic(KeyEvent.VK_M);
+
+				final HashMap profilesByMenuItem = new HashMap();
+				for ( Iterator i = samples.getProfileTypes().iterator(); i.hasNext(); )
+				{
+					SampleProfileType type = (SampleProfileType)i.next();
+					JMenu mnuSampleType = (JMenu)mnuSamples.add(new JMenu(type.getName()));
+					for ( Iterator j = type.getProfiles().iterator(); j.hasNext(); )
+					{
+						SampleProfile profile = (SampleProfile)j.next();
+						JMenuItem mnuProfile = (JMenuItem)mnuSampleType.add( new JMenuItem( profile.getName() ) );
+						profilesByMenuItem.put(mnuProfile, profile);
+						mnuProfile.addActionListener(new ActionListener()
 							{
-								JMenuItem source = (JMenuItem)e.getSource();
-								SampleProfile profile = (SampleProfile)profilesByMenuItem.get(source);
-								if ( profile != null )
+								public void actionPerformed( ActionEvent e ) 
 								{
-									Log.debug(LOG, "Profile ", profile.getName(), ".docURL = ", profile.getDocURL());
-									if ( profile.getDocURL() != null && UIUtil.isShowDocumentPossible() )
+									JMenuItem source = (JMenuItem)e.getSource();
+									SampleProfile profile = (SampleProfile)profilesByMenuItem.get(source);
+									if ( profile != null )
 									{
-										int showDoc =
-											JOptionPane.showConfirmDialog(null, 
-																		  Strings.getMessage(MapFrame.class, "showDocURL.message", profile.getDocURL()),
-																		  Strings.getUILabel(MapFrame.class, "showDocURL.title"),
-																		  JOptionPane.YES_NO_OPTION);
-										if ( showDoc == JOptionPane.YES_OPTION )
+										Log.debug(LOG, "Profile ", profile.getName(), ".docURL = ", profile.getDocURL());
+										if ( profile.getDocURL() != null && UIUtil.isShowDocumentPossible() )
 										{
-											if ( !UIUtil.showDocument(profile.getDocURL()) )
+											int showDoc =
+												JOptionPane.showConfirmDialog(null, 
+																						Strings.getMessage(MapFrame.class, "showDocURL.message", profile.getDocURL()),
+																						Strings.getUILabel(MapFrame.class, "showDocURL.title"),
+																						JOptionPane.YES_NO_OPTION);
+											if ( showDoc == JOptionPane.YES_OPTION )
 											{
-												LOG.warn("Unable to show profile document");
+												if ( !UIUtil.showDocument(profile.getDocURL()) )
+												{
+													LOG.warn("Unable to show profile document");
+												}
 											}
 										}
+										else
+										{
+											LOG.debug("Browser not available");
+										}
+										loadProfile(profile.getFile());
 									}
 									else
 									{
-										LOG.debug("Browser not available");
+										LOG.error("No SampleProfile found for menu item " + source);
 									}
-									loadProfile(profile.getFile());
 								}
-								else
-								{
-									LOG.error("No SampleProfile found for menu item " + source);
-								}
-							}
-						});
+							});
+					}
 				}
 			}
-		}
-		catch (IOException x)
-		{
-			LOG.error("Unable to load sample profiles from sampleProfiles.properties");
-		}
-
-		fileMenu.addSeparator();
-
-		addMenuItem(fileMenu, Strings.getUILabel(MapFrame.class, "menu.file.exit"), KeyEvent.VK_X, KeyEvent.VK_X, new ActionListener()
+			catch (IOException x)
 			{
-				public void actionPerformed( ActionEvent e ) { controller.doExit(); }
-			});
+				LOG.error("Unable to load sample profiles from sampleProfiles.properties");
+			}
+
+			fileMenu.addSeparator();
+
+			addMenuItem(fileMenu, Strings.getUILabel(MapFrame.class, "menu.file.exit"), KeyEvent.VK_X, KeyEvent.VK_X, new ActionListener()
+				{
+					public void actionPerformed( ActionEvent e ) { controller.doExit(); }
+				});
+		}
+
+		{
+			// Add Help menu
+			JMenu helpMenu = menuBar.add( new JMenu( Strings.getUILabel(MapFrame.class, "menu.help") ) );
+			helpMenu.setMnemonic( KeyEvent.VK_H );
+			
+			addMenuItem(helpMenu, Strings.getUILabel(MapFrame.class, "menu.help.about"), KeyEvent.VK_A, -1, new ActionListener()
+				{
+					public void actionPerformed( ActionEvent e ) 
+					{ 
+						AboutBox dlgAbout = new AboutBox(MapFrame.this);
+						UIUtil.centerWindow(MapFrame.this, dlgAbout);
+						dlgAbout.setVisible(true);
+					}
+				});
+		}
     }
 
 	private void addToolbar()
