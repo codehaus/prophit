@@ -6,9 +6,9 @@ import orbit.util.ConfigurationException;
 import orbit.util.Util;
 
 import java.io.*;
-import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
 import java.util.StringTokenizer;
 
 public class CallFractionSolverData
@@ -16,14 +16,14 @@ public class CallFractionSolverData
 	private static final String modelResourceName = "/ampl/profile.mod";
 	private static final String commandsResourceName = "/ampl/profile.run";
 
-	private final Collection callIDs;
-	private final Collection proxyCallIDs;
+	private final List callIDs;
+	private final List proxyCallIDs;
 	private boolean debug = false;
 	
-	public CallFractionSolverData(Collection callIDs, Collection proxyCallIDs)
+	public CallFractionSolverData(List callIDs)
 	{
 		this.callIDs = callIDs;
-		this.proxyCallIDs = proxyCallIDs;
+		this.proxyCallIDs = CallID.getProxyCallIDs(callIDs);
 	}
 
 	public double[] parse(String results)

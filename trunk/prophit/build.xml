@@ -73,6 +73,7 @@
 <!--	  <arg line="d:/java/hsqldb_v.1.61/demo/java.prof - -fractions fraw.txt" /> -->
 <!-- 	  <arg line="weblogic-system.prof - -fractions weblogic-system.prof.fractions" /> -->
 <!--  	  <arg line="data/hsqldb.prof" /> -->
+		<sysproperty key="solver.user.name" value="JAVA_USER" />
     </java>
   </target>
 
@@ -98,6 +99,7 @@
 
   <target name="test" depends="jar,compile,compile-tests">
     <java fork="true" classpathref="test.class.path" classname="test.Test">
+		<sysproperty key="solver.user.name" value="JAVA_USER" />
 		<sysproperty key="basedir" value="${basedir}" />
 	</java>
   </target>

@@ -1,5 +1,9 @@
 package orbit.model;
 
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+
 public class CallID
 {
 	private final RCC rcc;
@@ -43,5 +47,20 @@ public class CallID
 	public String toString()
 	{
 		return rcc.getLeafParentMethodName() + " -> " + rcc.getLeafMethodName() + " [ " + getParentRCCKey() + " -> " + ( key != -1 ? "p" : "" ) + getKey() + " ]";
+	}
+
+		/**
+	 * From a List of callIDs, return the list of callIDs for whom {@link CallID#isProxy} is true.
+	 */
+	public static List getProxyCallIDs(List callIDs)
+	{
+		ArrayList proxyCalls = new ArrayList(callIDs.size());
+		for ( Iterator i = callIDs.iterator(); i.hasNext(); )
+		{
+			CallID callID = (CallID)i.next();
+			if ( callID != null && callID.isProxy() )
+				proxyCalls.add(callID);
+		}
+		return proxyCalls;
 	}
 }

@@ -33,11 +33,6 @@ public class DashProfParser
 		return callIDs;
 	}
 	
-	public List getProxyCallIDs()
-	{
-		return getProxyCallIDs(callIDs);
-	}
-
 	public boolean isFileFormatRecognized()
 	{
 		try

@@ -15,7 +15,7 @@ import javax.swing.*;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
-import java.util.Collection;
+import java.util.List;
 
 public class LoadProgressDialog
 	extends JDialog
@@ -102,13 +102,12 @@ public class LoadProgressDialog
 
 				System.out.println("\tParsed in " + ( System.currentTimeMillis() - startTime ) + " ms");
 			
-				Collection callIDs = parser.getCallIDs();
-				Collection proxyCallIDs = parser.getProxyCallIDs();
+				List callIDs = parser.getCallIDs();
 				double[] fractions;
 			
 				cbParsed.setSelected(true);
 
-				CallFractionSolverData data = new CallFractionSolverData(callIDs, proxyCallIDs);
+				CallFractionSolverData data = new CallFractionSolverData(callIDs);
 				CallFractionSolver solver = new CallFractionSolver(data);
 			
 				File fractionsFile = new File(profileFile.getAbsolutePath() + ".graph");
@@ -128,8 +127,6 @@ public class LoadProgressDialog
 				{
 					fractions = solver.readFromFile(new FileReader(fractionsFile), callIDs.size());
 				}
-
-				parser.postProcess(fractions);
 
 				CallID[] callIDArray = (CallID[])parser.getCallIDs().toArray(new CallID[0]);
 				cg = new CallGraph(callIDArray, fractions);
