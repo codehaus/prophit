@@ -52,7 +52,6 @@ public class CallGraph
 
 		// Compute the total time spent by all the top-level functions
 		// Look for a unique top-level callID
-		long rootTime = 0;
 		ArrayList rootIDs = new ArrayList();
 		for ( int i = 0; i < callIDs.length; ++i )
 		{
@@ -62,45 +61,18 @@ public class CallGraph
 			if ( id != null && id.getParentRCCKey() == -1 )
 			{
 				rootIDs.add(id);
-				rootTime += id.getRCC().getTime();
 			}
 		}
 
-		if ( rootIDs.size() == 0 )
+		if ( rootIDs.size() != 1 )
 		{
-			throw new IllegalArgumentException("Must be at least one root callID");
+			throw new IllegalArgumentException("Must be exactly 1 root callID");
 		}
-		else if ( rootIDs.size() == 1 )
-		{
-			rootCallID = (CallID)rootIDs.get(0);
-			this.callIDs = callIDs;
-			this.callFractions = callFractions;
-		}
-		else
-		{
-			/*
-			 * Construct a new CallID which will represent the root of the CallGraph
-			 * Make it the parent of all the root CallIDs
-			 * Add it to the end of the callIDs and callFractions arrays
-			 */
-			int numRCCs = callIDs.length + 1;
-			this.callIDs = new CallID[numRCCs];
-			this.callFractions = new double[numRCCs];
+		
+		rootCallID = (CallID)rootIDs.get(0);
+		this.callIDs = callIDs;
+		this.callFractions = callFractions;
 
-			RCC rootRCC = new RCC(new StackTrace(new String[0]), 1, rootTime, callIDs.length);
-			rootCallID = new CallID(rootRCC, null);
-			for ( Iterator i = rootIDs.iterator(); i.hasNext(); )
-			{
-				CallID callID = (CallID)i.next();
-				callID.setParent(rootRCC);
-			}
-			
-			System.arraycopy(callIDs, 0, this.callIDs, 0, callIDs.length);
-			System.arraycopy(callFractions, 0, this.callFractions, 0, callFractions.length);
-			
-			this.callIDs[rootCallID.getKey()] = rootCallID;
-			this.callFractions[rootCallID.getKey()] = 1;
-		}
 		rootCall = new CallImpl(rootCallID);
 		
 		int numRCCs = this.callIDs.length;
