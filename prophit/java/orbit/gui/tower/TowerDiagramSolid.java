@@ -54,10 +54,6 @@ public class TowerDiagramSolid
 		BlockRenderer renderer = new BlockRenderer(gl, Constants.RENDER_SOLID, colorModel);
 		layout.setCallback(renderer);
 
-		gl.glEnable(GL_DITHER);
-		gl.glEnable(GL_LIGHTING);
-		gl.glEnable(GL_CULL_FACE);
-
 		layout.execute();
 		
 		model.setGLNameToCallMap(renderer.getGLNameToCallMap());
