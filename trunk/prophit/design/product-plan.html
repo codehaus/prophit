@@ -10,7 +10,7 @@
 <div align="center">
   <h1>Orbit Development Plan</h1>
   <br>
-  September 14, 2002<br>
+  September 22, 2002<br>
 </div>
 
 
@@ -19,165 +19,179 @@ Priorities range from 1 to 5, with 5 being the highest.
 <h2>Open Features</h2>
 <table width="90%" border="0" cellspacing="1">
   <tr> 
-    <th width="70%" bgcolor="ccccff">Description</th>
-    <th width="10%" bgcolor="ccccff">Priority</th>
-    <th width="20%" bgcolor="ccccff">Details</th>
-    <th width="20%" bgcolor="ccccff">Task Doc</th>
+    <th width="52%" bgcolor="ccccff">Description</th>
+    <th width="7%" bgcolor="ccccff">Priority</th>
+    <th width="28%" bgcolor="ccccff">Details</th>
+    <th width="13%" bgcolor="ccccff">Task Doc</th>
   </tr>
   <tr bgcolor="eeeeee"> 
-    <td width="70%">User documentation for the application</td>
-    <td width="10%">5</td>
-    <td width="20%">&nbsp;</td>
-    <td width="20%">&nbsp;</td>
+    <td width="52%">User documentation for the application</td>
+    <td width="7%">5</td>
+    <td width="28%">in progress, see <a href="../web/index.html">index.html</a></td>
+    <td width="13%">&nbsp;</td>
   </tr>
   <tr bgcolor="eeeeee"> 
-    <td width="70%">Link from the app to the doc page</td>
-    <td width="10%">5</td>
-    <td width="20%">&nbsp;</td>
-    <td width="20%">&nbsp;</td>
-  </tr>
-  <tr bgcolor="eeeeee">
-    <td width="70%">-prof parser may not handle recursive functions properly</td>
-    <td width="10%">5</td>
-    <td width="20%">See <a href="../data/db-example.prof">../data/db-example.prof</a></td>
-    <td width="20%">&nbsp;</td>
-  </tr>
-  <tr bgcolor="eeeeee">
-    <td width="70%">Need an 'About' box for the GUI</td>
-    <td width="10%">4</td>
-    <td width="20%">&nbsp;</td>
-    <td width="20%">&nbsp;</td>
+    <td width="52%">Link from the app to the doc page</td>
+    <td width="7%">5</td>
+    <td width="28%">should link to <a href="../web/doc.html">doc.html</a></td>
+    <td width="13%">&nbsp;</td>
   </tr>
   <tr bgcolor="eeeeee"> 
-    <td width="70%">FAQ, common problems, for the web site</td>
-    <td width="10%">5</td>
-    <td width="20%">&nbsp;</td>
-    <td width="20%">&nbsp;</td>
+    <td width="52%">-prof parser may not handle recursive functions properly</td>
+    <td width="7%">5</td>
+    <td width="28%">See <a href="../data/db-example.prof">../data/db-example.prof</a>. 
+      3 levels of 'write' calls are showing up rather than the expected 2</td>
+    <td width="13%">&nbsp;</td>
   </tr>
   <tr bgcolor="eeeeee"> 
-    <td width="70%">Mechanism for searching for a method call</td>
-    <td width="10%">4</td>
-    <td width="20%">&nbsp;</td>
-    <td width="20%">&nbsp;</td>
+    <td width="52%">Need an 'About' box for the GUI</td>
+    <td width="7%">4</td>
+    <td width="28%">About Box should show app version and link back to the home 
+      page </td>
+    <td width="13%">&nbsp;</td>
   </tr>
   <tr bgcolor="eeeeee"> 
-    <td width="70%">Implement a data loader for for cpu=times</td>
-    <td width="10%"> 
+    <td width="52%">Mechanism for searching for a method call</td>
+    <td width="7%">4</td>
+    <td width="28%">Should hi-lite the diagram using a different selection mechanism 
+      or color</td>
+    <td width="13%">&nbsp;</td>
+  </tr>
+  <tr bgcolor="eeeeee"> 
+    <td width="52%">Implement a data loader for for cpu=times</td>
+    <td width="7%"> 
       <div align="left">4</div>
     </td>
-    <td width="20%"><a href="parse-hprof-times.txt">parse-hprof-times.txt</a></td>
-    <td width="20%">&nbsp;</td>
+    <td width="28%"><a href="parse-hprof-times.txt">parse-hprof-times.txt</a></td>
+    <td width="13%">&nbsp;</td>
   </tr>
-  <tr bgcolor="eeeeee"> 
-    <td width="70%">As the mouse hovers over a diagram block, a label with an arrow to that block should be added to the diagram so that the user can keep track of it as the diagram is manipulated. Also, the label should have a little icon which the user can click to remove it.</td>
-    <td width="10%">3</td>
-    <td width="20%">&nbsp;</td>
-    <td width="20%">&nbsp;</td>
+  <tr bgcolor="ffeeff"> 
+    <td width="52%">FAQ, common problems, for the web site</td>
+    <td width="7%">3</td>
+    <td width="28%">No data yet on what this would be</td>
+    <td width="13%">&nbsp;</td>
   </tr>
-  <tr bgcolor="eeeeee"> 
-    <td width="70%">Parsed profile caching implementation should be made more 
+  <tr bgcolor="ffeeff"> 
+    <td width="52%">As the mouse hovers over a diagram block, a label with an 
+      arrow to that block should be added to the diagram so that the user can 
+      keep track of it as the diagram is manipulated. Also, the label should have 
+      a little icon which the user can click to remove it.</td>
+    <td width="7%">3</td>
+    <td width="28%">Lots of improvements in the general design and labeling of 
+      the tower diagram can be made. Will get Beta1 out first</td>
+    <td width="13%">&nbsp;</td>
+  </tr>
+  <tr bgcolor="ffeeff"> 
+    <td width="52%">Parsed profile caching implementation should be made more 
       complete, general, and robust</td>
-    <td width="10%">3</td>
-    <td width="20%">&nbsp;</td>
-    <td width="20%">&nbsp;</td>
+    <td width="7%">3</td>
+    <td width="28%">&nbsp;</td>
+    <td width="13%">&nbsp;</td>
   </tr>
-  <tr bgcolor="eeeeee"> 
-    <td width="70%">Implement a data loader for samples and times in the binary 
-      hprof format</td>
-    <td width="10%"> 
+  <tr bgcolor="ffeeff"> 
+    <td width="52%" height="21">Implement a data loader for samples and times 
+      in the binary hprof format</td>
+    <td width="7%" height="21"> 
       <div align="left">3</div>
     </td>
-    <td width="20%">&nbsp;</td>
-    <td width="20%">&nbsp;</td>
-  </tr>
-  <tr bgcolor="eeeeee"> 
-    <td width="70%">GUI should show a splash screen while it is initializing</td>
-    <td width="10%">2</td>
-    <td width="20%">&nbsp;</td>
-    <td width="20%">&nbsp;</td>
-  </tr>
-  <tr bgcolor="eeeeee"> 
-    <td width="70%">&nbsp;</td>
-    <td width="10%"> 
-      <div align="left"></div>
+    <td width="28%" height="21"> 
+      <p>Post Beta1</p>
     </td>
-    <td width="20%">&nbsp;</td>
-    <td width="20%">&nbsp;</td>
+    <td width="13%" height="21">&nbsp;</td>
+  </tr>
+  <tr bgcolor="ffeeff"> 
+    <td width="52%">GUI should show a splash screen while it is initializing</td>
+    <td width="7%">2</td>
+    <td width="28%">&nbsp;</td>
+    <td width="13%">&nbsp;</td>
   </tr>
 </table>
 <h2>Open Bugs</h2>
 <table width="90%" border="0" cellspacing="1">
   <tr> 
-    <th width="70%" bgcolor="ccccff" height="10">Description</th>
-    <th width="10%" bgcolor="ccccff" height="10">Priority</th>
-    <th width="20%" bgcolor="ccccff" height="10">Details</th>
-    <th width="20%" bgcolor="ccccff" height="10">Task Doc</th>
+    <th width="43%" bgcolor="ccccff" height="10">Description</th>
+    <th width="6%" bgcolor="ccccff" height="10">Priority</th>
+    <th width="35%" bgcolor="ccccff" height="10">Details</th>
+    <th width="16%" bgcolor="ccccff" height="10">Task Doc</th>
   </tr>
   <tr bgcolor="eeeeee"> 
-    <td width="70%">Occassional error in checkGL while loading the first profile into the UI</td>
-    <td width="10%">5</td>
-    <td width="20%">&nbsp;</td>
-    <td width="20%">&nbsp;</td>
+    <td width="43%">Occassional error in checkGL while loading the first profile 
+      into the UI</td>
+    <td width="6%">5</td>
+    <td width="35%">&nbsp;</td>
+    <td width="16%">&nbsp;</td>
   </tr>
   <tr bgcolor="eeeeee"> 
-    <td width="70%">New Orbit builds should not require the user to re-download 
-      the supporting libraries (log4jme, gl4java). These JARs are regenerated during the build and then re-signed</td>
-    <td width="10%">4</td>
-    <td width="20%">&nbsp;</td>
-    <td width="20%">&nbsp;</td>
+    <td width="43%">Orbit should give a good warning when an unsupported profile 
+      is loaded (e.g. binary hprof)</td>
+    <td width="6%">4</td>
+    <td width="35%">&nbsp;</td>
+    <td width="16%">&nbsp;</td>
   </tr>
   <tr bgcolor="eeeeee"> 
-    <td width="70%">Block diagram and call details should be resizeable. Currently, if you re-size the frame, the block diagram is grown or shrunk in repsonse. But the call details panel always stays at the same size</td>
-    <td width="10%">3</td>
-    <td width="20%">&nbsp;</td>
-    <td width="20%">&nbsp;</td>
+    <td width="43%">New Orbit builds should not require the user to re-download 
+      the supporting libraries (log4jme, gl4java). These JARs are regenerated 
+      during the build and then re-signed</td>
+    <td width="6%">4</td>
+    <td width="35%">&nbsp;</td>
+    <td width="16%">&nbsp;</td>
+  </tr>
+  <tr bgcolor="ffeeff"> 
+    <td width="43%">Block diagram and call details should be resizeable. Currently, 
+      if you re-size the frame, the block diagram is grown or shrunk in repsonse. 
+      But the call details panel always stays at the same size</td>
+    <td width="6%">3</td>
+    <td width="35%">&nbsp;</td>
+    <td width="16%">&nbsp;</td>
   </tr>
   <tr bgcolor="eeeeee"> 
-    <td width="70%">If the window is maximized, the bottom part of the block diagram 
-      does not render properly</td>
-    <td width="10%"> 
+    <td width="43%" bgcolor="ffeeff">If the window is maximized, the bottom part 
+      of the block diagram does not render properly</td>
+    <td width="6%" bgcolor="ffeeff"> 
       <div align="left">3</div>
     </td>
-    <td width="20%">&nbsp;</td>
-    <td width="20%">&nbsp;</td>
+    <td width="35%" bgcolor="ffeeff">&nbsp;</td>
+    <td width="16%" bgcolor="ffeeff">&nbsp;</td>
   </tr>
   <tr bgcolor="eeeeee"> 
-    <td width="70%">Root block should always be 1 unit square in size</td>
-    <td width="10%">3</td>
-    <td width="20%">&nbsp;</td>
-    <td width="20%">&nbsp;</td>
+    <td width="43%" bgcolor="ffeeff">Root block should always be 1 unit square 
+      in size</td>
+    <td width="6%" bgcolor="ffeeff">3</td>
+    <td width="35%" bgcolor="ffeeff">&nbsp;</td>
+    <td width="16%" bgcolor="ffeeff">&nbsp;</td>
   </tr>
-  <tr bgcolor="eeeeee">
-    <td width="70%">Memory usage appears to grow over time as more profiles are opened and the previous ones (presumably) closed. This problem has been mitigated by making sure that the CallGraph data is cleaned up when the profile is closed. Though there may still be a moderate-sized leak resulting from the GL4Java JNI implementation holding a reference to the GLCanvas.</td>
-    <td width="10%">2</td>
-    <td width="20%">&nbsp;</td>
-    <td width="20%">&nbsp;</td>
+  <tr bgcolor="ffeeff"> 
+    <td width="43%">Memory usage appears to grow over time as more profiles are 
+      opened and the previous ones (presumably) closed. </td>
+    <td width="6%">2</td>
+    <td width="35%">This problem has been mitigated by making sure that the CallGraph 
+      data is cleaned up when the profile is closed. Though there may still be 
+      a moderate-sized leak resulting from the GL4Java JNI implementation holding 
+      a reference to the GLCanvas.</td>
+    <td width="16%">&nbsp;</td>
   </tr>
-  <tr bgcolor="eeeeee"> 
-    <td width="70%">If the width of the frame is reduced to a very small amount, the call details tables start to be clipped on the left hand side</td>
-    <td width="10%">2</td>
-    <td width="20%">&nbsp;</td>
-    <td width="20%">&nbsp;</td>
+  <tr bgcolor="ffeeff"> 
+    <td width="43%">If the width of the frame is reduced to a very small amount, 
+      the call details tables start to be clipped on the left hand side</td>
+    <td width="6%">2</td>
+    <td width="35%">&nbsp;</td>
+    <td width="16%">&nbsp;</td>
   </tr>
-  <tr bgcolor="eeeeee"> 
-    <td width="70%">Change package names from 'orbit.xyz'? To what?</td>
-    <td width="10%">2</td>
-    <td width="20%">&nbsp;</td>
-    <td width="20%">&nbsp;</td>
+  <tr bgcolor="ffeeff"> 
+    <td width="43%">Change package names from 'orbit.xyz'? To what?</td>
+    <td width="6%">2</td>
+    <td width="35%">Looking at 'ProphIt' ( cc.prophit.gui, etc )</td>
+    <td width="16%">&nbsp;</td>
   </tr>
-  <tr bgcolor="eeeeee"> 
-    <td width="70%">The first time a diagram is opened, the Orbit frame changes size. This doesn't happen if JFrame.pack() is not called after the content panel is added to the frame. But if pack() is not called, the GL canvas for the block diagram renders to the top-left of where it should be, obscuring the toolbar, and the call details tables are not laid out properly.</td>
-    <td width="10%">2</td>
-    <td width="20%">&nbsp;</td>
-    <td width="20%">&nbsp;</td>
-  </tr>
-  <tr bgcolor="eeeeee"> 
-    <td width="70%">&nbsp;</td>
-    <td width="10%"> 
-      <div align="left"></div>
-    </td>
-    <td width="20%">&nbsp;</td>
-    <td width="20%">&nbsp;</td>
+  <tr bgcolor="ffeeff"> 
+    <td width="43%">The first time a diagram is opened, the Orbit frame changes 
+      size. This doesn't happen if JFrame.pack() is not called after the content 
+      panel is added to the frame. But if pack() is not called, the GL canvas 
+      for the block diagram renders to the top-left of where it should be, obscuring 
+      the toolbar, and the call details tables are not laid out properly.</td>
+    <td width="6%">2</td>
+    <td width="35%">&nbsp;</td>
+    <td width="16%">&nbsp;</td>
   </tr>
 </table>
 <h2> Features Implemented</h2>
@@ -190,11 +204,20 @@ Priorities range from 1 to 5, with 5 being the highest.
     <th width="15%" bgcolor="ccccff">Task Doc</th>
   </tr>
   <tr bgcolor="eeeeee"> 
-    <td width="49%" height="2">When a sample is opened, the application can open a browser window to the documentation page for that sample.</td>
+    <td width="26%">'Getting Started' guide (cookbook)</td>
+    <td width="5%">5</td>
+    <td width="55%">see <a href="../web/quick-start.html">quick-start.html</a></td>
+    <td width="9%">2002/09/22</td>
+    <td width="5%">&nbsp;</td>
+  </tr>
+  <tr bgcolor="eeeeee"> 
+    <td width="49%" height="2">When a sample is opened, the application can open 
+      a browser window to the documentation page for that sample.</td>
     <td width="6%" height="2"> 
       <div align="left">4</div>
     </td>
-    <td width="20%" height="2">Added entries to sampleProfiles.properties, and code to use the JNLP BasicService to show the document in a browser window.</td>
+    <td width="20%" height="2">Added entries to sampleProfiles.properties, and 
+      code to use the JNLP BasicService to show the document in a browser window.</td>
     <td width="10%" height="2">2002/09/17</td>
     <td width="15%" height="2">&nbsp;</td>
   </tr>
@@ -273,9 +296,12 @@ Priorities range from 1 to 5, with 5 being the highest.
     <th width="5%" bgcolor="ccccff" height="23">Task Doc</th>
   </tr>
   <tr bgcolor="eeeeee"> 
-    <td width="26%">'Getting Started' guide (cookbook)</td>
+    <td width="26%">-prof profiles do not load correctly when 'debug' is turned 
+      off in the connection.properties</td>
     <td width="5%">5</td>
-    <td width="55%">see <a href="../web/quick-start.html">../web/quick-start.html</a></td>
+    <td width="55%">Original cause not determined. Fixed by having the ConnectionFactory 
+      log out to ByteArrayOutputStreams which are then conditionally written to 
+      the log4j log using the standard configuration mechanism (log.properties)</td>
     <td width="9%">2002/09/22</td>
     <td width="5%">&nbsp;</td>
   </tr>
@@ -293,15 +319,17 @@ Priorities range from 1 to 5, with 5 being the highest.
     <td width="9%">2002/09/15</td>
     <td width="5%">&nbsp;</td>
   </tr>
-  <tr bgcolor="eeeeee">
+  <tr bgcolor="eeeeee"> 
     <td width="26%">As new profiles are opened, the Orbit frame grows bigger with 
       each one</td>
     <td width="5%">3</td>
-    <td width="55%">Changed the diagram-sizing code to construct the diagram with the size of the existing content panel, minus the preferred size of the call details view (caller/callee tables)</td>
+    <td width="55%">Changed the diagram-sizing code to construct the diagram with 
+      the size of the existing content panel, minus the preferred size of the 
+      call details view (caller/callee tables)</td>
     <td width="9%">2002/09/15</td>
     <td width="5%">&nbsp;</td>
   </tr>
-  <tr bgcolor="eeeeee">
+  <tr bgcolor="eeeeee"> 
     <td width="26%">-prof method names not displaying correctly</td>
     <td width="5%">4</td>
     <td width="55%">Updated the UIUtil class to correctly implement getShortName() 
