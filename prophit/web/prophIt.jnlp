@@ -2,15 +2,15 @@
 
 <jnlp
       spec     = "1.0+"
-      version  = "@@orbit.version@@"
+      version  = "@@prophIt.version@@"
       codebase = "http://@@host@@:@@port@@"
-      href     = "orbit.jnlp">
+      href     = "prophIt.jnlp">
   
   <information>
-    <title>Orbit</title>
+    <title>prophIt</title>
     <vendor>Westslope Software, LLC</vendor>
-    <homepage href="http://orbit.westslopesoftware.com" />
-    <description>Interactive profile data viewer for Java programs. Reads files output by the 'hprof' and '-prof' Java profile utilities.</description>
+    <homepage href="http://prophIt.westslopesoftware.com" />
+    <description>Interactive profile data viewer for Java programs. Reads files output by the '-hprof' and '-prof' Java profile utilities.</description>
     <offline-allowed/>
   </information>
   

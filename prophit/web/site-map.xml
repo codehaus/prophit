@@ -4,9 +4,9 @@
 
 <site>
   <page templated="false" file="index.html">
-    <name>Orbit Home</name>
+    <name>prophIt Home</name>
     <page file="doc.html">
-      <name>Orbit Documentation</name>
+      <name>prophIt Documentation</name>
       <page file="cookbook.html">
         <name>Cookbook</name>
       </page>
