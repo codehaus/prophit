@@ -12,8 +12,9 @@
 
   <property file="orbit.properties" />
 
+
   <path id="run.class.path">
-	 <fileset dir="${build}/lib" />
+	 <fileset dir="${build}/lib" />  <!-- somehow i'd like to fix this -->
 	 <fileset dir="${basedir}/lib" />
   </path>
 
@@ -25,6 +26,7 @@
   <path id="compile.class.path">
 	 <fileset dir="${basedir}/lib" includes="jnlp.jar,log4jME.jar,gl4java.jar,gl4java-glutfonts.jar,junit.jar"/>
   </path>
+
 
   <target name="init">
 	 <mkdir dir="${build}" />
@@ -39,6 +41,7 @@
     <javac classpathref="compile.class.path" srcdir="java" debug="yes" destdir="${build}/classes">
     </javac>
   </target>
+
 
   <target name="jar" depends="compile">
     <copy todir="${build}/resources">
@@ -82,16 +85,16 @@
 	  <fileset dir="${build}/lib" />
 	  <fileset dir="lib" includes="log4jME.jar" />
 	</copy>
-
 	<zip zipfile="${build}/orbit.zip">
 	  <fileset dir="${dist}" />
 	</zip>
   </target>
 
-  <target name="webdist" depends="web">
-	<zip zipfile="${build}/orbit-web.zip">
+  <target name="webdist" depends="jar,signorbit,web">
+
+	<!--zip zipfile="${build}/orbit-web.zip">
 	  <fileset dir="${webdist}" />
-	</zip>
+	</zip-->
   </target>
 
   <target name="web-copy">
@@ -115,16 +118,18 @@
     
   </target>
 
-  <target name="signlibjars" depends="jar">
-   
+  <target name="make-os-jars">
     <jar jarfile="${basedir}/lib/gl4java-win32.jar">
 	  <fileset dir="${basedir}/lib/win32" includes="*.dll" />
     </jar>
     <jar jarfile="${basedir}/lib/gl4java-linux.jar">
 	  <fileset dir="${basedir}/lib/linux" includes="*.so" />
     </jar>
+  </target>
 
 
+  <target name="signlibjars" depends="jar,make-os-jars">
+   
 	<signjar jar="${basedir}/lib/log4jME.jar" signedjar="${basedir}/lib/log4jME.jar" verbose="true" alias="${alias}" keystore="${keystore}" storepass="${keypass}" />
 	<signjar jar="${basedir}/lib/png.jar" signedjar="${basedir}/lib/png.jar" verbose="true" alias="${alias}" keystore="${keystore}" storepass="${keypass}" />
 	<signjar jar="${basedir}/lib/gl4java.jar" signedjar="${basedir}/lib/gl4java.jar" verbose="true" alias="${alias}" keystore="${keystore}" storepass="${keypass}" />
@@ -135,7 +140,7 @@
 
   </target>
 
-  <target name="web" depends="jar,web-copy, signorbit">
+  <target name="web" depends="jar,make-os-jars,web-copy">
 	<replace file="${webdist}/orbit.jnlp" token="@@orbit.version@@" value="${orbit.version}" />
 
     <copy file="${webdist}/orbit.jnlp" tofile="${webdist}/orbit-elrond.jnlp" />
