@@ -117,7 +117,7 @@ class CallDetails
 	 */
 	public TableModel getCallersModel()
 	{
-		return new CallList(callersRollup);
+		return new CallList(Strings.getUILabel(CallDetails.class, "columnName.callers"), callersRollup);
 	}
 
 	/**
@@ -127,19 +127,34 @@ class CallDetails
 	 */
 	public TableModel getCalleesModel()
 	{
-		return new CallList(calleesRollup);
+		return new CallList(Strings.getUILabel(CallDetails.class, "columnName.callees"), calleesRollup);
 	};
 
 	private class CallList
 		extends AbstractTableModel
 	{
+		private final String         name;
 		private final CallRollupList list;
 		
-		public CallList(CallRollupList list)
+		public CallList(String listName, CallRollupList list)
 		{
+			this.name = listName;
 			this.list = list;
 		}
 			
+		public String getColumnName(int column) 
+		{
+			switch ( column )
+			{
+			case 0:
+				return name;
+			case 1:
+				return Strings.getUILabel(CallDetails.class, "columnName.time");
+			default:
+				return "<unexpected column " + column + ">";
+			}
+		}
+
 		public int getRowCount()
 		{
 			return list.size();
