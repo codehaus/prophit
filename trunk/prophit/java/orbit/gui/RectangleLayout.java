@@ -41,7 +41,11 @@ public class RectangleLayout
 		// It should occupy the fraction of the extent equal to its fraction of all the time
 		//   spent in children of its parent
 
-		double fractionOfChildren = call.getFractionOfParentChildTimes(measure);
+		double fractionOfChildren = call.getInclusiveFractionOfParentChildTimes(measure);
+		if ( call.getParent() != null )
+		{
+			// fractionOfChildren /= new CallAdapter(call.getParent()).getChildTimeScaleFactor();
+		}
 
 		double areaRatio = ( remainderExtent.height / parentExtent.height ) * ( remainderExtent.width / parentExtent.width );
 
@@ -92,8 +96,8 @@ public class RectangleLayout
 	 */
 	public Rectangle2D.Double getRectangle(Rectangle2D.Double extent)
 	{
-		double fractionOfParent = call.getFractionOfParentTime(measure);
-		double fractionOfChildren = call.getFractionOfParentChildTimes(measure);
+		double fractionOfParent = call.getInclusiveTimeFractionOfParentInclusiveTime(measure);
+		double fractionOfChildren = call.getInclusiveFractionOfParentChildTimes(measure);
 
 		/*
 		if ( fractionOfParent != 0 &&

@@ -12,6 +12,8 @@ public class CallAdapter
 	private Call call = null;
 	private Call parent = null;
 	private List children = null;
+	private double rawTotalTimeInChildren = -1;
+	private double rawAverageTimeInChildren = -1;
 
 	public CallAdapter()
 	{
@@ -21,15 +23,22 @@ public class CallAdapter
 	{
 		initialize(call);
 	}
+
+	public Call getCall()
+	{
+		return call;
+	}
 	
 	public void initialize(Call call)
 	{
 		this.call = call;
 		this.parent = null;
 		this.children = null;
+		rawTotalTimeInChildren = -1;
+		rawAverageTimeInChildren = -1;
 	}
 
-	public double getTime(TimeMeasure measure)
+	public double getInclusiveTime(TimeMeasure measure)
 	{
 		switch ( measure.code )
 		{
@@ -42,43 +51,36 @@ public class CallAdapter
 		}		
 	}
 
-	public double getTimeInSelf(TimeMeasure measure)
+	public double getExclusiveTime(TimeMeasure measure)
 	{
-		return getTime(measure) - getTimeInChildren(measure);
+		return getInclusiveTime(measure) - getTimeInChildren(measure);
 	}
 
 	/**
 	 * In some cases, the profiler data will be inconsistent in that the sum of the child times
 	 * for a Call can be more than the parent time. This method never returns a greater value than
-	 * {@link #getTime(TimeMeasure)}.
+	 * {@link #getInclusiveTime(TimeMeasure)}.
 	 */
 	public double getTimeInChildren(TimeMeasure measure)
 	{
-		double timeInChildren = 0;
-		CallAdapter adapter = new CallAdapter();
-		for ( Iterator i = getChildren().iterator(); i.hasNext(); )
-		{
-			Call call = (Call)i.next();
-			adapter.initialize(call);
-			timeInChildren += adapter.getTime(measure);
-		}
+		double timeInChildren = getRawTimeInChildren(measure);
 		if ( measure == TimeMeasure.TotalTime )
 		{
-			double time = getTime(measure);
+			double time = getInclusiveTime(measure);
 			if ( timeInChildren > time )
 				timeInChildren = time;
 		}
 		return timeInChildren;
 	}
 
-	public double getSelfFractionOfParentTime(TimeMeasure measure)
+	public double getExclusiveTimeFractionOfParentInclusiveTime(TimeMeasure measure)
 	{
 		if ( getParent() != null )
 		{
-			double parentTime = new CallAdapter(getParent()).getTime(measure);
+			double parentTime = new CallAdapter(getParent()).getInclusiveTime(measure);
 			if ( parentTime != 0 )
 			{
-				double fraction = getTimeInSelf(measure) / parentTime;
+				double fraction = getExclusiveTime(measure) / parentTime;
 				return fraction <= 1 ? fraction : 1;
 			}
 			else
@@ -90,14 +92,14 @@ public class CallAdapter
 		}
 	}
 	
-	public double getFractionOfParentTime(TimeMeasure measure)
+	public double getInclusiveTimeFractionOfParentInclusiveTime(TimeMeasure measure)
 	{
 		if ( getParent() != null )
 		{
-			double parentTime = new CallAdapter(getParent()).getTime(measure);
+			double parentTime = new CallAdapter(getParent()).getInclusiveTime(measure);
 			if ( parentTime != 0 )
 			{
-				double fraction = getTime(measure) / parentTime;
+				double fraction = getInclusiveTime(measure) / parentTime;
 				return fraction <= 1 ? fraction : 1;
 			}
 			else
@@ -109,14 +111,14 @@ public class CallAdapter
 		}
 	}
 
-	public double getFractionOfParentChildTimes(TimeMeasure measure)
+	public double getInclusiveFractionOfParentChildTimes(TimeMeasure measure)
 	{
 		if ( getParent() != null )
 		{
 			double childrenTime = new CallAdapter(getParent()).getTimeInChildren(measure);
 			if ( childrenTime != 0 )
 			{
-				double fraction = getTime(measure) / childrenTime;
+				double fraction = getInclusiveTime(measure) / childrenTime;
 				return fraction <= 1 ? fraction : 1;
 			}
 			else
@@ -127,7 +129,24 @@ public class CallAdapter
 			return 1.0;
 		}
 	}
-	
+
+	/**
+	 * Get the degree to which the total inclusive time of all the child calls is greater
+	 * than the inclusive time of this call. In general, of course, the sum of child times
+	 * should not be greater than the parent time. But profiler data is not always accurate enough
+	 * to ensure that this doesn't happen.
+	 */
+	public double getChildTimeScaleFactor()
+	{
+		double inclusiveTime = getTime();
+		double rawChildTime = getRawTimeInChildren(TimeMeasure.TotalTime);
+		double ratio = rawChildTime / inclusiveTime;
+		if ( ratio <= 1 )
+			return 1.0;
+		else
+			return ratio;
+	}
+
 	public int getKey() { return call.getKey(); }
 	public String getName() { return call.getName(); }
 	public int getDepth() { return call.getDepth(); }
@@ -146,4 +165,33 @@ public class CallAdapter
 		return children;
 	}
 	public String toString() { return call.toString(); }
+
+	private double getRawTimeInChildren(TimeMeasure measure)
+	{
+		double time = -1;
+		if ( measure == TimeMeasure.TotalTime && rawTotalTimeInChildren != -1 )
+		{
+			time = rawTotalTimeInChildren;
+		}
+		else if ( measure == TimeMeasure.AverageTime && rawAverageTimeInChildren != -1 )
+		{
+			time = rawAverageTimeInChildren;
+		}
+		if ( time == -1 )
+		{
+			time = 0;
+			CallAdapter adapter = new CallAdapter();
+			for ( Iterator i = getChildren().iterator(); i.hasNext(); )
+			{
+				Call call = (Call)i.next();
+				adapter.initialize(call);
+				time += adapter.getInclusiveTime(measure);
+			}
+			if ( measure == TimeMeasure.TotalTime )
+				rawTotalTimeInChildren = time;
+			else if ( measure == TimeMeasure.AverageTime )
+				rawAverageTimeInChildren = time;
+		}
+		return time;
+	}
 }

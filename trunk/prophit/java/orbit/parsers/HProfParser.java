@@ -95,6 +95,7 @@ public class HProfParser
 				class ParseSamples
 				{
 					int key = 1;
+					HashMap rccsByStack = new HashMap();
 
 					public int getKey()
 					{
@@ -115,8 +116,18 @@ public class HProfParser
 							String method = nextToken(tok, true);
 
 							StackTrace st = (StackTrace)stackTracesByID.get(traceID);
-							RCC rcc = new RCC(st, count, count, key++);
-							rccList.add(rcc);
+							RCC rcc = (RCC)rccsByStack.get(st);
+							if ( rcc == null )
+							{
+								rcc = new RCC(st, count, count, key++);
+								rccsByStack.put(st, rcc);
+								rccList.add(rcc);
+							}
+							else
+							{
+								rcc.adjustTime(count);
+								rcc.adjustCalls(count);
+							}
 						}
 					}
 				}			
@@ -204,18 +215,6 @@ public class HProfParser
 					}
 				}
 
-				/*
-				HashSet parents = new HashSet();
-				for ( Iterator i = callIDs.iterator(); i.hasNext(); )
-				{
-					CallID callID = (CallID)i.next();
-					if ( callID != null && callID.getParentRCC() != null )
-					{
-						parents.add(callID.getParentRCC());
-					}
-				}
-				*/
-
 				HashMap timeAdjustment = new HashMap();
 				for ( Iterator i = callIDs.iterator(); i.hasNext(); )
 				{
@@ -238,20 +237,6 @@ public class HProfParser
 							callID = (CallID)callIDs.get(callID.getParentRCC().getKey());
 						}
 					}
-					/*
-					if ( callID != null && callID.getParentRCC() != null && !parents.contains(callID.getRCC()))
-					{
-						CallID parent = (CallID)callIDs.get(callID.getParentRCC().getKey());
-						while ( parent != null )
-						{
-							parent.getRCC().adjustTime(callID.getRCC().getTime());
-							if ( parent.getParentRCC() != null )
-								parent = (CallID)callIDs.get(parent.getParentRCC().getKey());
-							else
-								parent = null;
-						}
-					}
-					*/
 				}
 
 				for ( Iterator i = callIDs.iterator(); i.hasNext(); )
@@ -264,16 +249,6 @@ public class HProfParser
 							callID.getRCC().adjustTime(adjustment.longValue());
 					}
 				}
-
-				/*
-				System.out.println(callIDs);
-				for ( Iterator i = callIDs.iterator(); i.hasNext(); )
-				{
-					CallID callID = (CallID)i.next();
-					if ( callID != null && callID.getParentRCC() == null )
-						System.out.println("Root : " + callID);
-				}
-				*/
 			}
 		}
 		catch (IOException x)
@@ -340,7 +315,9 @@ public class HProfParser
 				stack.add(line);
 			}
 			String[] stackArray = (String[])stack.toArray(new String[stack.size()]);
-			stackTracesByID.put(id, new StackTrace(stackArray));
+			StackTrace st = new StackTrace(stackArray);
+			// System.out.println(st);
+			stackTracesByID.put(id, st);
 			if ( stack.size() > maxStackSize )
 				maxStackSize = stack.size();
 		}

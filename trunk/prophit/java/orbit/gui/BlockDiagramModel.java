@@ -8,7 +8,8 @@ import java.util.Iterator;
 
 public class BlockDiagramModel
 {
-	private static int DEFAULT_LEVELS = 5;
+	public static int DEFAULT_LEVELS = 5;
+	
 	private static EyeLocation DEFAULT_EYE_LOCATION = new EyeLocation(2.5, -Math.PI / 4, Math.PI / 4);
 	private static double SHIFT_STEP = 0.05;
 

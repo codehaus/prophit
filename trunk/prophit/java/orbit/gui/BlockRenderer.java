@@ -79,7 +79,7 @@ class BlockRenderer
 		/*
 		if ( renderMode == RENDER_WIREFRAME )
 		{
-			double fractionOfRoot = call.getTime(measure) / new CallAdapter(rootRenderCall).getTime(measure);
+			double fractionOfRoot = call.getInclusiveTime(measure) / new CallAdapter(rootRenderCall).getInclusiveTime(measure);
 			if ( fractionOfRoot < LINES_MINIMUM_TIME_FRACTION )
 				return null;
 		}
@@ -87,7 +87,7 @@ class BlockRenderer
 
 		// Used to shade the block according to whether it is a 'hotspot'. This shading can be made configurable
 		//   in the future
-		double expense = call.getTimeInSelf(measure) / call.getTime(measure);
+		double expense = call.getExclusiveTime(measure) / call.getInclusiveTime(measure);
 
 		// Neutral color is roughly 0.5, 0.5, 0.5 (though not really)
 		// More than 50% of parent time skews towards Red
@@ -106,7 +106,8 @@ class BlockRenderer
 			adjustment = -(int)( ( FRACTION_THRESHOLD - expense ) / negativeScale * 127.0 );
 		}
 
-		green = 160;
+		// green = 160;
+		green = 0;
 		red = blue = 128;
 		red += adjustment;
 		blue -= adjustment;
