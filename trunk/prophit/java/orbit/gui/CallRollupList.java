@@ -30,16 +30,16 @@ class CallRollupList
 	 * Add a new call. The time spent in the call will be aggregated with the time
 	 * spent in other calls whose {@link Call#getName name} is the same.
 	 */
-	public void addCall(Call call)
+	public void addCall(Call call, double t)
 	{
 		Double time = (Double)timeByCallName.get(call.getName());
 		if ( time == null )
 		{
-			time = new Double(call.getTime());
+			time = new Double(t);
 		}
 		else
 		{
-			time = new Double(time.doubleValue() + call.getTime());
+			time = new Double(time.doubleValue() + t);
 		}
 		timeByCallName.put(call.getName(), time);
 	}

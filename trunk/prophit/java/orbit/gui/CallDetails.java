@@ -61,14 +61,14 @@ class CallDetails
 					nCalls += adapter.getCallCount();
 					if ( parent != null )
 					{
-						callersRollup.addCall(parent);
+						callersRollup.addCall(parent, call.getTime());
 					}
 				}
 				for ( Iterator i = call.getChildren().iterator(); i.hasNext(); )
 				{
 					Call child = (Call)i.next();
 					if ( match )
-						calleesRollup.addCall(child);
+						calleesRollup.addCall(child, child.getTime());
 					search(call, child);
 				}
 			}
