@@ -1,0 +1,28 @@
+<!ELEMENT call-graph ( stacktrace*, callid* )>
+<!ATTLIST call-graph
+          id (#ID) #REQUIRED>
+
+<!ELEMENT stacktrace ( st-string*, begin-offset, end-offset )>
+<!ATTLIST stacktrace 
+          id (#ID) #REQUIRED>
+
+<!ELEMENT st-string ( #CDATA )>
+<!ELEMENT begin-offset ( #PCDATA )>
+<!ELEMENT end-offset ( #PCDATA )>
+
+<!ELEMENT callid ( call-fraction, rcc* )>
+<!ATTLIST callid
+          id (#ID) #REQUIRED>
+
+<!ELEMENT call-fraction ( #PCDATA )>
+
+<!ELEMENT rcc EMPTY>
+<!ATTLIST rcc 
+          id           (#ID)     #REQUIRED
+          st-id        (#IDREF)  #REQUIRED
+          begin-offset (#PCDATA) #REQUIRED
+          end-offset   (#PCDATA) #REQUIRED
+          time         (#PCDATA) #REQUIRED
+          num-calls    (#PCDATA) #REQUIRED
+>
+
