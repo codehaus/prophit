@@ -142,6 +142,16 @@ public class HProfParser
 					}
 				}
 
+				for ( Iterator i = callIDs.iterator(); i.hasNext(); )
+				{
+					CallID callID = (CallID)i.next();
+					while ( callID != null && callID.getParentRCC() != null )
+					{
+						callID.getParentRCC().adjustTime(callID.getRCC().getTime());
+						callID = (CallID)callIDs.get(callID.getParentRCC().getKey());
+					}
+				}
+				
 				/*
 				System.out.println(callIDs);
 				for ( Iterator i = callIDs.iterator(); i.hasNext(); )

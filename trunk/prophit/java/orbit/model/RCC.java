@@ -5,9 +5,10 @@ public class RCC
 {
 	private final StackTrace st;
 	private final int    nCalls;
-	private final long   time;
 	private final int    key;
-		
+
+	private long   time;
+
 	public RCC(StackTrace st, int nCalls, long time, int key)
 	{
 		this.st = st;
@@ -25,6 +26,8 @@ public class RCC
 	public long   getTime() { return time; }
 	public int    getKey() { return key; }
 
+	public void adjustTime(long delta) { time += delta; }
+	
 	public String toString()
 	{
 		return nCalls + " " + st.getLeafMethod() + " " + st.getLeafParentMethod() + " " + time + " [" + key + "]";
