@@ -21,10 +21,6 @@ public class HProfSolver
 {
 	public static Category LOG = Category.getInstance(HProfSolver.class);
 
-	private static int STACK_THRESHOLD = 6;
-	// When solving the call graph, skip times which are less than 0.1 unit in size
-	private static double GRAPH_THRESHOLD = 0.01;
-
 	private List callIDs;
 	private List proxyCallIDs;
 	
@@ -141,7 +137,6 @@ public class HProfSolver
 						// fraction *= fractions[parentID];
 					}
 				}
-				// return callStack.size() > STACK_THRESHOLD && fraction * callID.getRCC().getTime() > GRAPH_THRESHOLD;
 				return true;
 			}
 		}
