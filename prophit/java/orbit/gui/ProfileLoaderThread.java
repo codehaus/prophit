@@ -4,6 +4,7 @@ import orbit.model.CallGraph;
 import orbit.parsers.Loader;
 import orbit.parsers.LoaderFactory;
 import orbit.util.Log;
+import orbit.util.NetworkException;
 import orbit.util.Util;
 
 import org.apache.log4j.Category;
@@ -50,6 +51,10 @@ class ProfileLoaderThread
 			
 			System.gc();
 			Log.debug(LOG, "\tSolved in " + ( System.currentTimeMillis() - startTime ) + " ms");
+		}
+		catch (NetworkException x)
+		{
+			error = Strings.getUILabel(getClass(), "networkProblem");
 		}
 		catch (Exception x)
 		{

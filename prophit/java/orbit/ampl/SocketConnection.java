@@ -108,7 +108,7 @@ public class SocketConnection
 			}
 			catch (Exception x)
 			{
-				throw Util.handle(getClass(), x);
+				throw Util.handleAsNetwork(getClass(), x);
 			}
 		}
 	}		
