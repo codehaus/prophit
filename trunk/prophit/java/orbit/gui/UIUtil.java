@@ -2,6 +2,7 @@ package orbit.gui;
 
 import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.Point;
 import java.text.NumberFormat;
 
 import org.apache.log4j.Category;
@@ -72,8 +73,8 @@ class UIUtil
 			int lastParenOpenIndex = name.lastIndexOf('(');
 			String parenContents = name.substring(lastParenOpenIndex, lastParenCloseIndex);
 			if ( parenContents.indexOf('.') == -1 &&
-				 parenContents.indexOf('<') == -1 &&
-				 parenContents.indexOf(':') == -1 )
+				  parenContents.indexOf('<') == -1 &&
+				  parenContents.indexOf(':') == -1 )
 			{
 				name = name.substring(0, lastParenOpenIndex);
 			}
@@ -101,12 +102,25 @@ class UIUtil
 	}
 
 	public static void centerWindow(Component window)
-    {
-        // Center the window on the screen
+	{
+		// Center the window on the screen
 		Dimension screenSize = window.getToolkit().getScreenSize();
 		Dimension size = window.getSize();
 		window.setLocation( (screenSize.width - size.width) / 2, (screenSize.height - size.height) / 2 );
-    }
+	}
+	
+	public static void centerWindow(Component parent, Component window)
+	{
+		// Center the window relative to a parent
+		Dimension parentSize = parent.getSize();
+		Point parentLocation = parent.getLocationOnScreen();
+		Dimension size = window.getSize();
+
+		int x = parentLocation.x + ( parentSize.width - size.width ) / 2;
+		int y = parentLocation.y + ( parentSize.height - size.height ) / 2;
+
+		window.setLocation(x, y);
+	}
 	
 	private static BrowserLauncher getBrowserLauncher()
 	{

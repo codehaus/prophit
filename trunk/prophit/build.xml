@@ -2,7 +2,7 @@
 
 <project name="orbit" default="dist">
 
-  <property name="orbit.version" value="0.0.0" />
+  <property name="orbit.version" value="Developer Build" />
 
   <property name="build" value="build" />
   <property name="dist" value="${build}/dist" />
@@ -39,10 +39,16 @@
     </javac>
   </target>
 
-  <target name="jar" depends="compile">
+	<target name="jar" depends="compile">
+		<copy todir="${build}/resources">
+			<fileset dir="resources" />
+		</copy>
+
+		<replace file="${build}/resources/uitext.properties" token="@@orbit.version@@" value="${orbit.version}" />
+
     <jar manifest="manifest.mf" jarfile="${build}/lib/orbit.jar">
 	  <fileset dir="${build}/classes" />
-	  <fileset dir="resources" />
+	  <fileset dir="${build}/resources" />
     </jar>
 
     <jar jarfile="${build}/lib/data.jar">
