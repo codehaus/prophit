@@ -2,9 +2,9 @@
 
 <project name="orbit" default="dist">
 
-  <property name="orbit.version" value="Developer Build 2" />
-  <property name="orbit.homepage" value="http://orbit.westslopesoftware.com" />
-  <property name="orbit.docpage" value="http://orbit.westslopesoftware.com/doc.html" />
+  <property name="orbit.version" value="Developer Build 3" />
+  <property name="orbit.homepage" value="http://prophIt.westslopesoftware.com" />
+  <property name="orbit.docpage" value="http://prophIt.westslopesoftware.com/docs/index.html" />
 
   <property name="build" value="build" />
   <property name="dist" value="${build}/dist" />
@@ -48,9 +48,9 @@
 	  <fileset dir="resources" />
 	</copy>
 
-	<replace file="${build}/resources/uitext.properties" token="@@orbit.version@@" value="${orbit.version}" />
-	<replace file="${build}/resources/uitext.properties" token="@@orbit.homepage@@" value="${orbit.homepage}" />
-	<replace file="${build}/resources/uitext.properties" token="@@orbit.docpage@@" value="${orbit.docpage}" />
+	<replace file="${build}/resources/uitext.properties" token="@@prophit.version@@" value="${orbit.version}" />
+	<replace file="${build}/resources/uitext.properties" token="@@prophit.homepage@@" value="${orbit.homepage}" />
+	<replace file="${build}/resources/uitext.properties" token="@@prophit.docpage@@" value="${orbit.docpage}" />
 
     <jar manifest="manifest.mf" jarfile="${build}/lib/orbit.jar">
 	  <fileset dir="${build}/classes" />
@@ -104,7 +104,7 @@
 
   <target name="web-copy">
 	<delete>
-	  <fileset dir="${webdist}" includes="orbit*.jnlp" />
+	  <fileset dir="${webdist}" includes="prophIt*.jnlp" />
 	</delete>
 
     <copy file="${basedir}/test/java/util/HelloList.java" tofile="${webdist}/java/util/HelloList.java.txt" />
@@ -146,21 +146,22 @@
   </target>
 
   <target name="web" depends="jar,make-os-jars,web-copy">
-	<replace file="${webdist}/orbit.jnlp" token="@@orbit.version@@" value="${orbit.version}" />
+	<replace file="${webdist}/prophIt.jnlp" token="@@prophit.version@@" value="${orbit.version}" />
 
-    <copy file="${webdist}/orbit.jnlp" tofile="${webdist}/orbit-elrond.jnlp" />
-    <copy file="${webdist}/orbit.jnlp" tofile="${webdist}/orbit-arkanoid.jnlp" />
+    <copy file="${webdist}/prophIt.jnlp" tofile="${webdist}/prophIt-elrond.jnlp" />
+    <copy file="${webdist}/prophIt.jnlp" tofile="${webdist}/prophIt-arkanoid.jnlp" />
 
-	<replace file="${webdist}/orbit.jnlp" token="@@host@@" value="${host}" />
-	<replace file="${webdist}/orbit.jnlp" token="@@port@@" value="${port}" />
+	<replace file="${webdist}/prophIt.jnlp" token="@@host@@" value="${host}" />
+	<replace file="${webdist}/prophIt.jnlp" token="@@port@@" value="${port}" />
 
-	<replace file="${webdist}/orbit-elrond.jnlp" token="@@host@@" value="elrond" />
-	<replace file="${webdist}/orbit-elrond.jnlp" token="@@port@@" value="85" />
-	<replace file="${webdist}/orbit-elrond.jnlp" token="orbit.jnlp" value="orbit-elrond.jnlp" />
+	<!-- some stuff for kevin's private builds, i assume -->
+	<replace file="${webdist}/prophIt-elrond.jnlp" token="@@host@@" value="elrond" />
+	<replace file="${webdist}/prophIt-elrond.jnlp" token="@@port@@" value="85" />
+	<replace file="${webdist}/prophIt-elrond.jnlp" token="prophit.jnlp" value="prophit-elrond.jnlp" />
 
-	<replace file="${webdist}/orbit-arkanoid.jnlp" token="@@host@@" value="arkanoid" />
-	<replace file="${webdist}/orbit-arkanoid.jnlp" token="@@port@@" value="90" />
-	<replace file="${webdist}/orbit-arkanoid.jnlp" token="orbit.jnlp" value="orbit-arkanoid.jnlp" />
+	<replace file="${webdist}/prophIt-arkanoid.jnlp" token="@@host@@" value="arkanoid" />
+	<replace file="${webdist}/prophIt-arkanoid.jnlp" token="@@port@@" value="90" />
+	<replace file="${webdist}/prophIt-arkanoid.jnlp" token="prophit.jnlp" value="prophit-arkanoid.jnlp" />
 
 
   </target>
