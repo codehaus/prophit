@@ -1,0 +1,70 @@
+
+<body>
+
+<h2>The HelloList sample program</h2>
+
+<a href="java/util/HelloList.java">HelloList.java</a> is a simple Java program which compares the performance of:
+<ul>
+  <li><a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a> and <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/StringBuffer.html">StringBuffer</a></li>
+  <li><a href="http://java.sun.com/j2se/1.4/docs/api/java/util/ArrayList.html">ArrayList</a> and <a href="http://java.sun.com/j2se/1.4/docs/api/java/util/LinkedList.html">LinkedList</a></li>
+</ul>
+
+The program runs four loops, each of which tests one combination of String and Collection classes:
+<table border="1">
+  <tr><td>arrayAndString</td><td>For each iteration, builds an ArrayList of Strings, each of which is created by using the <code>+=</code> operator to concatenate the characters in the phrase <i>Hello World</i></td></tr>
+  <tr><td>arrayAndBuffer</td><td>For each iteration, builds an ArrayList of Strings, each of which is created by using a StringBuffer to concatenate the characters in the phrase <i>Hello World</i></td></tr>
+  <tr><td>linkedAndString</td><td>For each iteration, builds an LinkedList of Strings, each of which is created by using the <code>+=</code> operator to concatenate the characters in the phrase <i>Hello World</i></td></tr>
+  <tr><td>linkedAndBuffer</td><td>For each iteration, builds an LinkedList of Strings, each of which is created by using a StringBuffer to concatenate the characters in the phrase <i>Hello World</i></td></tr>
+</table>
+
+<h2>Exploring the HelloList <code>java -prof</code> Profile</h2>
+
+This sample shows <code>java -prof</code> output from the sample program <a href="java/util/HelloList.java">HelloList.java</a>.
+<ol>
+<li>Click on the root (bottom-most) block to select the <code>&lt;root&gt;</code> function. The base of every diagram is the <code>&lt;root&gt;</code> function. All the program's top-level threads are displayed as children of <code>&lt;root&gt;</code>.
+<p>
+By selecting the <code>&lt;root&gt;</code> function, and reading the Callee table, you can determine that the program time consists primarily of the <code>HelloList#main</code> function (almost 99%), though it also spends a little time running <code>java.lang.ClassLoader#loadClassInternal</code>.
+</li>
+
+<li>Adjust the slider down to '1', to show only 1 level of child function calls.
+<p>
+If you look closely at the diagram, you can see that the <code>&lt;root&gt;</code> function has two child blocks. The block for the <code>HelloList#main</code> function is much larger than the one for <code>java.lang.ClassLoader#loadClassInternal</code>, because much more time is spent in <code>HelloList#main</code>.
+</li>
+
+<li>Now move the slider to '2', to show another level of function calls, and click on the <code>HelloList#main</code> block in the diagram. If it helps you to get a better view of the diagram, click and drag the diagram to change its orientation.
+<p>
+This view shows the relative amounts of time taken by the <code>arrayAndString</code>, <code>linkedAndString</code>, <code>arrayAndBuffer</code>, and <code>linkedAndBuffer</code> functions. <code>arrayAndString</code> and <code>linkedAndString</code> take about 42% of the time spent in <code>HelloList#main</code> each, whereas <code>arrayAndBuffer</code> and <code>linkedAndBuffer</code> only take about 8% of the time.
+<p>
+Already we can make 2 key observations:
+<ol>
+  <li>The functions which use <code>String</code> take much more time than the ones that use <code>StringBuffer</code></li>
+  <li>The functions which use <code>ArrayList</code> appear to take about the same amount of time as the ones which use <code>LinkedList</code>
+</ol>
+</li>
+
+<li>Double-click the <code>linkedAndString</code> block. Double-clicking makes the selected block into the root of the diagram, so <code>linkedAndString</code> is now the bottom block in the diagram. You can use the 'Back' and 'Forward' buttons to move back and forth between diagrams.
+<p>
+As we could have guessed, the majority of the time (91%) of the time spent in <code>linkedAndString</code> is spent in <code>buildAsStrings</code>. The rest of the time is about evenly split between adding items to the linked list, and cloning the list at the end of the function.
+</li>
+
+<li>
+This diagram also shows what happens inside <code>buildAsStrings</code>. Move the slider up to '3' to show an additional level of function calls.
+<p>
+There are now several different colors of blocks in the diagram. What do the colors represent? All the blocks in the diagram are shaded between blue and red according to how much of the time was spent in the function itself ('exclusive time'). Exclusive time is the result of subtracting the inclusive times of all a function's callees.
+<p>
+The diagram shows that there are 3 important hot spots in the <code>buildAsStrings</code> function:
+<ol>
+  <li><code>StringBuffer#&lt;init&gt;</code></li>
+  <li><code>String#&lt;init&gt;</code></li>
+  <li><code>String#getChars</code></li>
+</ol>
+</li>
+
+<li>Push the 'Root' button to set the root of the diagram back to the <code>&lt;root&gt;</code> function. Move the slider to '2', then double-click the <code>linkedAndBuffer</code> function to select it.
+<p>
+to be continued...
+</li>
+	  
+</ol>
+
+</body>
