@@ -1,0 +1,18 @@
+
+BlockDiagram is currently rendered by :
+
+orbit.gui.tower.TowerDiagramWireFrame
+orbit.gui.tower.TowerDiagramSolid
+
+Both have similar behavior, in that they set up a CallLayoutAlgorithm and BlockRenderer, then run it
+MapFrame always renders the TowerDiagramWireFrame, then renders the TowerDiagramSolid if 
+		 RENDER_SOLID is enabled and wireFrame mode is not enabled
+
+TowerDiagramWireFrame and TowerDiagramSolid re-compute themselves at slightly different times
+Since TowerDiagramWireFrame is responsible for rendering wire-frame mode, it has to respond to WIREFRAME_PROPERTY, 
+  SELECTED_CALL_PROPERTY and NAME_SEARCH_STRING_PROPERTY events
+
+These classes can be unified into one which just renders the tower diagram as appropriate for the situation.
+Or into one class for the non-rotating diagram and one for the rotating one? Or wire-frame mode and the automatic 
+  wireframe mode that is enabled when the diagram rotates can be made to be the same
+
