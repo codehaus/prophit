@@ -1,0 +1,249 @@
+<html><!-- #BeginTemplate "/Templates/prophit-general.dwt" -->
+<head>
+<!-- #BeginEditable "doctitle" --> 
+<title>ProphIt: hprof</title>
+<!-- #EndEditable --> 
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<meta name="keywords" content="java profile profiler hprof prof swing free gl4java opengl visualization visualizer cpu function time">
+<script language="JavaScript">
+<!--
+function MM_reloadPage(init) {  //reloads the window if Nav4 resized
+  if (init==true) with (navigator) {if ((appName=="Netscape")&&(parseInt(appVersion)==4)) {
+    document.MM_pgW=innerWidth; document.MM_pgH=innerHeight; onresize=MM_reloadPage; }}
+  else if (innerWidth!=document.MM_pgW || innerHeight!=document.MM_pgH) location.reload();
+}
+MM_reloadPage(true);
+// -->
+</script>
+<link rel="stylesheet" href="../default.css" type="text/css">
+<STYLE>
+	#topMenuLayer {border: solid; background-color: #dddddd; border-bottom-width: 1px; border-top-width: 1px; border-left-width: 1px; border-right-width: 1px; border-color: #FFFFFF #AAAAAA #AAAAAA #AAAAAA}
+	#HeadingLayer {border: solid; border-bottom-width: 1px; border-top-width: 1px; border-left-width: 1px; border-right-width: 1px; border-color: #AAAAAA #AAAAAA #AAAAAA #AAAAAA}
+	#leftcol {border: solid; background-color: #eeeeee; border-bottom-width: 1px; border-top-width: 1px; border-left-width: 1px; border-right-width: 1px; border-color: #FFFFFF #AAAAAA #AAAAAA #AAAAAA}
+	.TopMenu {font-family: Verdana, Arial, Helvetica, sans-serif; font-size: 12px; font-variant: small-caps}
+	A:link {color: blue}
+	A:hover {color: red! important}
+	A:active {color: red! important}
+	#topMenuLayer A {text-decoration: none}
+	#leftcol A {text-decoration: none}
+	DIV.header {border: solid; border-bottom-width: 1px; border-top-width: 1px; border-left-width: 1px; border-right-width: 1px; border-color: #AAAAAA #AAAAAA #AAAAAA #AAAAAA; background-color: #EBDEA9; font-family: Arial, Helvetica, sans serif; font-size: small; color: #333333; font-variant: small-caps; font-weight: bold }
+	DIV.docnav {border: solid; border-bottom-width: 0px; border-top-width: 1px; border-left-width: 0px; border-right-width: 0px; border-color: #AAAAAA #AAAAAA #AAAAAA #AAAAAA; font-family: Arial, Helvetica, sans serif; font-size: small; color: #333333; font-variant: small-caps; font-weight: normal }
+	.news {font-size: small; font-family: "Courier New" }
+	TD.FAQH { font-color: #333333; font-weight: bold; background-color: #EEEEEE}
+	TD.FAQ {border: solid; border-bottom-width: 1px; border-top-width: 1px; border-left-width: 1px; border-right-width: 1px; border-color: #AAAAAA #AAAAAA #AAAAAA #AAAAAA; font-size: x-small; font-color: #666666;  }
+	DIV.FAQ {border: solid; border-bottom-width: 1px; border-top-width: 1px; border-left-width: 1px; border-right-width: 1px; border-color: #AAAAAA #AAAAAA #AAAAAA #AAAAAA; font-size: x-small; font-color: #666666;  }
+</STYLE>
+</head>
+
+<body bgcolor="#FFFFFF" text="#333333">
+<div id="HeadingLayer">
+  <table id="HeaderTable" width="100%" border="0" cellpadding="8" cellspacing="0">
+    <tr>
+  	  <td bgcolor="#EBDEA9" width="100%" > 
+        <p><font size="6" face="Georgia, Times New Roman, Times, serif" color="#000000"><b><a href="../index.html" style="text-decoration: none"><font color="222222">proph<font face="Courier New, Courier, mono">It</font></font></a></b></font> 
+          <br>
+          <a href="http://prophit.westslopesoftware.com"><font color="#333333"> 
+          prophIt.westslopesoftware.com<br>
+    </font></a> </p>
+	</td>
+	</tr>
+  </table>
+</div>
+<div id="topMenuLayer">
+	
+  <table cellspacing="0" cellpadding="4" width="100%">
+    <tr>
+			
+      <td class="TopMenu"> Last Published: 10/18/2002 </td>
+			<td>
+				
+        <div align="right"> <span class="TopMenu"><a href="../index.html">prophIt</a> 
+          | <a href="index.html">Documentation</a> | <a href="../download.html">Download</a> 
+          </span> </div>
+			
+        <font face="Arial, Helvetica, sans-serif"></font></td>
+		</tr>
+	</table> 
+</div>
+<div id="MAIN">
+<table id="main" border="0" cellspacing="0" cellpadding="8" width="100%">
+	<tr valign="top">
+		
+    <td id="leftcol" width="20%"> 
+        <div id="LeftMenuLayer"> 
+          <p><span class="MenuHeader">prophIt</span><br>
+            <span class="MenuItem"> - <a href="../index.html">Home Page</a><br>
+            - <a href="../news.html">News and Status</a><br>
+            - <a href="../team.html">The Team</a><br>
+            - <a href="../download.html">Download</a></span><span class="MenuItem"><br>
+            </span></p>
+          <p><span class="MenuHeader">Documentation</span><br>
+            <span class="MenuItem">- <a href="index.html">Overview</a><br>
+            &nbsp;&nbsp;&nbsp;- <a href="../quick-start.html">Quick Start</a><br>
+			&nbsp;&nbsp;&nbsp;- <a href="concepts.html">Concepts</a><br>
+			&nbsp;&nbsp;&nbsp;- <a href="profiler-types.html">Profilers</a><br>
+			&nbsp;&nbsp;&nbsp;- <a href="samples.html">Samples</a><br>
+			&nbsp;&nbsp;&nbsp;- <a href="glossary.html">Glossary</a><br>
+            - <a href="faq.html">FAQ</a><br>
+            </span> </p>
+      </div>
+		</td>
+		<td>
+			<div id="MainLayer">
+			
+			    <table name="MainTable" width="100%" bordercolor="#999999"  cellspacing="0" cellpadding="8" border="0">
+					<tr>
+						<td><div id="mainContentLayer">
+						<!-- #BeginEditable "Main%20Content%20Region" --> 
+                  <div class="header"><font size=4>hprof</font></div>
+                  <!--table border="0" cellspacing="0" cellpadding="0" bgcolor="eeeeee">
+                    <tr> 
+                      <td width="179" nowrap>Previous : <a href="dash-prof.html">Java 
+                        <code>-prof</code></a></td>
+                      <td width="20" bgcolor="ffffff" nowrap>&nbsp;</td>
+                      <td width="157" nowrap>Up : <a href="profiler-types.html">Profiler 
+                        Types</a></td>
+                      <td width="20" bgcolor="ffffff" nowrap>&nbsp;</td>
+                      <td width="234" nowrap>Next : </td>
+                    </tr>
+                  </table-->
+                  <p>Originally shipping with JDK 1.3 (and also available with 
+                    JDK 1.4), <code>hprof</code> is essentially an upgrade to 
+                    <code>-prof</code>. It is invoked from the Java command line 
+                    in a similar manner to <code>-prof</code>:</p>
+                  <pre>	java -Xrunhprof:&lt;options&gt;
+</pre>
+                  <p><code>hprof</code> has quite a few options. Run <code>java 
+                    -Xrunhprof:help</code> for a listing of its options, and read 
+                    the <b>Resources</b> listed below for more information. Briefly, 
+                    <code>hprof</code> is a native library that runs in-process 
+                    with the Java Virtual Machine. When the VM exits, it dumps 
+                    out a file which can contain one or more of the following 
+                    types of data:</p>
+                  <ul>
+                    <li>a heap dump for memory profiling and leak detection</li>
+                    <li>monitor (lock) contention</li>
+                    <li>CPU timing information</li>
+                  </ul>
+                  <p>prophIt only reads the CPU timing information. CPU timing can 
+                    be gathered by specifying one of two options : <code>-Xrunhprof:cpu=samples</code>, 
+                    or <code>-Xrunhprof:cpu=times</code>. These two options are 
+                    quite different. </p>
+                  <h5>Sampling</h5>
+                  <p>In <code>samples</code> mode, <code>hprof</code> spends the 
+                    majority of the time sleeping. Every few milliseconds, it 
+                    wakes up and pauses the VM while it looks at the current stack 
+                    trace of each running thread. It keeps count of how many times 
+                    each stack traces occurs. The most common stack traces are 
+                    the parts of the program that were utilized the most. </p>
+                  <h5>Timing</h5>
+                  <p>In <code>times</code> mode, <code>hprof</code> keeps track 
+                    of every single function call that the Java program makes, 
+                    adding up all the times spent in each function. </p>
+                  <h4>Advantages</h4>
+                  <ul>
+                    <li>Built into the JDK</li>
+                    <li><code>cpu=samples</code> option does not dramatically 
+                      slow down the JVM the way that <code>-prof</code> and <code>cpu=times</code> 
+                      do</li>
+                    <li>Can capture an arbitrary stack depth for accurate call 
+                      graph data</li>
+                    <li>Correctly profiles multi-threaded applications</li>
+                  </ul>
+                  <h4>Disadvantages </h4>
+                  <ul>
+                    <li>May require HotSpot to be disabled in order to function 
+                      properly, especially for multi-threaded programs running 
+                      with JDK 1.3</li>
+                    <li><code>cpu=times</code> option is very slow</li>
+                    <li>Harder to learn than <code>-prof</code></li>
+                    <li><code>cpu=samples</code> is not accurate for programs 
+                      which have very short running times</li>
+                  </ul>
+                  <h4>Tips</h4>
+                  <ul>
+                    <li>Specify <code>depth=6</code> or greater, to get better 
+                      CPU data on functions which may have many different callers. 
+                      A good example is a program with database access, such as 
+                      the <a href="hsqldb-hprof-sample.html">HSQLDB sample profile</a>. 
+                    </li>
+                    <li>When running with JDK 1.3, specify the <code>java -classic</code> 
+                      option to turn off HotSpot.</li>
+                    <li>Don't specify <code>format=b</code> (binary output), prophIt 
+                      can't read the binary file data yet.</li>
+                    <li>Don't use <code>cpu=times</code>, except for profiling 
+                      small, single-threaded test programs</li>
+                  </ul>
+                  <a name="resources">
+                  <h4>Resources</h4>
+                  </a> 
+                  <ul>
+                    <li><a href="http://www.javaworld.com/javaworld/jw-12-2001/jw-1207-hprof.html%20">http://www.javaworld.com/javaworld/jw-12-2001/jw-1207-hprof.html 
+                      </a></li>
+                    <li>Documentation for the <a href="http://java.sun.com/j2se/1.3/docs/tooldocs/win32/java.html">Java 
+                      1.3 Interpreter</a></li>
+                    <li>An interesting summary of various <a href="http://www.tarma.com/articles/index.htm#1997nov">profiling 
+                      methods</a>, including sampling and timing</li>
+                    <li>A Java Developer Connection <a href="http://developer.java.sun.com/developer/TechTips/2000/tt0124.html#tip2">Tech 
+                      Tip </a>on using <code>hprof</code></li>
+                    <li>An online <a href="http://tutorials.findtutorials.com/read/category/82/id/213/p/1">tutorial 
+                      </a>from FindTutorials</li>
+                    <li>HPjmeter performance analysis tool <a href="http://www.hp.com/products1/unix/java/hpjmeter/faq.html">FAQ</a></li>
+                    <li>A <a href="http://www.usenix.org/publications/library/proceedings/coots99/full_papers/liang/liang_html/paper.html">paper</a> 
+                      describing in detail the design the profiling support in 
+                      the Java Virtual Machine</li>
+                  </ul>
+				  <div class="docnav" align="center">
+				  	Previous : <a href="dash-prof.html">Java 
+                        <code>-prof</code></a>  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+					Up : <a href="profiler-types.html">Profiler 
+                        Types</a> 		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+					Next :   &nbsp;&nbsp;
+				  </div>				  
+                  <!--table border="0" cellspacing="0" cellpadding="0" bgcolor="eeeeee">
+                    <tr> 
+                      <td width="179" nowrap>Previous : <a href="dash-prof.html">Java 
+                        <code>-prof</code></a></td>
+                      <td width="20" bgcolor="ffffff" nowrap>&nbsp;</td>
+                      <td width="157" nowrap>Up : <a href="profiler-types.html">Profiler 
+                        Types</a></td>
+                      <td width="20" bgcolor="ffffff" nowrap>&nbsp;</td>
+                      <td width="234" nowrap>Next : </td>
+                    </tr>
+                  </table-->
+                  <h1>&nbsp;</h1>
+                  <!-- #EndEditable -->
+						</div></td>
+					</tr>
+				</table>
+				<table width="100%" border="0" cellspacing="0" cellpadding="0">
+				  <tr>
+					
+              <td></td>
+				  </tr>
+				</table>
+			</div>
+		
+		</td>
+	</tr>
+</table>
+</div>
+<div id="footer">
+<table border="0" width="100%">
+<tr>
+      <td> 
+        <div id="wsswFooter" align="bottom"> 
+          <p class="MenuItem"><a href="http://www.westslopesoftware.com" target=_blank><img src="../assets/wsswLogo.jpg" width="673" height="99" border="0"></a> 
+          </p>
+        </div>
+</td>
+      <td align="right"> 
+        <div id="ironworksFooter" align="bottom"> 
+        <p class="MenuItem"><font size="+1"><a href="http://www.ironworks.cc">Ironworks.cc</a></font></p>
+      </div>
+</td>
+</tr>
+</table>
+<p>&nbsp;</p>
+</div></body>
+<!-- #EndTemplate --></html>
