@@ -102,6 +102,8 @@ MM_reloadPage(true);
                     <li><a href="#selection_feedback">Selection feedback</a></li>
                     <li><a href="#new_coloring">New Coloring options</a></li>
                     <li><a href="#enhanced_searching">Enhanced searching</a></li>
+                  	<li><a href="#compact_data_format">Compact call graph data format</a></li>
+                  	<li><a href="#recursion_collapse">Collapse recursive functions</a></li>
                   </ul>
                   <a name="intelligent_labeling"><div class="header">Intelligent labeling of the 
                     tower diagram</div></a>
@@ -226,10 +228,33 @@ MM_reloadPage(true);
                   </ol>
 
                   <a name="enhanced_searching"><div class="header">Enhanced searching</div></a>
+                  <p><a name="enhanced_searching"> </a> The prophIt search bar 
+                    currently only searches by function call name. The ability 
+                    to search based on additional fields such as inclusive time 
+                    or exclusive time (as percentages of total program time), 
+                    to display the results in tabular form, and to sort the results 
+                    based on some timing data, would greatly enhance the search 
+                    feature. For instance, this would provide a straightforward 
+                    mechanism to display a table of hot-spots, sorted in descending 
+                    order of exclusive time.</p>
+                  <p>It is common for profilers to show a bar chart that goes 
+                    along with this hot-spot view. prophIt could show the search 
+                    data with this enhancement as well.</p>
+                  <a name="compact_data_format"><div class="header">Compact call graph data format</div>
+                  </a> prophIt should have its own compact call graph data format 
+                  which it can use to distribute profile data in a lightweight 
+                  fashion. This format can be used for distributing additional 
+                  samples, for storing interesting call graphs on the server, 
+                  and for caching call graphs on the users' client machines. 
+                  <p>
+                  <a name="recursion_collapse"><div class="header">Collapse recursive functions</div></a>
 				  
-				  More advanced search options. Display search results in a table.
-
-                  <!-- #EndEditable --> 
+				  Recursive functions can be hard to profile, because each instance of the function call has its own caller
+				  and callee time breakdown. Frequently it would be more useful to be able to combine the callers and callees 
+				  for all the recursive call instances into one call. This gives a more accurate picture of the time taken
+				  by the recursive function and its callees.
+				  
+				                    <!-- #EndEditable --> 
                 </div>
               </td>
             </tr>
