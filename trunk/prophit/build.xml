@@ -38,6 +38,7 @@
 	<target name="init">
 		<mkdir dir="${build}" />
 		<mkdir dir="${build}/classes" />
+		<mkdir dir="${build}/output" />
 		<mkdir dir="${build}/lib" />
 		<mkdir dir="${dist}" />
 		<mkdir dir="${webdist}" />
