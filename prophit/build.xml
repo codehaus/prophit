@@ -133,7 +133,7 @@
   </target>
 
 
-  <target name="signlibjars" depends="jar,make-os-jars">
+  <target name="signlibjars" depends="jar">
    
 	<signjar jar="${basedir}/lib/log4jME.jar" signedjar="${basedir}/lib/log4jME.jar" verbose="true" alias="${alias}" keystore="${keystore}" storepass="${keypass}" />
 	<signjar jar="${basedir}/lib/png.jar" signedjar="${basedir}/lib/png.jar" verbose="true" alias="${alias}" keystore="${keystore}" storepass="${keypass}" />
@@ -145,7 +145,7 @@
 
   </target>
 
-  <target name="web" depends="jar,make-os-jars,web-copy">
+  <target name="web" depends="jar,web-copy">
 	<replace file="${webdist}/prophIt.jnlp" token="@@prophit.version@@" value="${orbit.version}" />
 
     <copy file="${webdist}/prophIt.jnlp" tofile="${webdist}/prophIt-elrond.jnlp" />
