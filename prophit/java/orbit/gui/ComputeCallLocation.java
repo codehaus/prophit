@@ -13,7 +13,7 @@ import java.util.HashSet;
  * a specified root Call. It can be used to re-construct the location of a specific Call in the
  * 3-D space of the block diagram.
  * <p>
- * Construct the ComputeCallLocation, then call {@link #execute}.
+ * Construct the ComputeCallLocation object, then call {@link #execute}.
  */
 class ComputeCallLocation
 {
