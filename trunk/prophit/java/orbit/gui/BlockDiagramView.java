@@ -10,13 +10,14 @@ import gl4java.utils.glut.fonts.GLUTFuncLightImplWithFonts;
 import java.awt.*;
 import java.awt.geom.Rectangle2D;
 import java.awt.event.*;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.lang.Math;
 import java.util.Iterator;
 import java.util.Map;
 
 class BlockDiagramView
 	extends GLCanvas
-	implements BlockDiagramModel.Listener
 {
 	private static double EXTENT = 1.0;
 
@@ -59,7 +60,28 @@ class BlockDiagramView
 		super(w, h, null, null);
 
 		this.model = blockModel;
-		model.addListener(this);
+		this.model.addListener(new PropertyChangeListener()
+			{
+				public void propertyChange(PropertyChangeEvent evt)
+				{
+					if ( BlockDiagramModel.RENDER_CALL_PROPERTY.equals(evt.getPropertyName()) ||
+						  BlockDiagramModel.NUM_LEVELS_PROPERTY.equals(evt.getPropertyName()) )
+					{
+						generateLists = true;
+						repaint = true;
+						checkUpdate();
+					}
+					else /* if ( BlockDiagramModel.SHIFT_HORIZONTAL_PROPERTY.equals(evt.getPropertyName()) ||
+								 BlockDiagramModel.SHIFT_VERTICAL_PROPERTY.equals(evt.getPropertyName()) ||
+								 BlockDiagramModel.EYE_POSITION_PROPERTY.equals(evt.getPropertyName()) ||
+								 BlockDiagramModel.MOUSEOVER_CALL_PROPERTY.equals(evt.getPropertyName()) ||
+								 BlockDiagramModel.SELECTED_CALL_PROPERTY.equals(evt.getPropertyName()) ) */
+					{
+						repaint = true;
+						checkUpdate();
+					}
+				}
+			});
 		
 		addKeyListener(new KeyAdapter()
 			{
@@ -518,21 +540,6 @@ class BlockDiagramView
 		}
 	}
 	
-	public void modelInvalidated(BlockDiagramModel model)
-	{
-		generateLists = true;
-		repaint = true;
-
-		checkUpdate();
-	}
-
-	public void requestRepaint(BlockDiagramModel model)
-	{
-		repaint = true;
-
-		checkUpdate();
-	}
-
 	protected void beginUpdate()
 	{
 		++updateCount;

@@ -21,7 +21,8 @@ import javax.swing.table.AbstractTableModel;
 class CallDetails
 {
 	public static Category LOG = Category.getInstance(CallDetails.class);
-	
+
+	private final String callName;
 	private double inclusiveTime = 0;
 	private double exclusiveTime = 0;
 	private int nCalls = 0;
@@ -35,6 +36,8 @@ class CallDetails
 	 */
 	public CallDetails(Call root, final Call selected)
 	{
+		this.callName = selected.getName();
+
 		/*
 		 * This class recurses through the call graph, computing aggregated data on the selected call.
 		 */
@@ -73,6 +76,26 @@ class CallDetails
 
 		callersRollup.sort();
 		calleesRollup.sort();
+	}
+
+	public String getCallName()
+	{
+		return callName;
+	}
+
+	public double getInclusiveTime()
+	{
+		return inclusiveTime;
+	}
+
+	public double getExclusiveTime()
+	{
+		return exclusiveTime;
+	}
+
+	public int getNumCalls()
+	{
+		return nCalls;
 	}
 
 	/**

@@ -1,6 +1,19 @@
 
 -------------
 
+Need to tie the CallDetails into the GUI
+
+Would be simple to make 3 tables : Summary Data, Callers, Callees
+Each time the selected Call is changed, the models for each of these tables should be replaced...
+  Presumably, can just use setModel to accomplish this
+
+Need new events from the BlockDiagramModel:
+  Use PropertyChangeSupport
+  properties : numLevels, renderCall, selectedCall, mouseOverCall
+  
+
+-------------
+
 'Properties' for a selected Call
 
 callers, callees, nCalls, time, global %, local %

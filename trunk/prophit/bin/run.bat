@@ -42,8 +42,7 @@ if exist "%SCRIPT_HOME%\lib" goto setupClasspath
 
 echo %SCRIPT_HOME%
 
-set LOCALCLASSPATH=
-for %%i in ("%SCRIPT_HOME%\lib\*.jar") do set LOCALCLASSPATH=%%i;%LOCALCLASSPATH%
+set LOCALCLASSPATH="%SCRIPT_HOME%\lib\orbit.jar";"%SCRIPT_HOME%\lib\log4jME.jar"
 
 if "%JAVA_HOME%" == "" goto noJavaHome
 if "%_JAVACMD%" == "" set _JAVACMD=%JAVA_HOME%\jre\bin\java
