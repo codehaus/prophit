@@ -1,0 +1,10 @@
+
+<!ELEMENT site ( page* )>
+
+<!ELEMENT page ( name, page* )>
+<!ATTLIST page
+	file CDATA #REQUIRED
+	templated ( true | false ) "true"
+  	>
+
+<!ELEMENT name ( #PCDATA )>
