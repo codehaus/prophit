@@ -84,9 +84,9 @@ MM_reloadPage(true);
 			
 			    <table name="MainTable" width="100%" bordercolor="#999999"  cellspacing="0" cellpadding="8" border="0">
 					<tr>
-						<td><div id="mainContentLayer">
-						<!-- #BeginEditable "Main%20Content%20Region" -->
-			        <!--table border="0" cellspacing="0" cellpadding="0" bgcolor="eeeeee">
+						<td>
+                <div id="mainContentLayer"> <!-- #BeginEditable "Main%20Content%20Region" --> 
+                  <!--table border="0" cellspacing="0" cellpadding="0" bgcolor="eeeeee">
         <tr> 
           <td width="350"><a href="prophIt.jnlp">Get prophIt</a><br>
             <font size="-1">(see <a href="#running_prophIt">Running prophIt</a> first 
@@ -95,57 +95,50 @@ MM_reloadPage(true);
           <td width="107" nowrap><a href="doc.html">Documentation</a></td>
         </tr>
       </table -->
-                    <div class="header">prophIt Overview</div>
-
-                      <blockquote><b>prophIt</b> is an innovative visualization tool for 
-                        working with Java profiles. prophIt does not generate 
-                        profile data itself. Rather it reads data files generated 
-                        by a <a href="docs/profiler-types.html">supported profiler</a> 
-                        and presents them in a powerful user interface. <br>
-                        <br>
-                      <a href="assets/hello-list.png" target=_blank><img src="assets/hello-list.png" align="center" ></a> 
-                      </blockquote>
-
-                      <div class="header"><a name="running_prophIt"> Running prophIt</a></div>
-                      <h4>Runtime Environment</h4>
-                      prophIt is implemented using the Java <a href="http://java.sun.com/products/jfc/" target=_blank>Swing</a> 
-                      GUI library, using the <a href="http://www.jausoft.com/gl4java/" target=_blank>GL4Java</a> 
-                      Java binding to <a href="http://www.opengl.org" target=_blank>OpenGL</a> 
-                      to render graphics-intensive parts of the UI. Windows is 
-                      the only currently supported platform, but OpenGL is available 
-                      for other platforms as well and prophIt will be supported 
-                      on them as well. 
-                      <h4>JavaWebStart</h4>
-                      prophIt uses <a href="http://java.sun.com/products/javawebstart/" target=_blank>JavaWebStart</a> 
-                      (version 1.0.1_02 or later) for installation and automatic 
-                      upgrades. To run prophIt, first you need to obtain JavaWebStart: 
-                      <ul>
-                        <li>If you already have the JDK 1.4, you already have 
-                          JavaWebStart! It is bundled with the J2SE 
-                        <li>Otherwise, you will need to download and install JavaWebStart 
-                          separately. Go to the <a href="http://java.sun.com/products/javawebstart/" target=_blank>JavaWebStart</a> 
-                          home page and follow the installation instructions there. 
-                      </ul>
-                      <h4>Java Version</h4>
-                      prophIt requires JDK 1.3 or higher. It will run and look 
-                      better with JDK 1.4.0 or higher. <br>
-                        <br>
-
-                 <div class="header">Other Resources</div>
-                      <ul>
-                        <li>Check out <code>java -prof</code> <a href="docs/dash-prof.html#resources">resources</a></li>
-                        <li>Check out <code>hprof</code> <a href="docs/hprof.html#resources">resources</a></li>
-                        <li>Read <a target=_blank href="http://www.amazon.com/exec/obidos/tg/detail/-/0961392142/qid=1032639151/sr=1-1/ref=sr_1_1/102-6857501-9780924?v=glance&s=books">The 
-                          Visual Display of Quantitative Information</a>. It's 
-                          a very thought-provoking read that will have you looking 
-                          at diagrams, maps, and all forms of graphical information 
-                          display in new ways.</li>
-                      </ul>
-                      <p> 
-			  
-			  
-			  <!-- #EndEditable -->
-						</div></td>
+                  <div class="header">prophIt Overview</div>
+                  <blockquote><b>prophIt</b> is an innovative visualization tool 
+                    for working with Java profiles. prophIt does not generate 
+                    profile data itself. Rather it reads data files generated 
+                    by a <a href="docs/profiler-types.html">supported profiler</a> 
+                    and presents them in a powerful user interface. </blockquote>
+                  <img src="assets/hello-list.png" ><p>
+                  <div class="header"><a name="running_prophIt"> Running prophIt</a></div>
+                  <h4>Runtime Environment</h4>
+                  prophIt is implemented using the Java <a href="http://java.sun.com/products/jfc/" target=_blank>Swing</a> 
+                  GUI library, using the <a href="http://www.jausoft.com/gl4java/" target=_blank>GL4Java</a> 
+                  Java binding to <a href="http://www.opengl.org" target=_blank>OpenGL</a> 
+                  to render graphics-intensive parts of the UI. Windows is the 
+                  only currently supported platform, but OpenGL is available for 
+                  other platforms as well and prophIt will be supported on them 
+                  as well. 
+                  <h4>JavaWebStart</h4>
+                  prophIt uses <a href="http://java.sun.com/products/javawebstart/" target=_blank>JavaWebStart</a> 
+                  (version 1.0.1_02 or later) for installation and automatic upgrades. 
+                  To run prophIt, first you need to obtain JavaWebStart: 
+                  <ul>
+                    <li>If you already have the JDK 1.4, you already have JavaWebStart! 
+                      It is bundled with the J2SE 
+                    <li>Otherwise, you will need to download and install JavaWebStart 
+                      separately. Go to the <a href="http://java.sun.com/products/javawebstart/" target=_blank>JavaWebStart</a> 
+                      home page and follow the installation instructions there. 
+                  </ul>
+                  <h4>Java Version</h4>
+                  prophIt requires JDK 1.3 or higher. It will run and look better 
+                  with JDK 1.4.0 or higher. <br>
+                  <br>
+                  <div class="header">Other Resources</div>
+                  <ul>
+                    <li>Check out <code>java -prof</code> <a href="docs/dash-prof.html#resources">resources</a></li>
+                    <li>Check out <code>hprof</code> <a href="docs/hprof.html#resources">resources</a></li>
+                    <li>Read <a target=_blank href="http://www.amazon.com/exec/obidos/tg/detail/-/0961392142/qid=1032639151/sr=1-1/ref=sr_1_1/102-6857501-9780924?v=glance&s=books">The 
+                      Visual Display of Quantitative Information</a>. It's a very 
+                      thought-provoking read that will have you looking at diagrams, 
+                      maps, and all forms of graphical information display in 
+                      new ways.</li>
+                  </ul>
+                  <p> 
+                  <!-- #EndEditable --> </div>
+              </td>
 					</tr>
 				</table>
 				<table width="100%" border="0" cellspacing="0" cellpadding="0">
