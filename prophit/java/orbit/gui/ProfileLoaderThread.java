@@ -44,11 +44,11 @@ class ProfileLoaderThread
 				
 			startTime = System.currentTimeMillis();
 
-			cb.solved();
-
 			cg = loader.solve();
 			error = loader.getError();
-			
+
+			cb.solved();
+
 			System.gc();
 			Log.debug(LOG, "\tSolved in " + ( System.currentTimeMillis() - startTime ) + " ms");
 		}
