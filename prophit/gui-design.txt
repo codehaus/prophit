@@ -11,3 +11,12 @@ model attributes:
   
 controller:
   handle click, click-drag
+
+BlockDiagramView:
+  serves as the GL canvas and as the controller
+  uses the BlockDiagramModel to contain the stateful information about the diagram
+  uses a BlockRenderer and the CallLayoutAlgorithm to render the diagram
+  implements scrolling, rotation, and picking
+  Should eventually move all the GL code into specialized classes (e.g. labels)
+
+  

@@ -26,7 +26,8 @@
   </target>
 
   <target name="compile" depends="init">
-    <javac classpathref="compile.class.path" srcdir="java" debug="yes" destdir="${build}/classes" />
+    <javac classpathref="compile.class.path" srcdir="java" debug="yes" destdir="${build}/classes">
+    </javac>
   </target>
 
   <target name="jar" depends="compile">
