@@ -11,6 +11,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.StringTokenizer;
 
+// This class really doesn't belong in this package. The 'solver' stuff should be moved into a different package
+//   called something like 'qpsolver', then this class should go into a 'solver' package or perhaps into 'loader'
 public class CallFractionSolverData
 {
 	private static final String modelResourceName = "/ampl/profile.mod";

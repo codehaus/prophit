@@ -4,6 +4,13 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+/**
+ * A CallID represents a location in the call graph. It is the combination of a parent {@link RCC} (stack trace)
+ * calling a child RCC (stack trace). An RCC may appear many times in the call graph. Each of these appearences
+ * is represented by a CallID.
+ * <p>
+ * A CallID which represents one of multiple instantiations of an RCC is referred to as a 'proxy call'.
+ */
 public class CallID
 {
 	private final RCC rcc;

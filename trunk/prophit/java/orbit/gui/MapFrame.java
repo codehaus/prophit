@@ -81,6 +81,8 @@ public class MapFrame
 	private Action parentAction;
 	private Action rootAction;
 
+	private String workingDirectory = null;
+	
 	private BlockDiagramModel blockModel = null;
 
 	private BlockDiagramView blockView = null;
@@ -104,6 +106,8 @@ public class MapFrame
 
 	public boolean loadProfile(File profileFile)
 	{
+		workingDirectory = profileFile.getParent();
+		
 		LoadProgressDialog dlgLoad = new LoadProgressDialog(null, profileFile);
 		UIUtil.centerWindow(dlgLoad);
 		dlgLoad.setVisible(true);
@@ -376,7 +380,12 @@ public class MapFrame
 
 	private JFileChooser newFileChooser()
 	{
-		String startDirectory = System.getProperty("user.dir");
+		String startDirectory = workingDirectory;
+		if ( startDirectory == null )
+		{
+			startDirectory = System.getProperty("user.dir");
+		}
+
 		JFileChooser chooser = new JFileChooser(startDirectory);
 		chooser.setFileFilter(new javax.swing.filechooser.FileFilter()
 			{
@@ -416,7 +425,9 @@ public class MapFrame
 			{
 				JFileChooser chooser = newFileChooser();
 				int returnVal = chooser.showOpenDialog(MapFrame.this);
-				if ( returnVal == JFileChooser.APPROVE_OPTION )
+				if ( returnVal == JFileChooser.APPROVE_OPTION &&
+					 chooser.getSelectedFile() != null &&
+					 !chooser.getSelectedFile().isDirectory() )
 				{
 					loadProfile(chooser.getSelectedFile());
 				}

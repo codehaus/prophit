@@ -6,7 +6,7 @@ import java.util.ArrayList;
 public class HelloList
 {
 	static String HELLO_WORLD = new String("Hello World");	
-	static int ITERATIONS = 1000;
+	static int ITERATIONS = 100;
 	
 	public static void main(String[] args)
 	{

@@ -166,7 +166,8 @@ public class Test
 	
 	public static void testSimpleProfileSolver() throws Exception
 	{
-		DashProfParser parser = new DashProfParser(new FileReader(System.getProperty("basedir") + "/data/simple.prof"));
+		File file = new File(System.getProperty("basedir") + "/data/simple.prof");
+		DashProfParser parser = new DashProfParser(new FileReader(file));
 		parser.execute();
 		List callIDs = parser.getCallIDs();
 		
@@ -175,20 +176,20 @@ public class Test
 				  "Expected " + data.getModel() + " to start with [741]option solver kestrel;");
 		assertion(data.getCommands().toString().startsWith("[171]# Assign initial values for I"),
 				  "Expected " + data.getCommands() + " to start with [171]# Assign initial values for I");
-		String expectedData = "[222]data;\n" +
+		String expectedData = "[224]data;\n" +
 			"set rcc = 6 4 5 7;\n" + 
 			"set I = p10 p11 p12 p13;";
 		assertion(data.getData().toString().startsWith(expectedData), "Expected " + data.getData() + " to start with " + expectedData);
 
 		System.setProperty("solver.user.name", "JAVA_USER");
-		CallFractionSolver solver = new CallFractionSolver(data);
-		SocketConnection.Factory factory = new SocketConnection.Factory("neos.mcs.anl.gov", 3333);
-		factory.setDebug(true, "simple");
-		double[] fractions = solver.execute(factory);
+		DashProfSolver solver = new DashProfSolver(file);
+		solver.solve(callIDs);
+		double[] fractions = solver.getFractions();
 
 		assertion(fractions.length == 14, "Expected " + fractions.length + " = 14");
 		assertion(TestUtil.equal(fractions[0], 1), "Expected " + fractions[0] + " = 1");
 		assertion(TestUtil.equal(fractions[1], 1), "Expected " + fractions[1] + " = 1");
+		// TODO: I think I changed the data file & broke these tests
 		assertion(TestUtil.equal(fractions[10], 0.333333), "Expected " + fractions[10] + " = 1/3");
 		assertion(TestUtil.equal(fractions[11], 0.666667), "Expected " + fractions[10] + " = 2/3");
 		/*
@@ -202,8 +203,9 @@ public class Test
 	public static void testHsqlDBProfileSolver() throws Exception
 	{
 		long parseStart = System.currentTimeMillis();
-		
-		DashProfParser parser = new DashProfParser(new FileReader(System.getProperty("basedir") + "/data/hsqldb.prof"));
+
+		File file = new File(System.getProperty("basedir") + "/data/hsqldb.prof");
+		DashProfParser parser = new DashProfParser(new FileReader(file));
 		parser.execute();
 
 		long parseEnd = System.currentTimeMillis();
@@ -213,14 +215,10 @@ public class Test
 
 		System.setProperty("solver.user.name", "JAVA_USER");
 		
-		CallFractionSolverData data = new CallFractionSolverData(callIDs);
-		CallFractionSolver solver = new CallFractionSolver(data);
-		SocketConnection.Factory factory = new SocketConnection.Factory("neos.mcs.anl.gov", 3333);
-		factory.setDebug(true, "hsqldb");
-
 		long solveStart = System.currentTimeMillis();
 		
-		double[] fractions = solver.execute(factory);
+		DashProfSolver solver = new DashProfSolver(file);
+		solver.solve(callIDs);
 
 		long solveEnd = System.currentTimeMillis();
 		System.out.println("Solved hsqldb.prof in " + ( solveEnd - solveStart ) + " ms");

@@ -28,6 +28,12 @@ public class DashProfSolver
 		if ( props.getDebug() )
 			factory.setDebug(true, profileFile.getName());
 	}
+
+	// TODO: make protected & move test in test.Test into this package
+	public double[] getFractions()
+	{
+		return fractions;
+	}
 	
 	public CallGraph solve(List callIDs)
 	{

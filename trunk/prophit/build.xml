@@ -163,8 +163,9 @@
 	  </batchtest>	
     </junit>
     <java fork="true" classpathref="test.class.path" classname="test.Test">
-		<sysproperty key="solver.user.name" value="JAVA_USER" />
-		<sysproperty key="basedir" value="${basedir}" />
+	  <sysproperty key="solver.user.name" value="JAVA_USER" />
+	  <sysproperty key="basedir" value="${basedir}" />
+	  <arg line="${run.system}" />
 	</java>
   </target>
 
@@ -179,7 +180,9 @@
   </target>
 
   <target name="hello" depends="jar,compile-tests">
-    <java classpathref="class.path" fork="true" classname="test.HelloList" />
+    <java classpathref="test.class.path" fork="true" classname="util.HelloList">
+	  <jvmarg value="-Xrunhprof:cpu=samples,depth=6"/>   
+	</java>
   </target>
 
 </project>
